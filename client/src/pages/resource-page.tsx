@@ -7,7 +7,7 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import { useHistory } from 'react-router-dom';
 
-export const StartPage: FC = () => {
+export const ResourcePage: FC = () => {
   const history = useHistory();
   const plugins = [dayGridPlugin, timeGridPlugin, interactionPlugin];
   const headerToolbar = {

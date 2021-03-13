@@ -1,8 +1,8 @@
 import { render, screen } from '@testing-library/react';
-import { StartPage } from '../startpage';
+import { ResourcePage } from '../resource-page';
 
 test('renders learn react link', () => {
-  render(<StartPage />);
+  render(<ResourcePage />);
   const buttonElement = screen.getByText(/Monat/i);
   expect(buttonElement).toBeInTheDocument();
 });
