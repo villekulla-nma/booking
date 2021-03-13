@@ -6,11 +6,7 @@ import type {
   Optional,
   Sequelize,
 } from 'sequelize';
-
-export interface GroupAttributes {
-  id: string;
-  name: string;
-}
+import type { GroupAttributes } from '@villekulla-reservations/types';
 
 interface GroupCreationAttributes extends Optional<GroupAttributes, 'id'> {}
 

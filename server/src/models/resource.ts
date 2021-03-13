@@ -6,11 +6,7 @@ import type {
   Optional,
   Sequelize,
 } from 'sequelize';
-
-export interface ResourceAttributes {
-  id: string;
-  name: string;
-}
+import type { ResourceAttributes } from '@villekulla-reservations/types';
 
 interface ResourceCreationAttributes
   extends Optional<ResourceAttributes, 'id'> {}

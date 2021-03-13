@@ -6,14 +6,7 @@ import type {
   Optional,
   Sequelize,
 } from 'sequelize';
-
-export interface UserAttributes {
-  id: string;
-  first_name: string;
-  last_name: string;
-  fullName: string;
-  group: string;
-}
+import type { UserAttributes } from '@villekulla-reservations/types';
 
 interface UserCreationAttributes
   extends Optional<Optional<UserAttributes, 'id'>, 'fullName'> {}
