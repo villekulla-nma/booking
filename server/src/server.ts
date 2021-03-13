@@ -3,6 +3,14 @@ import type { FastifyInstance } from 'fastify';
 import proxy from 'fastify-http-proxy';
 
 import type { AppModel } from './model';
+import type { AssignHandlerFunction } from './handlers/type';
+import { assignPutEventHandler } from './handlers/put-event';
+import { assignGetAllEventsHandler } from './handlers/get-all-events';
+
+const routes: [string, AssignHandlerFunction][] = [
+  ['/api/resources/:resourceId/events', assignPutEventHandler],
+  ['/api/resources/:resourceId/events', assignGetAllEventsHandler],
+];
 
 const initProxy = (server: FastifyInstance): void => {
   if (typeof process.env.CLIENT_URL === 'string') {
@@ -14,7 +22,9 @@ const initProxy = (server: FastifyInstance): void => {
 };
 
 export const initServer = async (model: AppModel): Promise<void> => {
-  const server = Fastify();
+  const server = Fastify({ logger: true });
+
+  routes.forEach(([route, handler]) => handler(route, server, model));
 
   server.get(
     '/api/resources',

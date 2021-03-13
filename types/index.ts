@@ -15,3 +15,13 @@ export interface UserAttributes {
   fullName: string;
   group: string;
 }
+
+export interface EventAttributes {
+  id: string;
+  start: string;
+  end: string;
+  description: string;
+  all_day: boolean;
+  resource: string;
+  user: string;
+}
