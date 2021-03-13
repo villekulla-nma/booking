@@ -1,0 +1,59 @@
+import { DataTypes } from 'sequelize';
+import type {
+  Model,
+  ModelAttributes,
+  ModelCtor,
+  Optional,
+  Sequelize,
+} from 'sequelize';
+
+export interface ResourceAttributes {
+  id: string;
+  name: string;
+}
+
+interface ResourceCreationAttributes
+  extends Optional<ResourceAttributes, 'id'> {}
+
+export interface ResourceInstance
+  extends Model<ResourceAttributes, ResourceCreationAttributes>,
+    ResourceAttributes {}
+
+type Schema = ModelAttributes<ResourceInstance, ResourceAttributes>;
+
+const schema: Schema = {
+  id: {
+    primaryKey: true,
+    type: DataTypes.STRING,
+    unique: true,
+  },
+  name: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    unique: true,
+  },
+};
+
+const isResourceData = (r: any): r is ResourceAttributes =>
+  typeof r.id === 'string' && typeof r.name === 'string';
+
+export const scaffoldResources = async (
+  Resource: ModelCtor<ResourceInstance>,
+  data: unknown
+): Promise<void> => {
+  if (Array.isArray(data)) {
+    await Resource.bulkCreate(
+      data
+        .filter((r) => isResourceData(r))
+        .map(({ id, name }) => ({ id, name }))
+    );
+  }
+};
+
+export const createResourceInstance = (
+  db: Sequelize
+): ModelCtor<ResourceInstance> =>
+  db.define<ResourceInstance>('Resource', schema, {
+    timestamps: false,
+    createdAt: false,
+  });

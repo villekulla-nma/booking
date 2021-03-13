@@ -13,3 +13,5 @@ build
 .env.production.local
 
 npm-debug.log*
+
+server/scaffolding/*.json

@@ -10,7 +10,10 @@
   "dependencies": {
     "dotenv": "8.2.0",
     "fastify": "3.14.0",
-    "fastify-http-proxy": "5.0.0"
+    "fastify-http-proxy": "5.0.0",
+    "sequelize": "6.5.0",
+    "shortid": "2.2.16",
+    "sqlite3": "5.0.2"
   },
   "devDependencies": {
     "@types/node": "12.12.2",
