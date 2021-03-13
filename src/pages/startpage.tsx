@@ -1,4 +1,3 @@
-import React from 'react';
 import type { FC } from 'react';
 import FullCalendar from '@fullcalendar/react';
 import type { EventInput, EventClickArg } from '@fullcalendar/react';
@@ -6,8 +5,10 @@ import locale from '@fullcalendar/core/locales/de';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
+import { useHistory } from 'react-router-dom';
 
 export const StartPage: FC = () => {
+  const history = useHistory();
   const plugins = [dayGridPlugin, timeGridPlugin, interactionPlugin];
   const headerToolbar = {
     left: 'prev,next today',
@@ -21,8 +22,10 @@ export const StartPage: FC = () => {
     start: `${day}T12:00:00`,
     end: `${day}T14:00:00`,
   };
-  const handleClick = (event: EventClickArg) =>
-    console.log('Clicked...', event);
+  const handleClick = (args: EventClickArg) => {
+    console.log('Clicked...', args);
+    history.push(`/events/${args.event.id}`);
+  };
 
   return (
     <FullCalendar
