@@ -1,14 +1,27 @@
-import type { FC } from 'react';
+import { useState, useRef } from 'react';
+import type { FC, RefObject } from 'react';
 import FullCalendar from '@fullcalendar/react';
-import type { EventInput, EventClickArg } from '@fullcalendar/react';
+import type {
+  DateSelectArg,
+  EventInput,
+  EventClickArg,
+} from '@fullcalendar/react';
 import locale from '@fullcalendar/core/locales/de';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import { useHistory } from 'react-router-dom';
 
+interface SelectionRange {
+  start: string;
+  end: string;
+}
+
 export const ResourcePage: FC = () => {
   const history = useHistory();
+  const calendar = useRef<FullCalendar>();
+  const [dateSelection, setDateSelection] = useState<SelectionRange>();
+
   const plugins = [dayGridPlugin, timeGridPlugin, interactionPlugin];
   const headerToolbar = {
     left: 'prev,next today',
@@ -26,16 +39,55 @@ export const ResourcePage: FC = () => {
     console.log('Clicked...', args);
     history.push(`/events/${args.event.id}`);
   };
+  const handleSelect = (args: DateSelectArg) => {
+    const { start, end } = args;
+
+    if (args.allDay) {
+      end.setTime(end.getTime() - 1000);
+    }
+
+    setDateSelection({
+      start: start.toLocaleString(),
+      end: end.toLocaleString(),
+    });
+  };
+  const handleUnselect = () => setDateSelection(undefined);
+  const handleFormReset = () => {
+    if (calendar.current) {
+      calendar.current.getApi().unselect();
+    }
+  };
 
   return (
-    <FullCalendar
-      locale={locale}
-      plugins={plugins}
-      headerToolbar={headerToolbar}
-      initialEvents={[event]}
-      initialView="dayGridMonth"
-      selectable={true}
-      eventClick={handleClick}
-    />
+    <>
+      <FullCalendar
+        ref={calendar as RefObject<FullCalendar>}
+        locale={locale}
+        timeZone="local"
+        plugins={plugins}
+        headerToolbar={headerToolbar}
+        initialEvents={[event]}
+        initialView="dayGridMonth"
+        selectable={true}
+        eventClick={handleClick}
+        select={handleSelect}
+        unselect={handleUnselect}
+        unselectAuto={false}
+      />
+      {dateSelection && (
+        <form method="post" onReset={handleFormReset}>
+          <dl>
+            <dt>Start</dt>
+            <dd>{dateSelection.start}</dd>
+            <dt>End</dt>
+            <dd>{dateSelection.end}</dd>
+          </dl>
+          <label htmlFor="description">Beschreibung</label>
+          <textarea name="description" id="description" />
+          <button type="reset">Abbrechen</button>
+          <button>Speichern</button>
+        </form>
+      )}
+    </>
   );
 };
