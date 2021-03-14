@@ -20,6 +20,7 @@ const initProxy = (server: FastifyInstance): void => {
   if (typeof process.env.CLIENT_URL === 'string') {
     server.register(proxy, {
       upstream: process.env.CLIENT_URL,
+      base: '/app',
       http2: false,
     });
   }

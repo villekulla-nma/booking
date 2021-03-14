@@ -28,7 +28,7 @@ const routes: RouteProps[] = [
 
 ReactDOM.render(
   <StrictMode>
-    <Router>
+    <Router basename="app">
       <Switch>
         {routes.map((route, i) => (
           <Route key={i} {...route} />
