@@ -6,7 +6,10 @@ import type { RouteProps } from 'react-router-dom';
 import './main.css';
 import { EventPage } from './pages/event-page';
 import { ResourcePage } from './pages/resource-page';
+import { LoginPage } from './pages/login-page';
 import { StartPage } from './pages/start-page';
+import { WithAuth } from './components/with-auth';
+import { LogoutButton } from './components/logout-button';
 
 const routes: RouteProps[] = [
   {
@@ -29,11 +32,15 @@ const routes: RouteProps[] = [
 ReactDOM.render(
   <StrictMode>
     <Router basename="app">
-      <Switch>
-        {routes.map((route, i) => (
-          <Route key={i} {...route} />
-        ))}
-      </Switch>
+      <WithAuth loginPage={<LoginPage />}>
+        <LogoutButton />
+        <hr />
+        <Switch>
+          {routes.map((route, i) => (
+            <Route key={i} {...route} />
+          ))}
+        </Switch>
+      </WithAuth>
     </Router>
   </StrictMode>,
   document.getElementById('root')

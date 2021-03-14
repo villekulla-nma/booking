@@ -8,8 +8,14 @@ import { assignPutEventHandler } from './handlers/put-event';
 import { assignGetAllEventsHandler } from './handlers/get-all-events';
 import { assignGetEventByIdHandler } from './handlers/get-event-by-id';
 import { assignDeleteEventHandler } from './handlers/delete-event';
+import { assignPostLoginHandler } from './handlers/post-login';
+import { assignPostVerifySessionHandler } from './handlers/post-verify-session';
+import { assignPostLogoutHandler } from './handlers/post-logout';
 
 const routes: [string, AssignHandlerFunction][] = [
+  ['/api/login', assignPostLoginHandler],
+  ['/api/logout', assignPostLogoutHandler],
+  ['/api/verify-session', assignPostVerifySessionHandler],
   ['/api/resources/:resourceId/events', assignPutEventHandler],
   ['/api/resources/:resourceId/events', assignGetAllEventsHandler],
   ['/api/events/:eventId', assignGetEventByIdHandler],

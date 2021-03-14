@@ -10,8 +10,10 @@ export interface ResourceAttributes {
 
 export interface UserAttributes {
   id: string;
+  email: string;
   first_name: string;
   last_name: string;
+  password?: string;
   fullName: string;
   groupId: string;
 }
@@ -25,3 +27,5 @@ export interface EventAttributes {
   resourceId: string;
   userId: string;
 }
+
+export type LoginResult = 'ok' | 'unverified' | 'invalid' | 'error';

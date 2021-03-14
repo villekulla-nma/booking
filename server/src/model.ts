@@ -23,6 +23,8 @@ export interface AppModel {
     end: string
   ) => Promise<EventInstance[]>;
   getEventById: (eventId: string) => Promise<EventInstance>;
+  getUserByEmail: (email: string) => Promise<UserInstance>;
+  getUserById: (userId: string) => Promise<UserInstance>;
 
   createEvent: (
     start: string,
@@ -91,6 +93,14 @@ export const initModel = async (): Promise<AppModel> => {
           { model: User, as: 'user' },
         ],
       }),
+    getUserByEmail: (email: string): Promise<UserInstance> =>
+      User.findOne({
+        where: {
+          email: { [Op.eq]: email },
+        },
+      }),
+    getUserById: (userId: string): Promise<UserInstance> =>
+      User.findByPk(userId),
 
     createEvent: (
       start: string,

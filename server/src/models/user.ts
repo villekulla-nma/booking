@@ -23,6 +23,14 @@ const schema: Schema = {
     type: DataTypes.STRING,
     unique: true,
   },
+  email: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    unique: true,
+    validate: {
+      isEmail: true,
+    },
+  },
   first_name: {
     type: DataTypes.STRING,
     allowNull: false,
@@ -30,6 +38,9 @@ const schema: Schema = {
   last_name: {
     type: DataTypes.STRING,
     allowNull: false,
+  },
+  password: {
+    type: DataTypes.STRING,
   },
   groupId: {
     type: DataTypes.STRING,
@@ -48,8 +59,10 @@ const schema: Schema = {
 
 const isUserData = (r: any): r is UserAttributes =>
   typeof r.id === 'string' &&
+  typeof r.email === 'string' &&
   typeof r.first_name === 'string' &&
   typeof r.last_name === 'string' &&
+  Array.isArray((typeof r.password).match(/^(string|undefined)$/)) &&
   typeof r.groupId === 'string';
 
 export const scaffoldUsers = async (
@@ -60,12 +73,16 @@ export const scaffoldUsers = async (
     await User.bulkCreate(
       data
         .filter((r) => isUserData(r))
-        .map(({ id, first_name, last_name, groupId }) => ({
-          id,
-          first_name,
-          last_name,
-          groupId,
-        }))
+        .map(
+          ({ id, email, first_name, last_name, groupId, password = null }) => ({
+            id,
+            email,
+            first_name,
+            last_name,
+            password,
+            groupId,
+          })
+        )
     );
   }
 };

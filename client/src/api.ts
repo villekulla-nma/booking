@@ -2,11 +2,42 @@ import type {
   UserAttributes,
   ResourceAttributes,
   EventAttributes,
+  LoginResult,
 } from '@villekulla-reservations/types';
 
 export type EventByIdData = EventAttributes & {
   user: UserAttributes;
   resource: ResourceAttributes;
+};
+
+export const login = async (
+  email: string,
+  password: string
+): Promise<LoginResult> => {
+  const response = await fetch('/api/login', {
+    method: 'POST',
+    headers: {
+      'content-type': 'application/json',
+    },
+    body: JSON.stringify({ email, password }),
+  });
+  const { status } = await response.json();
+
+  if (!/^(ok|unverified|invalid|error)$/.test(status)) {
+    throw new Error('Invalid response from /api/login');
+  }
+
+  return status as LoginResult;
+};
+
+export const logout = async (): Promise<void> => {
+  await fetch('/api/logout', { method: 'POST' });
+};
+
+export const verifySession = async (): Promise<boolean> => {
+  const response = await fetch('/api/verify-session', { method: 'POST' });
+
+  return response.status === 201;
 };
 
 export const getResources = async (): Promise<ResourceAttributes[]> => {
