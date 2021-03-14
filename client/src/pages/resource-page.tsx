@@ -1,26 +1,36 @@
 import { useState, useRef } from 'react';
-import type { FC, RefObject } from 'react';
+import type { FC, RefObject, SyntheticEvent } from 'react';
 import FullCalendar from '@fullcalendar/react';
 import type {
   DateSelectArg,
-  EventInput,
+  EventSourceInput,
   EventClickArg,
 } from '@fullcalendar/react';
 import locale from '@fullcalendar/core/locales/de';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
+
+import { createEvent } from '../api';
 
 interface SelectionRange {
   start: string;
   end: string;
+  allDay: boolean;
 }
 
 export const ResourcePage: FC = () => {
   const history = useHistory();
+  const params = useParams<{ resourceId: string }>();
   const calendar = useRef<FullCalendar>();
   const [dateSelection, setDateSelection] = useState<SelectionRange>();
+  const [description, setDescription] = useState<string>('');
+  const eventSource = useRef<EventSourceInput>();
+
+  eventSource.current = {
+    url: `/api/resources/${params.resourceId}/events`,
+  };
 
   const plugins = [dayGridPlugin, timeGridPlugin, interactionPlugin];
   const headerToolbar = {
@@ -28,30 +38,47 @@ export const ResourcePage: FC = () => {
     center: 'title',
     right: 'dayGridMonth,timeGridWeek,timeGridDay',
   };
-  const day = new Date().toISOString().split('T').shift();
-  const event: EventInput = {
-    id: '1',
-    title: 'Termin',
-    start: `${day}T12:00:00`,
-    end: `${day}T14:00:00`,
-  };
   const handleClick = (args: EventClickArg) => {
-    console.log('Clicked...', args);
     history.push(`/events/${args.event.id}`);
   };
   const handleSelect = (args: DateSelectArg) => {
-    const { start, end } = args;
+    const start = args.start.toISOString();
+    const endDateTime = args.end;
 
     if (args.allDay) {
-      end.setTime(end.getTime() - 1000);
+      endDateTime.setTime(endDateTime.getTime() - 1000);
     }
 
-    setDateSelection({
-      start: start.toLocaleString(),
-      end: end.toLocaleString(),
-    });
+    const end = endDateTime.toISOString();
+
+    setDateSelection({ start, end, allDay: args.allDay });
   };
-  const handleUnselect = () => setDateSelection(undefined);
+  const handleUnselect = () => {
+    setDateSelection(undefined);
+    setDescription('');
+  };
+  const handleDecriptionChange = (event: SyntheticEvent<HTMLTextAreaElement>) =>
+    setDescription(event.currentTarget.value);
+  const handleFormSubmit = (event: SyntheticEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    if (!dateSelection) {
+      return;
+    }
+
+    const form = event.currentTarget;
+    const { start, end, allDay } = dateSelection;
+
+    createEvent(
+      start,
+      end,
+      description,
+      allDay,
+      params.resourceId,
+      // TODO: use real user ID
+      'urCGzt46j'
+    ).then(() => form.reset());
+  };
   const handleFormReset = () => {
     if (calendar.current) {
       calendar.current.getApi().unselect();
@@ -60,13 +87,14 @@ export const ResourcePage: FC = () => {
 
   return (
     <>
+      {/* TODO: make "locale" configurable by user */}
       <FullCalendar
         ref={calendar as RefObject<FullCalendar>}
         locale={locale}
-        timeZone="local"
+        timeZone="Europe/Berlin"
         plugins={plugins}
         headerToolbar={headerToolbar}
-        initialEvents={[event]}
+        eventSources={[eventSource.current]}
         initialView="dayGridMonth"
         selectable={true}
         eventClick={handleClick}
@@ -75,7 +103,11 @@ export const ResourcePage: FC = () => {
         unselectAuto={false}
       />
       {dateSelection && (
-        <form method="post" onReset={handleFormReset}>
+        <form
+          method="post"
+          onSubmit={handleFormSubmit}
+          onReset={handleFormReset}
+        >
           <dl>
             <dt>Start</dt>
             <dd>{dateSelection.start}</dd>
@@ -83,7 +115,11 @@ export const ResourcePage: FC = () => {
             <dd>{dateSelection.end}</dd>
           </dl>
           <label htmlFor="description">Beschreibung</label>
-          <textarea name="description" id="description" />
+          <textarea
+            name="description"
+            id="description"
+            onInput={handleDecriptionChange}
+          />
           <button type="reset">Abbrechen</button>
           <button>Speichern</button>
         </form>
