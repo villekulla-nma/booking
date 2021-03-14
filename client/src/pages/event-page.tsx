@@ -1,9 +1,10 @@
 import type { FC } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useHistory } from 'react-router-dom';
 import { format, formatDuration, parseISO } from 'date-fns';
 import { de } from 'date-fns/locale';
 
 import { useEventDetail } from '../hooks/use-event-detail';
+import { deleteEvent } from '../api';
 
 interface Params {
   resourceId: string;
@@ -11,6 +12,7 @@ interface Params {
 }
 
 export const EventPage: FC = () => {
+  const history = useHistory();
   const { eventId, resourceId } = useParams<Params>();
   const event = useEventDetail(eventId);
 
@@ -18,6 +20,7 @@ export const EventPage: FC = () => {
     return <b>Loading event...</b>;
   }
 
+  const backLink = `/resources/${resourceId}`;
   // TODO: fix timezone offset...
   const start = parseISO(event.start);
   const end = parseISO(event.end);
@@ -35,10 +38,18 @@ export const EventPage: FC = () => {
   const headingSuffix = duration
     ? `gebucht für ${duration}`
     : 'komplett gebucht';
+  const handleDelete = () => {
+    if (window.confirm('Soll der Eintrag wirklich geköscht werden?')) {
+      deleteEvent(eventId).then(
+        () => history.push(backLink),
+        () => alert('Der Eintrag konnte nicht gelöscht werden.')
+      );
+    }
+  };
 
   return (
     <>
-      <Link to={`/resources/${resourceId}`}>zurück</Link>
+      <Link to={backLink}>zurück</Link>
       <h1>
         {event.resource.name} {headingSuffix}
       </h1>
@@ -56,6 +67,7 @@ export const EventPage: FC = () => {
       </dl>
       <hr />
       <em>Gebucht von {event.user.fullName}</em>
+      <button onClick={handleDelete}>Eintrag löschen</button>
     </>
   );
 };

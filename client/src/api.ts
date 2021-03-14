@@ -23,6 +23,10 @@ export const getEventById = async (eventId: string): Promise<EventByIdData> => {
   return event;
 };
 
+export const deleteEvent = async (eventId: string): Promise<void> => {
+  await fetch(`/api/events/${eventId}`, { method: 'DELETE' });
+};
+
 export const createEvent = async (
   start: string,
   end: string,

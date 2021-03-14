@@ -33,6 +33,8 @@ export interface AppModel {
     userId: string
   ) => Promise<EventInstance>;
 
+  removeEvent: (eventId: string) => Promise<number>;
+
   terminate: () => Promise<void>;
 }
 
@@ -107,6 +109,9 @@ export const initModel = async (): Promise<AppModel> => {
         resourceId,
         userId,
       }),
+
+    removeEvent: (eventId: string) =>
+      Event.destroy({ where: { id: { [Op.eq]: eventId } } }),
 
     terminate: () => db.close(),
   };
