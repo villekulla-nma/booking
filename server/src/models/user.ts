@@ -31,7 +31,7 @@ const schema: Schema = {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  group: {
+  groupId: {
     type: DataTypes.STRING,
     allowNull: false,
   },
@@ -50,7 +50,7 @@ const isUserData = (r: any): r is UserAttributes =>
   typeof r.id === 'string' &&
   typeof r.first_name === 'string' &&
   typeof r.last_name === 'string' &&
-  typeof r.group === 'string';
+  typeof r.groupId === 'string';
 
 export const scaffoldUsers = async (
   User: ModelCtor<UserInstance>,
@@ -60,11 +60,11 @@ export const scaffoldUsers = async (
     await User.bulkCreate(
       data
         .filter((r) => isUserData(r))
-        .map(({ id, first_name, last_name, group }) => ({
+        .map(({ id, first_name, last_name, groupId }) => ({
           id,
           first_name,
           last_name,
-          group,
+          groupId,
         }))
     );
   }

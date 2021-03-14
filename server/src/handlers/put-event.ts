@@ -11,7 +11,7 @@ interface Body {
   end: string;
   description: string;
   allDay: boolean;
-  user: string;
+  userId: string;
 }
 
 const opts: RouteShorthandOptions = {
@@ -23,7 +23,7 @@ const opts: RouteShorthandOptions = {
         end: { type: 'string' },
         description: { type: 'string' },
         allDay: { type: 'boolean' },
-        user: { type: 'string' },
+        userId: { type: 'string' },
       },
     },
     params: {
@@ -43,7 +43,7 @@ export const assignPutEventHandler: AssignHandlerFunction = (
   server.put(route, opts, async (request, reply) => {
     let status = 201;
     const { resourceId } = request.params as Params;
-    const { start, end, description, allDay, user } = request.body as Body;
+    const { start, end, description, allDay, userId } = request.body as Body;
 
     try {
       await model.createEvent(
@@ -52,7 +52,7 @@ export const assignPutEventHandler: AssignHandlerFunction = (
         description,
         allDay,
         resourceId,
-        user
+        userId
       );
     } catch (error) {
       console.log(error);

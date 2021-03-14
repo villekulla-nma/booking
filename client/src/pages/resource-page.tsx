@@ -39,7 +39,8 @@ export const ResourcePage: FC = () => {
     right: 'dayGridMonth,timeGridWeek,timeGridDay',
   };
   const handleClick = (args: EventClickArg) => {
-    history.push(`/events/${args.event.id}`);
+    // TODO: pass on month/week/day to make the back-link useful
+    history.push(`/resources/${params.resourceId}/events/${args.event.id}`);
   };
   const handleSelect = (args: DateSelectArg) => {
     const start = args.start.toISOString();

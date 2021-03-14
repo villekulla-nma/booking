@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import type { RouteProps } from 'react-router-dom';
 
 import './main.css';
+import { EventPage } from './pages/event-page';
 import { ResourcePage } from './pages/resource-page';
 import { StartPage } from './pages/start-page';
 
@@ -17,10 +18,11 @@ const routes: RouteProps[] = [
   {
     path: '/resources/:resourceId',
     component: ResourcePage,
+    exact: true,
   },
   {
-    path: '/events/:eventId',
-    render: () => <h1>Event...</h1>,
+    path: '/resources/:resourceId/events/:eventId',
+    component: EventPage,
   },
 ];
 

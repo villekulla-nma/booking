@@ -7,12 +7,17 @@ import type {
   Sequelize,
 } from 'sequelize';
 import type { EventAttributes } from '@villekulla-reservations/types';
+import type { ResourceInstance } from './resource';
+import type { UserInstance } from './user';
 
 interface EventCreationAttributes extends Optional<EventAttributes, 'id'> {}
 
 export interface EventInstance
   extends Model<EventAttributes, EventCreationAttributes>,
-    EventAttributes {}
+    EventAttributes {
+  resource?: ResourceInstance;
+  user?: UserInstance;
+}
 
 type Schema = ModelAttributes<EventInstance, EventAttributes>;
 
@@ -38,11 +43,11 @@ const schema: Schema = {
     type: DataTypes.BOOLEAN,
     allowNull: false,
   },
-  resource: {
+  resourceId: {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  user: {
+  userId: {
     type: DataTypes.STRING,
     allowNull: false,
   },
@@ -54,8 +59,8 @@ const isEventData = (r: any): r is EventAttributes =>
   typeof r.end === 'string' &&
   typeof r.description === 'string' &&
   typeof r.all_day === 'boolean' &&
-  typeof r.resource === 'string' &&
-  typeof r.user === 'string';
+  typeof r.resourceId === 'string' &&
+  typeof r.userId === 'string';
 
 export const scaffoldEvents = async (
   Event: ModelCtor<EventInstance>,
@@ -65,15 +70,17 @@ export const scaffoldEvents = async (
     await Event.bulkCreate(
       data
         .filter((r) => isEventData(r))
-        .map(({ id, start, end, description, all_day, resource, user }) => ({
-          id,
-          start,
-          end,
-          description,
-          all_day,
-          resource,
-          user,
-        }))
+        .map(
+          ({ id, start, end, description, all_day, resourceId, userId }) => ({
+            id,
+            start,
+            end,
+            description,
+            all_day,
+            resourceId,
+            userId,
+          })
+        )
     );
   }
 };

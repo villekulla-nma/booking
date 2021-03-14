@@ -13,7 +13,7 @@ export interface UserAttributes {
   first_name: string;
   last_name: string;
   fullName: string;
-  group: string;
+  groupId: string;
 }
 
 export interface EventAttributes {
@@ -22,6 +22,6 @@ export interface EventAttributes {
   end: string;
   description: string;
   all_day: boolean;
-  resource: string;
-  user: string;
+  resourceId: string;
+  userId: string;
 }

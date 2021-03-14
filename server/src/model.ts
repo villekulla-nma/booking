@@ -18,18 +18,19 @@ export interface AppModel {
   getAllGroups: () => Promise<GroupInstance[]>;
   getAllUsers: () => Promise<UserInstance[]>;
   getAllEventsByResource: (
-    resource: string,
+    resourceId: string,
     start: string,
     end: string
   ) => Promise<EventInstance[]>;
+  getEventById: (eventId: string) => Promise<EventInstance>;
 
   createEvent: (
     start: string,
     end: string,
     description: string,
     allDay: boolean,
-    resource: string,
-    user: string
+    resourceId: string,
+    userId: string
   ) => Promise<EventInstance>;
 
   terminate: () => Promise<void>;
@@ -50,9 +51,9 @@ export const initModel = async (): Promise<AppModel> => {
   const Event = createEventInstance(db);
   const [data] = await Promise.all([dataPromise, db.sync()]);
 
-  User.belongsTo(Group, { foreignKey: 'group' });
-  Event.belongsTo(User, { foreignKey: 'user' });
-  Event.belongsTo(Resource, { foreignKey: 'resource' });
+  User.belongsTo(Group, { foreignKey: 'groupId', as: 'group' });
+  Event.belongsTo(User, { foreignKey: 'userId', as: 'user' });
+  Event.belongsTo(Resource, { foreignKey: 'resourceId', as: 'resource' });
 
   try {
     await writeScaffoldingData(data, { Group, Resource, User });
@@ -73,13 +74,20 @@ export const initModel = async (): Promise<AppModel> => {
     getAllResources: () => Resource.findAll(),
     getAllGroups: () => Group.findAll(),
     getAllUsers: () => User.findAll(),
-    getAllEventsByResource: (resource: string, start: string, end: string) =>
+    getAllEventsByResource: (resourceId: string, start: string, end: string) =>
       Event.findAll({
         where: {
-          resource: { [Op.eq]: resource },
+          resourceId: { [Op.eq]: resourceId },
           start: { [Op.gte]: start },
           end: { [Op.lte]: end },
         },
+      }),
+    getEventById: (eventId: string) =>
+      Event.findByPk(eventId, {
+        include: [
+          { model: Resource, as: 'resource' },
+          { model: User, as: 'user' },
+        ],
       }),
 
     createEvent: (
@@ -87,8 +95,8 @@ export const initModel = async (): Promise<AppModel> => {
       end: string,
       description: string,
       allDay: boolean,
-      resource: string,
-      user: string
+      resourceId: string,
+      userId: string
     ) =>
       Event.create({
         id: shortid(),
@@ -96,8 +104,8 @@ export const initModel = async (): Promise<AppModel> => {
         start,
         end,
         description,
-        resource,
-        user,
+        resourceId,
+        userId,
       }),
 
     terminate: () => db.close(),
