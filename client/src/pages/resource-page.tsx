@@ -20,6 +20,8 @@ interface SelectionRange {
   allDay: boolean;
 }
 
+const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
 export const ResourcePage: FC = () => {
   const history = useHistory();
   const params = useParams<{ resourceId: string }>();
@@ -30,6 +32,7 @@ export const ResourcePage: FC = () => {
 
   eventSource.current = {
     url: `/api/resources/${params.resourceId}/events`,
+    timeZoneParam: timeZone,
   };
 
   const plugins = [dayGridPlugin, timeGridPlugin, interactionPlugin];
@@ -52,7 +55,11 @@ export const ResourcePage: FC = () => {
 
     const end = endDateTime.toISOString();
 
-    setDateSelection({ start, end, allDay: args.allDay });
+    setDateSelection({
+      allDay: args.allDay,
+      start,
+      end,
+    });
   };
   const handleUnselect = () => {
     setDateSelection(undefined);
@@ -88,11 +95,10 @@ export const ResourcePage: FC = () => {
 
   return (
     <>
-      {/* TODO: make "locale" configurable by user */}
       <FullCalendar
         ref={calendar as RefObject<FullCalendar>}
         locale={locale}
-        timeZone="Europe/Berlin"
+        timeZone={timeZone}
         plugins={plugins}
         headerToolbar={headerToolbar}
         eventSources={[eventSource.current]}

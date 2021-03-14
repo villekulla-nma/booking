@@ -1,6 +1,6 @@
 import type { FC } from 'react';
 import { Link, useParams, useHistory } from 'react-router-dom';
-import { format, formatDuration, parseISO } from 'date-fns';
+import { format, formatDuration } from 'date-fns';
 import { de } from 'date-fns/locale';
 
 import { useEventDetail } from '../hooks/use-event-detail';
@@ -21,9 +21,8 @@ export const EventPage: FC = () => {
   }
 
   const backLink = `/resources/${resourceId}`;
-  // TODO: fix timezone offset...
-  const start = parseISO(event.start);
-  const end = parseISO(event.end);
+  const start = new Date(event.start.replace(/\.000z$/i, ''));
+  const end = new Date(event.end.replace(/\.000z$/i, ''));
   const from = format(start, 'd. LLLL yyyy, H:mm', { locale: de });
   const to = format(end, 'd. LLLL yyyy, H:mm', { locale: de });
   const duration = event.all_day
