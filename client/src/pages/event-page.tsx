@@ -1,5 +1,5 @@
 import type { FC } from 'react';
-import { Link, useParams, useHistory } from 'react-router-dom';
+import { Link, useParams, useHistory, useLocation } from 'react-router-dom';
 import { format, formatDuration } from 'date-fns';
 import { de } from 'date-fns/locale';
 
@@ -13,6 +13,7 @@ interface Params {
 
 export const EventPage: FC = () => {
   const history = useHistory();
+  const location = useLocation();
   const { eventId, resourceId } = useParams<Params>();
   const event = useEventDetail(eventId);
 
@@ -20,7 +21,7 @@ export const EventPage: FC = () => {
     return <b>Loading event...</b>;
   }
 
-  const backLink = `/resources/${resourceId}`;
+  const backLink = `/resources/${resourceId}${location.search}`;
   const start = new Date(event.start.replace(/\.000z$/i, ''));
   const end = new Date(event.end.replace(/\.000z$/i, ''));
   const from = format(start, 'd. LLLL yyyy, H:mm', { locale: de });
