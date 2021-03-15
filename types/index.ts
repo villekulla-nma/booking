@@ -29,3 +29,10 @@ export interface EventAttributes {
 }
 
 export type LoginResult = 'ok' | 'unverified' | 'invalid' | 'error';
+
+export interface User {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+}
