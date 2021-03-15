@@ -41,7 +41,7 @@ const createLoginCookie = async (userId: string): Promise<string> =>
 export const assignPostLoginHandler: AssignHandlerFunction = (
   route,
   server,
-  model
+  db
 ) => {
   server.post(route, opts, async (request, reply) => {
     let status = 200;
@@ -52,7 +52,7 @@ export const assignPostLoginHandler: AssignHandlerFunction = (
       let userId: string | undefined;
       let hash: string | undefined;
 
-      const user = await model.getUserByEmail(email);
+      const user = await db.getUserByEmail(email);
 
       if (!user) {
         server.log.trace('Unknown user with email %s', email);

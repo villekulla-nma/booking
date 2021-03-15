@@ -87,8 +87,10 @@ export const scaffoldUsers = async (
   }
 };
 
-export const createUserInstance = (db: Sequelize): ModelCtor<UserInstance> =>
-  db.define<UserInstance>('User', schema, {
+export const createUserInstance = (
+  sequelize: Sequelize
+): ModelCtor<UserInstance> =>
+  sequelize.define<UserInstance>('User', schema, {
     timestamps: false,
     createdAt: false,
   });

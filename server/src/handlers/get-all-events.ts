@@ -32,13 +32,13 @@ const opts: RouteShorthandOptions = {
 export const assignGetAllEventsHandler: AssignHandlerFunction = (
   route,
   server,
-  model
+  db
 ) => {
   server.get(route, opts, async (request, reply) => {
     const { start, end } = request.query as Querystring;
     const { resourceId } = request.params as Params;
 
-    const events = await model.getAllEventsByResource(resourceId, start, end);
+    const events = await db.getAllEventsByResource(resourceId, start, end);
 
     reply.send(events);
   });

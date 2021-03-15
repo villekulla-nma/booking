@@ -43,8 +43,10 @@ export const scaffoldGroups = async (
   }
 };
 
-export const createGroupInstance = (db: Sequelize): ModelCtor<GroupInstance> =>
-  db.define<GroupInstance>('Group', schema, {
+export const createGroupInstance = (
+  sequelize: Sequelize
+): ModelCtor<GroupInstance> =>
+  sequelize.define<GroupInstance>('Group', schema, {
     timestamps: false,
     createdAt: false,
   });

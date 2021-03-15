@@ -83,5 +83,6 @@ export const scaffoldEvents = async (
   }
 };
 
-export const createEventInstance = (db: Sequelize): ModelCtor<EventInstance> =>
-  db.define<EventInstance>('Event', schema);
+export const createEventInstance = (
+  sequelize: Sequelize
+): ModelCtor<EventInstance> => sequelize.define<EventInstance>('Event', schema);

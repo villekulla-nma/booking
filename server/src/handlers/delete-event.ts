@@ -20,14 +20,14 @@ const opts: RouteShorthandOptions = {
 export const assignDeleteEventHandler: AssignHandlerFunction = (
   route,
   server,
-  model
+  db
 ) => {
   server.delete(route, opts, async (request, reply) => {
     let status = 201;
     const { eventId } = request.params as Params;
 
     try {
-      await model.removeEvent(eventId);
+      await db.removeEvent(eventId);
     } catch {
       status = 500;
     }

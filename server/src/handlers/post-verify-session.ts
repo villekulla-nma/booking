@@ -48,7 +48,7 @@ const verifyToken = async (token: string): Promise<{ id?: string }> =>
 export const assignPostVerifySessionHandler: AssignHandlerFunction = (
   route,
   server,
-  model
+  db
 ) => {
   server.post(route, opts, async (request, reply) => {
     let status = 200;
@@ -70,9 +70,7 @@ export const assignPostVerifySessionHandler: AssignHandlerFunction = (
         break;
       }
 
-      const { id, firstName, lastName, email } = await model.getUserById(
-        userId
-      );
+      const { id, firstName, lastName, email } = await db.getUserById(userId);
       response.user = { id, firstName, lastName, email };
     } while (false);
 

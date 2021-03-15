@@ -8,12 +8,16 @@ import {
   createGroupInstance,
   createUserInstance,
   createEventInstance,
+} from './models';
+import type {
+  GroupInstance,
+  ResourceInstance,
+  UserInstance,
   EventInstance,
 } from './models';
-import type { GroupInstance, ResourceInstance, UserInstance } from './models';
 import { getScaffoldingData, writeScaffoldingData } from './utils/scaffolding';
 
-export interface AppModel {
+export interface Db {
   getAllResources: () => Promise<ResourceInstance[]>;
   getAllGroups: () => Promise<GroupInstance[]>;
   getAllUsers: () => Promise<UserInstance[]>;
@@ -44,16 +48,16 @@ const options: Options = {
   define: {},
 };
 
-export const initModel = async (): Promise<AppModel> => {
-  const db = new Sequelize('sqlite::memory:', options);
+export const initDb = async (): Promise<Db> => {
+  const sequelize = new Sequelize('sqlite::memory:', options);
   const dataPromise = getScaffoldingData(
     path.resolve(__dirname, '..', 'scaffolding')
   );
-  const Resource = createResourceInstance(db);
-  const Group = createGroupInstance(db);
-  const User = createUserInstance(db);
-  const Event = createEventInstance(db);
-  const [data] = await Promise.all([dataPromise, db.sync()]);
+  const Resource = createResourceInstance(sequelize);
+  const Group = createGroupInstance(sequelize);
+  const User = createUserInstance(sequelize);
+  const Event = createEventInstance(sequelize);
+  const [data] = await Promise.all([dataPromise, sequelize.sync()]);
 
   User.belongsTo(Group, { foreignKey: 'groupId', as: 'group' });
   Event.belongsTo(User, { foreignKey: 'userId', as: 'user' });
@@ -67,14 +71,14 @@ export const initModel = async (): Promise<AppModel> => {
   }
 
   try {
-    await db.authenticate();
+    await sequelize.authenticate();
     console.log('Connection has been established successfully.');
   } catch (error) {
     console.error('Unable to connect to the database:', error);
     throw error;
   }
 
-  const appModel: AppModel = {
+  const db: Db = {
     getAllResources: () => Resource.findAll(),
     getAllGroups: () => Group.findAll(),
     getAllUsers: () => User.findAll(),
@@ -115,8 +119,8 @@ export const initModel = async (): Promise<AppModel> => {
     removeEvent: (eventId) =>
       Event.destroy({ where: { id: { [Op.eq]: eventId } } }),
 
-    terminate: () => db.close(),
+    terminate: () => sequelize.close(),
   };
 
-  return appModel;
+  return db;
 };

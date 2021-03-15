@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 
-import { initModel } from './model';
+import { initDb } from './db';
 import { initServer } from './server';
 
 const { error } = dotenv.config();
@@ -11,11 +11,11 @@ if (error) {
 
 (async () => {
   try {
-    const model = await initModel();
+    const db = await initDb();
 
-    process.once('exit', () => model?.terminate());
+    process.once('exit', () => db?.terminate());
 
-    await initServer(model);
+    await initServer(db);
   } catch (err) {
     throw err;
   }

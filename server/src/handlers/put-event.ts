@@ -38,7 +38,7 @@ const opts: RouteShorthandOptions = {
 export const assignPutEventHandler: AssignHandlerFunction = (
   route,
   server,
-  model
+  db
 ) => {
   server.put(route, opts, async (request, reply) => {
     let status = 201;
@@ -46,14 +46,7 @@ export const assignPutEventHandler: AssignHandlerFunction = (
     const { start, end, description, allDay, userId } = request.body as Body;
 
     try {
-      await model.createEvent(
-        start,
-        end,
-        description,
-        allDay,
-        resourceId,
-        userId
-      );
+      await db.createEvent(start, end, description, allDay, resourceId, userId);
     } catch (error) {
       console.log(error);
       status = error.name === 'SequelizeValidationError' ? 400 : 500;

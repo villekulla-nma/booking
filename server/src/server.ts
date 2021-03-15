@@ -2,7 +2,7 @@ import Fastify from 'fastify';
 import type { FastifyInstance } from 'fastify';
 import proxy from 'fastify-http-proxy';
 
-import type { AppModel } from './model';
+import type { Db } from './db';
 import type { AssignHandlerFunction } from './handlers/type';
 import { assignPutEventHandler } from './handlers/put-event';
 import { assignGetAllEventsHandler } from './handlers/get-all-events';
@@ -32,15 +32,15 @@ const initProxy = (server: FastifyInstance): void => {
   }
 };
 
-export const initServer = async (model: AppModel): Promise<void> => {
+export const initServer = async (db: Db): Promise<void> => {
   const server = Fastify({ logger: { level: 'trace' } });
 
-  routes.forEach(([route, handler]) => handler(route, server, model));
+  routes.forEach(([route, handler]) => handler(route, server, db));
 
   server.get(
     '/api/resources',
     async (_, reply): Promise<void> => {
-      const resources = await model.getAllResources();
+      const resources = await db.getAllResources();
 
       reply.send(resources);
     }
@@ -48,7 +48,7 @@ export const initServer = async (model: AppModel): Promise<void> => {
   server.get(
     '/api/groups',
     async (_, reply): Promise<void> => {
-      const groups = await model.getAllGroups();
+      const groups = await db.getAllGroups();
 
       reply.send(groups);
     }
@@ -56,7 +56,7 @@ export const initServer = async (model: AppModel): Promise<void> => {
   server.get(
     '/api/users',
     async (_, reply): Promise<void> => {
-      const users = await model.getAllUsers();
+      const users = await db.getAllUsers();
 
       reply.send(users);
     }

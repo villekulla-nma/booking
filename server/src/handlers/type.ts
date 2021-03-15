@@ -1,8 +1,8 @@
 import type { FastifyInstance } from 'fastify';
-import type { AppModel } from '../model';
+import type { Db } from '../db';
 
 export type AssignHandlerFunction = (
   route: string,
   server: FastifyInstance,
-  model: AppModel
+  db: Db
 ) => void;

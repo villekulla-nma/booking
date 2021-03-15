@@ -47,9 +47,9 @@ export const scaffoldResources = async (
 };
 
 export const createResourceInstance = (
-  db: Sequelize
+  sequelize: Sequelize
 ): ModelCtor<ResourceInstance> =>
-  db.define<ResourceInstance>('Resource', schema, {
+  sequelize.define<ResourceInstance>('Resource', schema, {
     timestamps: false,
     createdAt: false,
   });

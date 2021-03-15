@@ -20,12 +20,12 @@ const opts: RouteShorthandOptions = {
 export const assignGetEventByIdHandler: AssignHandlerFunction = (
   route,
   server,
-  model
+  db
 ) => {
   server.get(route, opts, async (request, reply) => {
     const { eventId } = request.params as Params;
 
-    const event = await model.getEventById(eventId);
+    const event = await db.getEventById(eventId);
 
     reply.send(event);
   });
