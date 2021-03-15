@@ -74,11 +74,11 @@ export const initModel = async (): Promise<AppModel> => {
     throw error;
   }
 
-  return {
+  const appModel: AppModel = {
     getAllResources: () => Resource.findAll(),
     getAllGroups: () => Group.findAll(),
     getAllUsers: () => User.findAll(),
-    getAllEventsByResource: (resourceId: string, start: string, end: string) =>
+    getAllEventsByResource: (resourceId, start, end) =>
       Event.findAll({
         where: {
           resourceId: { [Op.eq]: resourceId },
@@ -86,30 +86,22 @@ export const initModel = async (): Promise<AppModel> => {
           end: { [Op.lte]: end },
         },
       }),
-    getEventById: (eventId: string) =>
+    getEventById: (eventId) =>
       Event.findByPk(eventId, {
         include: [
           { model: Resource, as: 'resource' },
           { model: User, as: 'user' },
         ],
       }),
-    getUserByEmail: (email: string): Promise<UserInstance> =>
+    getUserByEmail: (email) =>
       User.findOne({
         where: {
           email: { [Op.eq]: email },
         },
       }),
-    getUserById: (userId: string): Promise<UserInstance> =>
-      User.findByPk(userId),
+    getUserById: (userId) => User.findByPk(userId),
 
-    createEvent: (
-      start: string,
-      end: string,
-      description: string,
-      allDay: boolean,
-      resourceId: string,
-      userId: string
-    ) =>
+    createEvent: (start, end, description, allDay, resourceId, userId) =>
       Event.create({
         id: shortid(),
         allDay,
@@ -120,9 +112,11 @@ export const initModel = async (): Promise<AppModel> => {
         userId,
       }),
 
-    removeEvent: (eventId: string) =>
+    removeEvent: (eventId) =>
       Event.destroy({ where: { id: { [Op.eq]: eventId } } }),
 
     terminate: () => db.close(),
   };
+
+  return appModel;
 };
