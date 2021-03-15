@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 
 import type { AssignHandlerFunction } from './type';
 
-const verifyToken = async (token: string): Promise<{ sub?: string }> =>
+const verifyToken = async (token: string): Promise<{ id?: string }> =>
   new Promise((resolve, reject) => {
     jwt.verify(token, process.env.JWT_SECRET, (err, data) => {
       if (err) {
@@ -28,7 +28,7 @@ export const assignPostVerifySessionHandler: AssignHandlerFunction = (
         status = 401;
         break;
       }
-      const { sub: userId } = await verifyToken(token);
+      const { id: userId } = await verifyToken(token);
 
       if (!userId) {
         status = 400;

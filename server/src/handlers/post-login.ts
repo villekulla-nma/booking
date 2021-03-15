@@ -22,10 +22,10 @@ const opts: RouteShorthandOptions = {
   },
 };
 
-const createLoginCookie = async (sub: string): Promise<string> =>
+const createLoginCookie = async (userId: string): Promise<string> =>
   new Promise((resolve, reject) => {
     jwt.sign(
-      { sub },
+      { id: userId },
       process.env.JWT_SECRET,
       { expiresIn: '2 days' },
       (err, token) => {
