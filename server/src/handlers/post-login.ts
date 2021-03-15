@@ -52,25 +52,28 @@ export const assignPostLoginHandler: AssignHandlerFunction = (
       let userId: string | undefined;
       let hash: string | undefined;
 
-      try {
-        const user = await model.getUserByEmail(email);
-        userId = user.id;
-        hash = user.password;
-      } catch {
+      const user = await model.getUserByEmail(email);
+
+      if (!user) {
+        server.log.trace('Unknown user with email %s', email);
         status = 401;
         result = { status: 'invalid' };
         break;
       }
 
-      if (typeof userId === 'undefined' || typeof hash === 'undefined') {
+      if (typeof user.password === 'undefined') {
+        server.log.trace('Unverified user with email %s', email);
         status = 400;
         result = { status: 'unverified' };
         break;
       }
 
+      userId = user.id;
+      hash = user.password;
       const passwordIsValid = await bcrypt.compare(password, hash);
 
       if (!passwordIsValid) {
+        server.log.trace('Invalid password by user with email %s', email);
         status = 401;
         result = { status: 'invalid' };
         break;
@@ -80,7 +83,11 @@ export const assignPostLoginHandler: AssignHandlerFunction = (
         const cookie = await createLoginCookie(userId);
         reply.header('set-cookie', `login=${cookie}; path=/; httpOnly=true`);
       } catch (error) {
-        console.log(error);
+        server.log.trace(
+          'Error creating token: %s; user: %s',
+          error.message,
+          email
+        );
         status = 500;
         result = { status: 'error' };
       }

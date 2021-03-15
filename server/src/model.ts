@@ -23,7 +23,7 @@ export interface AppModel {
     end: string
   ) => Promise<EventInstance[]>;
   getEventById: (eventId: string) => Promise<EventInstance>;
-  getUserByEmail: (email: string) => Promise<UserInstance>;
+  getUserByEmail: (email: string) => Promise<UserInstance | null>;
   getUserById: (userId: string) => Promise<UserInstance>;
 
   createEvent: (
