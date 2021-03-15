@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react';
+import type { User } from '@villekulla-reservations/types';
 
 import { verifySession } from '../api';
 
-export const useSessionChecker = (): boolean | undefined => {
-  const [validSession, setValidSession] = useState<boolean>();
+export const useSessionChecker = (): User | undefined => {
+  const [user, setUser] = useState<User>();
 
   useEffect(() => {
-    verifySession().then((result) => setValidSession(result));
+    verifySession().then((result) => setUser(result));
   }, []);
 
-  return validSession;
+  return user;
 };

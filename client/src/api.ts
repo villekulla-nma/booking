@@ -3,7 +3,10 @@ import type {
   ResourceAttributes,
   EventAttributes,
   LoginResult,
+  User,
 } from '@villekulla-reservations/types';
+
+import { isUser } from './helpers/is-user';
 
 export type EventByIdData = EventAttributes & {
   user: UserAttributes;
@@ -34,10 +37,16 @@ export const logout = async (): Promise<void> => {
   await fetch('/api/logout', { method: 'POST' });
 };
 
-export const verifySession = async (): Promise<boolean> => {
+export const verifySession = async (): Promise<User | undefined> => {
   const response = await fetch('/api/verify-session', { method: 'POST' });
 
-  return response.status === 201;
+  if (response.status !== 200) {
+    return undefined;
+  }
+
+  const { user } = await response.json();
+
+  return isUser(user) ? user : undefined;
 };
 
 export const getResources = async (): Promise<ResourceAttributes[]> => {

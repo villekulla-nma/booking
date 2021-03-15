@@ -1,20 +1,23 @@
 import type { FC, ReactElement } from 'react';
 
 import { useSessionChecker } from '../hooks/use-session-checker';
+import { UserContext } from '../contexts/user-context';
 
 interface Props {
   loginPage: ReactElement;
 }
 
-export const WithAuth: FC<Props> = ({ loginPage, children }) => {
-  const hasValidSession = useSessionChecker();
+const { Provider: UserProvider } = UserContext;
 
-  if (typeof hasValidSession === 'undefined') {
+export const WithAuth: FC<Props> = ({ loginPage, children }) => {
+  const user = useSessionChecker();
+
+  if (typeof user === 'undefined') {
     return null;
   }
 
-  if (hasValidSession) {
-    return <>{children}</>;
+  if (user) {
+    return <UserProvider value={user}>{children}</UserProvider>;
   }
 
   return loginPage;
