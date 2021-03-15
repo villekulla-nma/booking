@@ -31,11 +31,11 @@ const schema: Schema = {
       isEmail: true,
     },
   },
-  first_name: {
+  firstName: {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  last_name: {
+  lastName: {
     type: DataTypes.STRING,
     allowNull: false,
   },
@@ -49,7 +49,7 @@ const schema: Schema = {
   fullName: {
     type: DataTypes.VIRTUAL,
     get() {
-      return `${this.first_name} ${this.last_name}`;
+      return `${this.firstName} ${this.lastName}`;
     },
     set(_) {
       throw new Error('Do not try to set the `fullName` value!');
@@ -60,8 +60,8 @@ const schema: Schema = {
 const isUserData = (r: any): r is UserAttributes =>
   typeof r.id === 'string' &&
   typeof r.email === 'string' &&
-  typeof r.first_name === 'string' &&
-  typeof r.last_name === 'string' &&
+  typeof r.firstName === 'string' &&
+  typeof r.lastName === 'string' &&
   Array.isArray((typeof r.password).match(/^(string|undefined)$/)) &&
   typeof r.groupId === 'string';
 
@@ -74,11 +74,11 @@ export const scaffoldUsers = async (
       data
         .filter((r) => isUserData(r))
         .map(
-          ({ id, email, first_name, last_name, groupId, password = null }) => ({
+          ({ id, email, firstName, lastName, groupId, password = null }) => ({
             id,
             email,
-            first_name,
-            last_name,
+            firstName,
+            lastName,
             password,
             groupId,
           })

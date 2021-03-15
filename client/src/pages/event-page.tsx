@@ -26,7 +26,7 @@ export const EventPage: FC = () => {
   const end = new Date(event.end.replace(/\.000z$/i, ''));
   const from = format(start, 'd. LLLL yyyy, H:mm', { locale: de });
   const to = format(end, 'd. LLLL yyyy, H:mm', { locale: de });
-  const duration = event.all_day
+  const duration = event.allDay
     ? null
     : formatDuration(
         {

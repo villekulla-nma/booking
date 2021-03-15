@@ -11,8 +11,8 @@ export interface ResourceAttributes {
 export interface UserAttributes {
   id: string;
   email: string;
-  first_name: string;
-  last_name: string;
+  firstName: string;
+  lastName: string;
   password?: string;
   fullName: string;
   groupId: string;
@@ -23,7 +23,7 @@ export interface EventAttributes {
   start: string;
   end: string;
   description: string;
-  all_day: boolean;
+  allDay: boolean;
   resourceId: string;
   userId: string;
 }

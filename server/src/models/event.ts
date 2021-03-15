@@ -39,7 +39,7 @@ const schema: Schema = {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  all_day: {
+  allDay: {
     type: DataTypes.BOOLEAN,
     allowNull: false,
   },
@@ -58,7 +58,7 @@ const isEventData = (r: any): r is EventAttributes =>
   typeof r.start === 'string' &&
   typeof r.end === 'string' &&
   typeof r.description === 'string' &&
-  typeof r.all_day === 'boolean' &&
+  typeof r.allDay === 'boolean' &&
   typeof r.resourceId === 'string' &&
   typeof r.userId === 'string';
 
@@ -70,17 +70,15 @@ export const scaffoldEvents = async (
     await Event.bulkCreate(
       data
         .filter((r) => isEventData(r))
-        .map(
-          ({ id, start, end, description, all_day, resourceId, userId }) => ({
-            id,
-            start,
-            end,
-            description,
-            all_day,
-            resourceId,
-            userId,
-          })
-        )
+        .map(({ id, start, end, description, allDay, resourceId, userId }) => ({
+          id,
+          start,
+          end,
+          description,
+          allDay,
+          resourceId,
+          userId,
+        }))
     );
   }
 };

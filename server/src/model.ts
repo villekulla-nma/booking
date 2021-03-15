@@ -112,7 +112,7 @@ export const initModel = async (): Promise<AppModel> => {
     ) =>
       Event.create({
         id: shortid(),
-        all_day: allDay,
+        allDay,
         start,
         end,
         description,
