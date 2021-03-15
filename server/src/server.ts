@@ -33,7 +33,7 @@ const initProxy = (server: FastifyInstance): void => {
 };
 
 export const initServer = async (model: AppModel): Promise<void> => {
-  const server = Fastify({ logger: true });
+  const server = Fastify({ logger: { level: 'trace' } });
 
   routes.forEach(([route, handler]) => handler(route, server, model));
 
