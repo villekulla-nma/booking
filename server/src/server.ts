@@ -4,6 +4,7 @@ import proxy from 'fastify-http-proxy';
 
 import type { Db } from './db';
 import type { AssignHandlerFunction } from './handlers/type';
+import { getResourcesHandler } from './handlers/get-resurces';
 import { assignPutEventHandler } from './handlers/put-event';
 import { assignGetAllEventsHandler } from './handlers/get-all-events';
 import { assignGetEventByIdHandler } from './handlers/get-event-by-id';
@@ -16,6 +17,7 @@ const routes: [string, AssignHandlerFunction][] = [
   ['/api/login', assignPostLoginHandler],
   ['/api/logout', assignPostLogoutHandler],
   ['/api/verify-session', assignPostVerifySessionHandler],
+  ['/api/resources', getResourcesHandler],
   ['/api/resources/:resourceId/events', assignPutEventHandler],
   ['/api/resources/:resourceId/events', assignGetAllEventsHandler],
   ['/api/events/:eventId', assignGetEventByIdHandler],
@@ -36,31 +38,6 @@ export const initServer = async (db: Db): Promise<void> => {
   const server = Fastify({ logger: { level: 'trace' } });
 
   routes.forEach(([route, handler]) => handler(route, server, db));
-
-  server.get(
-    '/api/resources',
-    async (_, reply): Promise<void> => {
-      const resources = await db.getAllResources();
-
-      reply.send(resources);
-    }
-  );
-  server.get(
-    '/api/groups',
-    async (_, reply): Promise<void> => {
-      const groups = await db.getAllGroups();
-
-      reply.send(groups);
-    }
-  );
-  server.get(
-    '/api/users',
-    async (_, reply): Promise<void> => {
-      const users = await db.getAllUsers();
-
-      reply.send(users);
-    }
-  );
 
   await initProxy(server);
   await server.listen(process.env.PORT || '3000');
