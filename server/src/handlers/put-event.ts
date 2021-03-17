@@ -1,6 +1,8 @@
 import type { RouteShorthandOptions } from 'fastify';
 
 import type { AssignHandlerFunction } from './type';
+import type { Request } from './pre-verify-session';
+import { preVerifySessionHandler } from './pre-verify-session';
 
 interface Params {
   resourceId: string;
@@ -30,9 +32,11 @@ const opts: RouteShorthandOptions = {
       type: 'object',
       properties: {
         resourceId: { type: 'string' },
+        userId: { type: 'string' },
       },
     },
   },
+  preHandler: preVerifySessionHandler,
 };
 
 export const assignPutEventHandler: AssignHandlerFunction = (
@@ -40,10 +44,10 @@ export const assignPutEventHandler: AssignHandlerFunction = (
   server,
   db
 ) => {
-  server.put(route, opts, async (request, reply) => {
+  server.put(route, opts, async (request: Request<Params>, reply) => {
     let status = 201;
-    const { resourceId } = request.params as Params;
-    const { start, end, description, allDay, userId } = request.body as Body;
+    const { resourceId, userId } = request.params;
+    const { start, end, description, allDay } = request.body as Body;
 
     try {
       await db.createEvent(start, end, description, allDay, resourceId, userId);

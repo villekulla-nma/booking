@@ -1,9 +1,9 @@
 import type { RouteShorthandOptions } from 'fastify';
 import type { LoginResult } from '@villekulla-reservations/types';
 import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
 
 import type { AssignHandlerFunction } from './type';
+import { signJwt } from '../utils/jwt';
 
 interface Body {
   email: string;
@@ -21,22 +21,6 @@ const opts: RouteShorthandOptions = {
     },
   },
 };
-
-const createLoginCookie = async (userId: string): Promise<string> =>
-  new Promise((resolve, reject) => {
-    jwt.sign(
-      { id: userId },
-      process.env.JWT_SECRET,
-      { expiresIn: '2 days' },
-      (err, token) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(token);
-        }
-      }
-    );
-  });
 
 export const assignPostLoginHandler: AssignHandlerFunction = (
   route,
@@ -80,7 +64,7 @@ export const assignPostLoginHandler: AssignHandlerFunction = (
       }
 
       try {
-        const cookie = await createLoginCookie(userId);
+        const cookie = await signJwt({ id: userId });
         reply.header('set-cookie', `login=${cookie}; path=/; httpOnly=true`);
       } catch (error) {
         server.log.trace(

@@ -39,7 +39,7 @@ export interface Db {
     userId: string
   ) => Promise<EventInstance>;
 
-  removeEvent: (eventId: string) => Promise<number>;
+  removeEvent: (eventId: string, userId: string) => Promise<number>;
 
   terminate: () => Promise<void>;
 }
@@ -116,8 +116,13 @@ export const initDb = async (): Promise<Db> => {
         userId,
       }),
 
-    removeEvent: (eventId) =>
-      Event.destroy({ where: { id: { [Op.eq]: eventId } } }),
+    removeEvent: (eventId, userId) =>
+      Event.destroy({
+        where: {
+          id: { [Op.eq]: eventId },
+          userId: { [Op.eq]: userId },
+        },
+      }),
 
     terminate: () => sequelize.close(),
   };

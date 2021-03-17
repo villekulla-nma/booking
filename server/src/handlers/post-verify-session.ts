@@ -1,11 +1,18 @@
 import type { RouteShorthandOptions } from 'fastify';
-import jwt from 'jsonwebtoken';
 import type { User } from '@villekulla-reservations/types';
 
 import type { AssignHandlerFunction } from './type';
+import type { Request } from './pre-verify-session';
+import { preVerifySessionHandler } from './pre-verify-session';
 
 const opts: RouteShorthandOptions = {
   schema: {
+    params: {
+      type: 'object',
+      properties: {
+        userId: { type: 'string' },
+      },
+    },
     response: {
       200: {
         type: 'object',
@@ -32,48 +39,21 @@ const opts: RouteShorthandOptions = {
       },
     },
   },
+  preHandler: preVerifySessionHandler,
 };
-
-const verifyToken = async (token: string): Promise<{ id?: string }> =>
-  new Promise((resolve, reject) => {
-    jwt.verify(token, process.env.JWT_SECRET, (err, data) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(typeof data === 'object' ? data : {});
-      }
-    });
-  });
 
 export const assignPostVerifySessionHandler: AssignHandlerFunction = (
   route,
   server,
   db
 ) => {
-  server.post(route, opts, async (request, reply) => {
-    let status = 200;
-    const response: { status: string; user?: User } = { status: 'ok' };
-    const [, token] =
-      request.headers?.cookie?.match(/login=([^;]+)(;|$)/) || [];
+  server.post(route, opts, async (request: Request, reply) => {
+    const { id, firstName, lastName, email } = await db.getUserById(
+      request.params.userId
+    );
+    const user: User = { id, firstName, lastName, email };
+    const response = { status: 'ok', user };
 
-    do {
-      if (!token) {
-        response.status = 'error';
-        status = 401;
-        break;
-      }
-      const { id: userId } = await verifyToken(token);
-
-      if (!userId) {
-        response.status = 'invalid';
-        status = 400;
-        break;
-      }
-
-      const { id, firstName, lastName, email } = await db.getUserById(userId);
-      response.user = { id, firstName, lastName, email };
-    } while (false);
-
-    reply.status(status).send(response);
+    reply.status(200).send(response);
   });
 };

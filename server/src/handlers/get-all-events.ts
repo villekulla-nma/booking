@@ -1,6 +1,8 @@
 import type { RouteShorthandOptions } from 'fastify';
 
 import type { AssignHandlerFunction } from './type';
+import type { Request } from './pre-verify-session';
+import { preVerifySessionHandler } from './pre-verify-session';
 
 interface Querystring {
   start: string;
@@ -24,9 +26,11 @@ const opts: RouteShorthandOptions = {
       type: 'object',
       properties: {
         resourceId: { type: 'string' },
+        userId: { type: 'string' },
       },
     },
   },
+  preHandler: preVerifySessionHandler,
 };
 
 export const assignGetAllEventsHandler: AssignHandlerFunction = (
@@ -34,9 +38,9 @@ export const assignGetAllEventsHandler: AssignHandlerFunction = (
   server,
   db
 ) => {
-  server.get(route, opts, async (request, reply) => {
+  server.get(route, opts, async (request: Request<Params>, reply) => {
     const { start, end } = request.query as Querystring;
-    const { resourceId } = request.params as Params;
+    const { resourceId } = request.params;
 
     const events = await db.getAllEventsByResource(resourceId, start, end);
 
