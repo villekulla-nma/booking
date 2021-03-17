@@ -32,7 +32,7 @@ export const assignDeleteEventHandler: AssignHandlerFunction = (
 
     try {
       const result = await db.removeEvent(eventId, userId);
-      status = result === 1 ? 201 : 400;
+      status = result === 1 ? 200 : 400;
     } catch {
       status = 500;
     }
