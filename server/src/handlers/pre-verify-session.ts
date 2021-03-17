@@ -12,20 +12,18 @@ export const preVerifySessionHandler = async (
 ) => {
   const [, token] = request.headers?.cookie?.match(/login=([^;]+)(;|$)/) || [];
 
-  do {
-    if (!token) {
-      reply.code(401).send({ status: 'error' });
-      break;
-    }
+  if (!token) {
+    reply.code(401).send({ status: 'error' });
+    return;
+  }
 
-    const result = await verifyJwt(token);
+  const result = await verifyJwt(token);
 
-    if (typeof result !== 'object' || result === null || !('id' in result)) {
-      reply.code(400).send({ status: 'invalid' });
-      break;
-    }
+  if (typeof result !== 'object' || result === null || !('id' in result)) {
+    reply.code(400).send({ status: 'invalid' });
+    return;
+  }
 
-    const { id: userId } = result as Record<string, unknown>;
-    request.params.userId = String(userId);
-  } while (false);
+  const { id: userId } = result as Record<string, unknown>;
+  request.params.userId = String(userId);
 };
