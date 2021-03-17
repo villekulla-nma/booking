@@ -72,14 +72,13 @@ export const createEvent = async (
   end: string,
   description: string,
   allDay: boolean,
-  resourceId: string,
-  userId: string
+  resourceId: string
 ): Promise<void> => {
   fetch(`/api/resources/${resourceId}/events`, {
     method: 'PUT',
     headers: {
       'content-type': 'application/json',
     },
-    body: JSON.stringify({ userId, start, end, description, allDay }),
+    body: JSON.stringify({ start, end, description, allDay }),
   });
 };

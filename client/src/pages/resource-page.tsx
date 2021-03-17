@@ -132,15 +132,9 @@ export const ResourcePage: FC = () => {
     const form = event.currentTarget;
     const { start, end, allDay } = dateSelection;
 
-    createEvent(
-      start,
-      end,
-      description,
-      allDay,
-      params.resourceId,
-      // TODO: use real user ID
-      'urCGzt46j'
-    ).then(() => form.reset());
+    createEvent(start, end, description, allDay, params.resourceId).then(() =>
+      form.reset()
+    );
   };
   const handleFormReset = () => {
     if (calendar.current) {
