@@ -11,7 +11,7 @@ import { StartPage } from './pages/start-page';
 import { WithAuth } from './components/with-auth';
 import { LogoutButton } from './components/logout-button';
 
-const routes: RouteProps[] = [
+const authenticatedRoutes: RouteProps[] = [
   {
     path: '/',
     component: StartPage,
@@ -32,15 +32,15 @@ const routes: RouteProps[] = [
 ReactDOM.render(
   <StrictMode>
     <Router basename="app">
-      <WithAuth loginPage={<LoginPage />}>
-        <LogoutButton />
-        <hr />
-        <Switch>
-          {routes.map((route, i) => (
+      <LogoutButton />
+      <hr />
+      <Switch>
+        <WithAuth loginPage={<LoginPage />}>
+          {authenticatedRoutes.map((route, i) => (
             <Route key={i} {...route} />
           ))}
-        </Switch>
-      </WithAuth>
+        </WithAuth>
+      </Switch>
     </Router>
   </StrictMode>,
   document.getElementById('root')
