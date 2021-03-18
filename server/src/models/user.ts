@@ -1,10 +1,11 @@
-import { DataTypes } from 'sequelize';
+import { DataTypes, Op } from 'sequelize';
 import type {
   Model,
   ModelAttributes,
   ModelCtor,
   Optional,
   Sequelize,
+  Transaction,
 } from 'sequelize';
 import type { UserAttributes } from '@villekulla-reservations/types';
 
@@ -57,8 +58,8 @@ const schema: Schema = {
   },
 };
 
-const isUserData = (r: any): r is UserAttributes =>
-  typeof r.id === 'string' &&
+const isUserCreationData = (r: any): r is UserCreationAttributes =>
+  Array.isArray((typeof r.id).match(/^(string|undefined)$/)) &&
   typeof r.email === 'string' &&
   typeof r.firstName === 'string' &&
   typeof r.lastName === 'string' &&
@@ -67,20 +68,20 @@ const isUserData = (r: any): r is UserAttributes =>
 
 export const scaffoldUsers = async (
   User: ModelCtor<UserInstance>,
-  data: unknown
+  data: unknown,
+  transaction: Transaction
 ): Promise<void> => {
   if (Array.isArray(data)) {
-    await User.bulkCreate(
+    await Promise.all(
       data
-        .filter((r) => isUserData(r))
-        .map(
-          ({ id, email, firstName, lastName, groupId, password = null }) => ({
-            id,
-            email,
-            firstName,
-            lastName,
-            password,
-            groupId,
+        .filter((r) => isUserCreationData(r))
+        .map(async (user) =>
+          User.findOrCreate({
+            where: {
+              id: { [Op.eq]: user.id },
+            },
+            defaults: user,
+            transaction,
           })
         )
     );

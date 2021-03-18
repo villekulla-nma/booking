@@ -64,7 +64,7 @@ export const initDb = async (): Promise<Db> => {
   Event.belongsTo(Resource, { foreignKey: 'resourceId', as: 'resource' });
 
   try {
-    await writeScaffoldingData(data, { Group, Resource, User });
+    await writeScaffoldingData(sequelize, data, { Group, Resource, User });
   } catch (error) {
     console.error(error);
     throw error;

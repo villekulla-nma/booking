@@ -1,10 +1,11 @@
-import { DataTypes } from 'sequelize';
+import { DataTypes, Op } from 'sequelize';
 import type {
   Model,
   ModelAttributes,
   ModelCtor,
   Optional,
   Sequelize,
+  Transaction,
 } from 'sequelize';
 import type { ResourceAttributes } from '@villekulla-reservations/types';
 
@@ -35,13 +36,22 @@ const isResourceData = (r: any): r is ResourceAttributes =>
 
 export const scaffoldResources = async (
   Resource: ModelCtor<ResourceInstance>,
-  data: unknown
+  data: unknown,
+  transaction: Transaction
 ): Promise<void> => {
   if (Array.isArray(data)) {
-    await Resource.bulkCreate(
+    await Promise.all(
       data
         .filter((r) => isResourceData(r))
-        .map(({ id, name }) => ({ id, name }))
+        .map((resource) =>
+          Resource.findOrCreate({
+            where: {
+              id: { [Op.eq]: resource.id },
+            },
+            defaults: resource,
+            transaction,
+          })
+        )
     );
   }
 };

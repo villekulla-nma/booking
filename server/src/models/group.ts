@@ -1,10 +1,11 @@
-import { DataTypes } from 'sequelize';
+import { DataTypes, Op } from 'sequelize';
 import type {
   Model,
   ModelAttributes,
   ModelCtor,
   Optional,
   Sequelize,
+  Transaction,
 } from 'sequelize';
 import type { GroupAttributes } from '@villekulla-reservations/types';
 
@@ -34,11 +35,22 @@ const isGroupData = (r: any): r is GroupAttributes =>
 
 export const scaffoldGroups = async (
   Group: ModelCtor<GroupInstance>,
-  data: unknown
+  data: unknown,
+  transaction: Transaction
 ): Promise<void> => {
   if (Array.isArray(data)) {
-    await Group.bulkCreate(
-      data.filter((r) => isGroupData(r)).map(({ id, name }) => ({ id, name }))
+    await Promise.all(
+      data
+        .filter((r) => isGroupData(r))
+        .map((group) =>
+          Group.findOrCreate({
+            where: {
+              id: { [Op.eq]: group.id },
+            },
+            defaults: group,
+            transaction,
+          })
+        )
     );
   }
 };

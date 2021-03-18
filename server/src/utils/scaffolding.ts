@@ -1,8 +1,7 @@
 import path from 'path';
 import { promises as fs } from 'fs';
-import type { ModelCtor } from 'sequelize';
+import type { ModelCtor, Sequelize } from 'sequelize';
 
-import { env } from './env';
 import { scaffoldResources, scaffoldGroups, scaffoldUsers } from '../models';
 import type { GroupInstance, ResourceInstance, UserInstance } from '../models';
 
@@ -29,35 +28,33 @@ export const getScaffoldingData = async (
 ): Promise<Record<string, unknown>> => {
   const data = await readFile(path.join(dir, 'data.json'));
 
-  if (env('NODE_ENV') === 'development') {
-    const devData = await readFile(path.join(dir, 'dev-data.json'));
-    Object.assign(data, devData);
-  }
-
   return data;
 };
 
 export const writeScaffoldingData = async (
+  sequelize: Sequelize,
   data: Record<string, unknown>,
   instances: ModelInstances
 ): Promise<void> => {
-  await Promise.all(
-    Object.keys(data).map(
-      async (key: string): Promise<unknown> => {
-        switch (key) {
-          case 'Resource': {
-            return scaffoldResources(instances.Resource, data.Resource);
+  await sequelize.transaction(async (t) => {
+    return await Promise.all(
+      Object.keys(data).map(
+        async (key: string): Promise<unknown> => {
+          switch (key) {
+            case 'Resource': {
+              return scaffoldResources(instances.Resource, data.Resource, t);
+            }
+            case 'Group': {
+              return scaffoldGroups(instances.Group, data.Group, t);
+            }
+            case 'User': {
+              return scaffoldUsers(instances.User, data.User, t);
+            }
+            default:
+              return Promise.resolve();
           }
-          case 'Group': {
-            return scaffoldGroups(instances.Group, data.Group);
-          }
-          case 'User': {
-            return scaffoldUsers(instances.User, data.User);
-          }
-          default:
-            return Promise.resolve();
         }
-      }
-    )
-  );
+      )
+    );
+  });
 };
