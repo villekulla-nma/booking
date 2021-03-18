@@ -16,6 +16,7 @@ import type {
   EventInstance,
 } from './models';
 import { getScaffoldingData, writeScaffoldingData } from './utils/scaffolding';
+import type { UserAttributes } from '@villekulla-reservations/types';
 
 export interface Db {
   getAllResources: () => Promise<ResourceInstance[]>;
@@ -38,6 +39,11 @@ export interface Db {
     resourceId: string,
     userId: string
   ) => Promise<EventInstance>;
+
+  updateUser: (
+    id: string,
+    data: Partial<UserAttributes>
+  ) => Promise<[number, UserInstance[]]>;
 
   removeEvent: (eventId: string, userId: string) => Promise<number>;
 
@@ -114,6 +120,13 @@ export const initDb = async (): Promise<Db> => {
         description,
         resourceId,
         userId,
+      }),
+
+    updateUser: (UserId, data) =>
+      User.update(data, {
+        where: {
+          id: { [Op.eq]: UserId },
+        },
       }),
 
     removeEvent: (eventId, userId) =>

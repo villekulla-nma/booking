@@ -12,6 +12,7 @@
     "dotenv": "8.2.0",
     "fastify": "3.14.0",
     "jsonwebtoken": "8.5.1",
+    "nodemailer": "6.5.0",
     "sequelize": "6.5.0",
     "shortid": "2.2.16",
     "sqlite3": "5.0.2"
@@ -20,6 +21,7 @@
     "@types/bcryptjs": "2.4.1",
     "@types/jsonwebtoken": "7.2.7",
     "@types/node": "12.12.2",
+    "@types/nodemailer": "4.6.0",
     "@types/shortid": "0.0.29",
     "@villekulla-reservations/types": "0.1.0",
     "fastify-http-proxy": "5.0.0",

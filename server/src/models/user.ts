@@ -43,6 +43,9 @@ const schema: Schema = {
   password: {
     type: DataTypes.STRING,
   },
+  passwordReset: {
+    type: DataTypes.STRING,
+  },
   groupId: {
     type: DataTypes.STRING,
     allowNull: false,
@@ -64,6 +67,7 @@ const isUserCreationData = (r: any): r is UserCreationAttributes =>
   typeof r.firstName === 'string' &&
   typeof r.lastName === 'string' &&
   Array.isArray((typeof r.password).match(/^(string|undefined)$/)) &&
+  Array.isArray((typeof r.passwordReset).match(/^(string|undefined)$/)) &&
   typeof r.groupId === 'string';
 
 export const scaffoldUsers = async (

@@ -14,6 +14,7 @@ export interface UserAttributes {
   firstName: string;
   lastName: string;
   password?: string;
+  passwordReset?: string;
   fullName: string;
   groupId: string;
 }

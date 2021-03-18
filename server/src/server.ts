@@ -13,10 +13,12 @@ import { assignDeleteEventHandler } from './handlers/delete-event';
 import { assignPostLoginHandler } from './handlers/post-login';
 import { assignPostVerifySessionHandler } from './handlers/post-verify-session';
 import { assignPostLogoutHandler } from './handlers/post-logout';
+import { assignPostPasswordResetHandler } from './handlers/post-password-reset';
 
 const routes: [string, AssignHandlerFunction][] = [
   ['/api/login', assignPostLoginHandler],
   ['/api/logout', assignPostLogoutHandler],
+  ['/api/password-reset', assignPostPasswordResetHandler],
   ['/api/verify-session', assignPostVerifySessionHandler],
   ['/api/resources', getResourcesHandler],
   ['/api/resources/:resourceId/events', assignPutEventHandler],
