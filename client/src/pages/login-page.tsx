@@ -1,12 +1,15 @@
 import type { FC, SyntheticEvent } from 'react';
 import { useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 
 import { login } from '../api';
 
 export const LoginPage: FC = () => {
+  const location = useLocation<{ from: string }>();
   const [feedback, setFeedback] = useState<string>();
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
+  const { from = '/app/' } = location.state || {};
 
   const handleEmailChange = (event: SyntheticEvent<HTMLInputElement>): void => {
     setEmail(event.currentTarget.value);
@@ -22,7 +25,7 @@ export const LoginPage: FC = () => {
     login(email, password).then((result) => {
       switch (result) {
         case 'ok':
-          window.location.reload();
+          window.location.href = from;
           break;
         case 'unverified':
           setFeedback('Bitte verfifiziere deinen Nutzer.');
@@ -72,6 +75,9 @@ export const LoginPage: FC = () => {
             onInput={handlePasswordChange}
           />
         </div>
+        <p>
+          <Link to="/password-reset">Passwort vergessen?</Link>
+        </p>
       </fieldset>
       <button>Absenden</button>
     </form>
