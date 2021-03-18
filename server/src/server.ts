@@ -2,6 +2,7 @@ import Fastify from 'fastify';
 import type { FastifyInstance } from 'fastify';
 import proxy from 'fastify-http-proxy';
 
+import { env } from './utils/env';
 import type { Db } from './db';
 import type { AssignHandlerFunction } from './handlers/type';
 import { getResourcesHandler } from './handlers/get-resurces';
@@ -25,9 +26,11 @@ const routes: [string, AssignHandlerFunction][] = [
 ];
 
 const initProxy = (server: FastifyInstance): void => {
-  if (typeof process.env.CLIENT_URL === 'string') {
+  const clientUrl = env('CLIENT_URL', true);
+
+  if (typeof clientUrl === 'string') {
     server.register(proxy, {
-      upstream: process.env.CLIENT_URL,
+      upstream: clientUrl,
       base: '/app',
       http2: false,
     });
@@ -40,5 +43,5 @@ export const initServer = async (db: Db): Promise<void> => {
   routes.forEach(([route, handler]) => handler(route, server, db));
 
   await initProxy(server);
-  await server.listen(process.env.PORT || '3000');
+  await server.listen(env('PORT') || '3000');
 };
