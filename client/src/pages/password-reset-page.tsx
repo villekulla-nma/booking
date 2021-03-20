@@ -16,7 +16,7 @@ const Feedback: FC<{ display: boolean }> = ({ display }) => {
   return null;
 };
 
-export const RequestPasswordResetPage: FC = () => {
+export const PasswordResetPage: FC = () => {
   const [email, setEmail] = useState<string>('');
   const [formSubmitted, setFormSubmitted] = useState<boolean>(false);
   const handleChange = (event: SyntheticEvent<HTMLInputElement>) => {
@@ -28,7 +28,7 @@ export const RequestPasswordResetPage: FC = () => {
   const handleSubmit = (event: SyntheticEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    requestPasswordReset(email).then(() => {
+    requestPasswordReset(email.trim()).then(() => {
       setEmail('');
       setFormSubmitted(true);
     });

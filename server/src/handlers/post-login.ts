@@ -1,9 +1,9 @@
 import type { RouteShorthandOptions } from 'fastify';
 import type { LoginResult } from '@villekulla-reservations/types';
-import bcrypt from 'bcryptjs';
 
 import type { AssignHandlerFunction } from './type';
 import { signJwt } from '../utils/jwt';
+import { verifyPassword } from '../utils/crypto';
 
 interface Body {
   email: string;
@@ -54,7 +54,7 @@ export const assignPostLoginHandler: AssignHandlerFunction = (
 
       userId = user.id;
       hash = user.password;
-      const passwordIsValid = await bcrypt.compare(password, hash);
+      const passwordIsValid = await verifyPassword(password, hash);
 
       if (!passwordIsValid) {
         server.log.trace('Invalid password by user with email %s', email);

@@ -1,9 +1,9 @@
-import { randomBytes } from 'crypto';
 import type { RouteShorthandOptions } from 'fastify';
 
 import type { AssignHandlerFunction } from './type';
 import { sendMail } from '../utils/send-mail';
 import { env } from '../utils/env';
+import { randomBytes } from '../utils/crypto';
 
 interface Body {
   email: string;
@@ -14,7 +14,7 @@ const opts: RouteShorthandOptions = {
     body: {
       type: 'object',
       properties: {
-        email: { type: 'string' },
+        password: { type: 'string' },
       },
     },
   },
@@ -35,7 +35,9 @@ export const assignPostPasswordResetHandler: AssignHandlerFunction = (
         break;
       }
 
-      const token = randomBytes(32).toString('hex').slice(0, 32);
+      const token = randomBytes(32);
+
+      server.log.debug('Setting reset token %s for user %s', token, user.id);
 
       await db.updateUser(user.id, { passwordReset: token });
 

@@ -22,7 +22,7 @@ export const LoginPage: FC = () => {
   const handleSubmit = (event: SyntheticEvent<HTMLFormElement>): void => {
     event.preventDefault();
 
-    login(email, password).then((result) => {
+    login(email.trim(), password.trim()).then((result) => {
       switch (result) {
         case 'ok':
           window.location.href = from;

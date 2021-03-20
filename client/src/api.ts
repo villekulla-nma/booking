@@ -47,6 +47,29 @@ export const requestPasswordReset = async (email: string): Promise<void> => {
   });
 };
 
+export type UpdatePasswordResponse = 'ok' | 'invalid' | 'error';
+
+export const updatePassword = async (
+  token: string,
+  password: string,
+  confirm: string
+): Promise<UpdatePasswordResponse> => {
+  const response = await fetch(`/api/password-reset/${token}`, {
+    method: 'POST',
+    headers: {
+      'content-type': 'application/json',
+    },
+    body: JSON.stringify({ password, password_confirm: confirm }),
+  });
+  const { status } = await response.json();
+
+  if (!/^(ok|invalid|error)$/.test(status)) {
+    throw new Error('Invalid response from /api/password-reset/:token');
+  }
+
+  return status;
+};
+
 export const verifySession = async (): Promise<User | undefined> => {
   const response = await fetch('/api/verify-session', { method: 'POST' });
 

@@ -30,6 +30,7 @@ export interface Db {
   getEventById: (eventId: string) => Promise<EventInstance>;
   getUserByEmail: (email: string) => Promise<UserInstance | null>;
   getUserById: (userId: string) => Promise<UserInstance>;
+  getUserByPasswordResetToken: (token: string) => Promise<UserInstance>;
 
   createEvent: (
     start: string,
@@ -40,10 +41,7 @@ export interface Db {
     userId: string
   ) => Promise<EventInstance>;
 
-  updateUser: (
-    id: string,
-    data: Partial<UserAttributes>
-  ) => Promise<[number, UserInstance[]]>;
+  updateUser: (id: string, data: Partial<UserAttributes>) => Promise<number>;
 
   removeEvent: (eventId: string, userId: string) => Promise<number>;
 
@@ -110,6 +108,12 @@ export const initDb = async (): Promise<Db> => {
         },
       }),
     getUserById: (userId) => User.findByPk(userId),
+    getUserByPasswordResetToken: (token) =>
+      User.findOne({
+        where: {
+          passwordReset: { [Op.eq]: token },
+        },
+      }),
 
     createEvent: (start, end, description, allDay, resourceId, userId) =>
       Event.create({
@@ -122,12 +126,14 @@ export const initDb = async (): Promise<Db> => {
         userId,
       }),
 
-    updateUser: (UserId, data) =>
-      User.update(data, {
+    updateUser: async (userId, data) => {
+      const [result] = await User.update(data, {
         where: {
-          id: { [Op.eq]: UserId },
+          id: { [Op.eq]: userId },
         },
-      }),
+      });
+      return result;
+    },
 
     removeEvent: (eventId, userId) =>
       Event.destroy({

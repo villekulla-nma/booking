@@ -129,12 +129,15 @@ export const ResourcePage: FC = () => {
       return;
     }
 
-    const form = event.currentTarget;
     const { start, end, allDay } = dateSelection;
 
-    createEvent(start, end, description, allDay, params.resourceId).then(() =>
-      form.reset()
-    );
+    createEvent(
+      start,
+      end,
+      description.trim(),
+      allDay,
+      params.resourceId
+    ).then(() => setDescription(''));
   };
   const handleFormReset = () => {
     if (calendar.current) {

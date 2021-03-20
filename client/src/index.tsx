@@ -8,8 +8,8 @@ import { EventPage } from './pages/event-page';
 import { ResourcePage } from './pages/resource-page';
 import { LoginPage } from './pages/login-page';
 import { StartPage } from './pages/start-page';
-import { RequestPasswordResetPage } from './pages/request-password-reset-page';
-import { ExecutePasswordResetPage } from './pages/execute-password-reset-page';
+import { PasswordResetPage } from './pages/password-reset-page';
+import { PasswordUpdatePage } from './pages/password-update-page';
 import { PrivateRoute } from './components/private-route';
 import { LogoutButton } from './components/logout-button';
 
@@ -42,13 +42,13 @@ const publicRoutes: RouteProps[] = [
   },
   {
     path: '/password-reset',
-    component: RequestPasswordResetPage,
+    component: PasswordResetPage,
     strict: true,
     exact: true,
   },
   {
     path: '/password-reset/:token',
-    component: ExecutePasswordResetPage,
+    component: PasswordUpdatePage,
     strict: true,
     exact: true,
   },
