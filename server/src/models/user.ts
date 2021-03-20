@@ -45,6 +45,7 @@ const schema: Schema = {
   },
   passwordReset: {
     type: DataTypes.STRING,
+    unique: true,
   },
   groupId: {
     type: DataTypes.STRING,
