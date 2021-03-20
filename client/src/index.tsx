@@ -5,6 +5,7 @@ import type { RouteProps } from 'react-router-dom';
 
 import './main.css';
 import { EventPage } from './pages/event-page';
+import { RedirectToResourcePage } from './pages/redirect-to-resource-page';
 import { ResourcePage } from './pages/resource-page';
 import { LoginPage } from './pages/login-page';
 import { StartPage } from './pages/start-page';
@@ -21,8 +22,8 @@ const authenticatedRoutes: RouteProps[] = [
     exact: true,
   },
   {
-    path: '/resources/:resourceId',
-    component: ResourcePage,
+    path: ['/resources/:resourceId', '/resources/:resourceId/:view'],
+    component: RedirectToResourcePage,
     strict: true,
     exact: true,
   },
@@ -30,6 +31,13 @@ const authenticatedRoutes: RouteProps[] = [
     path: '/resources/:resourceId/events/:eventId',
     component: EventPage,
     strict: true,
+    exact: true,
+  },
+  {
+    path: '/resources/:resourceId/:view/:now',
+    component: ResourcePage,
+    strict: true,
+    exact: true,
   },
 ];
 

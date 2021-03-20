@@ -11,6 +11,14 @@ interface Params {
   eventId: string;
 }
 
+const getCalendarParamsFromSearch = (search: string): string => {
+  const query = new URLSearchParams(search);
+  const view = query.get('view');
+  const now = query.get('now');
+
+  return view && now ? `/${view}/${now}` : '';
+};
+
 export const EventPage: FC = () => {
   const history = useHistory();
   const location = useLocation();
@@ -21,7 +29,8 @@ export const EventPage: FC = () => {
     return <b>Loading event...</b>;
   }
 
-  const backLink = `/resources/${resourceId}${location.search}`;
+  const calendarParams = getCalendarParamsFromSearch(location.search);
+  const backLink = `/resources/${resourceId}${calendarParams}`;
   const start = new Date(event.start.replace(/\.000z$/i, ''));
   const end = new Date(event.end.replace(/\.000z$/i, ''));
   const from = format(start, 'd. LLLL yyyy, H:mm', { locale: de });

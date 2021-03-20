@@ -3,28 +3,33 @@ import type { FC, RefObject, SyntheticEvent } from 'react';
 import FullCalendar from '@fullcalendar/react';
 import type {
   DateSelectArg,
-  DatesSetArg,
   EventSourceInput,
   EventClickArg,
+  ToolbarInput,
+  CustomButtonInput,
 } from '@fullcalendar/react';
 import locale from '@fullcalendar/core/locales/de';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
-import { useHistory, useParams, useLocation } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
+import { format } from 'date-fns';
 
+import type { ViewTypeOption, ViewTypeParam } from '../types';
+import { DEFAULT_VIEW_OPTION } from '../constants';
 import { createEvent } from '../api';
+
+interface Params {
+  resourceId: string;
+  view: string;
+  now: string;
+}
 
 interface SelectionRange {
   start: string;
   end: string;
   allDay: boolean;
 }
-
-type ViewTypeOption = 'timeGridDay' | 'timeGridWeek' | 'dayGridMonth';
-type ViewTypeParam = 'day' | 'week' | 'month';
-
-const DEFAULT_VIEW_TYPE: ViewTypeOption = 'timeGridWeek';
 
 const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
@@ -36,31 +41,8 @@ const getViewTypeOption = (view: string | null): ViewTypeOption => {
       return 'dayGridMonth';
     case 'week':
     default:
-      return DEFAULT_VIEW_TYPE;
+      return DEFAULT_VIEW_OPTION;
   }
-};
-
-const getViewTypeParam = (view: string): ViewTypeParam | never => {
-  switch (view) {
-    case 'timeGridDay':
-      return 'day';
-    case 'dayGridMonth':
-      return 'month';
-    case 'timeGridWeek':
-      return 'week';
-    default:
-      throw new Error(`Unknown view type option "${view}".`);
-  }
-};
-
-const pad = (n: number): string => {
-  const s = String(n);
-  return s.length === 2 ? s : `0${n}`;
-};
-
-const getNowFromDate = (d: Date): string => {
-  const now = `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
-  return now;
 };
 
 const getNowFromString = (now: string | null): string | undefined => {
@@ -75,15 +57,17 @@ const getNowFromString = (now: string | null): string | undefined => {
 
 export const ResourcePage: FC = () => {
   const history = useHistory();
-  const location = useLocation();
-  const searchParams = new URLSearchParams(location.search);
-  const params = useParams<{ resourceId: string }>();
-  const currentViewType = getViewTypeOption(searchParams.get('view'));
-  const nowProp = getNowFromString(searchParams.get('now'));
+  const params = useParams<Params>();
+  const currentViewType = getViewTypeOption(params.view);
+  const nowProp = getNowFromString(params.now);
   const calendar = useRef<FullCalendar>();
   const [dateSelection, setDateSelection] = useState<SelectionRange>();
   const [description, setDescription] = useState<string>('');
   const eventSource = useRef<EventSourceInput>();
+  const search = new URLSearchParams({
+    view: params.view,
+    now: params.now,
+  }).toString();
 
   eventSource.current = {
     url: `/api/resources/${params.resourceId}/events`,
@@ -91,14 +75,87 @@ export const ResourcePage: FC = () => {
   };
 
   const plugins = [dayGridPlugin, timeGridPlugin, interactionPlugin];
-  const headerToolbar = {
-    left: 'prev,next today',
+  const replaceView = (view: ViewTypeParam): void =>
+    history.replace(`/resources/${params.resourceId}/${view}/${params.now}`);
+  const replaceNow = (now: string): void =>
+    history.replace(`/resources/${params.resourceId}/${params.view}/${now}`);
+  const customButtons: Record<string, CustomButtonInput> = {
+    customPrev: {
+      icon: 'chevron-left',
+      click: () => {
+        if (calendar.current) {
+          const api = calendar.current.getApi();
+          api.prev();
+
+          const date = new Date(api.getDate());
+          const lastWeek = format(date, 'yyyy-MM-dd');
+
+          replaceNow(lastWeek);
+        }
+      },
+    },
+    customNext: {
+      icon: 'chevron-right',
+      click: () => {
+        if (calendar.current) {
+          const api = calendar.current.getApi();
+          api.next();
+
+          const date = new Date(api.getDate());
+          const nextWeek = format(date, 'yyyy-MM-dd');
+
+          replaceNow(nextWeek);
+        }
+      },
+    },
+    customToday: {
+      text: 'Heute',
+      click: () => {
+        const now = format(new Date(), 'yyyy-MM-dd');
+
+        if (calendar.current) {
+          calendar.current.getApi().today();
+        }
+
+        replaceNow(now);
+      },
+    },
+    customMonth: {
+      text: 'Monat',
+      click: () => {
+        if (calendar.current) {
+          calendar.current.getApi().changeView('dayGridMonth');
+        }
+        replaceView('month');
+      },
+    },
+    customWeek: {
+      text: 'Woche',
+      click: () => {
+        if (calendar.current) {
+          calendar.current.getApi().changeView('timeGridWeek');
+        }
+        replaceView('week');
+      },
+    },
+    customDay: {
+      text: 'Tag',
+      click: () => {
+        if (calendar.current) {
+          calendar.current.getApi().changeView('timeGridDay');
+        }
+        replaceView('day');
+      },
+    },
+  };
+  const headerToolbar: ToolbarInput = {
+    left: 'customPrev,customNext customToday',
     center: 'title',
-    right: 'dayGridMonth,timeGridWeek,timeGridDay',
+    right: 'customMonth,customWeek,customDay',
   };
   const handleClick = (args: EventClickArg) =>
     history.push(
-      `/resources/${params.resourceId}/events/${args.event.id}${location.search}`
+      `/resources/${params.resourceId}/events/${args.event.id}?${search}`
     );
   const handleSelect = (args: DateSelectArg) => {
     const start = args.start.toISOString();
@@ -144,15 +201,6 @@ export const ResourcePage: FC = () => {
       calendar.current.getApi().unselect();
     }
   };
-  const updateUrlSearchParam = (event: DatesSetArg) => {
-    if (calendar.current) {
-      const { currentDate: date } = calendar.current.getApi().getCurrentData();
-      const view = getViewTypeParam(event.view.type);
-      const now = getNowFromDate(date);
-
-      history.replace(`${location.pathname}?view=${view}&now=${now}`);
-    }
-  };
 
   return (
     <>
@@ -161,6 +209,7 @@ export const ResourcePage: FC = () => {
         locale={locale}
         timeZone={timeZone}
         plugins={plugins}
+        customButtons={customButtons}
         headerToolbar={headerToolbar}
         eventSources={[eventSource.current]}
         initialView={currentViewType}
@@ -169,8 +218,7 @@ export const ResourcePage: FC = () => {
         select={handleSelect}
         unselect={handleUnselect}
         unselectAuto={false}
-        datesSet={updateUrlSearchParam}
-        now={nowProp}
+        initialDate={nowProp}
       />
       {dateSelection && (
         <form
