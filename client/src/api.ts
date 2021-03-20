@@ -37,6 +37,16 @@ export const logout = async (): Promise<void> => {
   await fetch('/api/logout', { method: 'POST' });
 };
 
+export const requestPasswordReset = async (email: string): Promise<void> => {
+  await fetch('/api/password-reset', {
+    method: 'POST',
+    headers: {
+      'content-type': 'application/json',
+    },
+    body: JSON.stringify({ email }),
+  });
+};
+
 export const verifySession = async (): Promise<User | undefined> => {
   const response = await fetch('/api/verify-session', { method: 'POST' });
 
