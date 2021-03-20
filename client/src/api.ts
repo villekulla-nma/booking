@@ -70,8 +70,8 @@ export const updatePassword = async (
   return status;
 };
 
-export const verifySession = async (): Promise<User | undefined> => {
-  const response = await fetch('/api/verify-session', { method: 'POST' });
+export const getUser = async (): Promise<User | undefined> => {
+  const response = await fetch('/api/user');
 
   if (response.status !== 200) {
     return undefined;

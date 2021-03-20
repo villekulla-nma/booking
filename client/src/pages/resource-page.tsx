@@ -130,14 +130,14 @@ export const ResourcePage: FC = () => {
     }
 
     const { start, end, allDay } = dateSelection;
+    const form = event.currentTarget;
 
-    createEvent(
-      start,
-      end,
-      description.trim(),
-      allDay,
-      params.resourceId
-    ).then(() => setDescription(''));
+    createEvent(start, end, description.trim(), allDay, params.resourceId).then(
+      () => {
+        setDescription('');
+        form.reset();
+      }
+    );
   };
   const handleFormReset = () => {
     if (calendar.current) {
@@ -188,6 +188,7 @@ export const ResourcePage: FC = () => {
           <textarea
             name="description"
             id="description"
+            value={description}
             onInput={handleDecriptionChange}
           />
           <button type="reset">Abbrechen</button>

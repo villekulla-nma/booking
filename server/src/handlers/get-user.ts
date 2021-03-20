@@ -42,12 +42,12 @@ const opts: RouteShorthandOptions = {
   preHandler: preVerifySessionHandler,
 };
 
-export const assignPostVerifySessionHandler: AssignHandlerFunction = (
+export const assignGetUserHandler: AssignHandlerFunction = (
   route,
   server,
   db
 ) => {
-  server.post(route, opts, async (request: Request, reply) => {
+  server.get(route, opts, async (request: Request, reply) => {
     const { id, firstName, lastName, email } = await db.getUserById(
       request.params.userId
     );

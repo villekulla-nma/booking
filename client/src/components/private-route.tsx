@@ -3,13 +3,13 @@ import type { RouteProps } from 'react-router-dom';
 import { Route, Redirect } from 'react-router-dom';
 import type { User } from '@villekulla-reservations/types';
 
-import { useSessionChecker } from '../hooks/use-session-checker';
+import { useUser } from '../hooks/use-user';
 import { UserContext } from '../contexts/user-context';
 
 const { Provider: UserProvider } = UserContext;
 
 export const PrivateRoute: FC<RouteProps> = ({ component, ...rest }) => {
-  const user = useSessionChecker();
+  const user = useUser();
   const from = `${window.location.pathname}${window.location.search}`;
 
   return (

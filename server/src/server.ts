@@ -11,7 +11,7 @@ import { assignGetAllEventsHandler } from './handlers/get-all-events';
 import { assignGetEventByIdHandler } from './handlers/get-event-by-id';
 import { assignDeleteEventHandler } from './handlers/delete-event';
 import { assignPostLoginHandler } from './handlers/post-login';
-import { assignPostVerifySessionHandler } from './handlers/post-verify-session';
+import { assignGetUserHandler } from './handlers/get-user';
 import { assignPostLogoutHandler } from './handlers/post-logout';
 import { assignPostPasswordResetHandler } from './handlers/post-password-reset';
 import { assignPostPasswordUpdateHandler } from './handlers/post-password-update';
@@ -21,7 +21,7 @@ const routes: [string, AssignHandlerFunction][] = [
   ['/api/logout', assignPostLogoutHandler],
   ['/api/password-reset', assignPostPasswordResetHandler],
   ['/api/password-reset/:token', assignPostPasswordUpdateHandler],
-  ['/api/verify-session', assignPostVerifySessionHandler],
+  ['/api/user', assignGetUserHandler],
   ['/api/resources', getResourcesHandler],
   ['/api/resources/:resourceId/events', assignPutEventHandler],
   ['/api/resources/:resourceId/events', assignGetAllEventsHandler],
