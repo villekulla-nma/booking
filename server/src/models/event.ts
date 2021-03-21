@@ -21,6 +21,8 @@ export interface EventInstance
 
 type Schema = ModelAttributes<EventInstance, EventAttributes>;
 
+// TODO: consider using a Range instead of start/end
+//       (https://sequelize.org/master/manual/other-data-types.html#ranges--postgresql-only-)
 const schema: Schema = {
   id: {
     primaryKey: true,

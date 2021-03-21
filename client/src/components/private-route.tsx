@@ -1,7 +1,7 @@
 import type { FC, ComponentType } from 'react';
 import type { RouteProps } from 'react-router-dom';
 import { Route, Redirect } from 'react-router-dom';
-import type { User } from '@villekulla-reservations/types';
+import type { UserResponse } from '@villekulla-reservations/types';
 
 import { useUser } from '../hooks/use-user';
 import { UserContext } from '../contexts/user-context';
@@ -31,7 +31,7 @@ export const PrivateRoute: FC<RouteProps> = ({ component, ...rest }) => {
           default:
             const Comp = component as ComponentType<unknown>;
             return (
-              <UserProvider value={user as User}>
+              <UserProvider value={user as UserResponse}>
                 <Comp />
               </UserProvider>
             );

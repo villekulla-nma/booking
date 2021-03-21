@@ -7,7 +7,7 @@ import type {
 
 export type UserResult = Pick<
   UserAttributes,
-  'id' | 'firstName' | 'lastName' | 'fullName' | 'email' | 'password'
+  'id' | 'role' | 'firstName' | 'lastName' | 'fullName' | 'email' | 'password'
 >;
 
 export type ResourceResult = Pick<ResourceAttributes, 'id' | 'name'>;

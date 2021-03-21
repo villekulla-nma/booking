@@ -1,5 +1,5 @@
 import type { RouteShorthandOptions } from 'fastify';
-import type { User } from '@villekulla-reservations/types';
+import type { UserResponse } from '@villekulla-reservations/types';
 
 import type { AssignHandlerFunction } from './type';
 import type { Request } from './pre-verify-session';
@@ -22,6 +22,7 @@ const opts: RouteShorthandOptions = {
             type: 'object',
             properties: {
               id: { type: 'string' },
+              role: { type: 'string', enum: ['user', 'admin'] },
               firstName: { type: 'string' },
               lastName: { type: 'string' },
               email: { type: 'string' },
@@ -49,11 +50,11 @@ export const assignGetUserHandler: AssignHandlerFunction = (
   db
 ) => {
   server.get(route, opts, async (request: Request, reply) => {
-    const { id, firstName, lastName, email } = await getUserById(
+    const { id, role, firstName, lastName, email } = await getUserById(
       db,
       request.params.userId
     );
-    const user: User = { id, firstName, lastName, email };
+    const user: UserResponse = { id, role, firstName, lastName, email };
     const response = { status: 'ok', user };
 
     reply.status(200).send(response);

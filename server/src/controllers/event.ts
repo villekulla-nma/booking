@@ -59,7 +59,15 @@ export const getEventById = async (
   const { start, end, description, allDay, user, resource } = event;
 
   return {
-    user: pick(user, 'id', 'firstName', 'lastName', 'fullName', 'email'),
+    user: pick(
+      user,
+      'id',
+      'role',
+      'firstName',
+      'lastName',
+      'fullName',
+      'email'
+    ),
     resource: pick(resource, 'id', 'name'),
     id,
     start,

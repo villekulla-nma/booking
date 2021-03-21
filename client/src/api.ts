@@ -3,7 +3,7 @@ import type {
   ResourceAttributes,
   EventAttributes,
   LoginResult,
-  User,
+  UserResponse,
 } from '@villekulla-reservations/types';
 
 import { isUser } from './helpers/is-user';
@@ -70,7 +70,7 @@ export const updatePassword = async (
   return status;
 };
 
-export const getUser = async (): Promise<User | undefined> => {
+export const getUser = async (): Promise<UserResponse | undefined> => {
   const response = await fetch('/api/user');
 
   if (response.status !== 200) {

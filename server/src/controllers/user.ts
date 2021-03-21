@@ -14,9 +14,9 @@ export const getUserById = async (
     return null;
   }
 
-  const { firstName, lastName, fullName, email, password } = user;
+  const { role, firstName, lastName, fullName, email, password } = user;
 
-  return { id, firstName, lastName, fullName, email, password };
+  return { id, role, firstName, lastName, fullName, email, password };
 };
 
 export const getUserByKey = async (
@@ -34,9 +34,9 @@ export const getUserByKey = async (
     return null;
   }
 
-  const { id, firstName, lastName, fullName, email, password } = user;
+  const { id, role, firstName, lastName, fullName, email, password } = user;
 
-  return { id, firstName, lastName, fullName, email, password };
+  return { id, role, firstName, lastName, fullName, email, password };
 };
 
 export const updateUser = async (

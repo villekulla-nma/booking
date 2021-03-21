@@ -1,6 +1,9 @@
 import { createContext } from 'react';
-import type { User } from '@villekulla-reservations/types';
+import type { UserResponse } from '@villekulla-reservations/types';
 
-export const UserContext = Object.assign(createContext<Partial<User>>({}), {
-  displayName: 'UserContext',
-});
+export const UserContext = Object.assign(
+  createContext<Partial<UserResponse>>({}),
+  {
+    displayName: 'UserContext',
+  }
+);

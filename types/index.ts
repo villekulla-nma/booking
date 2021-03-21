@@ -8,8 +8,11 @@ export interface ResourceAttributes {
   name: string;
 }
 
+type UserRole = 'user' | 'admin';
+
 export interface UserAttributes {
   id: string;
+  role: UserRole;
   email: string;
   firstName: string;
   lastName: string;
@@ -31,8 +34,9 @@ export interface EventAttributes {
 
 export type LoginResult = 'ok' | 'unverified' | 'invalid' | 'error';
 
-export interface User {
+export interface UserResponse {
   id: string;
+  role: UserRole;
   firstName: string;
   lastName: string;
   email: string;

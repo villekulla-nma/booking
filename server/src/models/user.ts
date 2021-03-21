@@ -18,11 +18,17 @@ export interface UserInstance
 
 type Schema = ModelAttributes<UserInstance, UserAttributes>;
 
+const roles = ['user', 'admin'];
+
 const schema: Schema = {
   id: {
     primaryKey: true,
     type: DataTypes.STRING,
     unique: true,
+  },
+  role: {
+    type: DataTypes.ENUM(...roles),
+    allowNull: false,
   },
   email: {
     type: DataTypes.STRING,
@@ -64,6 +70,7 @@ const schema: Schema = {
 
 const isUserCreationData = (r: any): r is UserCreationAttributes =>
   Array.isArray((typeof r.id).match(/^(string|undefined)$/)) &&
+  roles.includes(r.role) &&
   typeof r.email === 'string' &&
   typeof r.firstName === 'string' &&
   typeof r.lastName === 'string' &&
