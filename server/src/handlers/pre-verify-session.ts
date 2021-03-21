@@ -1,6 +1,7 @@
 import type { FastifyRequest, FastifyReply } from 'fastify';
 
 import { verifyJwt } from '../utils/jwt';
+import { LOGOUT_COOKIE } from '../constants';
 
 export type Request<T = {}> = FastifyRequest<{
   Params: { userId: string } & T;
@@ -17,10 +18,17 @@ export const preVerifySessionHandler = async (
     return;
   }
 
-  const result = await verifyJwt(token);
+  let result = null;
+
+  try {
+    result = await verifyJwt(token);
+  } catch {}
 
   if (typeof result !== 'object' || result === null || !('id' in result)) {
-    reply.code(400).send({ status: 'invalid' });
+    reply
+      .code(400)
+      .header('set-cookie', LOGOUT_COOKIE)
+      .send({ status: 'invalid' });
     return;
   }
 
