@@ -2,6 +2,7 @@ import type {
   UserAttributes,
   ResourceAttributes,
   EventAttributes,
+  EventResult,
   LoginResult,
   UserResponse,
 } from '@villekulla-reservations/types';
@@ -11,6 +12,10 @@ import { isUser } from './helpers/is-user';
 export type EventByIdData = EventAttributes & {
   user: UserAttributes;
   resource: ResourceAttributes;
+};
+
+export type UserEvent = EventResult & {
+  resource: string;
 };
 
 export const login = async (
@@ -94,6 +99,17 @@ export const getEventById = async (eventId: string): Promise<EventByIdData> => {
   const event = await response.json();
 
   return event;
+};
+
+export const getUserEvents = async (limit?: number): Promise<UserEvent[]> => {
+  const query = limit
+    ? new URLSearchParams({ limit: String(limit) }).toString()
+    : '';
+  const glue = query ? '?' : '';
+  const response = await fetch(`/api/user/events${glue}${query}`);
+  const { events = [] } = await response.json();
+
+  return events;
 };
 
 export const deleteEvent = async (eventId: string): Promise<void> => {

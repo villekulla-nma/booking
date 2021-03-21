@@ -1,12 +1,19 @@
 import { Op } from 'sequelize';
 import { generate as shortid } from 'shortid';
+import type { EventResult } from '@villekulla-reservations/types';
 
 import type { Db } from '../db';
-import type { EventResult, ResourceResult, UserResult } from './types';
+import type { ResourceResult, UserResult } from './types';
+import { getNow } from '../utils/date';
+import type { EventInstance } from '../models';
 
 type SingleEventResult = EventResult & {
   user: UserResult;
   resource: ResourceResult;
+};
+
+type UserEvent = EventResult & {
+  resource: string;
 };
 
 const pick = <Input, Key extends keyof Input>(
@@ -17,6 +24,15 @@ const pick = <Input, Key extends keyof Input>(
     acc[key] = input[key];
     return acc;
   }, {} as Pick<Input, Key>);
+
+const toEventResult = (events: EventInstance[]): EventResult[] =>
+  events.map(({ id, start, end, description, allDay }) => ({
+    id,
+    start,
+    end,
+    description,
+    allDay,
+  }));
 
 export const getScopedEvents = async (
   { Event }: Db,
@@ -32,13 +48,7 @@ export const getScopedEvents = async (
     },
   });
 
-  return events.map(({ id, start, end, description, allDay }) => ({
-    id,
-    start,
-    end,
-    description,
-    allDay,
-  }));
+  return toEventResult(events);
 };
 
 export const getOverlappingEvents = async (
@@ -69,13 +79,7 @@ export const getOverlappingEvents = async (
     },
   });
 
-  return overlappingEvents.map(({ id, start, end, description, allDay }) => ({
-    id,
-    start,
-    end,
-    description,
-    allDay,
-  }));
+  return toEventResult(overlappingEvents);
 };
 
 export const getEventById = async (
@@ -112,6 +116,33 @@ export const getEventById = async (
     description,
     allDay,
   };
+};
+
+export const getUpcomingEventsByUserId = async (
+  { Event, Resource }: Db,
+  userId: string,
+  limit?: number
+): Promise<UserEvent[]> => {
+  const now = getNow();
+  const upcomingEvents = await Event.findAll({
+    include: [{ model: Resource, as: 'resource' }],
+    where: {
+      userId: { [Op.eq]: userId },
+      start: { [Op.gt]: now },
+    },
+    limit,
+  });
+
+  return upcomingEvents.map(
+    ({ id, start, end, description, allDay, resource }) => ({
+      resource: resource.name,
+      id,
+      start,
+      end,
+      description,
+      allDay,
+    })
+  );
 };
 
 export const createEvent = async (

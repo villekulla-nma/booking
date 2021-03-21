@@ -32,6 +32,11 @@ export interface EventAttributes {
   userId: string;
 }
 
+export type EventResult = Pick<
+  EventAttributes,
+  'id' | 'start' | 'end' | 'description' | 'allDay'
+>;
+
 export type LoginResult = 'ok' | 'unverified' | 'invalid' | 'error';
 
 export interface UserResponse {

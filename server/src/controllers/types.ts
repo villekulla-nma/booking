@@ -1,5 +1,4 @@
 import type {
-  EventAttributes,
   GroupAttributes,
   ResourceAttributes,
   UserAttributes,
@@ -13,8 +12,3 @@ export type UserResult = Pick<
 export type ResourceResult = Pick<ResourceAttributes, 'id' | 'name'>;
 
 export type GroupResult = Pick<GroupAttributes, 'id' | 'name'>;
-
-export type EventResult = Pick<
-  EventAttributes,
-  'id' | 'start' | 'end' | 'description' | 'allDay'
->;
