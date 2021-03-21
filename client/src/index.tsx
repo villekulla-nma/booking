@@ -9,6 +9,7 @@ import './main.css';
 import { EventPage } from './pages/event-page';
 import { RedirectToResourcePage } from './pages/redirect-to-resource-page';
 import { ResourcePage } from './pages/resource-page';
+import { ReservationPage } from './pages/reservation-page';
 import { LoginPage } from './pages/login-page';
 import { StartPage } from './pages/start-page';
 import { PasswordResetPage } from './pages/password-reset-page';
@@ -19,6 +20,12 @@ const authenticatedRoutes: RouteProps[] = [
   {
     path: '/',
     component: StartPage,
+    strict: true,
+    exact: true,
+  },
+  {
+    path: '/resources/:resourceId/create',
+    component: ReservationPage,
     strict: true,
     exact: true,
   },

@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import type { FC, RefObject, SyntheticEvent } from 'react';
+import type { FC, RefObject } from 'react';
 import FullCalendar from '@fullcalendar/react';
 import type {
   DateSelectArg,
@@ -14,11 +14,12 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import { useHistory, useParams } from 'react-router-dom';
 import { format } from 'date-fns';
+import { ActionButton } from '@fluentui/react';
+import type { IIconProps } from '@fluentui/react';
 
 import { Layout } from '../components/layout';
 import type { ViewTypeOption, ViewTypeParam } from '../types';
 import { DEFAULT_VIEW_OPTION } from '../constants';
-import { createEvent } from '../api';
 
 interface Params {
   resourceId: string;
@@ -63,13 +64,12 @@ export const ResourcePage: FC = () => {
   const nowProp = getNowFromString(params.now);
   const calendar = useRef<FullCalendar>();
   const [dateSelection, setDateSelection] = useState<SelectionRange>();
-  const [description, setDescription] = useState<string>('');
-  const [feedback, setFeedback] = useState<string>('');
   const eventSource = useRef<EventSourceInput>();
   const search = new URLSearchParams({
     view: params.view,
     now: params.now,
   }).toString();
+  const actionButtonIcon: IIconProps = { iconName: 'Add' };
 
   eventSource.current = {
     url: `/api/resources/${params.resourceId}/events`,
@@ -175,53 +175,12 @@ export const ResourcePage: FC = () => {
       end,
     });
   };
-  const handleUnselect = () => {
-    setDateSelection(undefined);
-    setDescription('');
-  };
-  const handleDecriptionChange = (event: SyntheticEvent<HTMLTextAreaElement>) =>
-    setDescription(event.currentTarget.value);
-  const handleFormSubmit = (event: SyntheticEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    if (!dateSelection) {
-      return;
-    }
-
-    const { start, end, allDay } = dateSelection;
-    const form = event.currentTarget;
-
-    createEvent(start, end, description.trim(), allDay, params.resourceId).then(
-      (status) => {
-        switch (status) {
-          case 'ok':
-            setDescription('');
-            form.reset();
-            break;
-          case 'overlapping':
-            setFeedback(
-              'Die Buchung überschneidet sich mit einer existierenden Buchung.'
-            );
-            break;
-          case 'invalid':
-            setFeedback('Eine oder mehrere Angaben sind ungültig.');
-            break;
-          case 'error':
-            setFeedback(
-              'Beim speichern der Buchung ist ein Fehler aufgetreten.'
-            );
-            break;
-          default:
-            ((_: never) => undefined)(status);
-        }
-      }
+  const handleUnselect = () => setDateSelection(undefined);
+  const handleReservation = (): void => {
+    history.push(
+      `/resources/${params.resourceId}/create?${search}`,
+      dateSelection
     );
-  };
-  const handleFormReset = () => {
-    if (calendar.current) {
-      calendar.current.getApi().unselect();
-    }
-    setFeedback('');
   };
 
   return (
@@ -242,30 +201,13 @@ export const ResourcePage: FC = () => {
         unselectAuto={false}
         initialDate={nowProp}
       />
-      {dateSelection && (
-        <form
-          method="post"
-          onSubmit={handleFormSubmit}
-          onReset={handleFormReset}
-        >
-          {feedback === '' || <p>{feedback}</p>}
-          <dl>
-            <dt>Start</dt>
-            <dd>{dateSelection.start}</dd>
-            <dt>End</dt>
-            <dd>{dateSelection.end}</dd>
-          </dl>
-          <label htmlFor="description">Beschreibung</label>
-          <textarea
-            name="description"
-            id="description"
-            value={description}
-            onInput={handleDecriptionChange}
-          />
-          <button type="reset">Abbrechen</button>
-          <button>Speichern</button>
-        </form>
-      )}
+      <ActionButton
+        onClick={handleReservation}
+        iconProps={actionButtonIcon}
+        disabled={typeof dateSelection === 'undefined'}
+      >
+        Reservieren
+      </ActionButton>
     </Layout>
   );
 };
