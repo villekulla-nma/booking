@@ -12,7 +12,7 @@ import locale from '@fullcalendar/core/locales/de';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
-import { useHistory, useParams } from 'react-router-dom';
+import { Link, useHistory, useParams } from 'react-router-dom';
 import { format } from 'date-fns';
 
 import type { ViewTypeOption, ViewTypeParam } from '../types';
@@ -225,6 +225,8 @@ export const ResourcePage: FC = () => {
 
   return (
     <>
+      <Link to="/">Startseite</Link>
+      <hr />
       <FullCalendar
         ref={calendar as RefObject<FullCalendar>}
         locale={locale}
