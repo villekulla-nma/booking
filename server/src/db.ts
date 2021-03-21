@@ -1,7 +1,6 @@
 import path from 'path';
-import { Sequelize, Op } from 'sequelize';
-import type { Options } from 'sequelize';
-import { generate as shortid } from 'shortid';
+import { Sequelize } from 'sequelize';
+import type { ModelCtor, Options } from 'sequelize';
 
 import {
   createResourceInstance,
@@ -16,34 +15,12 @@ import type {
   EventInstance,
 } from './models';
 import { getScaffoldingData, writeScaffoldingData } from './utils/scaffolding';
-import type { UserAttributes } from '@villekulla-reservations/types';
 
 export interface Db {
-  getAllResources: () => Promise<ResourceInstance[]>;
-  getAllGroups: () => Promise<GroupInstance[]>;
-  getAllUsers: () => Promise<UserInstance[]>;
-  getAllEventsByResource: (
-    resourceId: string,
-    start: string,
-    end: string
-  ) => Promise<EventInstance[]>;
-  getEventById: (eventId: string) => Promise<EventInstance>;
-  getUserByEmail: (email: string) => Promise<UserInstance | null>;
-  getUserById: (userId: string) => Promise<UserInstance>;
-  getUserByPasswordResetToken: (token: string) => Promise<UserInstance>;
-
-  createEvent: (
-    start: string,
-    end: string,
-    description: string,
-    allDay: boolean,
-    resourceId: string,
-    userId: string
-  ) => Promise<EventInstance>;
-
-  updateUser: (id: string, data: Partial<UserAttributes>) => Promise<number>;
-
-  removeEvent: (eventId: string, userId: string) => Promise<number>;
+  Event: ModelCtor<EventInstance>;
+  Group: ModelCtor<GroupInstance>;
+  Resource: ModelCtor<ResourceInstance>;
+  User: ModelCtor<UserInstance>;
 
   terminate: () => Promise<void>;
 }
@@ -83,65 +60,10 @@ export const initDb = async (): Promise<Db> => {
   }
 
   const db: Db = {
-    getAllResources: () => Resource.findAll(),
-    getAllGroups: () => Group.findAll(),
-    getAllUsers: () => User.findAll(),
-    getAllEventsByResource: (resourceId, start, end) =>
-      Event.findAll({
-        where: {
-          resourceId: { [Op.eq]: resourceId },
-          start: { [Op.gte]: start },
-          end: { [Op.lte]: end },
-        },
-      }),
-    getEventById: (eventId) =>
-      Event.findByPk(eventId, {
-        include: [
-          { model: Resource, as: 'resource' },
-          { model: User, as: 'user' },
-        ],
-      }),
-    getUserByEmail: (email) =>
-      User.findOne({
-        where: {
-          email: { [Op.eq]: email },
-        },
-      }),
-    getUserById: (userId) => User.findByPk(userId),
-    getUserByPasswordResetToken: (token) =>
-      User.findOne({
-        where: {
-          passwordReset: { [Op.eq]: token },
-        },
-      }),
-
-    createEvent: (start, end, description, allDay, resourceId, userId) =>
-      Event.create({
-        id: shortid(),
-        allDay,
-        start,
-        end,
-        description,
-        resourceId,
-        userId,
-      }),
-
-    updateUser: async (userId, data) => {
-      const [result] = await User.update(data, {
-        where: {
-          id: { [Op.eq]: userId },
-        },
-      });
-      return result;
-    },
-
-    removeEvent: (eventId, userId) =>
-      Event.destroy({
-        where: {
-          id: { [Op.eq]: eventId },
-          userId: { [Op.eq]: userId },
-        },
-      }),
+    Event,
+    Group,
+    Resource,
+    User,
 
     terminate: () => sequelize.close(),
   };

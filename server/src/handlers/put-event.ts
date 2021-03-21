@@ -3,6 +3,7 @@ import type { RouteShorthandOptions } from 'fastify';
 import type { AssignHandlerFunction } from './type';
 import type { Request } from './pre-verify-session';
 import { preVerifySessionHandler } from './pre-verify-session';
+import { createEvent } from '../controllers/event';
 
 interface Params {
   resourceId: string;
@@ -50,7 +51,15 @@ export const assignPutEventHandler: AssignHandlerFunction = (
     const { start, end, description, allDay } = request.body as Body;
 
     try {
-      await db.createEvent(start, end, description, allDay, resourceId, userId);
+      await createEvent(
+        db,
+        start,
+        end,
+        description,
+        allDay,
+        resourceId,
+        userId
+      );
     } catch (error) {
       console.log(error);
       status = error.name === 'SequelizeValidationError' ? 400 : 500;

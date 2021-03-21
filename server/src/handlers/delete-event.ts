@@ -3,6 +3,7 @@ import type { RouteShorthandOptions } from 'fastify';
 import type { AssignHandlerFunction } from './type';
 import type { Request } from './pre-verify-session';
 import { preVerifySessionHandler } from './pre-verify-session';
+import { removeEvent } from '../controllers/event';
 
 interface Params {
   eventId: string;
@@ -31,8 +32,8 @@ export const assignDeleteEventHandler: AssignHandlerFunction = (
     const { eventId, userId } = request.params;
 
     try {
-      const result = await db.removeEvent(eventId, userId);
-      status = result === 1 ? 200 : 400;
+      const succeeded = await removeEvent(db, eventId, userId);
+      status = succeeded ? 200 : 400;
     } catch {
       status = 500;
     }

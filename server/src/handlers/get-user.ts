@@ -4,6 +4,7 @@ import type { User } from '@villekulla-reservations/types';
 import type { AssignHandlerFunction } from './type';
 import type { Request } from './pre-verify-session';
 import { preVerifySessionHandler } from './pre-verify-session';
+import { getUserById } from '../controllers/user';
 
 const opts: RouteShorthandOptions = {
   schema: {
@@ -48,7 +49,8 @@ export const assignGetUserHandler: AssignHandlerFunction = (
   db
 ) => {
   server.get(route, opts, async (request: Request, reply) => {
-    const { id, firstName, lastName, email } = await db.getUserById(
+    const { id, firstName, lastName, email } = await getUserById(
+      db,
       request.params.userId
     );
     const user: User = { id, firstName, lastName, email };

@@ -4,6 +4,7 @@ import type { LoginResult } from '@villekulla-reservations/types';
 import type { AssignHandlerFunction } from './type';
 import { signJwt } from '../utils/jwt';
 import { verifyPassword } from '../utils/crypto';
+import { getUserByKey } from '../controllers/user';
 
 interface Body {
   email: string;
@@ -36,7 +37,7 @@ export const assignPostLoginHandler: AssignHandlerFunction = (
       let userId: string | undefined;
       let hash: string | undefined;
 
-      const user = await db.getUserByEmail(email);
+      const user = await getUserByKey(db, 'email', email);
 
       if (!user) {
         server.log.trace('Unknown user with email %s', email);

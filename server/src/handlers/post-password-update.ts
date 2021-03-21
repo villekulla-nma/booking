@@ -7,6 +7,7 @@ import type {
 import type { Db } from '../db';
 import { hashPassword } from '../utils/crypto';
 import type { AssignHandlerFunction } from './type';
+import { getUserByKey, updateUser } from '../controllers/user';
 
 interface Body {
   password: string;
@@ -55,7 +56,7 @@ const createPreHandler = (db: Db) => async (
   }
 
   const { token } = request.params;
-  const user = await db.getUserByPasswordResetToken(token);
+  const user = await getUserByKey(db, 'passwordReset', token);
 
   if (!user) {
     reply.code(400).send({ status: 'error' });
@@ -77,12 +78,12 @@ export const assignPostPasswordUpdateHandler: AssignHandlerFunction = (
     const { userId } = request.params;
     const hash = await hashPassword(password);
 
-    const result = await db.updateUser(userId, {
+    const succeeded = await updateUser(db, userId, {
       passwordReset: null,
       password: hash,
     });
 
-    if (result !== 1) {
+    if (!succeeded) {
       reply.code(400).send({ status: 'error' });
       return;
     }

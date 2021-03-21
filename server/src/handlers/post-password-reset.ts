@@ -4,6 +4,7 @@ import type { AssignHandlerFunction } from './type';
 import { sendMail } from '../utils/send-mail';
 import { env } from '../utils/env';
 import { randomBytes } from '../utils/crypto';
+import { getUserByKey, updateUser } from '../controllers/user';
 
 interface Body {
   email: string;
@@ -29,7 +30,7 @@ export const assignPostPasswordResetHandler: AssignHandlerFunction = (
     const { email } = request.body as Body;
 
     do {
-      const user = await db.getUserByEmail(email);
+      const user = await getUserByKey(db, 'email', email);
 
       if (!user) {
         break;
@@ -39,7 +40,7 @@ export const assignPostPasswordResetHandler: AssignHandlerFunction = (
 
       server.log.debug('Setting reset token %s for user %s', token, user.id);
 
-      await db.updateUser(user.id, { passwordReset: token });
+      await updateUser(db, user.id, { passwordReset: token });
 
       const link = `${env('APP_URL')}/password-reset/${token}`;
       const subject = 'Passwort-Reset';
