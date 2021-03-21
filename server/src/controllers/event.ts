@@ -41,6 +41,43 @@ export const getScopedEvents = async (
   }));
 };
 
+export const getOverlappingEvents = async (
+  { Event }: Db,
+  resourceId: string,
+  start: string,
+  end: string
+): Promise<EventResult[]> => {
+  const overlappingEvents = await Event.findAll({
+    where: {
+      [Op.and]: [
+        {
+          resourceId: { [Op.eq]: resourceId },
+        },
+        {
+          [Op.or]: [
+            { start: { [Op.between]: [start, end] } },
+            { end: { [Op.between]: [start, end] } },
+            {
+              [Op.and]: [
+                { start: { [Op.lt]: start } },
+                { end: { [Op.gt]: end } },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+  });
+
+  return overlappingEvents.map(({ id, start, end, description, allDay }) => ({
+    id,
+    start,
+    end,
+    description,
+    allDay,
+  }));
+};
+
 export const getEventById = async (
   { Event, Resource, User }: Db,
   id: string

@@ -100,18 +100,27 @@ export const deleteEvent = async (eventId: string): Promise<void> => {
   await fetch(`/api/events/${eventId}`, { method: 'DELETE' });
 };
 
+export type CreateEventResponse = 'ok' | 'overlapping' | 'invalid' | 'error';
+
 export const createEvent = async (
   start: string,
   end: string,
   description: string,
   allDay: boolean,
   resourceId: string
-): Promise<void> => {
-  fetch(`/api/resources/${resourceId}/events`, {
+): Promise<CreateEventResponse> => {
+  const response = await fetch(`/api/resources/${resourceId}/events`, {
     method: 'PUT',
     headers: {
       'content-type': 'application/json',
     },
     body: JSON.stringify({ start, end, description, allDay }),
   });
+  const { status } = await response.json();
+
+  if (!/^(ok|overlapping|invalid|error)$/.test(status)) {
+    throw new Error('Invalid response from /api/resources/:resourceId/events');
+  }
+
+  return status;
 };

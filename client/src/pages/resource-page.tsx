@@ -63,6 +63,7 @@ export const ResourcePage: FC = () => {
   const calendar = useRef<FullCalendar>();
   const [dateSelection, setDateSelection] = useState<SelectionRange>();
   const [description, setDescription] = useState<string>('');
+  const [feedback, setFeedback] = useState<string>('');
   const eventSource = useRef<EventSourceInput>();
   const search = new URLSearchParams({
     view: params.view,
@@ -190,9 +191,28 @@ export const ResourcePage: FC = () => {
     const form = event.currentTarget;
 
     createEvent(start, end, description.trim(), allDay, params.resourceId).then(
-      () => {
-        setDescription('');
-        form.reset();
+      (status) => {
+        switch (status) {
+          case 'ok':
+            setDescription('');
+            form.reset();
+            break;
+          case 'overlapping':
+            setFeedback(
+              'Die Buchung überschneidet sich mit einer existierenden Buchung.'
+            );
+            break;
+          case 'invalid':
+            setFeedback('Eine oder mehrere Angaben sind ungültig.');
+            break;
+          case 'error':
+            setFeedback(
+              'Beim speichern der Buchung ist ein Fehler aufgetreten.'
+            );
+            break;
+          default:
+            ((_: never) => undefined)(status);
+        }
       }
     );
   };
@@ -200,6 +220,7 @@ export const ResourcePage: FC = () => {
     if (calendar.current) {
       calendar.current.getApi().unselect();
     }
+    setFeedback('');
   };
 
   return (
@@ -226,6 +247,7 @@ export const ResourcePage: FC = () => {
           onSubmit={handleFormSubmit}
           onReset={handleFormReset}
         >
+          {feedback === '' || <p>{feedback}</p>}
           <dl>
             <dt>Start</dt>
             <dd>{dateSelection.start}</dd>
