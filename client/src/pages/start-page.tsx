@@ -1,25 +1,13 @@
 import type { FC } from 'react';
-import { Link } from 'react-router-dom';
 
-import { useResourceList } from '../hooks/use-resource-list';
+import { Layout } from '../components/layout';
 import { useUserEvents } from '../hooks/use-user-events';
 
 export const StartPage: FC = () => {
-  const resourceList = useResourceList();
   const upcomingEvents = useUserEvents(3);
 
   return (
-    <>
-      {resourceList.length > 0 && (
-        <ul>
-          {resourceList.map(({ id, name }) => (
-            <li key={id}>
-              <Link to={`/resources/${id}`}>{name}</Link>
-            </li>
-          ))}
-        </ul>
-      )}
-      <hr />
+    <Layout>
       {(() => {
         switch (true) {
           case typeof upcomingEvents === 'undefined':
@@ -43,6 +31,6 @@ export const StartPage: FC = () => {
             );
         }
       })()}
-    </>
+    </Layout>
   );
 };

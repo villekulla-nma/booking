@@ -2,6 +2,8 @@ import { StrictMode } from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import type { RouteProps } from 'react-router-dom';
+import { initializeIcons } from '@uifabric/icons';
+import { FabricBase } from '@fluentui/react';
 
 import './main.css';
 import { EventPage } from './pages/event-page';
@@ -12,7 +14,6 @@ import { StartPage } from './pages/start-page';
 import { PasswordResetPage } from './pages/password-reset-page';
 import { PasswordUpdatePage } from './pages/password-update-page';
 import { PrivateRoute } from './components/private-route';
-import { LogoutButton } from './components/logout-button';
 
 const authenticatedRoutes: RouteProps[] = [
   {
@@ -62,20 +63,22 @@ const publicRoutes: RouteProps[] = [
   },
 ];
 
+initializeIcons();
+
 ReactDOM.render(
   <StrictMode>
-    <Router basename="app">
-      <LogoutButton />
-      <hr />
-      <Switch>
-        {authenticatedRoutes.map((route, i) => (
-          <PrivateRoute key={i} {...route} />
-        ))}
-        {publicRoutes.map((route, i) => (
-          <Route key={i} {...route} />
-        ))}
-      </Switch>
-    </Router>
+    <FabricBase>
+      <Router basename="app">
+        <Switch>
+          {authenticatedRoutes.map((route, i) => (
+            <PrivateRoute key={i} {...route} />
+          ))}
+          {publicRoutes.map((route, i) => (
+            <Route key={i} {...route} />
+          ))}
+        </Switch>
+      </Router>
+    </FabricBase>
   </StrictMode>,
   document.getElementById('root')
 );

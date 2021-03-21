@@ -12,9 +12,10 @@ import locale from '@fullcalendar/core/locales/de';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
-import { Link, useHistory, useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { format } from 'date-fns';
 
+import { Layout } from '../components/layout';
 import type { ViewTypeOption, ViewTypeParam } from '../types';
 import { DEFAULT_VIEW_OPTION } from '../constants';
 import { createEvent } from '../api';
@@ -224,9 +225,7 @@ export const ResourcePage: FC = () => {
   };
 
   return (
-    <>
-      <Link to="/">Startseite</Link>
-      <hr />
+    <Layout>
       <FullCalendar
         ref={calendar as RefObject<FullCalendar>}
         locale={locale}
@@ -267,6 +266,6 @@ export const ResourcePage: FC = () => {
           <button>Speichern</button>
         </form>
       )}
-    </>
+    </Layout>
   );
 };
