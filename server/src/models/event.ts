@@ -21,8 +21,6 @@ export interface EventInstance
 
 type Schema = ModelAttributes<EventInstance, EventAttributes>;
 
-// TODO: consider using a Range instead of start/end
-//       (https://sequelize.org/master/manual/other-data-types.html#ranges--postgresql-only-)
 const schema: Schema = {
   id: {
     primaryKey: true,
@@ -53,36 +51,6 @@ const schema: Schema = {
     type: DataTypes.STRING,
     allowNull: false,
   },
-};
-
-const isEventData = (r: any): r is EventAttributes =>
-  typeof r.id === 'string' &&
-  typeof r.start === 'string' &&
-  typeof r.end === 'string' &&
-  typeof r.description === 'string' &&
-  typeof r.allDay === 'boolean' &&
-  typeof r.resourceId === 'string' &&
-  typeof r.userId === 'string';
-
-export const scaffoldEvents = async (
-  Event: ModelCtor<EventInstance>,
-  data: unknown
-): Promise<void> => {
-  if (Array.isArray(data)) {
-    await Event.bulkCreate(
-      data
-        .filter((r) => isEventData(r))
-        .map(({ id, start, end, description, allDay, resourceId, userId }) => ({
-          id,
-          start,
-          end,
-          description,
-          allDay,
-          resourceId,
-          userId,
-        }))
-    );
-  }
 };
 
 export const createEventInstance = (
