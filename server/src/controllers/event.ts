@@ -118,6 +118,7 @@ export const getEventById = async (
   };
 };
 
+// TODO: sort by start date (desc)
 export const getUpcomingEventsByUserId = async (
   { Event, Resource }: Db,
   userId: string,
