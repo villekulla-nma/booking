@@ -35,6 +35,7 @@
     "@uifabric/icons": "7.5.23",
     "@fluentui/merge-styles": "8.0.1",
     "@fluentui/react": "8.4.0",
+    "@fluentui/theme": "2.0.2",
     "@fullcalendar/core": "5.5.1",
     "@fullcalendar/daygrid": "5.5.0",
     "@fullcalendar/interaction": "5.5.0",

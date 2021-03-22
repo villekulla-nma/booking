@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import type { RouteProps } from 'react-router-dom';
 import { initializeIcons } from '@uifabric/icons';
-import { FabricBase } from '@fluentui/react';
+import { FabricBase, loadTheme } from '@fluentui/react';
 
 import './main.css';
 import { EventPage } from './pages/event-page';
@@ -71,6 +71,17 @@ const publicRoutes: RouteProps[] = [
 ];
 
 initializeIcons();
+
+loadTheme({
+  fonts: {
+    small: {
+      fontSize: '12px',
+    },
+    medium: {
+      fontSize: '16px',
+    },
+  },
+});
 
 ReactDOM.render(
   <StrictMode>
