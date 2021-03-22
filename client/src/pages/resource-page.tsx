@@ -68,7 +68,7 @@ export const ResourcePage: FC = () => {
   const search = new URLSearchParams({
     view: params.view,
     now: params.now,
-  }).toString();
+  });
   const actionButtonIcon: IIconProps = { iconName: 'Add' };
 
   eventSource.current = {
@@ -155,10 +155,12 @@ export const ResourcePage: FC = () => {
     center: 'title',
     right: 'customMonth,customWeek,customDay',
   };
-  const handleClick = (args: EventClickArg) =>
-    history.push(
-      `/resources/${params.resourceId}/events/${args.event.id}?${search}`
-    );
+  const handleClick = (args: EventClickArg) => {
+    const searchParams = new URLSearchParams(search);
+
+    searchParams.append('resourceId', params.resourceId);
+    history.push(`/events/${args.event.id}?${searchParams}`);
+  };
   const handleSelect = (args: DateSelectArg) => {
     const start = args.start.toISOString();
     const endDateTime = args.end;

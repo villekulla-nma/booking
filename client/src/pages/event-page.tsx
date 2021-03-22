@@ -7,22 +7,24 @@ import { useEventDetail } from '../hooks/use-event-detail';
 import { deleteEvent } from '../api';
 
 interface Params {
-  resourceId: string;
   eventId: string;
 }
 
-const getCalendarParamsFromSearch = (search: string): string => {
+const getCalendarParamsFromSearch = (search: string): string | undefined => {
   const query = new URLSearchParams(search);
+  const resourceId = query.get('resourceId');
   const view = query.get('view');
   const now = query.get('now');
 
-  return view && now ? `/${view}/${now}` : '';
+  return resourceId && view && now
+    ? [resourceId, view, now].join('/')
+    : undefined;
 };
 
 export const EventPage: FC = () => {
   const history = useHistory();
   const location = useLocation();
-  const { eventId, resourceId } = useParams<Params>();
+  const { eventId } = useParams<Params>();
   const event = useEventDetail(eventId);
 
   if (!event) {
@@ -30,7 +32,7 @@ export const EventPage: FC = () => {
   }
 
   const calendarParams = getCalendarParamsFromSearch(location.search);
-  const backLink = `/resources/${resourceId}${calendarParams}`;
+  const backLink = calendarParams ? `/resources/${calendarParams}` : '/';
   const start = new Date(event.start.replace(/\.000z$/i, ''));
   const end = new Date(event.end.replace(/\.000z$/i, ''));
   const from = format(start, 'd. LLLL yyyy, H:mm', { locale: de });

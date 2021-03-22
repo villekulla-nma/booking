@@ -36,14 +36,14 @@ const authenticatedRoutes: RouteProps[] = [
     exact: true,
   },
   {
-    path: '/resources/:resourceId/events/:eventId',
-    component: EventPage,
+    path: '/resources/:resourceId/:view/:now',
+    component: ResourcePage,
     strict: true,
     exact: true,
   },
   {
-    path: '/resources/:resourceId/:view/:now',
-    component: ResourcePage,
+    path: '/events/:eventId',
+    component: EventPage,
     strict: true,
     exact: true,
   },
