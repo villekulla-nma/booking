@@ -6,7 +6,7 @@ import { MainHeader } from './main-header';
 
 const styles = mergeStyles({
   minHeight: '100vh',
-  maxWidth: '760px',
+  maxWidth: '860px',
   margin: '0 auto',
 });
 
