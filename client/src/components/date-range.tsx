@@ -5,6 +5,8 @@ import { mergeStyles } from '@fluentui/merge-styles';
 import { format } from 'date-fns';
 import { de } from 'date-fns/locale';
 
+import { denormalizeCalendarDate } from '../helpers/date';
+
 interface Props {
   start: string;
   end: string;
@@ -28,10 +30,12 @@ const definitionTerm = mergeStyles({
 });
 
 const formatDate = (date: string) =>
-  format(new Date(date), FORMAT_DATE, { locale: de });
+  format(denormalizeCalendarDate(date), FORMAT_DATE, { locale: de });
 
 const formatDateTime = (date: string) =>
-  format(new Date(date), `H:mm, ${FORMAT_DATE}`, { locale: de });
+  format(denormalizeCalendarDate(date), `H:mm, ${FORMAT_DATE}`, {
+    locale: de,
+  });
 
 export const DateRange: FC<Props> = ({ start, end, allDay }) => {
   if (allDay) {

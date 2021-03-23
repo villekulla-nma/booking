@@ -15,3 +15,7 @@ export const createRoundedDateString = (): string => {
 
   return utc.toISOString();
 };
+
+export const denormalizeCalendarDate = (date: string): Date => {
+  return new Date(date.replace(/\.000z$/i, ''));
+};
