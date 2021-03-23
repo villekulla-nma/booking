@@ -4,6 +4,7 @@ import { Stack, Text, NeutralColors } from '@fluentui/react';
 import { mergeStyles } from '@fluentui/merge-styles';
 import { SharedColors, FluentTheme } from '@fluentui/theme';
 import { Link, useHistory } from 'react-router-dom';
+// TODO: use @fluentui/merge-styles#mergeCss instead
 import classNames from 'classnames';
 import { format } from 'date-fns';
 import { de } from 'date-fns/locale';
