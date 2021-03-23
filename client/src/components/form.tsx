@@ -37,7 +37,7 @@ export const Form: FC<Props> = ({ children, onSubmit, label }) => {
         </Text>
         {children}
       </Stack>
-      <PrimaryButton>Absenden</PrimaryButton>
+      <PrimaryButton type="submit">Absenden</PrimaryButton>
     </form>
   );
 };
