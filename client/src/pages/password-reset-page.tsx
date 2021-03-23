@@ -1,15 +1,27 @@
+import type { FC, FormEvent } from 'react';
 import { useState } from 'react';
-import type { FC, SyntheticEvent } from 'react';
+import { Link } from 'react-router-dom';
+import {
+  TextField,
+  MessageBar,
+  MessageBarType,
+  Link as A,
+} from '@fluentui/react';
 
 import { requestPasswordReset } from '../api';
+import { Layout } from '../components/layout';
+import { Form } from '../components/form';
 
 const Feedback: FC<{ display: boolean }> = ({ display }) => {
   if (display) {
     return (
-      <p>
+      <MessageBar messageBarType={MessageBarType.success}>
         Eine Email mit einem Link zum aktualisieren deines Passworts wurde an
         deine Emailadresse geschickt. Bitte prüfe deinen Spam-Ordner.
-      </p>
+        <A as={Link} to="/">
+          Zurück zur Startseite
+        </A>
+      </MessageBar>
     );
   }
 
@@ -19,15 +31,15 @@ const Feedback: FC<{ display: boolean }> = ({ display }) => {
 export const PasswordResetPage: FC = () => {
   const [email, setEmail] = useState<string>('');
   const [formSubmitted, setFormSubmitted] = useState<boolean>(false);
-  const handleChange = (event: SyntheticEvent<HTMLInputElement>) => {
+  const handleChange = (
+    event: FormEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { value } = event.currentTarget;
 
     setEmail(value);
     setFormSubmitted(false);
   };
-  const handleSubmit = (event: SyntheticEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
+  const handleSubmit = (): void => {
     requestPasswordReset(email.trim()).then(() => {
       setEmail('');
       setFormSubmitted(true);
@@ -35,23 +47,19 @@ export const PasswordResetPage: FC = () => {
   };
 
   return (
-    <form method="post" onSubmit={handleSubmit}>
-      <fieldset>
-        <legend>Passwort-Reset anfordern</legend>
+    <Layout>
+      <Form label="Passwort-Reset anfordern" onSubmit={handleSubmit}>
         <Feedback display={formSubmitted} />
-        <div>
-          <label htmlFor="email">Email</label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            value={email}
-            onInput={handleChange}
-            placeholder="Deine Email-Adresse &hellip;"
-          />
-        </div>
-      </fieldset>
-      <button>Absenden</button>
-    </form>
+        <TextField
+          label="Email"
+          type="email"
+          id="email"
+          name="email"
+          value={email}
+          onChange={handleChange}
+          placeholder="Deine Email-Adresse &hellip;"
+        />
+      </Form>
+    </Layout>
   );
 };
