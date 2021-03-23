@@ -1,11 +1,14 @@
-import type { FC, SyntheticEvent } from 'react';
+import type { FC, FormEvent } from 'react';
 import { useState } from 'react';
 import { useLocation, useParams, useHistory } from 'react-router-dom';
 import { addMinutes } from 'date-fns';
+import { TextField } from '@fluentui/react';
 
 import { Layout } from '../components/layout';
 import { createRoundedDateString } from '../helpers/date';
 import { createEvent } from '../api';
+import { Form } from '../components/form';
+import { DateRange } from '../components/date-range';
 
 interface Params {
   resourceId: string;
@@ -42,24 +45,19 @@ export const ReservationPage: FC = () => {
   const search = new URLSearchParams(location.search);
 
   const handleDecriptionChange = (
-    event: SyntheticEvent<HTMLTextAreaElement>
+    event: FormEvent<HTMLInputElement | HTMLTextAreaElement>
   ): void => {
     setDescription(event.currentTarget.value);
   };
   const handleReset = (): void => {
     history.push(getBackUrl(params.resourceId, search));
   };
-  const handleSubmit = (event: SyntheticEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    const form = event.currentTarget;
-
+  const handleSubmit = () => {
     createEvent(start, end, description.trim(), allDay, params.resourceId).then(
       (status) => {
         switch (status) {
           case 'ok':
             setDescription('');
-            form.reset();
             history.push(getBackUrl(params.resourceId, search));
             break;
           case 'overlapping':
@@ -84,25 +82,25 @@ export const ReservationPage: FC = () => {
 
   return (
     <Layout>
-      <form method="post" onReset={handleReset} onSubmit={handleSubmit}>
+      <Form
+        onReset={handleReset}
+        onSubmit={handleSubmit}
+        label="Reservieren"
+        buttonLabel="Speichern"
+      >
         {feedback === '' || <p>{feedback}</p>}
-        <dl>
-          {/* TODO: add datepicker inputs */}
-          <dt>Start</dt>
-          <dd>{start}</dd>
-          <dt>End</dt>
-          <dd>{end}</dd>
-        </dl>
-        <label htmlFor="description">Beschreibung</label>
-        <textarea
+        <DateRange start={start} end={end} allDay={allDay} />
+        <TextField
+          as="textarea"
+          label="Beschreibung"
           name="description"
           id="description"
           value={description}
-          onInput={handleDecriptionChange}
+          onChange={handleDecriptionChange}
+          multiline={true}
+          autoAdjustHeight={true}
         />
-        <button type="reset">Abbrechen</button>
-        <button>Speichern</button>
-      </form>
+      </Form>
     </Layout>
   );
 };
