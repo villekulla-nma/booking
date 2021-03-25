@@ -5,14 +5,14 @@
   "author": "Emanuel Kluge (https://emanuel-kluge.de/)",
   "license": "MIT",
   "scripts": {
-    "dev": "nodemon"
+    "dev": "nodemon",
+    "build": "ncc build src/index.ts -o ../dist/api --target es2020"
   },
   "dependencies": {
     "bcryptjs": "2.4.3",
     "dotenv": "8.2.0",
     "fastify": "3.14.0",
     "jsonwebtoken": "8.5.1",
-    "nodemailer": "6.5.0",
     "sequelize": "6.5.0",
     "shortid": "2.2.16",
     "sqlite3": "5.0.2"
