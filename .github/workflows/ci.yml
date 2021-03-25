@@ -47,3 +47,5 @@ jobs:
       - name: Create release
         if: github.ref == 'refs/heads/KillYourMaster'
         run: npx lerna version prerelease --yes
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
