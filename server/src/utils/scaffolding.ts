@@ -1,7 +1,7 @@
-import path from 'path';
 import { promises as fs } from 'fs';
 import type { ModelCtor, Sequelize } from 'sequelize';
 
+import { env } from './env';
 import { scaffoldResources, scaffoldGroups, scaffoldUsers } from '../models';
 import type { GroupInstance, ResourceInstance, UserInstance } from '../models';
 
@@ -23,10 +23,10 @@ const readFile = async (filename: string): Promise<Record<string, unknown>> => {
   }
 };
 
-export const getScaffoldingData = async (
-  dir: string
-): Promise<Record<string, unknown>> => {
-  const data = await readFile(path.join(dir, 'data.json'));
+export const getScaffoldingData = async (): Promise<
+  Record<string, unknown>
+> => {
+  const data = await readFile(env('SCAFFOLDING_DATA'));
 
   return data;
 };

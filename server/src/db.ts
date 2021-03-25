@@ -30,9 +30,7 @@ export const initDb = async (): Promise<Db> => {
     dialect: 'sqlite',
     storage: env('SQLITE3_PATH'),
   });
-  const dataPromise = getScaffoldingData(
-    path.resolve(__dirname, '..', 'scaffolding')
-  );
+  const dataPromise = getScaffoldingData();
   const Resource = createResourceInstance(sequelize);
   const Group = createGroupInstance(sequelize);
   const User = createUserInstance(sequelize);
