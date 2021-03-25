@@ -43,3 +43,7 @@ jobs:
           zip -r ../app.zip .
           cd ..
           ls -lah .
+
+      - name: Create release
+        if: github.ref == 'refs/heads/KillYourMaster'
+        run: npx lerna version prerelease --yes
