@@ -1,4 +1,4 @@
-name: Lint and Build
+name: Lint, Build and Release
 
 on:
   push:
@@ -46,6 +46,9 @@ jobs:
 
       - name: Create release
         if: github.ref == 'refs/heads/KillYourMaster'
-        run: npx lerna version prerelease --yes
+        run: |
+          git config user.email "action@github.com"
+          git config user.name "GitHub Action"
+          npx lerna version prerelease --yes
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
