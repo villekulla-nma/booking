@@ -102,6 +102,7 @@ export const ReservationPage: FC = () => {
           onChange={handleDecriptionChange}
           multiline={true}
           autoAdjustHeight={true}
+          autoFocus={true}
         />
       </Form>
     </Layout>
