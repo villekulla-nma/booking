@@ -1,7 +1,7 @@
-import path from 'path';
 import { Sequelize } from 'sequelize';
-import type { ModelCtor, Options } from 'sequelize';
+import type { ModelCtor } from 'sequelize';
 
+import { env } from './utils/env';
 import {
   createResourceInstance,
   createGroupInstance,
@@ -25,12 +25,11 @@ export interface Db {
   terminate: () => Promise<void>;
 }
 
-const options: Options = {
-  define: {},
-};
-
 export const initDb = async (): Promise<Db> => {
-  const sequelize = new Sequelize('sqlite::memory:', options);
+  const sequelize = new Sequelize({
+    dialect: 'sqlite',
+    storage: env('SQLITE3_PATH'),
+  });
   const dataPromise = getScaffoldingData(
     path.resolve(__dirname, '..', 'scaffolding')
   );
