@@ -39,7 +39,7 @@ export const assignPostPasswordResetHandler: AssignHandlerFunction = (
       server.log.warn('Setting reset token %s for user %s', token, user.id);
 
       await updateUser(db, user.id, { passwordReset: token });
-    } while (false);
+    } while (false); // eslint-disable-line no-constant-condition
 
     reply.send({ status: 'ok' });
   });

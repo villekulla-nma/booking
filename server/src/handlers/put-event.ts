@@ -78,7 +78,7 @@ export const assignPutEventHandler: AssignHandlerFunction = (
 
   server.put(route, opts, async (request: Request<Params>, reply) => {
     let status = 200;
-    let response = { status: 'ok' };
+    const response = { status: 'ok' };
     const { resourceId, userId } = request.params;
     const { start, end, description, allDay } = request.body as Body;
 

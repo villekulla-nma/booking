@@ -3,14 +3,14 @@ import type { FastifyRequest, FastifyReply } from 'fastify';
 import { verifyJwt } from '../utils/jwt';
 import { LOGOUT_COOKIE } from '../constants';
 
-export type Request<T = {}> = FastifyRequest<{
+export type Request<T = Record<string, unknown>> = FastifyRequest<{
   Params: { userId: string } & T;
 }>;
 
 export const preVerifySessionHandler = async (
   request: Request,
   reply: FastifyReply
-) => {
+): Promise<void> => {
   const [, token] = request.headers?.cookie?.match(/login=([^;]+)(;|$)/) || [];
 
   if (!token) {
@@ -22,7 +22,9 @@ export const preVerifySessionHandler = async (
 
   try {
     result = await verifyJwt(token);
-  } catch {}
+  } catch {
+    /* :shrug: */
+  }
 
   if (typeof result !== 'object' || result === null || !('id' in result)) {
     reply

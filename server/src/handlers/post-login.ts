@@ -34,9 +34,6 @@ export const assignPostLoginHandler: AssignHandlerFunction = (
     const { email, password } = request.body as Body;
 
     do {
-      let userId: string | undefined;
-      let hash: string | undefined;
-
       const user = await getUserByKey(db, 'email', email);
 
       if (!user) {
@@ -53,8 +50,8 @@ export const assignPostLoginHandler: AssignHandlerFunction = (
         break;
       }
 
-      userId = user.id;
-      hash = user.password;
+      const userId = user.id;
+      const hash = user.password;
       const passwordIsValid = await verifyPassword(password, hash);
 
       if (!passwordIsValid) {
@@ -76,7 +73,7 @@ export const assignPostLoginHandler: AssignHandlerFunction = (
         status = 500;
         result = { status: 'error' };
       }
-    } while (false);
+    } while (false); // eslint-disable-line no-constant-condition
 
     reply.status(status);
     reply.send(result);

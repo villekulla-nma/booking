@@ -9,7 +9,7 @@ import type {
 } from 'sequelize';
 import type { GroupAttributes } from '@villekulla-reservations/types';
 
-interface GroupCreationAttributes extends Optional<GroupAttributes, 'id'> {}
+type GroupCreationAttributes = Optional<GroupAttributes, 'id'>;
 
 export interface GroupInstance
   extends Model<GroupAttributes, GroupCreationAttributes>,
@@ -30,6 +30,7 @@ const schema: Schema = {
   },
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const isGroupData = (r: any): r is GroupAttributes =>
   typeof r.id === 'string' && typeof r.name === 'string';
 

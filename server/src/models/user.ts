@@ -9,8 +9,10 @@ import type {
 } from 'sequelize';
 import type { UserAttributes } from '@villekulla-reservations/types';
 
-interface UserCreationAttributes
-  extends Optional<Optional<UserAttributes, 'id'>, 'fullName'> {}
+type UserCreationAttributes = Optional<
+  Optional<UserAttributes, 'id'>,
+  'fullName'
+>;
 
 export interface UserInstance
   extends Model<UserAttributes, UserCreationAttributes>,
@@ -62,12 +64,13 @@ const schema: Schema = {
     get() {
       return `${this.firstName} ${this.lastName}`;
     },
-    set(_) {
+    set() {
       throw new Error('Do not try to set the `fullName` value!');
     },
   },
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const isUserCreationData = (r: any): r is UserCreationAttributes =>
   Array.isArray((typeof r.id).match(/^(string|undefined)$/)) &&
   roles.includes(r.role) &&

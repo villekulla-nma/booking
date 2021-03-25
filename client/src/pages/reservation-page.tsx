@@ -5,10 +5,7 @@ import { addMinutes } from 'date-fns';
 import { TextField } from '@fluentui/react';
 
 import { Layout } from '../components/layout';
-import {
-  createRoundedDateString,
-  denormalizeCalendarDate,
-} from '../helpers/date';
+import { createRoundedDateString } from '../helpers/date';
 import { createEvent } from '../api';
 import { Form } from '../components/form';
 import { DateRange } from '../components/date-range';

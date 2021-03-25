@@ -6,6 +6,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "nodemon",
+    "lint": "eslint .",
     "build": "ncc build src/index.ts -o ../dist/api --target es2020"
   },
   "dependencies": {
@@ -23,9 +24,15 @@
     "@types/node": "12.12.2",
     "@types/nodemailer": "4.6.0",
     "@types/shortid": "0.0.29",
-    "@villekulla-reservations/types": "0.1.0",
-    "fastify-http-proxy": "5.0.0",
+    "@typescript-eslint/eslint-plugin": "4.19.0",
+    "@typescript-eslint/parser": "4.19.0",
     "@vercel/ncc": "0.27.0",
+    "@villekulla-reservations/types": "0.1.0",
+    "eslint": "7.21.0",
+    "eslint-config-prettier": "8.1.0",
+    "eslint-plugin-prettier": "3.3.1",
+    "eslint-plugin-react": "7.23.1",
+    "fastify-http-proxy": "5.0.0",
     "nodemon": "2.0.7",
     "ts-node": "9.1.1"
   }

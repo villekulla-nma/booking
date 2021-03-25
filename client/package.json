@@ -15,6 +15,7 @@
     "extends": [
       "react-app",
       "react-app/jest",
+      "eslint:recommended",
       "plugin:@typescript-eslint/recommended",
       "plugin:prettier/recommended"
     ]
@@ -61,6 +62,7 @@
     "@types/react-router-dom": "5.1.7",
     "@typescript-eslint/eslint-plugin": "4.17.0",
     "@villekulla-reservations/types": "0.1.0",
+    "eslint": "7.21.0",
     "eslint-config-prettier": "8.1.0",
     "eslint-plugin-prettier": "3.3.1"
   }

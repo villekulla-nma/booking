@@ -10,7 +10,7 @@ import type { EventAttributes } from '@villekulla-reservations/types';
 import type { ResourceInstance } from './resource';
 import type { UserInstance } from './user';
 
-interface EventCreationAttributes extends Optional<EventAttributes, 'id'> {}
+type EventCreationAttributes = Optional<EventAttributes, 'id'>;
 
 export interface EventInstance
   extends Model<EventAttributes, EventCreationAttributes>,

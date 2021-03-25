@@ -10,13 +10,9 @@ if (error) {
 }
 
 (async () => {
-  try {
-    const db = await initDb();
+  const db = await initDb();
 
-    process.once('exit', () => db?.terminate());
+  process.once('exit', () => db?.terminate());
 
-    await initServer(db);
-  } catch (err) {
-    throw err;
-  }
+  await initServer(db);
 })();

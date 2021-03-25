@@ -9,8 +9,7 @@ import type {
 } from 'sequelize';
 import type { ResourceAttributes } from '@villekulla-reservations/types';
 
-interface ResourceCreationAttributes
-  extends Optional<ResourceAttributes, 'id'> {}
+type ResourceCreationAttributes = Optional<ResourceAttributes, 'id'>;
 
 export interface ResourceInstance
   extends Model<ResourceAttributes, ResourceCreationAttributes>,
@@ -31,6 +30,7 @@ const schema: Schema = {
   },
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const isResourceData = (r: any): r is ResourceAttributes =>
   typeof r.id === 'string' && typeof r.name === 'string';
 

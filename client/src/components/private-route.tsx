@@ -11,6 +11,7 @@ const { Provider: UserProvider } = UserContext;
 export const PrivateRoute: FC<RouteProps> = ({ component, ...rest }) => {
   const user = useUser();
   const from = `${window.location.pathname}${window.location.search}`;
+  const Comp = component as ComponentType<unknown>;
 
   return (
     <Route
@@ -29,7 +30,6 @@ export const PrivateRoute: FC<RouteProps> = ({ component, ...rest }) => {
               />
             );
           default:
-            const Comp = component as ComponentType<unknown>;
             return (
               <UserProvider value={user as UserResponse}>
                 <Comp />
