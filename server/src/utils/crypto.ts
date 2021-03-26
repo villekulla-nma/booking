@@ -19,4 +19,4 @@ export const hashPassword = async (password: string): Promise<string> => {
 };
 
 export const randomBytes = (length: number): string =>
-  crypto.randomBytes(length).toString('hex').slice(0, 32).toString();
+  crypto.randomBytes(length).toString('hex').slice(0, length).toString();
