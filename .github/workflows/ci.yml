@@ -4,8 +4,7 @@ on:
   push:
     branches:
       - KillYourMaster
-    tags:
-      - 'v*.*.*'
+  create:
   pull_request:
 
 jobs:
