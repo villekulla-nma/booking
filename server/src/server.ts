@@ -43,13 +43,16 @@ const initProxy = (server: FastifyInstance): void => {
   }
 };
 
-export const initServer = async (db: Db): Promise<FastifyInstance> => {
+export const initServer = async (
+  db: Db,
+  port?: string
+): Promise<FastifyInstance> => {
   const server = Fastify({ logger: { level: 'trace' } });
 
   routes.forEach(([route, handler]) => handler(route, server, db));
 
   await initProxy(server);
-  await server.listen(env('PORT') || '3000');
+  await server.listen(port || env('PORT') || '3000');
 
   return server;
 };
