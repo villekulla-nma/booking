@@ -1,10 +1,9 @@
-name: Lint, Build and Release
+name: Upload Release Artifact
 
 on:
   push:
-    branches:
-      - KillYourMaster
-  pull_request:
+    tags:
+      - 'v*'
 
 jobs:
   ci-cd:
@@ -26,17 +25,21 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
-      - name: Build & test the application
+      - name: Build the application
         run: |
           npm ci
-          npm run lint
           npm run build
 
-      - name: Create release
-        if: github.ref == 'refs/heads/KillYourMaster'
+      - name: Prepare Release Artifact
         run: |
-          git config user.email "520258+herschel666@users.noreply.github.com"
-          git config user.name "Emanuel Kluge"
-          npx lerna version prerelease --yes
+          jq .version lerna.json > dist/version.txt
+          cd dist/
+          zip -r ../app.zip .
+          cd ..
+
+      - name: Upload Release Artifact
+        uses: softprops/action-gh-release@v1
+        with:
+          files: app.zip
         env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
