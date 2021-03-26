@@ -20,7 +20,7 @@
   "devDependencies": {
     "@types/bcryptjs": "2.4.2",
     "@types/jsonwebtoken": "7.2.8",
-    "@types/node": "12.12.2",
+    "@types/node": "12.20.6",
     "@types/nodemailer": "4.6.0",
     "@types/shortid": "0.0.29",
     "@typescript-eslint/eslint-plugin": "4.19.0",
