@@ -43,7 +43,7 @@ export const assignPostLoginHandler: AssignHandlerFunction = (
         break;
       }
 
-      if (typeof user.password === 'undefined') {
+      if (user.password === null) {
         server.log.trace('Unverified user with email %s', email);
         status = 400;
         result = { status: 'unverified' };
