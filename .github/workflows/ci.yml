@@ -5,7 +5,6 @@ on:
     branches:
       - KillYourMaster
     tags:
-      - 'v*.*.**'
   pull_request:
 
 jobs:
