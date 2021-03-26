@@ -14,6 +14,7 @@
     "dev:server": "cd server && npm run dev",
     "dev": "lerna run dev --parallel --no-bail",
     "lint": "lerna run lint --no-bail",
+    "test": "lerna run test --no-bail --stream",
     "prebuild": "rm -rf ./dist",
     "__postbuild_comment__": "Whyever this file is put there by ncc anyways...",
     "postbuild": "rm ./dist/api/package.json",
