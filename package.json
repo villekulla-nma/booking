@@ -5,7 +5,7 @@
   "author": "Emanuel Kluge (https://emanuel-kluge.de/)",
   "license": "MIT",
   "scripts": {
-    "postinstall": "lerna bootstrap --ignore-prepublish --no-ci",
+    "postinstall": "lerna bootstrap",
     "dev:client": "cd client && npm run dev",
     "dev:server": "cd server && npm run dev",
     "dev": "lerna run dev --parallel --no-bail",
