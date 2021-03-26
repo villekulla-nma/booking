@@ -1,6 +1,6 @@
 {
   "name": "@villekulla-reservations/client",
-  "version": "0.1.0-alpha.8",
+  "version": "0.1.0-alpha.9",
   "author": "Emanuel Kluge (https://emanuel-kluge.de/)",
   "license": "MIT",
   "scripts": {
@@ -58,7 +58,7 @@
     "@types/react-dom": "17.0.2",
     "@types/react-router-dom": "5.1.7",
     "@typescript-eslint/eslint-plugin": "4.17.0",
-    "@villekulla-reservations/types": "0.1.0-alpha.8",
+    "@villekulla-reservations/types": "0.1.0-alpha.9",
     "eslint": "7.21.0",
     "eslint-config-prettier": "8.1.0",
     "eslint-plugin-prettier": "3.3.1",
