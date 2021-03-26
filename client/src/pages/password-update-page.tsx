@@ -1,9 +1,20 @@
-import type { FC, SyntheticEvent } from 'react';
+import type { FC, FormEvent } from 'react';
 import { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
+import {
+  Stack,
+  TextField,
+  MessageBar,
+  MessageBarType,
+  Link as A,
+} from '@fluentui/react';
+import type { IStackTokens, IMessageBarStyles } from '@fluentui/react';
+import { mergeStyles } from '@fluentui/merge-styles';
 
 import type { UpdatePasswordResponse } from '../api';
 import { updatePassword } from '../api';
+import { Layout } from '../components/layout';
+import { Form } from '../components/form';
 
 interface Params {
   token: string;
@@ -13,17 +24,51 @@ interface FeedbackProps {
   feedback: UpdatePasswordResponse | undefined;
 }
 
+const tokens: IStackTokens = {
+  childrenGap: '16px',
+};
+
+const feedbackText = mergeStyles({
+  fontSize: '14px',
+});
+
+const feedbackStyles: IMessageBarStyles = { text: feedbackText };
+
 const Feedback: FC<FeedbackProps> = ({ feedback }) => {
+  if (!feedback) {
+    return null;
+  }
+
+  let message: string;
+  let type: MessageBarType;
+
   switch (feedback) {
     case 'ok':
-      return <p>Passwort erfolgreich zurück gesetzt.</p>;
+      message = 'Passwort erfolgreich zurück gesetzt.';
+      type = MessageBarType.success;
+      break;
     case 'invalid':
-      return <p>Passwörter stimmen nicht überein.</p>;
+      message = 'Die Passwörter stimmen leider nicht überein.';
+      type = MessageBarType.warning;
+      break;
     case 'error':
-      return <p>Ein Fehler ist aufgetreten. Bitte versuch es noch einmal.</p>;
+      message = 'Ein Fehler ist aufgetreten. Bitte versuch es noch einmal.';
+      type = MessageBarType.error;
+      break;
     default:
-      return null;
+      throw new Error(`Unknown type "${feedback}".`);
   }
+
+  return (
+    <MessageBar messageBarType={type} styles={feedbackStyles}>
+      {message}
+      {feedback === 'ok' && (
+        <A as={Link} to="/login">
+          Zum Login
+        </A>
+      )}
+    </MessageBar>
+  );
 };
 
 export const PasswordUpdatePage: FC = () => {
@@ -34,20 +79,18 @@ export const PasswordUpdatePage: FC = () => {
   const [password, setPassword] = useState<string>('');
   const [passwordConfirm, setPasswordConfirm] = useState<string>('');
   const handlePasswordChange = (
-    event: SyntheticEvent<HTMLInputElement>
+    event: FormEvent<HTMLInputElement | HTMLTextAreaElement>
   ): void => {
     setFeedback(undefined);
     setPassword(event.currentTarget.value);
   };
   const handlePasswordConfirmChange = (
-    event: SyntheticEvent<HTMLInputElement>
+    event: FormEvent<HTMLInputElement | HTMLTextAreaElement>
   ): void => {
     setFeedback(undefined);
     setPasswordConfirm(event.currentTarget.value);
   };
-  const handleSubmit = (event: SyntheticEvent<HTMLFormElement>): void => {
-    event.preventDefault();
-
+  const handleSubmit = (): void => {
     updatePassword(token, password, passwordConfirm).then((status) => {
       setFeedback(status);
 
@@ -59,32 +102,28 @@ export const PasswordUpdatePage: FC = () => {
   };
 
   return (
-    <form method="post" onSubmit={handleSubmit}>
-      <fieldset>
-        <legend>Passwort neu setzen</legend>
-        <Feedback feedback={feedback} />
-        <div>
-          <label htmlFor="password">Passwort</label>
-          <input
+    <Layout>
+      <Form label="Passwort neu setzen" onSubmit={handleSubmit}>
+        <Stack tokens={tokens}>
+          <Feedback feedback={feedback} />
+          <TextField
             type="password"
+            label="Passwort"
             id="password"
             name="password"
             value={password}
-            onInput={handlePasswordChange}
+            onChange={handlePasswordChange}
           />
-        </div>
-        <div>
-          <label htmlFor="password_confirm">Passwort wiederholen</label>
-          <input
+          <TextField
             type="password"
+            label="Passwort wiederholen"
             id="password_confirm"
             name="password_confirm"
             value={passwordConfirm}
-            onInput={handlePasswordConfirmChange}
+            onChange={handlePasswordConfirmChange}
           />
-        </div>
-      </fieldset>
-      <button>Absenden</button>
-    </form>
+        </Stack>
+      </Form>
+    </Layout>
   );
 };
