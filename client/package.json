@@ -59,7 +59,7 @@
     "@types/react-router-dom": "5.1.7",
     "@typescript-eslint/eslint-plugin": "4.19.0",
     "@villekulla-reservations/types": "0.1.0-alpha.12",
-    "eslint": "7.21.0",
+    "eslint": "7.23.0",
     "eslint-config-prettier": "8.1.0",
     "eslint-plugin-prettier": "3.3.1",
     "react-scripts": "4.0.3",
