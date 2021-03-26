@@ -11,10 +11,6 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 
-# [0.1.0-alpha.0](https://github.com/herschel666/villekulla-reservations/compare/v0.1.0-alpha.1...v0.1.0-alpha.0) (2021-03-26)
-
-
-
 # [0.1.0-alpha.1](https://github.com/herschel666/villekulla-reservations/compare/05f62be135c95d0376477ae2169db5a64080e387...v0.1.0-alpha.1) (2021-03-25)
 
 
@@ -73,3 +69,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 * style main header ([7dbb05f](https://github.com/herschel666/villekulla-reservations/commit/7dbb05f28dbe3d4792555afddab0e1b20ffa3850))
 * style password reset page ([a5f4705](https://github.com/herschel666/villekulla-reservations/commit/a5f470505aac53726087dbce29f3f2bef1314891))
 * style the start page ([d03a176](https://github.com/herschel666/villekulla-reservations/commit/d03a176021244ed0b56229e432b302e2ae514932))
+
+
+# [0.1.0-alpha.0](https://github.com/herschel666/villekulla-reservations/compare/v0.1.0-alpha.1...v0.1.0-alpha.0) (2021-03-24)
+
