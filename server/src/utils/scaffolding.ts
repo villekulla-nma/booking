@@ -26,9 +26,13 @@ const readFile = async (filename: string): Promise<Record<string, unknown>> => {
 export const getScaffoldingData = async (): Promise<
   Record<string, unknown>
 > => {
-  const data = await readFile(env('SCAFFOLDING_DATA'));
+  try {
+    const data = await readFile(env('SCAFFOLDING_DATA'));
 
-  return data;
+    return data;
+  } catch {
+    return {};
+  }
 };
 
 export const writeScaffoldingData = async (
