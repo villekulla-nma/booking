@@ -1,9 +1,9 @@
 name: Upload Release Artifact
 
 on:
-  push:
-    tags:
-      - 'v*'
+  release:
+    types:
+      - published
 
 jobs:
   ci-cd:
