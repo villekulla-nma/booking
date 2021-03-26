@@ -47,7 +47,8 @@ export const initServer = async (
   db: Db,
   port?: string
 ): Promise<FastifyInstance> => {
-  const server = Fastify({ logger: { level: 'trace' } });
+  const level = process.env.NODE_ENV === 'test' ? 'silent' : 'trace';
+  const server = Fastify({ logger: { level } });
 
   routes.forEach(([route, handler]) => handler(route, server, db));
 

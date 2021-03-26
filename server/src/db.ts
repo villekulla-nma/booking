@@ -29,6 +29,7 @@ export const initDb = async (): Promise<Db> => {
   const sequelize = new Sequelize({
     dialect: 'sqlite',
     storage: env('SQLITE3_PATH'),
+    logging: process.env.NODE_ENV === 'test' ? false : console.log,
   });
   const dataPromise = getScaffoldingData();
   const Resource = createResourceInstance(sequelize);
