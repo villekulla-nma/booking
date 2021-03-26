@@ -1,27 +1,23 @@
 import type { FC, FormEvent } from 'react';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import {
-  TextField,
-  MessageBar,
-  MessageBarType,
-  Link as A,
-} from '@fluentui/react';
+import { TextField, MessageBarType, Link as A } from '@fluentui/react';
 
 import { requestPasswordReset } from '../api';
 import { Layout } from '../components/layout';
 import { Form } from '../components/form';
+import { Feedback } from '../components/feedback';
 
-const Feedback: FC<{ display: boolean }> = ({ display }) => {
+const UserFeedback: FC<{ display: boolean }> = ({ display }) => {
   if (display) {
     return (
-      <MessageBar messageBarType={MessageBarType.success}>
-        Eine Email mit einem Link zum aktualisieren deines Passworts wurde an
-        deine Emailadresse geschickt. Bitte prüfe deinen Spam-Ordner.
+      <Feedback type={MessageBarType.success}>
+        Eine Email mit einem Link zum Aktualisieren deines Passworts wurde an
+        deine Email-Adresse geschickt. Bitte prüfe deinen Spam-Ordner.
         <A as={Link} to="/">
           Zurück zur Startseite
         </A>
-      </MessageBar>
+      </Feedback>
     );
   }
 
@@ -49,7 +45,7 @@ export const PasswordResetPage: FC = () => {
   return (
     <Layout>
       <Form label="Passwort-Reset anfordern" onSubmit={handleSubmit}>
-        <Feedback display={formSubmitted} />
+        <UserFeedback display={formSubmitted} />
         <TextField
           label="Email"
           type="email"

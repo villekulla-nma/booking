@@ -1,20 +1,14 @@
 import type { FC, FormEvent } from 'react';
 import { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import {
-  Stack,
-  TextField,
-  MessageBar,
-  MessageBarType,
-  Link as A,
-} from '@fluentui/react';
-import type { IStackTokens, IMessageBarStyles } from '@fluentui/react';
-import { mergeStyles } from '@fluentui/merge-styles';
+import { Stack, TextField, MessageBarType, Link as A } from '@fluentui/react';
+import type { IStackTokens } from '@fluentui/react';
 
 import type { UpdatePasswordResponse } from '../api';
 import { updatePassword } from '../api';
 import { Layout } from '../components/layout';
 import { Form } from '../components/form';
+import { Feedback } from '../components/feedback';
 
 interface Params {
   token: string;
@@ -28,13 +22,7 @@ const tokens: IStackTokens = {
   childrenGap: '16px',
 };
 
-const feedbackText = mergeStyles({
-  fontSize: '14px',
-});
-
-const feedbackStyles: IMessageBarStyles = { text: feedbackText };
-
-const Feedback: FC<FeedbackProps> = ({ feedback }) => {
+const UserFeedback: FC<FeedbackProps> = ({ feedback }) => {
   if (!feedback) {
     return null;
   }
@@ -60,14 +48,14 @@ const Feedback: FC<FeedbackProps> = ({ feedback }) => {
   }
 
   return (
-    <MessageBar messageBarType={type} styles={feedbackStyles}>
+    <Feedback type={type}>
       {message}
       {feedback === 'ok' && (
         <A as={Link} to="/login">
           Zum Login
         </A>
       )}
-    </MessageBar>
+    </Feedback>
   );
 };
 
@@ -105,7 +93,7 @@ export const PasswordUpdatePage: FC = () => {
     <Layout>
       <Form label="Passwort neu setzen" onSubmit={handleSubmit}>
         <Stack tokens={tokens}>
-          <Feedback feedback={feedback} />
+          <UserFeedback feedback={feedback} />
           <TextField
             type="password"
             label="Passwort"
