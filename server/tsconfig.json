@@ -17,7 +17,7 @@
     "inlineSources": true,
     "pretty": true,
     "skipLibCheck": true,
-    "types": ["node"]
+    "types": ["node", "jest"]
   },
   "exclude": ["node_modules"]
 }
