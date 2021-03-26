@@ -28,14 +28,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
-      - name: Cache Build artifacts
-        uses: actions/cache@v2
-        with:
-          path: ./.cache
-          key: ${{ runner.os }}-node-${{ hashFiles('**/*') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-
       - name: Build & test the application
         run: |
           npm ci
