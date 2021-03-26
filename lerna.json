@@ -1,8 +1,5 @@
 {
-  "packages": [
-    "client",
-    "server",
-    "types"
-  ],
+  "packages": ["client", "server", "types"],
+  "useWorkspaces": true,
   "version": "0.1.0-alpha.1"
 }
