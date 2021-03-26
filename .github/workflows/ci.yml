@@ -32,10 +32,6 @@ jobs:
           npm ci
           npm run lint
           npm run build
-          cd dist/
-          zip -r ../app.zip .
-          cd ..
-          ls -lah .
 
       - name: Create release
         if: github.ref == 'refs/heads/KillYourMaster'
@@ -45,6 +41,14 @@ jobs:
           npx lerna version prerelease --yes
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Prepare Release Artifact
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          jq .version lerna.json > dist/version.txt
+          cd dist/
+          zip -r ../app.zip .
+          cd ..
 
       - name: Upload Release Artifact
         uses: softprops/action-gh-release@v1
