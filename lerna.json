@@ -4,6 +4,15 @@
     "server",
     "types"
   ],
+  "command": {
+    "version": {
+      "allowBranch": "KillYourMaster",
+      "conventionalCommits": true,
+      "createRelease": "github",
+      "exact": true,
+      "message": "chore(release): %s :feelsgood:"
+    }
+  },
   "useWorkspaces": true,
   "version": "0.1.0-alpha.2"
 }
