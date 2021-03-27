@@ -22,7 +22,7 @@ describe('Server [PUT] /api/resources/:resourceId/events', () => {
 
   beforeAll(async () => {
     db = await initDb();
-    server = await initServer(db, '9060');
+    server = await initServer(db, '9100');
     log = console.log;
 
     console.log = () => undefined;
@@ -86,7 +86,7 @@ describe('Server [PUT] /api/resources/:resourceId/events', () => {
       );
 
       const response = await fetch(
-        'http://localhost:9060/api/resources/Uj5SAS740/events',
+        'http://localhost:9100/api/resources/Uj5SAS740/events',
         {
           method: 'PUT',
           headers: {
@@ -117,7 +117,7 @@ describe('Server [PUT] /api/resources/:resourceId/events', () => {
     );
 
     const response = await fetch(
-      'http://localhost:9060/api/resources/Uj5SAS740/events',
+      'http://localhost:9100/api/resources/Uj5SAS740/events',
       {
         method: 'PUT',
         headers: {
@@ -145,7 +145,7 @@ describe('Server [PUT] /api/resources/:resourceId/events', () => {
     (createEvent as jest.Mock).mockRejectedValue(new Error('nope'));
 
     const response = await fetch(
-      'http://localhost:9060/api/resources/Uj5SAS740/events',
+      'http://localhost:9100/api/resources/Uj5SAS740/events',
       {
         method: 'PUT',
         headers: {
@@ -177,7 +177,7 @@ describe('Server [PUT] /api/resources/:resourceId/events', () => {
     const start = `${tomorrow}T15:00:00.000Z`;
     const end = `${tomorrow}T16:00:00.000Z`;
     const response = await fetch(
-      'http://localhost:9060/api/resources/Uj5SAS740/events',
+      'http://localhost:9100/api/resources/Uj5SAS740/events',
       {
         method: 'PUT',
         headers: {
