@@ -64,17 +64,14 @@ export const ResourcePage: FC = () => {
   const nowProp = getNowFromString(params.now);
   const calendar = useRef<FullCalendar>();
   const [dateSelection, setDateSelection] = useState<SelectionRange>();
-  const eventSource = useRef<EventSourceInput>();
+  const eventSource: EventSourceInput = {
+    url: `/api/resources/${params.resourceId}/events`,
+  };
   const search = new URLSearchParams({
     view: params.view,
     now: params.now,
   });
   const actionButtonIcon: IIconProps = { iconName: 'Add' };
-
-  eventSource.current = {
-    url: `/api/resources/${params.resourceId}/events`,
-    timeZoneParam: timeZone,
-  };
 
   const plugins = [dayGridPlugin, timeGridPlugin, interactionPlugin];
   const replaceView = (view: ViewTypeParam): void =>
@@ -194,7 +191,7 @@ export const ResourcePage: FC = () => {
         plugins={plugins}
         customButtons={customButtons}
         headerToolbar={headerToolbar}
-        eventSources={[eventSource.current]}
+        eventSources={[eventSource]}
         initialView={currentViewType}
         selectable={currentViewType !== 'dayGridMonth'}
         eventClick={handleClick}
