@@ -61,6 +61,7 @@ const createCheckOverlappingEvents = (db: Db) => async (
   }
 };
 
+// TODO: check that start is before end
 export const assignPutEventHandler: AssignHandlerFunction = (
   route,
   server,
