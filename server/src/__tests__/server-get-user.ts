@@ -6,7 +6,7 @@ import { initDb } from '../db';
 import { initServer } from '../server';
 import { signJwt } from './helpers/sign-jwt';
 
-describe('Server :: /api/user', () => {
+describe('Server [GET] /api/user', () => {
   let cookieValue: string;
   let invalidCookieValue: string;
   let server: FastifyInstance;

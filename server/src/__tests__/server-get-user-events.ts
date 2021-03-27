@@ -8,7 +8,7 @@ import { signJwt } from './helpers/sign-jwt';
 import type { ResourceInstance } from '../models/resource';
 import type { EventInstance } from '../models/event';
 
-describe('Server :: /api/user/events', () => {
+describe('Server [GET] /api/user/events', () => {
   let cookieValue: string;
   let server: FastifyInstance;
   let db: Db;

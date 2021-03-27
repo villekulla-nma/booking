@@ -8,7 +8,7 @@ import { signJwt } from '../utils/jwt';
 
 jest.mock('../utils/jwt');
 
-describe('Server :: /api/login', () => {
+describe('Server [POST] /api/login', () => {
   let server: FastifyInstance;
   let db: Db;
 
