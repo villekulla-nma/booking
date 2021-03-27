@@ -9,7 +9,7 @@ import { updateUser, getUserByKey } from '../controllers/user';
 
 jest.mock('../controllers/user');
 
-describe('Server :: /api/password-reset/:token', () => {
+describe('Server [POST] /api/password-reset/:token', () => {
   const token = 'c2c4a54d1f64ed8eca662783b013bf6e';
   let server: FastifyInstance;
   let db: Db;

@@ -5,7 +5,7 @@ import type { Db } from '../db';
 import { initDb } from '../db';
 import { initServer } from '../server';
 
-describe('Server :: /api/password-reset', () => {
+describe('Server [POST] /api/password-reset', () => {
   let server: FastifyInstance;
   let db: Db;
 

@@ -4,7 +4,7 @@ import fetch from 'node-fetch';
 import type { Db } from '../db';
 import { initServer } from '../server';
 
-describe('Server :: /api/logout', () => {
+describe('Server [POST] /api/logout', () => {
   let server: FastifyInstance;
 
   beforeAll(async () => {
