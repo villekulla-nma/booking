@@ -1,0 +1,159 @@
+import type { FastifyInstance } from 'fastify';
+import fetch from 'node-fetch';
+
+import type { Db } from '../db';
+import { initDb } from '../db';
+import { initServer } from '../server';
+import { signJwt } from './helpers/sign-jwt';
+import type { ResourceInstance } from '../models/resource';
+import type { EventInstance } from '../models/event';
+
+describe('Server :: /api/user/events', () => {
+  let cookieValue: string;
+  let server: FastifyInstance;
+  let db: Db;
+
+  beforeAll(async () => {
+    db = await initDb();
+    server = await initServer(db, '9050');
+    await db.User.create({
+      id: 'TD0sIeaoz',
+      email: 'person.one@example.com',
+      firstName: 'Person1',
+      lastName: 'One',
+      role: 'user',
+      groupId: 'YLBqxvCCm',
+    });
+    await db.Resource.bulkCreate<ResourceInstance>([
+      {
+        id: 'Uj5SAS740',
+        name: 'Resource #1',
+      },
+      {
+        id: 'gWH5T7Kdz',
+        name: 'Resource #2',
+      },
+    ]);
+    cookieValue = await signJwt({ id: 'TD0sIeaoz' }, process.env.JWT_SECRET);
+  });
+
+  afterAll(async () => {
+    await db?.terminate();
+    server.close();
+  });
+
+  describe('empty response', () => {
+    it('should respond with 200/ok', async () => {
+      const response = await fetch('http://localhost:9050/api/user/events', {
+        headers: {
+          cookie: `login=${cookieValue}`,
+        },
+      });
+      const data = await response.json();
+
+      expect(response.status).toBe(200);
+      expect(data.status).toBe('ok');
+      expect(data.events).toEqual([]);
+    });
+  });
+
+  describe('exisiting events', () => {
+    const [tomorrow] = new Date(Date.now() + 24 * 3600 * 1000)
+      .toISOString()
+      .split('T');
+
+    beforeAll(async () => {
+      await db.Event.bulkCreate<EventInstance>([
+        {
+          id: 'Ja2mFvsGM',
+          start: '2021-03-26T11:30:00.000Z',
+          end: '2021-03-26T15:00:00.000Z',
+          allDay: false,
+          resourceId: 'Uj5SAS740',
+          description: 'An event in the past',
+          userId: 'TD0sIeaoz',
+        },
+        {
+          id: 'HBv7p7CVC',
+          start: `${tomorrow}T08:30:00.000Z`,
+          end: `${tomorrow}T12:00:00.000Z`,
+          allDay: false,
+          resourceId: 'Uj5SAS740',
+          description: 'A nice event',
+          userId: 'TD0sIeaoz',
+        },
+        {
+          id: 'VKZ27GlOF',
+          start: `${tomorrow}T13:00:00.000Z`,
+          end: `${tomorrow}T13:30:00.000Z`,
+          allDay: false,
+          resourceId: 'Uj5SAS740',
+          description: 'Event by another user',
+          userId: '4XNdIWWOy',
+        },
+        {
+          id: 'SHYVTIGoM',
+          start: `${tomorrow}T00:00:00.000Z`,
+          end: `${tomorrow}T23:59:59.000Z`,
+          allDay: true,
+          resourceId: 'gWH5T7Kdz',
+          description: 'Party all day!!1',
+          userId: 'TD0sIeaoz',
+        },
+      ]);
+    });
+
+    it('should respond with the events', async () => {
+      const response = await fetch('http://localhost:9050/api/user/events', {
+        headers: {
+          cookie: `login=${cookieValue}`,
+        },
+      });
+      const data = await response.json();
+
+      expect(response.status).toBe(200);
+      expect(data.status).toBe('ok');
+      expect(data.events).toEqual([
+        {
+          id: 'HBv7p7CVC',
+          start: `${tomorrow}T08:30:00.000Z`,
+          end: `${tomorrow}T12:00:00.000Z`,
+          allDay: false,
+          resource: 'Resource #1',
+          description: 'A nice event',
+        },
+        {
+          id: 'SHYVTIGoM',
+          start: `${tomorrow}T00:00:00.000Z`,
+          end: `${tomorrow}T23:59:59.000Z`,
+          allDay: true,
+          resource: 'Resource #2',
+          description: 'Party all day!!1',
+        },
+      ]);
+    });
+
+    it('should respect the limit-param', async () => {
+      const response = await fetch(
+        'http://localhost:9050/api/user/events?limit=1',
+        {
+          headers: {
+            cookie: `login=${cookieValue}`,
+          },
+        }
+      );
+      const data = await response.json();
+
+      expect(data.events).toEqual([
+        {
+          id: 'HBv7p7CVC',
+          start: `${tomorrow}T08:30:00.000Z`,
+          end: `${tomorrow}T12:00:00.000Z`,
+          allDay: false,
+          resource: 'Resource #1',
+          description: 'A nice event',
+        },
+      ]);
+    });
+  });
+});
