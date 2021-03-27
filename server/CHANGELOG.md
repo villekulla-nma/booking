@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 0.1.0-alpha.17 (2021-03-27)
+
+
+### Bug Fixes
+
+* **client:** display range of multiple days correctly ([033849e](https://github.com/herschel666/villekulla-reservations/commit/033849ef63a4d30c4a3dd5e7d6691e738ea98965))
+
+
+
+
+
 # 0.1.0-alpha.16 (2021-03-27)
 
 **Note:** Version bump only for package @villekulla-reservations/server
