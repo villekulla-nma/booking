@@ -1,20 +1,10 @@
 import type { FastifyInstance } from 'fastify';
 import fetch from 'node-fetch';
-import jwt from 'jsonwebtoken';
 
 import type { Db } from '../db';
 import { initDb } from '../db';
 import { initServer } from '../server';
-
-const signJwt = async (
-  payload: { id: string },
-  secret: string
-): Promise<string> =>
-  new Promise((resolve, reject) =>
-    jwt.sign(payload, secret, { expiresIn: '2 minutes' }, (err, token) =>
-      err ? reject(err) : resolve(token)
-    )
-  );
+import { signJwt } from './helpers/sign-jwt';
 
 describe('Server :: /api/user', () => {
   let cookieValue: string;
