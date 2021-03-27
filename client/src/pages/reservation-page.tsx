@@ -2,13 +2,14 @@ import type { FC, FormEvent } from 'react';
 import { useState } from 'react';
 import { useLocation, useParams, useHistory } from 'react-router-dom';
 import { addMinutes } from 'date-fns';
-import { TextField } from '@fluentui/react';
+import { TextField, MessageBarType } from '@fluentui/react';
 
 import { Layout } from '../components/layout';
 import { createRoundedDateString } from '../helpers/date';
 import { createEvent } from '../api';
 import { Form } from '../components/form';
 import { DateRange } from '../components/date-range';
+import { Feedback } from '../components/feedback';
 
 interface Params {
   resourceId: string;
@@ -88,7 +89,9 @@ export const ReservationPage: FC = () => {
         label="Reservieren"
         buttonLabel="Speichern"
       >
-        {feedback === '' || <p>{feedback}</p>}
+        {feedback === '' || (
+          <Feedback type={MessageBarType.error}>{feedback}</Feedback>
+        )}
         <DateRange start={start} end={end} allDay={allDay} />
         <TextField
           as="textarea"
