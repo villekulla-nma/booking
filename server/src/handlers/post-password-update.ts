@@ -58,6 +58,7 @@ const createPreHandler = (db: Db) => async (
   const { token } = request.params;
   const user = await getUserByKey(db, 'passwordReset', token);
 
+  // TODO: respond with status "expired"
   if (!user) {
     reply.code(400).send({ status: 'error' });
     return;
