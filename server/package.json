@@ -14,7 +14,8 @@
     "preset": "ts-jest",
     "testEnvironment": "node",
     "setupFilesAfterEnv": ["./jest.setup.ts"],
-    "clearMocks": true
+    "clearMocks": true,
+    "testPathIgnorePatterns": ["/node_modules/", "__tests__/helpers/"]
   },
   "dependencies": {
     "bcryptjs": "2.4.3",
