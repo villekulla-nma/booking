@@ -2,7 +2,7 @@ import type { FC } from 'react';
 import { Stack, Text, NeutralColors } from '@fluentui/react';
 import type { IStackTokens } from '@fluentui/react';
 import { mergeStyles } from '@fluentui/merge-styles';
-import { format } from 'date-fns';
+import { format, differenceInDays } from 'date-fns';
 import { de } from 'date-fns/locale';
 
 import { denormalizeCalendarDate } from '../helpers/date';
@@ -38,10 +38,13 @@ const formatDateTime = (date: string) =>
   });
 
 export const DateRange: FC<Props> = ({ start, end, allDay }) => {
-  if (allDay) {
+  const difference = differenceInDays(new Date(end), new Date(start));
+  const formatFn = difference === 0 ? formatDateTime : formatDate;
+
+  if (difference === 1) {
     return (
       <Text variant="medium">
-        {formatDate(start)}
+        {formatFn(start)}
         <em className={allDayHint}>(ganztägig)</em>
       </Text>
     );
@@ -54,7 +57,7 @@ export const DateRange: FC<Props> = ({ start, end, allDay }) => {
           Beginn
         </Text>
         <Text variant="medium" as="dd">
-          {formatDateTime(start)}
+          {formatFn(start)}
         </Text>
       </Stack>
       <Stack horizontal={true} tokens={listItemTokens}>
@@ -62,7 +65,7 @@ export const DateRange: FC<Props> = ({ start, end, allDay }) => {
           Ende
         </Text>
         <Text variant="medium" as="dd">
-          {formatDateTime(end)}
+          {formatFn(end)}
         </Text>
       </Stack>
     </dl>
