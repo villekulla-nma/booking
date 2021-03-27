@@ -158,22 +158,12 @@ export const ResourcePage: FC = () => {
     searchParams.append('resourceId', params.resourceId);
     history.push(`/events/${args.event.id}?${searchParams}`);
   };
-  const handleSelect = (args: DateSelectArg) => {
-    const start = args.start.toISOString();
-    const endDateTime = args.end;
-
-    if (args.allDay) {
-      endDateTime.setTime(endDateTime.getTime() - 1000);
-    }
-
-    const end = endDateTime.toISOString();
-
+  const handleSelect = (args: DateSelectArg): void =>
     setDateSelection({
       allDay: args.allDay,
-      start,
-      end,
+      start: args.start.toISOString(),
+      end: args.end.toISOString(),
     });
-  };
   const handleUnselect = () => setDateSelection(undefined);
   const handleReservation = (): void => {
     history.push(
