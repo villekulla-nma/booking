@@ -41,7 +41,7 @@
     "@typescript-eslint/eslint-plugin": "4.19.0",
     "@typescript-eslint/parser": "4.19.0",
     "@vercel/ncc": "0.27.0",
-    "@villekulla-reservations/types": "0.1.0-alpha.15",
+    "@villekulla-reservations/types": "*",
     "eslint": "7.23.0",
     "eslint-config-prettier": "8.1.0",
     "eslint-plugin-prettier": "3.3.1",
