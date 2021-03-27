@@ -19,7 +19,6 @@ interface Body {
   end: string;
   description: string;
   allDay: boolean;
-  userId: string;
 }
 
 const opts: RouteShorthandOptions = {
@@ -31,7 +30,6 @@ const opts: RouteShorthandOptions = {
         end: { type: 'string' },
         description: { type: 'string' },
         allDay: { type: 'boolean' },
-        userId: { type: 'string' },
       },
     },
     params: {
