@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Link as A, TextField, MessageBarType } from '@fluentui/react';
 
-import { redirect } from '../helpers/redirect';
+import { redirect } from '../helpers/location';
 import { login } from '../api';
 import { Layout } from '../components/layout';
 import { Form } from '../components/form';
