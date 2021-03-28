@@ -5,13 +5,13 @@ import { initializeIcons } from '@uifabric/icons';
 
 import { LoginPage } from '../login-page';
 import { sleep } from '../../helpers/sleep';
-import { redirect } from '../../helpers/redirect';
+import { redirect } from '../../helpers/location';
 
 jest.mock('../../components/layout.tsx', () => ({
   Layout: ({ children }) => <>{children}</>,
 }));
 
-jest.mock('../../helpers/redirect', () => ({
+jest.mock('../../helpers/location', () => ({
   redirect: jest.fn(),
 }));
 
