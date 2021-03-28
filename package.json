@@ -18,7 +18,8 @@
     "prebuild": "rm -rf ./dist",
     "__postbuild_comment__": "Whyever this file is put there by ncc anyways...",
     "postbuild": "rm ./dist/api/package.json",
-    "build": "lerna run build --parallel"
+    "build": "lerna run build --parallel",
+    "version": "npm install && git add package-lock.json"
   },
   "devDependencies": {
     "lerna": "4.0.0",
