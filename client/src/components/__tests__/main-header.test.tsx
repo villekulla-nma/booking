@@ -11,6 +11,7 @@ import { initializeIcons } from '@uifabric/icons';
 
 import { MainHeader } from '../main-header';
 import { sleep } from '../../helpers/sleep';
+import { reload } from '../../helpers/location';
 
 jest.mock('../../components/private-route.tsx', () => ({
   PrivateRoute: ({ component: Comp }) => {
@@ -33,6 +34,10 @@ jest.mock('../../components/private-route.tsx', () => ({
 
 jest.mock('../../components/layout.tsx', () => ({
   Layout: ({ children }) => <>{children}</>,
+}));
+
+jest.mock('../../helpers/location', () => ({
+  reload: jest.fn(),
 }));
 
 describe('Start Page', () => {
@@ -98,8 +103,12 @@ describe('Start Page', () => {
       );
 
       fireEvent.click(logoutButton);
-      await sleep(50);
 
+      await act(async () => {
+        await sleep(50);
+      });
+
+      expect(reload).toHaveBeenCalled();
       expect(scope.isDone()).toBe(true);
     });
   });
