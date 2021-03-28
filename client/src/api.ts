@@ -43,13 +43,17 @@ export const logout = async (): Promise<void> => {
 };
 
 export const requestPasswordReset = async (email: string): Promise<void> => {
-  await fetch('/api/password-reset', {
-    method: 'POST',
-    headers: {
-      'content-type': 'application/json',
-    },
-    body: JSON.stringify({ email }),
-  });
+  try {
+    await fetch('/api/password-reset', {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify({ email }),
+    });
+  } catch {
+    /* nothing to do here */
+  }
 };
 
 export type UpdatePasswordResponse = 'ok' | 'invalid' | 'error';
