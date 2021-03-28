@@ -1,11 +1,12 @@
 import type { FC, FormEvent } from 'react';
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Link as A, TextField } from '@fluentui/react';
+import { Link as A, TextField, MessageBarType } from '@fluentui/react';
 
 import { login } from '../api';
 import { Layout } from '../components/layout';
 import { Form } from '../components/form';
+import { Feedback } from '../components/feedback';
 
 export const LoginPage: FC = () => {
   const location = useLocation<{ from: string }>();
@@ -51,9 +52,7 @@ export const LoginPage: FC = () => {
     <Layout>
       <Form label="Anmeldung" onSubmit={handleSubmit}>
         {feedback && (
-          <div>
-            <b>{feedback}</b>
-          </div>
+          <Feedback type={MessageBarType.error}>{feedback}</Feedback>
         )}
         <div>
           <TextField
