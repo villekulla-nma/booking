@@ -46,4 +46,26 @@ describe('Resource Page', () => {
 
     expect(scope.isDone()).toBe(true);
   });
+
+  it('should show success message even in case of server error', async () => {
+    const scope = nock('http://localhost')
+      .post('/api/password-reset')
+      .reply(500);
+
+    render(
+      <Router initialEntries={['/password-reset']}>
+        <Route path="/password-reset" component={PasswordResetPage} />
+      </Router>
+    );
+
+    fireEvent.click(screen.getByText('Absenden').closest('button'));
+
+    await waitFor(() =>
+      screen.getByText(
+        /Dein Passwort wurde erfolgreich zurück gesetzt. Bitte wende dich an/
+      )
+    );
+
+    expect(scope.isDone()).toBe(true);
+  });
 });
