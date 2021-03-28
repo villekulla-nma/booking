@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 0.1.0-alpha.21 (2021-03-28)
+
+
+### Features
+
+* **client:** add site footer ([e18b897](https://github.com/herschel666/villekulla-reservations/commit/e18b8972624861ddef1f630545732e0e163569a3))
+
+
+
+
+
 # 0.1.0-alpha.20 (2021-03-28)
 
 **Note:** Version bump only for package @villekulla-reservations/client
