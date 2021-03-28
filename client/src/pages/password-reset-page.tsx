@@ -8,12 +8,12 @@ import { Layout } from '../components/layout';
 import { Form } from '../components/form';
 import { Feedback } from '../components/feedback';
 
-const UserFeedback: FC<{ display: boolean }> = ({ display }) => {
+const SuccessFeedback: FC<{ display: boolean }> = ({ display }) => {
   if (display) {
     return (
       <Feedback type={MessageBarType.success}>
-        Eine Email mit einem Link zum Aktualisieren deines Passworts wurde an
-        deine Email-Adresse geschickt. Bitte prüfe deinen Spam-Ordner.
+        Dein Passwort wurde erfolgreich zurück gesetzt. Bitte wende dich an
+        einen der Administratoren, um den Verifizierungs-Code zu bekommen.
         <A as={Link} to="/">
           Zurück zur Startseite
         </A>
@@ -45,7 +45,7 @@ export const PasswordResetPage: FC = () => {
   return (
     <Layout>
       <Form label="Passwort-Reset anfordern" onSubmit={handleSubmit}>
-        <UserFeedback display={formSubmitted} />
+        <SuccessFeedback display={formSubmitted} />
         <TextField
           label="Email"
           type="email"
