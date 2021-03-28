@@ -42,7 +42,9 @@ export const LoginPage: FC = () => {
           break;
         case 'error':
         default:
-          setFeedback('Etwas ist schief gelaufen.');
+          setFeedback(
+            'Etwas ist schief gelaufen. Bitte versuche es noch einmal.'
+          );
           setPassword('');
           break;
       }
