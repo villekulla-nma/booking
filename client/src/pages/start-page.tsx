@@ -1,5 +1,6 @@
 import type { FC } from 'react';
 import { Stack, Text } from '@fluentui/react';
+import type { IStackTokens } from '@fluentui/react';
 import { mergeStyles } from '@fluentui/merge-styles';
 
 import { Layout } from '../components/layout';
@@ -13,6 +14,10 @@ const heading = mergeStyles({
 const text = mergeStyles({
   fontStyle: 'italic',
 });
+
+const tileTokens: IStackTokens = {
+  childrenGap: 32,
+};
 
 const tile = mergeStyles({
   width: 'calc(50% - 32px)',
@@ -42,7 +47,7 @@ export const StartPage: FC = () => {
             );
           default:
             return (
-              <Stack horizontal={true} wrap={true} gap={32}>
+              <Stack horizontal={true} wrap={true} tokens={tileTokens}>
                 {upcomingEvents?.map((event) => (
                   <EventTile className={tile} key={event.id} {...event} />
                 ))}
