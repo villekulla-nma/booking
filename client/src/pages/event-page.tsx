@@ -19,6 +19,7 @@ import { useEventDetail } from '../hooks/use-event-detail';
 import { useUser } from '../hooks/use-user';
 import { Layout } from '../components/layout';
 import { DateRange } from '../components/date-range';
+import { inquireConfirmation } from '../helpers/inquire-confirmation';
 
 interface Params {
   eventId: string;
@@ -91,7 +92,7 @@ export const EventPage: FC = () => {
     ? `gebucht für ${duration}`
     : 'komplett gebucht';
   const handleDelete = () => {
-    if (window.confirm('Soll der Eintrag wirklich geköscht werden?')) {
+    if (inquireConfirmation('Soll der Eintrag wirklich geköscht werden?')) {
       deleteEvent(eventId).then(
         () => history.push(backLinkUrl),
         () => alert('Der Eintrag konnte nicht gelöscht werden.')
