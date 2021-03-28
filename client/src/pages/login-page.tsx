@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Link as A, TextField, MessageBarType } from '@fluentui/react';
 
+import { redirect } from '../helpers/redirect';
 import { login } from '../api';
 import { Layout } from '../components/layout';
 import { Form } from '../components/form';
@@ -29,7 +30,7 @@ export const LoginPage: FC = () => {
     login(email.trim(), password.trim()).then((result) => {
       switch (result) {
         case 'ok':
-          window.location.href = from;
+          redirect(from);
           break;
         case 'unverified':
           setFeedback('Bitte verfifiziere deinen Nutzer.');
