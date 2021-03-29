@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 0.1.0-alpha.22 (2021-03-29)
+
+
+### Bug Fixes
+
+* **deps:** update fullcalendar monorepo to v5.6.0 ([4b5453d](https://github.com/herschel666/villekulla-reservations/commit/4b5453d0b1f73513bcf2171405b9f4a2a6d54355))
+
+
+
+
+
 # 0.1.0-alpha.21 (2021-03-28)
 
 
