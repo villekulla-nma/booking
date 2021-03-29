@@ -1,8 +1,5 @@
 {
   "extends": ["config:base", ":maintainLockFilesWeekly"],
-  "constraints": {
-    "npm": "^7"
-  },
   "devDependencies": {
     "automerge": true
   }
