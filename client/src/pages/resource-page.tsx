@@ -14,8 +14,9 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import { useHistory, useParams } from 'react-router-dom';
 import { format } from 'date-fns';
-import { ActionButton } from '@fluentui/react';
-import type { IIconProps } from '@fluentui/react';
+import { ActionButton, Stack } from '@fluentui/react';
+import type { IIconProps, IStackTokens } from '@fluentui/react';
+import { mergeStyles } from '@fluentui/merge-styles';
 
 import { Layout } from '../components/layout';
 import type { ViewTypeOption, ViewTypeParam } from '../types';
@@ -34,6 +35,15 @@ interface SelectionRange {
 }
 
 const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+const wrapTokens: IStackTokens = {
+  childrenGap: '16px',
+};
+
+const actionButton = mergeStyles({
+  marginBottom: '32px',
+  fontSize: '18px',
+});
 
 const getViewTypeOption = (view: string | null): ViewTypeOption => {
   switch (view) {
@@ -174,29 +184,34 @@ export const ResourcePage: FC = () => {
 
   return (
     <Layout>
-      <FullCalendar
-        ref={calendar as RefObject<FullCalendar>}
-        locale={locale}
-        timeZone={timeZone}
-        plugins={plugins}
-        customButtons={customButtons}
-        headerToolbar={headerToolbar}
-        eventSources={[eventSource]}
-        initialView={currentViewType}
-        selectable={currentViewType !== 'dayGridMonth'}
-        eventClick={handleClick}
-        select={handleSelect}
-        unselect={handleUnselect}
-        unselectAuto={false}
-        initialDate={nowProp}
-      />
-      <ActionButton
-        onClick={handleReservation}
-        iconProps={actionButtonIcon}
-        disabled={typeof dateSelection === 'undefined'}
-      >
-        Reservieren
-      </ActionButton>
+      <Stack tokens={wrapTokens}>
+        <FullCalendar
+          ref={calendar as RefObject<FullCalendar>}
+          locale={locale}
+          timeZone={timeZone}
+          plugins={plugins}
+          customButtons={customButtons}
+          headerToolbar={headerToolbar}
+          eventSources={[eventSource]}
+          initialView={currentViewType}
+          selectable={currentViewType !== 'dayGridMonth'}
+          eventClick={handleClick}
+          select={handleSelect}
+          unselect={handleUnselect}
+          unselectAuto={false}
+          initialDate={nowProp}
+        />
+        <Stack.Item>
+          <ActionButton
+            onClick={handleReservation}
+            iconProps={actionButtonIcon}
+            disabled={typeof dateSelection === 'undefined'}
+            className={actionButton}
+          >
+            Reservieren
+          </ActionButton>
+        </Stack.Item>
+      </Stack>
     </Layout>
   );
 };
