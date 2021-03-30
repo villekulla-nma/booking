@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 0.1.0-alpha.26 (2021-03-30)
+
+**Note:** Version bump only for package @villekulla-reservations/types
+
+
+
+
+
 # 0.1.0-alpha.25 (2021-03-30)
 
 **Note:** Version bump only for package @villekulla-reservations/types
