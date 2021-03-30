@@ -16,8 +16,10 @@ import { assignGetUserEventsHandler } from './handlers/get-user-events';
 import { assignPostLogoutHandler } from './handlers/post-logout';
 import { assignPostPasswordResetHandler } from './handlers/post-password-reset';
 import { assignPostPasswordUpdateHandler } from './handlers/post-password-update';
+import { assignGetHealthHandler } from './handlers/get-health';
 
 const routes: [string, AssignHandlerFunction][] = [
+  ['/api/_health', assignGetHealthHandler],
   ['/api/login', assignPostLoginHandler],
   ['/api/logout', assignPostLogoutHandler],
   ['/api/password-reset', assignPostPasswordResetHandler],
