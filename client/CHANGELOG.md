@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 0.1.0-alpha.29 (2021-03-30)
+
+
+### Features
+
+* **client:** prepare main header for small screens ([22cb2fd](https://github.com/herschel666/villekulla-reservations/commit/22cb2fd5024a1feb1597e2197e55a40abaf94428))
+
+
+
+
+
 # 0.1.0-alpha.28 (2021-03-30)
 
 **Note:** Version bump only for package @villekulla-reservations/client
