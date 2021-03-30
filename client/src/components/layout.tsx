@@ -8,7 +8,10 @@ import { MainHeader } from './main-header';
 const styles = mergeStyles({
   minHeight: '100vh',
   maxWidth: '860px',
-  margin: '0 auto',
+  margin: '0 16px',
+  '@media (min-width: 892px)': {
+    margin: '0 auto',
+  },
 });
 
 const footerTokens: IStackTokens = {
