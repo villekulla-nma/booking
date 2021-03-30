@@ -12,6 +12,7 @@ import { initializeIcons } from '@uifabric/icons';
 import { MainHeader } from '../main-header';
 import { sleep } from '../../helpers/sleep';
 import { reload } from '../../helpers/location';
+import { useMediaQuery } from '../../hooks/use-media-query';
 
 jest.mock('../../components/private-route.tsx', () => ({
   PrivateRoute: ({ component: Comp }) => {
@@ -40,6 +41,10 @@ jest.mock('../../helpers/location', () => ({
   reload: jest.fn(),
 }));
 
+jest.mock('../../hooks/use-media-query', () => ({
+  useMediaQuery: jest.fn(),
+}));
+
 describe('Start Page', () => {
   const user = {
     id: 'TD0sIeaoz',
@@ -60,7 +65,9 @@ describe('Start Page', () => {
   });
 
   describe(`logged-in`, () => {
-    it('should display resource', async () => {
+    it('should display resource (Desktop)', async () => {
+      (useMediaQuery as jest.Mock).mockReturnValue(true);
+
       const scope = nock('http://localhost')
         .get('/api/user')
         .times(2)
@@ -85,7 +92,44 @@ describe('Start Page', () => {
       expect(scope.isDone()).toBe(true);
     });
 
+    it('should display resource (Mobile)', async () => {
+      (useMediaQuery as jest.Mock).mockReturnValue(false);
+
+      const scope = nock('http://localhost')
+        .get('/api/user')
+        .times(2)
+        .reply(200, { user })
+        .get('/api/resources')
+        .reply(200, [
+          {
+            id: 'Uj5SAS740',
+            name: 'Resource #1',
+          },
+          {
+            id: 'gWH5T7Kdz',
+            name: 'Resource #2',
+          },
+        ]);
+
+      render(<MainHeader />, { wrapper: Router });
+
+      expect(screen.queryByText('Resource #2')).toBeNull();
+
+      await act(async () => {
+        await sleep(200);
+      });
+
+      fireEvent.click(screen.getByTitle('Menü einblenden'));
+
+      screen.getByText('Resource #1');
+      screen.getByText('Resource #2');
+
+      expect(scope.isDone()).toBe(true);
+    });
+
     it('should log out the user', async () => {
+      (useMediaQuery as jest.Mock).mockReturnValue(true);
+
       const scope = nock('http://localhost')
         .get('/api/user')
         .times(2)
@@ -115,6 +159,8 @@ describe('Start Page', () => {
 
   describe('logged-out', () => {
     it('should not display the logout button', async () => {
+      (useMediaQuery as jest.Mock).mockReturnValue(true);
+
       const scope = nock('http://localhost')
         .get('/api/user')
         .times(2)
