@@ -3,5 +3,11 @@
   "devDependencies": {
     "automerge": true,
     "commitBody": "[skip release]"
-  }
+  },
+  "packageRules": [
+    {
+      "groupName": "Fluent UI",
+      "matchPackagePatterns": ["^@fluentui/"]
+    }
+  ]
 }
