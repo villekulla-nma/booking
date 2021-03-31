@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 0.1.0-alpha.32 (2021-03-31)
+
+
+### Bug Fixes
+
+* **deps:** update fluent ui ([87ec3cf](https://github.com/herschel666/villekulla-reservations/commit/87ec3cf341aa5a8ec78ef25d65b0fd9cd28d8bd0))
+
+
+
+
+
 # 0.1.0-alpha.31 (2021-03-31)
 
 **Note:** Version bump only for package @villekulla-reservations/client
