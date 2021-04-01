@@ -9,5 +9,9 @@
   </head>
   <body>
     <div id="root"></div>
+    <script>
+      // Prevent @fluentui/theme from downloding all the fonts
+      window.FabricConfig = { fontBaseUrl: '' };
+    </script>
   </body>
 </html>
