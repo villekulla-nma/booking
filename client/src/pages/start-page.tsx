@@ -6,6 +6,7 @@ import { mergeStyles } from '@fluentui/merge-styles';
 import { Layout } from '../components/layout';
 import { useUserEvents } from '../hooks/use-user-events';
 import { EventTile } from '../components/event-tile';
+import { MQ_IS_DESKTOP } from '../constants';
 
 const heading = mergeStyles({
   marginBottom: '32px',
@@ -20,7 +21,10 @@ const tileTokens: IStackTokens = {
 };
 
 const tile = mergeStyles({
-  width: 'calc(50% - 32px)',
+  width: '100%',
+  [`@media ${MQ_IS_DESKTOP}`]: {
+    width: 'calc(50% - 32px)',
+  },
 });
 
 export const StartPage: FC = () => {
