@@ -72,7 +72,8 @@ const publicRoutes: RouteProps[] = [
 
 initializeIcons();
 
-loadTheme({
+const theme = loadTheme({
+  defaultFontStyle: { fontFamily: 'sans-serif', fontWeight: 'regular' },
   fonts: {
     small: {
       fontSize: '12px',
@@ -85,7 +86,7 @@ loadTheme({
 
 ReactDOM.render(
   <StrictMode>
-    <FabricBase>
+    <FabricBase theme={theme}>
       <Router basename="app">
         <Switch>
           {authenticatedRoutes.map((route, i) => (
