@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 0.1.0-alpha.33 (2021-04-01)
+
+
+### Bug Fixes
+
+* **client:** provide pae layout to loading state ([032e777](https://github.com/herschel666/villekulla-reservations/commit/032e77731ddf00298c96c25e2dfd9d5f6bcd601c))
+
+
+
+
+
 # 0.1.0-alpha.32 (2021-03-31)
 
 
