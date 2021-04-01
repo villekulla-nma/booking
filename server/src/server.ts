@@ -17,6 +17,7 @@ import { assignPostLogoutHandler } from './handlers/post-logout';
 import { assignPostPasswordResetHandler } from './handlers/post-password-reset';
 import { assignPostPasswordUpdateHandler } from './handlers/post-password-update';
 import { assignGetHealthHandler } from './handlers/get-health';
+import { CSP_DIRECTIVES } from './constants';
 
 const routes: [string, AssignHandlerFunction][] = [
   ['/api/_health', assignGetHealthHandler],
@@ -41,6 +42,12 @@ const initProxy = (server: FastifyInstance): void => {
       upstream: clientUrl,
       base: '/app',
       http2: false,
+      replyOptions: {
+        rewriteHeaders: (headers) => ({
+          ...headers,
+          'Content-Security-Policy': CSP_DIRECTIVES.join('; '),
+        }),
+      },
     });
   }
 };
