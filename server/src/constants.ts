@@ -5,12 +5,9 @@ export const LOGOUT_COOKIE =
 /* eslint-disable quotes */
 export const CSP_DIRECTIVES = [
   `default-src 'none'`,
-  `script-src 'self'`,
-  `script-src-elem 'self'`,
-  `script-src-attr 'none'`,
-  `style-src 'self'`,
-  `style-src-elem 'self' 'unsafe-inline'`,
-  `style-src-attr 'none'`,
+  `script-src 'self' 'unsafe-inline'`,
+  `style-src 'self' 'unsafe-inline'`,
+  `style-src-attr 'self'`,
   `img-src 'self'`,
   `font-src 'self' data: https://spoprod-a.akamaihd.net`,
   `connect-src 'self' ws://localhost:8080`,
