@@ -41,7 +41,7 @@
     "@fullcalendar/react": "5.6.0",
     "@fullcalendar/timegrid": "5.6.0",
     "@uifabric/icons": "7.5.23",
-    "classnames": "2.2.6",
+    "classnames": "2.3.0",
     "date-fns": "2.19.0",
     "react": "17.0.1",
     "react-dom": "17.0.1",
