@@ -72,7 +72,11 @@ export const EventPage: FC = () => {
   const user = useUser();
 
   if (!user || !event) {
-    return <b>Loading event...</b>;
+    return (
+      <Layout>
+        <b>Loading event...</b>
+      </Layout>
+    );
   }
 
   const calendarParams = getCalendarParamsFromSearch(location.search);
