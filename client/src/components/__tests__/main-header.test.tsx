@@ -175,5 +175,23 @@ describe('Start Page', () => {
       expect(screen.queryByText('Abmelden')).toBeNull();
       expect(scope.isDone()).toBe(true);
     });
+
+    it('should not display the hamburger when there are no resources', async () => {
+      (useMediaQuery as jest.Mock).mockReturnValue(false);
+
+      const scope = nock('http://localhost')
+        .get('/api/user')
+        .times(2)
+        .reply(401, { status: 'error' });
+
+      render(<MainHeader />, { wrapper: Router });
+
+      await act(async () => {
+        await sleep(200);
+      });
+
+      expect(scope.isDone()).toBe(true);
+      expect(screen.queryByTitle('Menü einblenden')).toBeNull();
+    });
   });
 });
