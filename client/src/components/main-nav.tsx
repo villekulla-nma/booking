@@ -49,6 +49,11 @@ const iconProps: IIconProps = { iconName: 'GlobalNavButton' };
 const MobileNav: FC<Props & ResourceId> = ({ resources, resourceId }) => {
   const history = useHistory();
   const [open, setOpen] = useState<boolean>(false);
+
+  if (resources.length === 0) {
+    return null;
+  }
+
   const openPanel = () => setOpen(true);
   const closePanel = () => setOpen(false);
   const links = resources.map(
