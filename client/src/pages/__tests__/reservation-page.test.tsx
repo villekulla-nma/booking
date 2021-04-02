@@ -1,3 +1,4 @@
+import type { FC, ComponentType } from 'react';
 import nock from 'nock';
 import { render, screen, fireEvent, act } from '@testing-library/react';
 import { MemoryRouter as Router, Route } from 'react-router-dom';
@@ -6,8 +7,10 @@ import { initializeIcons } from '@uifabric/icons';
 import { ReservationPage } from '../reservation-page';
 import { sleep } from '../../helpers/sleep';
 
-jest.mock('../../components/private-route.tsx', () => ({
-  PrivateRoute: ({ component: Comp }) => {
+jest.mock('../../components/private-route.tsx', () => {
+  const PrivateRoute: FC<{ component: ComponentType }> = ({
+    component: Comp,
+  }) => {
     const user = {
       id: 'TD0sIeaoz',
       email: 'person.one@example.com',
@@ -22,12 +25,14 @@ jest.mock('../../components/private-route.tsx', () => ({
         <Comp />
       </UserContext>
     );
-  },
-}));
+  };
+  return { PrivateRoute };
+});
 
-jest.mock('../../components/layout.tsx', () => ({
-  Layout: ({ children }) => <>{children}</>,
-}));
+jest.mock('../../components/layout.tsx', () => {
+  const Layout: FC = ({ children }) => <>{children}</>;
+  return { Layout };
+});
 
 describe('Reservation Page', () => {
   initializeIcons();
@@ -76,10 +81,12 @@ describe('Reservation Page', () => {
       </Router>
     );
 
-    const elemStart = screen.getByText('Beginn').nextElementSibling;
-    const elemEnd = screen.getByText('Ende').nextElementSibling;
+    const elemStart = screen.getByText('Beginn').nextElementSibling as Element;
+    const elemEnd = screen.getByText('Ende').nextElementSibling as Element;
     const textarea = screen.getByLabelText('Beschreibung');
-    const submit = screen.getByText('Speichern').closest('button');
+    const submit = screen
+      .getByText('Speichern')
+      .closest('button') as HTMLButtonElement;
 
     expect(elemStart.textContent).toContain('9:00');
     expect(elemEnd.textContent).toContain('13:30');
@@ -115,7 +122,9 @@ describe('Reservation Page', () => {
       </Router>
     );
 
-    const submit = screen.getByText('Speichern').closest('button');
+    const submit = screen
+      .getByText('Speichern')
+      .closest('button') as HTMLButtonElement;
 
     await act(async () => {
       expect(fireEvent.click(submit)).toBe(true);
@@ -150,7 +159,9 @@ describe('Reservation Page', () => {
       </Router>
     );
 
-    const submit = screen.getByText('Speichern').closest('button');
+    const submit = screen
+      .getByText('Speichern')
+      .closest('button') as HTMLButtonElement;
 
     await act(async () => {
       expect(fireEvent.click(submit)).toBe(true);
@@ -183,7 +194,9 @@ describe('Reservation Page', () => {
       </Router>
     );
 
-    const submit = screen.getByText('Speichern').closest('button');
+    const submit = screen
+      .getByText('Speichern')
+      .closest('button') as HTMLButtonElement;
 
     await act(async () => {
       expect(fireEvent.click(submit)).toBe(true);

@@ -1,3 +1,4 @@
+import type { FC, ComponentType } from 'react';
 import nock from 'nock';
 import { MemoryRouter as Router } from 'react-router-dom';
 import {
@@ -14,8 +15,10 @@ import { sleep } from '../../helpers/sleep';
 import { reload } from '../../helpers/location';
 import { useMediaQuery } from '../../hooks/use-media-query';
 
-jest.mock('../../components/private-route.tsx', () => ({
-  PrivateRoute: ({ component: Comp }) => {
+jest.mock('../../components/private-route.tsx', () => {
+  const PrivateRoute: FC<{ component: ComponentType }> = ({
+    component: Comp,
+  }) => {
     const user = {
       id: 'TD0sIeaoz',
       email: 'person.one@example.com',
@@ -30,12 +33,14 @@ jest.mock('../../components/private-route.tsx', () => ({
         <Comp />
       </UserContext>
     );
-  },
-}));
+  };
+  return { PrivateRoute };
+});
 
-jest.mock('../../components/layout.tsx', () => ({
-  Layout: ({ children }) => <>{children}</>,
-}));
+jest.mock('../../components/layout.tsx', () => {
+  const Layout: FC = ({ children }) => <>{children}</>;
+  return { Layout };
+});
 
 jest.mock('../../helpers/location', () => ({
   reload: jest.fn(),
