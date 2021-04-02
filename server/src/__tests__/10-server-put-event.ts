@@ -6,15 +6,15 @@ import type { Db } from '../db';
 import { initDb } from '../db';
 import { initServer } from '../server';
 import { signJwt } from './helpers/sign-jwt';
+import { getDates } from './helpers/get-dates';
 import type { ResourceInstance } from '../models/resource';
 import { createEvent, getOverlappingEvents } from '../controllers/event';
+import type { EventInstance } from '../models/event';
 
 jest.mock('../controllers/event');
 
 describe('Server [PUT] /api/resources/:resourceId/events', () => {
-  const [tomorrow] = new Date(Date.now() + 24 * 3600 * 1000)
-    .toISOString()
-    .split('T');
+  const { today, tomorrow, dayAfterTomorrow } = getDates();
   let cookieValue: string;
   let server: FastifyInstance;
   let db: Db;
@@ -53,15 +53,26 @@ describe('Server [PUT] /api/resources/:resourceId/events', () => {
         name: 'Resource #2',
       },
     ]);
-    await db.Event.create({
-      id: 'HBv7p7CVC',
-      start: `${tomorrow}T08:30:00.000Z`,
-      end: `${tomorrow}T12:00:00.000Z`,
-      allDay: false,
-      resourceId: 'Uj5SAS740',
-      description: 'A nice event',
-      userId: 'Ul2Zrv1BX',
-    });
+    await db.Event.bulkCreate<EventInstance>([
+      {
+        id: 'HBv7p7CVC',
+        start: `${tomorrow}T08:30:00.000Z`,
+        end: `${tomorrow}T12:00:00.000Z`,
+        allDay: false,
+        resourceId: 'Uj5SAS740',
+        description: 'A nice event',
+        userId: 'Ul2Zrv1BX',
+      },
+      {
+        id: 'ctigHisJr',
+        start: `${today}T07:00:00.000Z`,
+        end: `${tomorrow}T00:00:00.000Z`,
+        allDay: false,
+        resourceId: 'gWH5T7Kdz',
+        description: 'Thingies',
+        userId: 'TD0sIeaoz',
+      },
+    ]);
 
     cookieValue = await signJwt({ id: 'TD0sIeaoz' }, process.env.JWT_SECRET);
   });
@@ -126,8 +137,8 @@ describe('Server [PUT] /api/resources/:resourceId/events', () => {
         },
         body: JSON.stringify({
           description: '',
-          start: '1234-56-78T11:22:33.000Z',
-          end: '1234-56-78T12:22:33.000Z',
+          start: '2021-04-02T11:22:33.000Z',
+          end: '2021-04-02T12:22:33.000Z',
           allDay: false,
         }),
       }
@@ -154,8 +165,8 @@ describe('Server [PUT] /api/resources/:resourceId/events', () => {
         },
         body: JSON.stringify({
           description: '',
-          start: '1234-56-78T11:22:33.000Z',
-          end: '1234-56-78T12:22:33.000Z',
+          start: '2021-04-02T11:22:33.000Z',
+          end: '2021-04-02T12:22:33.000Z',
           allDay: false,
         }),
       }
@@ -166,42 +177,60 @@ describe('Server [PUT] /api/resources/:resourceId/events', () => {
     expect(data.status).toBe('error');
   });
 
-  it('should respond with 200/ok on success', async () => {
-    (getOverlappingEvents as jest.Mock).mockImplementation(
-      jest.requireActual('../controllers/event').getOverlappingEvents
-    );
-    (createEvent as jest.Mock).mockImplementation(
-      jest.requireActual('../controllers/event').createEvent
-    );
+  describe('Successful events creations', () => {
+    it.each([
+      [
+        'Event #1',
+        'Uj5SAS740',
+        `${tomorrow}T15:00:00.000Z`,
+        `${tomorrow}T16:00:00.000Z`,
+        false,
+      ],
+      [
+        'Event #2',
+        'gWH5T7Kdz',
+        `${tomorrow}T00:00:00.000Z`,
+        `${dayAfterTomorrow}T00:00:00.000Z`,
+        true,
+      ],
+    ])(
+      'should respond with 200/ok on success (%s)',
+      async (description, resourceId, start, end, allDay) => {
+        (getOverlappingEvents as jest.Mock).mockImplementation(
+          jest.requireActual('../controllers/event').getOverlappingEvents
+        );
+        (createEvent as jest.Mock).mockImplementation(
+          jest.requireActual('../controllers/event').createEvent
+        );
 
-    const start = `${tomorrow}T15:00:00.000Z`;
-    const end = `${tomorrow}T16:00:00.000Z`;
-    const response = await fetch(
-      'http://localhost:9100/api/resources/Uj5SAS740/events',
-      {
-        method: 'PUT',
-        headers: {
-          cookie: `login=${cookieValue}`,
-          'content-type': 'application/json',
-        },
-        body: JSON.stringify({
-          description: 'Fancy get-together',
-          allDay: false,
-          start,
-          end,
-        }),
+        const response = await fetch(
+          `http://localhost:9100/api/resources/${resourceId}/events`,
+          {
+            method: 'PUT',
+            headers: {
+              cookie: `login=${cookieValue}`,
+              'content-type': 'application/json',
+            },
+            body: JSON.stringify({
+              description,
+              allDay,
+              start,
+              end,
+            }),
+          }
+        );
+        const data = await response.json();
+        const event = await db.Event.findOne({
+          where: {
+            start: { [Op.eq]: start },
+            end: { [Op.eq]: end },
+          },
+        });
+
+        expect(response.status).toBe(200);
+        expect(data.status).toBe('ok');
+        expect(event.description).toBe(description);
       }
     );
-    const data = await response.json();
-    const event = await db.Event.findOne({
-      where: {
-        start: { [Op.eq]: start },
-        end: { [Op.eq]: end },
-      },
-    });
-
-    expect(response.status).toBe(200);
-    expect(data.status).toBe('ok');
-    expect(event.description).toBe('Fancy get-together');
   });
 });
