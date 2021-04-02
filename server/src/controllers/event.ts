@@ -37,9 +37,12 @@ const toEventResult = (events: EventInstance[]): EventResult[] =>
 export const getScopedEvents = async (
   { Event }: Db,
   resourceId: string,
-  start: string,
-  end: string
+  startString: string,
+  endString: string
 ): Promise<EventResult[]> => {
+  const start = new Date(`${startString}.000Z`).toISOString();
+  const end = new Date(`${endString}.000Z`).toISOString();
+
   const events = await Event.findAll({
     where: {
       resourceId: { [Op.eq]: resourceId },

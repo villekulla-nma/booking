@@ -6,17 +6,12 @@ import type { Db } from '../db';
 import { initDb } from '../db';
 import { initServer } from '../server';
 import { signJwt } from './helpers/sign-jwt';
+import { getDates } from './helpers/get-dates';
 import type { ResourceInstance } from '../models/resource';
 import type { EventInstance } from '../models/event';
 
-const getDate = (timestamp = Date.now()): string =>
-  new Date(timestamp).toISOString().split('T').shift();
-
 describe('Server [GET] /api/resources/:resourceId/events', () => {
-  const today = getDate();
-  const tomorrow = getDate(Date.now() + 24 * 3600 * 1000);
-  const dayAfterTomorrow = getDate(Date.now() + 48 * 3600 * 1000);
-  const threeDaysAhead = getDate(Date.now() + 72 * 3600 * 1000);
+  const { today, tomorrow, dayAfterTomorrow, threeDaysAhead } = getDates();
   let cookieValue: string;
   let server: FastifyInstance;
   let db: Db;
@@ -54,6 +49,15 @@ describe('Server [GET] /api/resources/:resourceId/events', () => {
         userId: 'TD0sIeaoz',
       },
       {
+        id: 'a85VfWRQA',
+        start: `${today}T00:00:00.000Z`,
+        end: `${tomorrow}T00:00:00.000Z`,
+        allDay: true,
+        resourceId: 'gWH5T7Kdz',
+        description: 'All-day event #1',
+        userId: 'TD0sIeaoz',
+      },
+      {
         id: 'HBv7p7CVC',
         start: `${tomorrow}T08:30:00.000Z`,
         end: `${tomorrow}T12:00:00.000Z`,
@@ -69,6 +73,15 @@ describe('Server [GET] /api/resources/:resourceId/events', () => {
         allDay: false,
         resourceId: 'gWH5T7Kdz',
         description: 'Another nice event',
+        userId: 'TD0sIeaoz',
+      },
+      {
+        id: 'MRaI4jIzw',
+        start: `${tomorrow}T00:00:00.000Z`,
+        end: `${dayAfterTomorrow}T00:00:00.000Z`,
+        allDay: true,
+        resourceId: 'gWH5T7Kdz',
+        description: 'All-day event #2',
         userId: 'TD0sIeaoz',
       },
       {
@@ -90,7 +103,7 @@ describe('Server [GET] /api/resources/:resourceId/events', () => {
     server.close();
   });
 
-  it('should respond with 200 on success', async () => {
+  it('should respond with 200 on success for resource Uj5SAS740', async () => {
     const start = `${tomorrow}T00:00:00`;
     const end = `${dayAfterTomorrow}T00:00:00`;
     const search = new URLSearchParams({ start, end }).toString();
@@ -107,6 +120,27 @@ describe('Server [GET] /api/resources/:resourceId/events', () => {
     expect(response.status).toBe(200);
     expect(events.length).toBe(1);
     expect(events[0].description).toBe('A nice event');
+  });
+
+  it('should respond with 200 on success for resource gWH5T7Kdz', async () => {
+    const start = `${today}T00:00:00`;
+    const end = `${dayAfterTomorrow}T00:00:00`;
+    const search = new URLSearchParams({ start, end }).toString();
+    const response = await fetch(
+      `http://localhost:9070/api/resources/gWH5T7Kdz/events?${search}`,
+      {
+        headers: {
+          cookie: `login=${cookieValue}`,
+        },
+      }
+    );
+    const events = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(events.length).toBe(3);
+    expect(events[0].description).toBe('All-day event #1');
+    expect(events[1].description).toBe('Another nice event');
+    expect(events[2].description).toBe('All-day event #2');
   });
 
   it('should respond with an empty list', async () => {
