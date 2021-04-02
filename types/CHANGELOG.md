@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 0.1.0-alpha.35 (2021-04-02)
+
+
+### Features
+
+* **client:** improve event page view for small screens ([1a883ac](https://github.com/herschel666/villekulla-reservations/commit/1a883ac50f6189ec448c1f6193d6b07252f98549))
+
+
+
+
+
 # 0.1.0-alpha.34 (2021-04-01)
 
 
