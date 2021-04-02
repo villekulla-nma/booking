@@ -4,6 +4,7 @@ import type { IStackTokens } from '@fluentui/react';
 import { mergeStyles } from '@fluentui/merge-styles';
 import { format, differenceInDays } from 'date-fns';
 import { de } from 'date-fns/locale';
+import classNames from 'classnames';
 
 import { denormalizeCalendarDate } from '../helpers/date';
 
@@ -24,9 +25,24 @@ const listItemTokens: IStackTokens = {
   padding: '4px 0',
 };
 
+const dateDisplay = mergeStyles({
+  margin: '16px 0',
+});
+
 const definitionTerm = mergeStyles({
-  flex: '0 1 15%',
-  color: NeutralColors.gray140,
+  maxWidth: '120px',
+  flex: '0 1 20%',
+  color: NeutralColors.gray180,
+});
+
+const firstDefinitionTerm = mergeStyles({
+  paddingBottom: '8px',
+  borderBottom: `1px solid ${NeutralColors.gray50}`,
+});
+
+const definitionValue = mergeStyles({
+  paddingLeft: '8px',
+  color: NeutralColors.gray130,
 });
 
 const formatDate = (date: string) =>
@@ -43,7 +59,7 @@ export const DateRange: FC<Props> = ({ start, end, allDay }) => {
 
   if (difference === 1) {
     return (
-      <Text variant="medium">
+      <Text variant="medium" className={dateDisplay}>
         {formatFn(start)}
         <em className={allDayHint}>(ganztägig)</em>
       </Text>
@@ -51,12 +67,16 @@ export const DateRange: FC<Props> = ({ start, end, allDay }) => {
   }
 
   return (
-    <dl>
+    <dl className={dateDisplay}>
       <Stack horizontal={true} tokens={listItemTokens}>
-        <Text variant="medium" as="dt" className={definitionTerm}>
+        <Text
+          variant="medium"
+          as="dt"
+          className={classNames(definitionTerm, firstDefinitionTerm)}
+        >
           Beginn
         </Text>
-        <Text variant="medium" as="dd">
+        <Text variant="medium" as="dd" className={definitionValue}>
           {formatFn(start)}
         </Text>
       </Stack>
@@ -64,7 +84,7 @@ export const DateRange: FC<Props> = ({ start, end, allDay }) => {
         <Text variant="medium" as="dt" className={definitionTerm}>
           Ende
         </Text>
-        <Text variant="medium" as="dd">
+        <Text variant="medium" as="dd" className={definitionValue}>
           {formatFn(end)}
         </Text>
       </Stack>

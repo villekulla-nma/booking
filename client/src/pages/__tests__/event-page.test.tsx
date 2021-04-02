@@ -6,6 +6,7 @@ import { initializeIcons } from '@uifabric/icons';
 import { EventPage } from '../event-page';
 import { sleep } from '../../helpers/sleep';
 import { inquireConfirmation } from '../../helpers/inquire-confirmation';
+import { useMediaQuery } from '../../hooks/use-media-query';
 
 jest.mock('../../components/private-route.tsx', () => ({
   PrivateRoute: ({ component: Comp }) => {
@@ -34,6 +35,10 @@ jest.mock('../../helpers/inquire-confirmation', () => ({
   inquireConfirmation: jest.fn(),
 }));
 
+jest.mock('../../hooks/use-media-query', () => ({
+  useMediaQuery: jest.fn(),
+}));
+
 describe('Start Page', () => {
   const user = {
     id: 'TD0sIeaoz',
@@ -55,6 +60,8 @@ describe('Start Page', () => {
 
   describe(`some other person's event`, () => {
     it('should display the event details', async () => {
+      (useMediaQuery as jest.Mock).mockReturnValue(true);
+
       const eventId = 'dsgw46hrds';
       const event = {
         id: eventId,
@@ -63,7 +70,7 @@ describe('Start Page', () => {
         description: 'stuff',
         allDay: false,
         resource: { name: 'Resource #1' },
-        user: { id: 'vgjt8i8kuz', fullName: 'Person2 Two' },
+        user: { id: 'vgjt8i8kuz', firstName: 'Person2' },
       };
       const scope = nock('http://localhost')
         .get('/api/user')
@@ -81,7 +88,7 @@ describe('Start Page', () => {
         screen.getByText('Resource #1 gebucht für 2 Stunden')
       );
       screen.getByText('stuff');
-      screen.getByText('Gebucht von Person2 Two');
+      screen.getByText('Gebucht von Person2');
 
       expect(screen.queryByText('Eintrag löschen')).toBeNull();
       expect(scope.isDone()).toBe(true);
@@ -95,6 +102,7 @@ describe('Start Page', () => {
 
     it('should display the event & delete it', async () => {
       (inquireConfirmation as jest.Mock).mockReturnValue(true);
+      (useMediaQuery as jest.Mock).mockReturnValue(true);
 
       const eventId = 'dsgw46hrds';
       let pathname = `/events/${eventId}`;
@@ -105,7 +113,7 @@ describe('Start Page', () => {
         description: 'thingies',
         allDay: true,
         resource: { name: 'Resource #2' },
-        user: { id: user.id, fullName: `${user.firstName} ${user.lastName}` },
+        user: { id: user.id, firstName: user.firstName },
       };
       const scope = nock('http://localhost')
         .get('/api/user')
@@ -130,7 +138,7 @@ describe('Start Page', () => {
 
       await waitFor(() => screen.getByText('Resource #2 komplett gebucht'));
       screen.getByText('thingies');
-      screen.getByText('Gebucht von Person1 One');
+      screen.getByText('Gebucht von Person1');
 
       const deleteButton = screen
         .getByText('Eintrag löschen')

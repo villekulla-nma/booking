@@ -7,10 +7,12 @@ import {
   Text,
   Separator,
   CommandBarButton,
+  NeutralColors,
 } from '@fluentui/react';
-import type { IStackTokens } from '@fluentui/react';
+import type { IStackTokens, IButtonStyles } from '@fluentui/react';
 import { mergeStyleSets, mergeStyles } from '@fluentui/merge-styles';
 import { SharedColors } from '@fluentui/theme';
+import { memoizeFunction } from '@fluentui/utilities';
 import { formatDuration } from 'date-fns';
 import { de } from 'date-fns/locale';
 
@@ -20,6 +22,8 @@ import { useUser } from '../hooks/use-user';
 import { Layout } from '../components/layout';
 import { DateRange } from '../components/date-range';
 import { inquireConfirmation } from '../helpers/inquire-confirmation';
+import { useMediaQuery } from '../hooks/use-media-query';
+import { MQ_IS_MEDIUM } from '../constants';
 
 interface Params {
   eventId: string;
@@ -53,6 +57,29 @@ const heading = mergeStyles({
   marginBottom: '24px',
 });
 
+const description = mergeStyles({
+  padding: '8px',
+  background: NeutralColors.gray20,
+  whiteSpace: 'break-spaces',
+  wordBreak: 'break-word',
+});
+
+const username = mergeStyles({
+  marginBottom: '32px',
+  [`@media${MQ_IS_MEDIUM}`]: {
+    marginBottom: 'inherit',
+  },
+});
+
+const getDeleteButtonStyles = memoizeFunction(
+  (isMedium: boolean): IButtonStyles => ({
+    root: {
+      display: isMedium ? undefined : 'flex',
+      paddingLeft: isMedium ? undefined : '0',
+    },
+  })
+);
+
 const getCalendarParamsFromSearch = (search: string): string | undefined => {
   const query = new URLSearchParams(search);
   const resourceId = query.get('resourceId');
@@ -70,6 +97,7 @@ export const EventPage: FC = () => {
   const { eventId } = useParams<Params>();
   const event = useEventDetail(eventId);
   const user = useUser();
+  const isMedium = useMediaQuery(MQ_IS_MEDIUM);
 
   if (!user || !event) {
     return (
@@ -95,6 +123,8 @@ export const EventPage: FC = () => {
   const headingSuffix = duration
     ? `gebucht für ${duration}`
     : 'komplett gebucht';
+  const footerHorizontalAlign = isMedium ? 'space-between' : 'start';
+  const headingSize = isMedium ? 'xxLarge' : 'xLarge';
   const handleDelete = () => {
     if (inquireConfirmation('Soll der Eintrag wirklich geköscht werden?')) {
       deleteEvent(eventId).then(
@@ -115,7 +145,7 @@ export const EventPage: FC = () => {
         </Stack>
       </A>
       <Stack tokens={contentTokens}>
-        <Text variant="xxLarge" className={heading}>
+        <Text variant={headingSize} className={heading}>
           {event.resource.name} {headingSuffix}
         </Text>
         <DateRange
@@ -123,17 +153,20 @@ export const EventPage: FC = () => {
           end={end.toISOString()}
           allDay={event.allDay}
         />
-        <Text variant="medium">{event.description}</Text>
+        <Text variant="medium" className={description}>
+          {event.description}
+        </Text>
         <Separator />
-        <Stack horizontal={true} horizontalAlign="space-between">
-          <Text as="em" variant="medium">
-            Gebucht von {event.user.fullName}
+        <Stack horizontal={isMedium} horizontalAlign={footerHorizontalAlign}>
+          <Text as="em" variant="medium" className={username}>
+            Gebucht von {event.user.firstName}
           </Text>
           {user.id === event.user.id && (
             <CommandBarButton
               onClick={handleDelete}
               iconProps={{ iconName: 'RemoveEvent' }}
               text="Eintrag löschen"
+              styles={getDeleteButtonStyles(isMedium)}
             />
           )}
         </Stack>

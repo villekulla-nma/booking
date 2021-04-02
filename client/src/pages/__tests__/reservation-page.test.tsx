@@ -187,7 +187,7 @@ describe('Reservation Page', () => {
 
     await act(async () => {
       expect(fireEvent.click(submit)).toBe(true);
-      await sleep(100);
+      await sleep(150);
     });
 
     screen.getByText('Beim speichern der Buchung ist ein Fehler aufgetreten.');
