@@ -1,12 +1,10 @@
 import { useState, useRef } from 'react';
 import type { FC, RefObject } from 'react';
-import FullCalendar from '@fullcalendar/react';
+import FullCalendar, { BASE_OPTION_DEFAULTS } from '@fullcalendar/react';
 import type {
   DateSelectArg,
   EventSourceInput,
   EventClickArg,
-  ToolbarInput,
-  CustomButtonInput,
 } from '@fullcalendar/react';
 import locale from '@fullcalendar/core/locales/de';
 import dayGridPlugin from '@fullcalendar/daygrid';
@@ -14,13 +12,26 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import { useHistory, useParams } from 'react-router-dom';
 import { format } from 'date-fns';
-import { ActionButton, Stack } from '@fluentui/react';
-import type { IIconProps, IStackTokens } from '@fluentui/react';
+import {
+  ActionButton,
+  DefaultButton,
+  CommandBar,
+  Icon,
+  Stack,
+  FontWeights,
+} from '@fluentui/react';
+import type {
+  IButtonStyles,
+  IIconProps,
+  IStackTokens,
+  ICommandBarItemProps,
+} from '@fluentui/react';
 import { mergeStyles } from '@fluentui/merge-styles';
 
 import { Layout } from '../components/layout';
 import type { ViewTypeOption, ViewTypeParam } from '../types';
-import { DEFAULT_VIEW_OPTION } from '../constants';
+import { DEFAULT_VIEW_OPTION, MQ_IS_DESKTOP, MQ_IS_MEDIUM } from '../constants';
+import { useMediaQuery } from '../hooks/use-media-query';
 
 interface Params {
   resourceId: string;
@@ -40,10 +51,55 @@ const wrapTokens: IStackTokens = {
   childrenGap: '16px',
 };
 
+const toolbarTokens: IStackTokens = {
+  childrenGap: '8px',
+};
+
+const toolbar = mergeStyles({
+  [`@media ${MQ_IS_DESKTOP}`]: {
+    marginBottom: '32px',
+  },
+});
+
+// Increase specifity to overrule Fullcalendar styles
+const calendarClassName = mergeStyles({
+  ':global(.fc.fc table)': {
+    fontSize: '.8em',
+    [`@media ${MQ_IS_MEDIUM}`]: {
+      fontSize: '.9em',
+    },
+    [`@media ${MQ_IS_DESKTOP}`]: {
+      fontSize: '1em',
+    },
+  },
+  ':global(.fc .fc-toolbar-title.fc-toolbar-title)': {
+    fontSize: '1em',
+    [`@media ${MQ_IS_MEDIUM}`]: {
+      fontSize: '1.25em',
+    },
+    [`@media ${MQ_IS_DESKTOP}`]: {
+      fontSize: '1.75em',
+    },
+  },
+});
+
 const actionButton = mergeStyles({
   marginBottom: '32px',
-  fontSize: '18px',
+  fontSize: '16px',
+  [`@media ${MQ_IS_DESKTOP}`]: {
+    fontSize: '18px',
+  },
 });
+
+const viewSelectionButton = {
+  label: {
+    fontWeight: FontWeights.regular,
+  },
+};
+
+const commandBar = {
+  root: { paddingRight: 0 },
+};
 
 const getViewTypeOption = (view: string | null): ViewTypeOption => {
   switch (view) {
@@ -74,6 +130,7 @@ export const ResourcePage: FC = () => {
   const nowProp = getNowFromString(params.now);
   const calendar = useRef<FullCalendar>();
   const [dateSelection, setDateSelection] = useState<SelectionRange>();
+  const isDesktop = useMediaQuery(MQ_IS_DESKTOP);
   const eventSource: EventSourceInput = {
     url: `/api/resources/${params.resourceId}/events`,
   };
@@ -82,85 +139,61 @@ export const ResourcePage: FC = () => {
     now: params.now,
   });
   const actionButtonIcon: IIconProps = { iconName: 'Add' };
+  const calendarAspectRatio = isDesktop
+    ? BASE_OPTION_DEFAULTS.aspectRatio
+    : 0.95;
 
   const plugins = [dayGridPlugin, timeGridPlugin, interactionPlugin];
+  const headerToolbar = { left: '', center: 'title', right: '' };
   const replaceView = (view: ViewTypeParam): void =>
     history.replace(`/resources/${params.resourceId}/${view}/${params.now}`);
   const replaceNow = (now: string): void =>
     history.replace(`/resources/${params.resourceId}/${params.view}/${now}`);
-  const customButtons: Record<string, CustomButtonInput> = {
-    customPrev: {
-      icon: 'chevron-left',
-      click: () => {
-        if (calendar.current) {
-          const api = calendar.current.getApi();
-          api.prev();
+  const handlePrev = () => {
+    if (calendar.current) {
+      const api = calendar.current.getApi();
+      api.prev();
+      const date = new Date(api.getDate());
+      const lastWeek = format(date, 'yyyy-MM-dd');
 
-          const date = new Date(api.getDate());
-          const lastWeek = format(date, 'yyyy-MM-dd');
-
-          replaceNow(lastWeek);
-        }
-      },
-    },
-    customNext: {
-      icon: 'chevron-right',
-      click: () => {
-        if (calendar.current) {
-          const api = calendar.current.getApi();
-          api.next();
-
-          const date = new Date(api.getDate());
-          const nextWeek = format(date, 'yyyy-MM-dd');
-
-          replaceNow(nextWeek);
-        }
-      },
-    },
-    customToday: {
-      text: 'Heute',
-      click: () => {
-        const now = format(new Date(), 'yyyy-MM-dd');
-
-        if (calendar.current) {
-          calendar.current.getApi().today();
-        }
-
-        replaceNow(now);
-      },
-    },
-    customMonth: {
-      text: 'Monat',
-      click: () => {
-        if (calendar.current) {
-          calendar.current.getApi().changeView('dayGridMonth');
-        }
-        replaceView('month');
-      },
-    },
-    customWeek: {
-      text: 'Woche',
-      click: () => {
-        if (calendar.current) {
-          calendar.current.getApi().changeView('timeGridWeek');
-        }
-        replaceView('week');
-      },
-    },
-    customDay: {
-      text: 'Tag',
-      click: () => {
-        if (calendar.current) {
-          calendar.current.getApi().changeView('timeGridDay');
-        }
-        replaceView('day');
-      },
-    },
+      replaceNow(lastWeek);
+    }
   };
-  const headerToolbar: ToolbarInput = {
-    left: 'customPrev,customNext customToday',
-    center: 'title',
-    right: 'customMonth,customWeek,customDay',
+  const handleNext = () => {
+    if (calendar.current) {
+      const api = calendar.current.getApi();
+      api.next();
+      const date = new Date(api.getDate());
+      const nextWeek = format(date, 'yyyy-MM-dd');
+
+      replaceNow(nextWeek);
+    }
+  };
+  const handleToday = () => {
+    const now = format(new Date(), 'yyyy-MM-dd');
+
+    if (calendar.current) {
+      calendar.current.getApi().today();
+    }
+    replaceNow(now);
+  };
+  const handleViewMonth = () => {
+    if (calendar.current) {
+      calendar.current.getApi().changeView('dayGridMonth');
+    }
+    replaceView('month');
+  };
+  const handleViewWeek = () => {
+    if (calendar.current) {
+      calendar.current.getApi().changeView('timeGridWeek');
+    }
+    replaceView('week');
+  };
+  const handleViewDay = () => {
+    if (calendar.current) {
+      calendar.current.getApi().changeView('timeGridDay');
+    }
+    replaceView('day');
   };
   const handleClick = (args: EventClickArg) => {
     const searchParams = new URLSearchParams(search);
@@ -181,16 +214,116 @@ export const ResourcePage: FC = () => {
       dateSelection
     );
   };
+  const buttonStyles: IButtonStyles = { root: { marginLeft: '32px' } };
+  const navigationMenuItems: ICommandBarItemProps[] = [
+    {
+      key: 'prev',
+      onClick: handlePrev,
+      iconProps: { iconName: 'chevronLeft' },
+      iconOnly: true,
+    },
+    {
+      key: 'next',
+      onClick: handleNext,
+      iconProps: { iconName: 'chevronright' },
+      iconOnly: true,
+    },
+    { key: 'today', text: 'Heute', onClick: handleToday, buttonStyles },
+    {
+      key: 'view',
+      text: 'Ansicht',
+      subMenuProps: {
+        items: [
+          {
+            key: 'month',
+            text: 'Monat',
+            disabled: currentViewType === 'dayGridMonth',
+            onClick: handleViewMonth,
+          },
+          {
+            key: 'week',
+            text: 'Woche',
+            disabled: currentViewType === 'timeGridWeek',
+            onClick: handleViewWeek,
+          },
+          {
+            key: 'day',
+            text: 'Tag',
+            disabled: currentViewType === 'timeGridDay',
+            onClick: handleViewDay,
+          },
+        ],
+        styles: {
+          subComponentStyles: {
+            menuItem: { item: { padding: '8px' } },
+          },
+        },
+      },
+      buttonStyles,
+    },
+  ];
 
   return (
     <Layout>
       <Stack tokens={wrapTokens}>
+        <Stack horizontal={true} horizontalAlign="space-between">
+          <Stack horizontal={true} tokens={toolbarTokens} className={toolbar}>
+            {isDesktop && (
+              <>
+                <DefaultButton aria-label="customPrev" onClick={handlePrev}>
+                  <Icon iconName="chevronLeft" />
+                </DefaultButton>
+                <DefaultButton aria-label="customNext" onClick={handleNext}>
+                  <Icon iconName="chevronRight" />
+                </DefaultButton>
+                <DefaultButton
+                  styles={viewSelectionButton}
+                  onClick={handleToday}
+                >
+                  Heute
+                </DefaultButton>
+              </>
+            )}
+          </Stack>
+          {isDesktop ? (
+            <Stack horizontal={true} tokens={toolbarTokens}>
+              <DefaultButton
+                styles={viewSelectionButton}
+                onClick={handleViewMonth}
+                primary={currentViewType === 'dayGridMonth'}
+              >
+                Monat
+              </DefaultButton>
+              <DefaultButton
+                styles={viewSelectionButton}
+                onClick={handleViewWeek}
+                primary={currentViewType === 'timeGridWeek'}
+              >
+                Woche
+              </DefaultButton>
+              <DefaultButton
+                styles={viewSelectionButton}
+                onClick={handleViewDay}
+                primary={currentViewType === 'timeGridDay'}
+              >
+                Tag
+              </DefaultButton>
+            </Stack>
+          ) : (
+            <CommandBar
+              items={navigationMenuItems}
+              ariaLabel="Kalendaransicht wählen"
+              styles={commandBar}
+              className="CommandBar"
+            />
+          )}
+        </Stack>
         <FullCalendar
           ref={calendar as RefObject<FullCalendar>}
+          viewClassNames={calendarClassName}
           locale={locale}
           timeZone={timeZone}
           plugins={plugins}
-          customButtons={customButtons}
           headerToolbar={headerToolbar}
           eventSources={[eventSource]}
           initialView={currentViewType}
@@ -200,6 +333,7 @@ export const ResourcePage: FC = () => {
           unselect={handleUnselect}
           unselectAuto={false}
           initialDate={nowProp}
+          aspectRatio={calendarAspectRatio}
         />
         <Stack.Item>
           <ActionButton
