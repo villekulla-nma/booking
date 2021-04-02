@@ -4,7 +4,7 @@ import type { EventResult } from '@villekulla-reservations/types';
 
 import type { Db } from '../db';
 import type { ResourceResult, UserResult } from './types';
-import { getNow } from '../utils/date';
+import { getToday } from '../utils/date';
 import type { EventInstance } from '../models';
 
 type SingleEventResult = EventResult & {
@@ -124,12 +124,12 @@ export const getUpcomingEventsByUserId = async (
   userId: string,
   limit?: number
 ): Promise<UserEvent[]> => {
-  const now = getNow();
+  const today = getToday();
   const upcomingEvents = await Event.findAll({
     include: [{ model: Resource, as: 'resource' }],
     where: {
       userId: { [Op.eq]: userId },
-      start: { [Op.gt]: now },
+      start: { [Op.gte]: today },
     },
     limit,
   });

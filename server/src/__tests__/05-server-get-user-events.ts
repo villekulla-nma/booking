@@ -7,6 +7,7 @@ import { initServer } from '../server';
 import { signJwt } from './helpers/sign-jwt';
 import type { ResourceInstance } from '../models/resource';
 import type { EventInstance } from '../models/event';
+import { getDates } from './helpers/get-dates';
 
 describe('Server [GET] /api/user/events', () => {
   let cookieValue: string;
@@ -58,9 +59,7 @@ describe('Server [GET] /api/user/events', () => {
   });
 
   describe('exisiting events', () => {
-    const [tomorrow] = new Date(Date.now() + 24 * 3600 * 1000)
-      .toISOString()
-      .split('T');
+    const { today, tomorrow } = getDates();
 
     beforeAll(async () => {
       await db.Event.bulkCreate<EventInstance>([
@@ -71,6 +70,15 @@ describe('Server [GET] /api/user/events', () => {
           allDay: false,
           resourceId: 'Uj5SAS740',
           description: 'An event in the past',
+          userId: 'TD0sIeaoz',
+        },
+        {
+          id: 'SHYVTIGoM',
+          start: `${today}T00:00:00.000Z`,
+          end: `${today}T23:59:59.000Z`,
+          allDay: true,
+          resourceId: 'gWH5T7Kdz',
+          description: 'Party all day!!1',
           userId: 'TD0sIeaoz',
         },
         {
@@ -91,15 +99,6 @@ describe('Server [GET] /api/user/events', () => {
           description: 'Event by another user',
           userId: '4XNdIWWOy',
         },
-        {
-          id: 'SHYVTIGoM',
-          start: `${tomorrow}T00:00:00.000Z`,
-          end: `${tomorrow}T23:59:59.000Z`,
-          allDay: true,
-          resourceId: 'gWH5T7Kdz',
-          description: 'Party all day!!1',
-          userId: 'TD0sIeaoz',
-        },
       ]);
     });
 
@@ -115,20 +114,20 @@ describe('Server [GET] /api/user/events', () => {
       expect(data.status).toBe('ok');
       expect(data.events).toEqual([
         {
+          id: 'SHYVTIGoM',
+          start: `${today}T00:00:00.000Z`,
+          end: `${today}T23:59:59.000Z`,
+          allDay: true,
+          resource: 'Resource #2',
+          description: 'Party all day!!1',
+        },
+        {
           id: 'HBv7p7CVC',
           start: `${tomorrow}T08:30:00.000Z`,
           end: `${tomorrow}T12:00:00.000Z`,
           allDay: false,
           resource: 'Resource #1',
           description: 'A nice event',
-        },
-        {
-          id: 'SHYVTIGoM',
-          start: `${tomorrow}T00:00:00.000Z`,
-          end: `${tomorrow}T23:59:59.000Z`,
-          allDay: true,
-          resource: 'Resource #2',
-          description: 'Party all day!!1',
         },
       ]);
     });
@@ -146,12 +145,12 @@ describe('Server [GET] /api/user/events', () => {
 
       expect(data.events).toEqual([
         {
-          id: 'HBv7p7CVC',
-          start: `${tomorrow}T08:30:00.000Z`,
-          end: `${tomorrow}T12:00:00.000Z`,
-          allDay: false,
-          resource: 'Resource #1',
-          description: 'A nice event',
+          id: 'SHYVTIGoM',
+          start: `${today}T00:00:00.000Z`,
+          end: `${today}T23:59:59.000Z`,
+          allDay: true,
+          resource: 'Resource #2',
+          description: 'Party all day!!1',
         },
       ]);
     });
