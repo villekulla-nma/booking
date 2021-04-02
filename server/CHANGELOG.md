@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 0.1.0-alpha.38 (2021-04-02)
+
+
+### Bug Fixes
+
+* **server:** detect overlapping events correctly ([e0e4030](https://github.com/herschel666/villekulla-reservations/commit/e0e403051b17e7ad876a2027ae0ba388a7ecb098))
+
+
+
+
+
 # 0.1.0-alpha.37 (2021-04-02)
 
 **Note:** Version bump only for package @villekulla-reservations/server
