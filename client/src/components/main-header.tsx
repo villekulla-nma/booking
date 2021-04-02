@@ -7,10 +7,14 @@ import { Icon, NeutralColors, Link as A } from '@fluentui/react';
 import { useResourceList } from '../hooks/use-resource-list';
 import { LogoutButton } from './logout-button';
 import { MainNav } from './main-nav';
+import { MQ_IS_DESKTOP } from '../constants';
 
 const header = mergeStyles({
-  marginBottom: '32px',
+  marginBottom: '16px',
   borderBottom: `1px solid ${NeutralColors.gray90}`,
+  [`@media${MQ_IS_DESKTOP}`]: {
+    marginBottom: '32px',
+  },
 });
 
 const icon = mergeStyles({

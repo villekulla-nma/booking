@@ -5,6 +5,7 @@ import { initializeIcons } from '@uifabric/icons';
 
 import { ResourcePage } from '../resource-page';
 import { sleep } from '../../helpers/sleep';
+import { useMediaQuery } from '../../hooks/use-media-query';
 
 jest.mock('../../components/private-route.tsx', () => ({
   PrivateRoute: ({ component: Comp }) => {
@@ -29,6 +30,10 @@ jest.mock('../../components/layout.tsx', () => ({
   Layout: ({ children }) => <>{children}</>,
 }));
 
+jest.mock('../../hooks/use-media-query', () => ({
+  useMediaQuery: jest.fn(),
+}));
+
 describe('Resource Page', () => {
   initializeIcons();
 
@@ -41,6 +46,8 @@ describe('Resource Page', () => {
   });
 
   it('should render the calendar somehow...', async () => {
+    (useMediaQuery as jest.Mock).mockReturnValue(true);
+
     const resourceId = 'Uj5SAS740';
     const date = new Date(Date.now() + 24 * 3600 * 1000);
     const [tomorrow] = date.toISOString().split('T');
