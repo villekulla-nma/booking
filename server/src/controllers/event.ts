@@ -57,9 +57,19 @@ export const getScopedEvents = async (
 export const getOverlappingEvents = async (
   { Event }: Db,
   resourceId: string,
-  start: string,
-  end: string
+  startString: string,
+  endString: string
 ): Promise<EventResult[]> => {
+  // Allow events to have overlapping start- & endpoints,
+  // because this is how Fullcalendar deals with
+  // subsequent events.
+  const alteredStart = new Date(startString);
+  const alteredEnd = new Date(endString);
+  alteredStart.setTime(alteredStart.getTime() + 1000);
+  alteredEnd.setTime(alteredEnd.getTime() - 1000);
+  const start = alteredStart.toISOString();
+  const end = alteredEnd.toISOString();
+
   const overlappingEvents = await Event.findAll({
     where: {
       [Op.and]: [
@@ -68,12 +78,20 @@ export const getOverlappingEvents = async (
         },
         {
           [Op.or]: [
-            { start: { [Op.between]: [start, end] } },
-            { end: { [Op.between]: [start, end] } },
+            {
+              start: {
+                [Op.between]: [start, end],
+              },
+            },
+            {
+              end: {
+                [Op.between]: [start, end],
+              },
+            },
             {
               [Op.and]: [
-                { start: { [Op.lt]: start } },
-                { end: { [Op.gt]: end } },
+                { start: { [Op.lte]: start } },
+                { end: { [Op.gte]: end } },
               ],
             },
           ],
