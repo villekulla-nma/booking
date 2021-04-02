@@ -1,3 +1,4 @@
+import type { FC } from 'react';
 import nock from 'nock';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MemoryRouter as Router, Route } from 'react-router-dom';
@@ -5,9 +6,10 @@ import { initializeIcons } from '@uifabric/icons';
 
 import { PasswordResetPage } from '../password-reset-page';
 
-jest.mock('../../components/layout.tsx', () => ({
-  Layout: ({ children }) => <>{children}</>,
-}));
+jest.mock('../../components/layout.tsx', () => {
+  const Layout: FC = ({ children }) => <>{children}</>;
+  return { Layout };
+});
 
 describe('Resource Page', () => {
   initializeIcons();
@@ -36,7 +38,9 @@ describe('Resource Page', () => {
     fireEvent.change(screen.getByLabelText('Email'), {
       target: { value: 'person.one@example.com' },
     });
-    fireEvent.click(screen.getByText('Absenden').closest('button'));
+    fireEvent.click(
+      screen.getByText('Absenden').closest('button') as HTMLButtonElement
+    );
 
     await waitFor(() =>
       screen.getByText(
@@ -58,7 +62,9 @@ describe('Resource Page', () => {
       </Router>
     );
 
-    fireEvent.click(screen.getByText('Absenden').closest('button'));
+    fireEvent.click(
+      screen.getByText('Absenden').closest('button') as HTMLButtonElement
+    );
 
     await waitFor(() =>
       screen.getByText(

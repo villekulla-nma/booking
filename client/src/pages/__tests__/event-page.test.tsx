@@ -1,3 +1,4 @@
+import type { FC, ComponentType } from 'react';
 import nock from 'nock';
 import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import { MemoryRouter as Router, Route } from 'react-router-dom';
@@ -8,8 +9,10 @@ import { sleep } from '../../helpers/sleep';
 import { inquireConfirmation } from '../../helpers/inquire-confirmation';
 import { useMediaQuery } from '../../hooks/use-media-query';
 
-jest.mock('../../components/private-route.tsx', () => ({
-  PrivateRoute: ({ component: Comp }) => {
+jest.mock('../../components/private-route.tsx', () => {
+  const PrivateRoute: FC<{ component: ComponentType }> = ({
+    component: Comp,
+  }) => {
     const user = {
       id: 'TD0sIeaoz',
       email: 'person.one@example.com',
@@ -24,12 +27,14 @@ jest.mock('../../components/private-route.tsx', () => ({
         <Comp />
       </UserContext>
     );
-  },
-}));
+  };
+  return { PrivateRoute };
+});
 
-jest.mock('../../components/layout.tsx', () => ({
-  Layout: ({ children }) => <>{children}</>,
-}));
+jest.mock('../../components/layout.tsx', () => {
+  const Layout: FC = ({ children }) => <>{children}</>;
+  return { Layout };
+});
 
 jest.mock('../../helpers/inquire-confirmation', () => ({
   inquireConfirmation: jest.fn(),
@@ -142,7 +147,7 @@ describe('Start Page', () => {
 
       const deleteButton = screen
         .getByText('Eintrag löschen')
-        .closest('button');
+        .closest('button') as HTMLButtonElement;
 
       fireEvent.click(deleteButton);
 

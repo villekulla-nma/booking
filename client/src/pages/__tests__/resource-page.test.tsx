@@ -1,3 +1,4 @@
+import type { FC, ComponentType } from 'react';
 import nock from 'nock';
 import { render, screen } from '@testing-library/react';
 import { MemoryRouter as Router, Route } from 'react-router-dom';
@@ -7,8 +8,10 @@ import { ResourcePage } from '../resource-page';
 import { sleep } from '../../helpers/sleep';
 import { useMediaQuery } from '../../hooks/use-media-query';
 
-jest.mock('../../components/private-route.tsx', () => ({
-  PrivateRoute: ({ component: Comp }) => {
+jest.mock('../../components/private-route.tsx', () => {
+  const PrivateRoute: FC<{ component: ComponentType }> = ({
+    component: Comp,
+  }) => {
     const user = {
       id: 'TD0sIeaoz',
       email: 'person.one@example.com',
@@ -23,12 +26,14 @@ jest.mock('../../components/private-route.tsx', () => ({
         <Comp />
       </UserContext>
     );
-  },
-}));
+  };
+  return { PrivateRoute };
+});
 
-jest.mock('../../components/layout.tsx', () => ({
-  Layout: ({ children }) => <>{children}</>,
-}));
+jest.mock('../../components/layout.tsx', () => {
+  const Layout: FC = ({ children }) => <>{children}</>;
+  return { Layout };
+});
 
 jest.mock('../../hooks/use-media-query', () => ({
   useMediaQuery: jest.fn(),
@@ -71,7 +76,9 @@ describe('Resource Page', () => {
         />
       </Router>
     );
-    const button = screen.getByText('Reservieren').closest('button');
+    const button = screen
+      .getByText('Reservieren')
+      .closest('button') as HTMLButtonElement;
 
     await sleep(100);
 

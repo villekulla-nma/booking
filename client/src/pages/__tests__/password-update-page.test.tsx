@@ -1,3 +1,4 @@
+import type { FC } from 'react';
 import nock from 'nock';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MemoryRouter as Router, Route } from 'react-router-dom';
@@ -5,9 +6,10 @@ import { initializeIcons } from '@uifabric/icons';
 
 import { PasswordUpdatePage } from '../password-update-page';
 
-jest.mock('../../components/layout.tsx', () => ({
-  Layout: ({ children }) => <>{children}</>,
-}));
+jest.mock('../../components/layout.tsx', () => {
+  const Layout: FC = ({ children }) => <>{children}</>;
+  return { Layout };
+});
 
 describe('Resource Page', () => {
   initializeIcons();
@@ -41,7 +43,9 @@ describe('Resource Page', () => {
     fireEvent.change(screen.getByLabelText('Passwort wiederholen'), {
       target: { value: '12345' },
     });
-    fireEvent.click(screen.getByText('Absenden').closest('button'));
+    fireEvent.click(
+      screen.getByText('Absenden').closest('button') as HTMLButtonElement
+    );
 
     await waitFor(() =>
       screen.getByText('Passwort erfolgreich zurück gesetzt.')
@@ -71,7 +75,9 @@ describe('Resource Page', () => {
     fireEvent.change(screen.getByLabelText('Passwort wiederholen'), {
       target: { value: '67890' },
     });
-    fireEvent.click(screen.getByText('Absenden').closest('button'));
+    fireEvent.click(
+      screen.getByText('Absenden').closest('button') as HTMLButtonElement
+    );
 
     await waitFor(() =>
       screen.getByText('Die Passwörter stimmen leider nicht überein.')
@@ -92,7 +98,9 @@ describe('Resource Page', () => {
       </Router>
     );
 
-    fireEvent.click(screen.getByText('Absenden').closest('button'));
+    fireEvent.click(
+      screen.getByText('Absenden').closest('button') as HTMLButtonElement
+    );
 
     await waitFor(() =>
       screen.getByText(

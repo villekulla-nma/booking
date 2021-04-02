@@ -1,3 +1,4 @@
+import type { FC } from 'react';
 import nock from 'nock';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MemoryRouter as Router, Route } from 'react-router-dom';
@@ -7,9 +8,10 @@ import { LoginPage } from '../login-page';
 import { sleep } from '../../helpers/sleep';
 import { redirect } from '../../helpers/location';
 
-jest.mock('../../components/layout.tsx', () => ({
-  Layout: ({ children }) => <>{children}</>,
-}));
+jest.mock('../../components/layout.tsx', () => {
+  const Layout: FC = ({ children }) => <>{children}</>;
+  return { Layout };
+});
 
 jest.mock('../../helpers/location', () => ({
   redirect: jest.fn(),
@@ -49,7 +51,9 @@ describe('Resource Page', () => {
     fireEvent.change(screen.getByLabelText('Passwort'), {
       target: { value: '1234' },
     });
-    fireEvent.click(screen.getByText('Absenden').closest('button'));
+    fireEvent.click(
+      screen.getByText('Absenden').closest('button') as HTMLButtonElement
+    );
     await sleep(50);
 
     expect(redirect).toHaveBeenCalledWith(from);
@@ -80,7 +84,9 @@ describe('Resource Page', () => {
     fireEvent.change(passwordField, {
       target: { value: '1234' },
     });
-    fireEvent.click(screen.getByText('Absenden').closest('button'));
+    fireEvent.click(
+      screen.getByText('Absenden').closest('button') as HTMLButtonElement
+    );
 
     await waitFor(() => screen.getByText('Bitte verfifiziere deinen Nutzer.'));
 
@@ -112,7 +118,9 @@ describe('Resource Page', () => {
     fireEvent.change(passwordField, {
       target: { value: '5678' },
     });
-    fireEvent.click(screen.getByText('Absenden').closest('button'));
+    fireEvent.click(
+      screen.getByText('Absenden').closest('button') as HTMLButtonElement
+    );
 
     await waitFor(() =>
       screen.getByText('Nutzername oder Passwort sind nicht korrekt.')
@@ -146,7 +154,9 @@ describe('Resource Page', () => {
     fireEvent.change(passwordField, {
       target: { value: '5678' },
     });
-    fireEvent.click(screen.getByText('Absenden').closest('button'));
+    fireEvent.click(
+      screen.getByText('Absenden').closest('button') as HTMLButtonElement
+    );
 
     await waitFor(() =>
       screen.getByText(
