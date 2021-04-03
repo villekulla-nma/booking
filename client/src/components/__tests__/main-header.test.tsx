@@ -1,4 +1,4 @@
-import type { FC, ComponentType } from 'react';
+import type { FC } from 'react';
 import nock from 'nock';
 import { MemoryRouter as Router } from 'react-router-dom';
 import {
@@ -14,28 +14,9 @@ import { MainHeader } from '../main-header';
 import { sleep } from '../../helpers/sleep';
 import { reload } from '../../helpers/location';
 import { useMediaQuery } from '../../hooks/use-media-query';
+import { useUserContext } from '../../hooks/use-user-context';
 
-jest.mock('../../components/private-route.tsx', () => {
-  const PrivateRoute: FC<{ component: ComponentType }> = ({
-    component: Comp,
-  }) => {
-    const user = {
-      id: 'TD0sIeaoz',
-      email: 'person.one@example.com',
-      firstName: 'Person1',
-      lastName: 'One',
-      role: 'user',
-    };
-    const { UserContext } = jest.requireActual('../../contexts/user-context');
-
-    return (
-      <UserContext value={user}>
-        <Comp />
-      </UserContext>
-    );
-  };
-  return { PrivateRoute };
-});
+jest.mock('../../hooks/use-user-context');
 
 jest.mock('../../components/layout.tsx', () => {
   const Layout: FC = ({ children }) => <>{children}</>;
@@ -50,7 +31,7 @@ jest.mock('../../hooks/use-media-query', () => ({
   useMediaQuery: jest.fn(),
 }));
 
-describe('Start Page', () => {
+describe('Main-Header', () => {
   const user = {
     id: 'TD0sIeaoz',
     email: 'person.one@example.com',
@@ -72,11 +53,9 @@ describe('Start Page', () => {
   describe(`logged-in`, () => {
     it('should display resource (Desktop)', async () => {
       (useMediaQuery as jest.Mock).mockReturnValue(true);
+      (useUserContext as jest.Mock).mockReturnValue(user);
 
       const scope = nock('http://localhost')
-        .get('/api/user')
-        .times(2)
-        .reply(200, { user })
         .get('/api/resources')
         .reply(200, [
           {
@@ -99,11 +78,9 @@ describe('Start Page', () => {
 
     it('should display resource (Mobile)', async () => {
       (useMediaQuery as jest.Mock).mockReturnValue(false);
+      (useUserContext as jest.Mock).mockReturnValue(user);
 
       const scope = nock('http://localhost')
-        .get('/api/user')
-        .times(2)
-        .reply(200, { user })
         .get('/api/resources')
         .reply(200, [
           {
@@ -134,11 +111,9 @@ describe('Start Page', () => {
 
     it('should log out the user', async () => {
       (useMediaQuery as jest.Mock).mockReturnValue(true);
+      (useUserContext as jest.Mock).mockReturnValue(user);
 
       const scope = nock('http://localhost')
-        .get('/api/user')
-        .times(2)
-        .reply(200, { user })
         .get('/api/resources')
         .reply(200, [])
         .post('/api/logout')
@@ -165,11 +140,7 @@ describe('Start Page', () => {
   describe('logged-out', () => {
     it('should not display the logout button', async () => {
       (useMediaQuery as jest.Mock).mockReturnValue(true);
-
-      const scope = nock('http://localhost')
-        .get('/api/user')
-        .times(2)
-        .reply(401, { status: 'error' });
+      (useUserContext as jest.Mock).mockReturnValue(null);
 
       render(<MainHeader />, { wrapper: Router });
 
@@ -178,16 +149,11 @@ describe('Start Page', () => {
       });
 
       expect(screen.queryByText('Abmelden')).toBeNull();
-      expect(scope.isDone()).toBe(true);
     });
 
     it('should not display the hamburger when there are no resources', async () => {
       (useMediaQuery as jest.Mock).mockReturnValue(false);
-
-      const scope = nock('http://localhost')
-        .get('/api/user')
-        .times(2)
-        .reply(401, { status: 'error' });
+      (useUserContext as jest.Mock).mockReturnValue(null);
 
       render(<MainHeader />, { wrapper: Router });
 
@@ -195,7 +161,6 @@ describe('Start Page', () => {
         await sleep(200);
       });
 
-      expect(scope.isDone()).toBe(true);
       expect(screen.queryByTitle('Menü einblenden')).toBeNull();
     });
   });

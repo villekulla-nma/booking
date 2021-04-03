@@ -2,10 +2,10 @@ import { useState, useEffect } from 'react';
 import type { ResourceAttributes } from '@villekulla-reservations/types';
 
 import { getResources } from '../api';
-import { useUser } from './use-user';
+import { useUserContext } from './use-user-context';
 
 export const useResourceList = (): ResourceAttributes[] => {
-  const user = useUser();
+  const user = useUserContext();
   const [list, setList] = useState<ResourceAttributes[]>([]);
 
   useEffect(() => {

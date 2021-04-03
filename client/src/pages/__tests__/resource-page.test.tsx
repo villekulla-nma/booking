@@ -1,4 +1,4 @@
-import type { FC, ComponentType } from 'react';
+import type { FC } from 'react';
 import nock from 'nock';
 import { render, screen } from '@testing-library/react';
 import { MemoryRouter as Router, Route } from 'react-router-dom';
@@ -7,28 +7,6 @@ import { initializeIcons } from '@uifabric/icons';
 import { ResourcePage } from '../resource-page';
 import { sleep } from '../../helpers/sleep';
 import { useMediaQuery } from '../../hooks/use-media-query';
-
-jest.mock('../../components/private-route.tsx', () => {
-  const PrivateRoute: FC<{ component: ComponentType }> = ({
-    component: Comp,
-  }) => {
-    const user = {
-      id: 'TD0sIeaoz',
-      email: 'person.one@example.com',
-      firstName: 'Person1',
-      lastName: 'One',
-      role: 'user',
-    };
-    const { UserContext } = jest.requireActual('../../contexts/user-context');
-
-    return (
-      <UserContext value={user}>
-        <Comp />
-      </UserContext>
-    );
-  };
-  return { PrivateRoute };
-});
 
 jest.mock('../../components/layout.tsx', () => {
   const Layout: FC = ({ children }) => <>{children}</>;

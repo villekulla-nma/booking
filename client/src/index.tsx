@@ -15,6 +15,7 @@ import { StartPage } from './pages/start-page';
 import { PasswordResetPage } from './pages/password-reset-page';
 import { PasswordUpdatePage } from './pages/password-update-page';
 import { PrivateRoute } from './components/private-route';
+import { UserProvider } from './components/user-provider';
 
 const authenticatedRoutes: RouteProps[] = [
   {
@@ -86,18 +87,20 @@ const theme = loadTheme({
 
 ReactDOM.render(
   <StrictMode>
-    <FabricBase theme={theme}>
-      <Router basename="app">
-        <Switch>
-          {authenticatedRoutes.map((route, i) => (
-            <PrivateRoute key={i} {...route} />
-          ))}
-          {publicRoutes.map((route, i) => (
-            <Route key={i} {...route} />
-          ))}
-        </Switch>
-      </Router>
-    </FabricBase>
+    <UserProvider>
+      <FabricBase theme={theme}>
+        <Router basename="app">
+          <Switch>
+            {authenticatedRoutes.map((route, i) => (
+              <PrivateRoute key={i} {...route} />
+            ))}
+            {publicRoutes.map((route, i) => (
+              <Route key={i} {...route} />
+            ))}
+          </Switch>
+        </Router>
+      </FabricBase>
+    </UserProvider>
   </StrictMode>,
   document.getElementById('root')
 );

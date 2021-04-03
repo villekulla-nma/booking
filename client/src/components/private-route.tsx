@@ -1,41 +1,31 @@
 import type { FC, ComponentType } from 'react';
 import type { RouteProps } from 'react-router-dom';
-import { Route, Redirect } from 'react-router-dom';
-import type { UserResponse } from '@villekulla-reservations/types';
+import { Route, Redirect, useLocation } from 'react-router-dom';
 
-import { useUser } from '../hooks/use-user';
-import { UserContext } from '../contexts/user-context';
-
-const { Provider: UserProvider } = UserContext;
+import { useUserContext } from '../hooks/use-user-context';
 
 export const PrivateRoute: FC<RouteProps> = ({ component, ...rest }) => {
-  const user = useUser();
-  const from = `${window.location.pathname}${window.location.search}`;
+  const user = useUserContext();
+  const location = useLocation();
+  const from = `${location.pathname}${location.search}`;
   const Comp = component as ComponentType<unknown>;
 
   return (
     <Route
       {...rest}
       render={() => {
-        switch (true) {
-          case typeof user === 'undefined':
-            return null;
-          case user === null:
-            return (
-              <Redirect
-                to={{
-                  pathname: '/login',
-                  state: { from },
-                }}
-              />
-            );
-          default:
-            return (
-              <UserProvider value={user as UserResponse}>
-                <Comp />
-              </UserProvider>
-            );
+        if (user === null) {
+          return (
+            <Redirect
+              to={{
+                pathname: '/login',
+                state: { from },
+              }}
+            />
+          );
         }
+
+        return <Comp />;
       }}
     />
   );

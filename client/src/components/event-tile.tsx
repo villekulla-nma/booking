@@ -6,7 +6,7 @@ import { SharedColors, FluentTheme } from '@fluentui/theme';
 import { Link, useHistory } from 'react-router-dom';
 import classNames from 'classnames';
 
-import { UserEvent } from '../api';
+import type { UserEvent } from '../api';
 import { DateRange } from './date-range';
 
 interface Props {

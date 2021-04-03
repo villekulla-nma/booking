@@ -2,11 +2,11 @@ import type { FC } from 'react';
 import { PrimaryButton } from '@fluentui/react';
 
 import { logout } from '../api';
-import { useUser } from '../hooks/use-user';
 import { reload } from '../helpers/location';
+import { useUserContext } from '../hooks/use-user-context';
 
 export const LogoutButton: FC = () => {
-  const user = useUser();
+  const user = useUserContext();
   const handleClick = () => {
     logout().then(() => reload());
   };
