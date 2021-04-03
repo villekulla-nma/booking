@@ -5,8 +5,8 @@ import { MemoryRouter as Router, Route } from 'react-router-dom';
 import { initializeIcons } from '@uifabric/icons';
 
 import { ResourcePage } from '../resource-page';
-import { sleep } from '../../helpers/sleep';
 import { useMediaQuery } from '../../hooks/use-media-query';
+import { scopeIsDone } from '../../helpers/nock';
 
 jest.mock('../../components/layout.tsx', () => {
   const Layout: FC = ({ children }) => <>{children}</>;
@@ -58,9 +58,7 @@ describe('Resource Page', () => {
       .getByText('Reservieren')
       .closest('button') as HTMLButtonElement;
 
-    await sleep(100);
-
+    await expect(scopeIsDone(scope)).resolves.toBe(true);
     expect(button.disabled).toBe(true);
-    expect(scope.isDone()).toBe(true);
   });
 });

@@ -5,8 +5,8 @@ import { MemoryRouter as Router, Route } from 'react-router-dom';
 import { initializeIcons } from '@uifabric/icons';
 
 import { LoginPage } from '../login-page';
-import { sleep } from '../../helpers/sleep';
 import { redirect } from '../../helpers/location';
+import { scopeIsDone } from '../../helpers/nock';
 
 jest.mock('../../components/layout.tsx', () => {
   const Layout: FC = ({ children }) => <>{children}</>;
@@ -54,10 +54,9 @@ describe('Resource Page', () => {
     fireEvent.click(
       screen.getByText('Absenden').closest('button') as HTMLButtonElement
     );
-    await sleep(50);
 
+    await expect(scopeIsDone(scope)).resolves.toBe(true);
     expect(redirect).toHaveBeenCalledWith(from);
-    expect(scope.isDone()).toBe(true);
   });
 
   it('should warn if the user is not verified', async () => {

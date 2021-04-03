@@ -5,7 +5,7 @@ import { MemoryRouter as Router, Route } from 'react-router-dom';
 import { initializeIcons } from '@uifabric/icons';
 
 import { ReservationPage } from '../reservation-page';
-import { sleep } from '../../helpers/sleep';
+import { scopeIsDone } from '../../helpers/nock';
 
 jest.mock('../../components/layout.tsx', () => {
   const Layout: FC = ({ children }) => <>{children}</>;
@@ -70,13 +70,14 @@ describe('Reservation Page', () => {
     expect(elemEnd.textContent).toContain('13:30');
 
     fireEvent.change(textarea, { target: { value: description } });
+
+    expect(fireEvent.click(submit)).toBe(true);
+
     await act(async () => {
-      expect(fireEvent.click(submit)).toBe(true);
-      await sleep(100);
+      await expect(scopeIsDone(scope)).resolves.toBe(true);
     });
 
     expect(pathname).toBe(`/resources/${resourceId}`);
-    expect(scope.isDone()).toBe(true);
   });
 
   it('should warn on overlapping events', async () => {
@@ -106,14 +107,12 @@ describe('Reservation Page', () => {
 
     await act(async () => {
       expect(fireEvent.click(submit)).toBe(true);
-      await sleep(100);
+      await expect(scopeIsDone(scope)).resolves.toBe(true);
     });
 
     screen.getByText(
       'Die Buchung überschneidet sich mit einer existierenden Buchung.'
     );
-
-    expect(scope.isDone()).toBe(true);
   });
 
   it('should display a warning on invalid data', async () => {
@@ -141,14 +140,15 @@ describe('Reservation Page', () => {
       .getByText('Speichern')
       .closest('button') as HTMLButtonElement;
 
-    await act(async () => {
+    act(() => {
       expect(fireEvent.click(submit)).toBe(true);
-      await sleep(100);
+    });
+
+    await act(async () => {
+      await expect(scopeIsDone(scope)).resolves.toBe(true);
     });
 
     screen.getByText('Eine oder mehrere Angaben sind ungültig.');
-
-    expect(scope.isDone()).toBe(true);
   });
 
   it('should display an error message', async () => {
@@ -176,13 +176,14 @@ describe('Reservation Page', () => {
       .getByText('Speichern')
       .closest('button') as HTMLButtonElement;
 
-    await act(async () => {
+    act(() => {
       expect(fireEvent.click(submit)).toBe(true);
-      await sleep(150);
+    });
+
+    await act(async () => {
+      await expect(scopeIsDone(scope)).resolves.toBe(true);
     });
 
     screen.getByText('Beim speichern der Buchung ist ein Fehler aufgetreten.');
-
-    expect(scope.isDone()).toBe(true);
   });
 });
