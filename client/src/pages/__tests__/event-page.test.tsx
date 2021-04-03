@@ -5,10 +5,10 @@ import { MemoryRouter as Router, Route } from 'react-router-dom';
 import { initializeIcons } from '@uifabric/icons';
 
 import { EventPage } from '../event-page';
-import { sleep } from '../../helpers/sleep';
 import { inquireConfirmation } from '../../helpers/inquire-confirmation';
 import { useMediaQuery } from '../../hooks/use-media-query';
 import { useUserContext } from '../../hooks/use-user-context';
+import { scopeIsDone } from '../../helpers/nock';
 
 jest.mock('../../hooks/use-user-context');
 
@@ -134,11 +134,9 @@ describe('Start Page', () => {
         'Soll der Eintrag wirklich geköscht werden?'
       );
 
-      await sleep(50);
-
+      await expect(scopeIsDone(scope)).resolves.toBe(true);
       expect(window.alert).not.toHaveBeenCalled();
       expect(pathname).toBe('/');
-      expect(scope.isDone()).toBe(true);
     });
   });
 });

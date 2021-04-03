@@ -15,6 +15,7 @@ import { sleep } from '../../helpers/sleep';
 import { reload } from '../../helpers/location';
 import { useMediaQuery } from '../../hooks/use-media-query';
 import { useUserContext } from '../../hooks/use-user-context';
+import { scopeIsDone } from '../../helpers/nock';
 
 jest.mock('../../hooks/use-user-context');
 
@@ -98,15 +99,13 @@ describe('Main-Header', () => {
       expect(screen.queryByText('Resource #2')).toBeNull();
 
       await act(async () => {
-        await sleep(200);
+        await expect(scopeIsDone(scope)).resolves.toBe(true);
       });
 
       fireEvent.click(screen.getByTitle('Menü einblenden'));
 
       screen.getByText('Resource #1');
       screen.getByText('Resource #2');
-
-      expect(scope.isDone()).toBe(true);
     });
 
     it('should log out the user', async () => {
@@ -129,11 +128,10 @@ describe('Main-Header', () => {
       fireEvent.click(logoutButton);
 
       await act(async () => {
-        await sleep(50);
+        await expect(scopeIsDone(scope)).resolves.toBe(true);
       });
 
       expect(reload).toHaveBeenCalled();
-      expect(scope.isDone()).toBe(true);
     });
   });
 
@@ -158,7 +156,7 @@ describe('Main-Header', () => {
       render(<MainHeader />, { wrapper: Router });
 
       await act(async () => {
-        await sleep(200);
+        await sleep(100);
       });
 
       expect(screen.queryByTitle('Menü einblenden')).toBeNull();
