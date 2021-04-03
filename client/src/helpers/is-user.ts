@@ -1,6 +1,6 @@
 import type { UserResponse } from '@villekulla-reservations/types';
 
-export const isUser = (user: Partial<UserResponse>): user is UserResponse => {
+export const isUser = (user: UserResponse | null): user is UserResponse => {
   return (
     typeof user === 'object' &&
     user !== null &&

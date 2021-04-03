@@ -18,7 +18,7 @@ import { de } from 'date-fns/locale';
 
 import { deleteEvent } from '../api';
 import { useEventDetail } from '../hooks/use-event-detail';
-import { useUser } from '../hooks/use-user';
+import { useUserContext } from '../hooks/use-user-context';
 import { Layout } from '../components/layout';
 import { DateRange } from '../components/date-range';
 import { inquireConfirmation } from '../helpers/inquire-confirmation';
@@ -96,7 +96,7 @@ export const EventPage: FC = () => {
   const location = useLocation();
   const { eventId } = useParams<Params>();
   const event = useEventDetail(eventId);
-  const user = useUser();
+  const user = useUserContext();
   const isMedium = useMediaQuery(MQ_IS_MEDIUM);
 
   if (!user || !event) {

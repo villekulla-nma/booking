@@ -2,10 +2,10 @@ import { useEffect, useState } from 'react';
 
 import type { UserEvent } from '../api';
 import { getUserEvents } from '../api';
-import { useUser } from './use-user';
+import { useUserContext } from './use-user-context';
 
 export const useUserEvents = (limit?: number): UserEvent[] | undefined => {
-  const user = useUser();
+  const user = useUserContext();
   const [events, setEvents] = useState<UserEvent[] | undefined>();
 
   useEffect(() => {

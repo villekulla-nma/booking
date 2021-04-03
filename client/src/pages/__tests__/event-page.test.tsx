@@ -1,4 +1,4 @@
-import type { FC, ComponentType } from 'react';
+import type { FC } from 'react';
 import nock from 'nock';
 import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import { MemoryRouter as Router, Route } from 'react-router-dom';
@@ -8,28 +8,9 @@ import { EventPage } from '../event-page';
 import { sleep } from '../../helpers/sleep';
 import { inquireConfirmation } from '../../helpers/inquire-confirmation';
 import { useMediaQuery } from '../../hooks/use-media-query';
+import { useUserContext } from '../../hooks/use-user-context';
 
-jest.mock('../../components/private-route.tsx', () => {
-  const PrivateRoute: FC<{ component: ComponentType }> = ({
-    component: Comp,
-  }) => {
-    const user = {
-      id: 'TD0sIeaoz',
-      email: 'person.one@example.com',
-      firstName: 'Person1',
-      lastName: 'One',
-      role: 'user',
-    };
-    const { UserContext } = jest.requireActual('../../contexts/user-context');
-
-    return (
-      <UserContext value={user}>
-        <Comp />
-      </UserContext>
-    );
-  };
-  return { PrivateRoute };
-});
+jest.mock('../../hooks/use-user-context');
 
 jest.mock('../../components/layout.tsx', () => {
   const Layout: FC = ({ children }) => <>{children}</>;
@@ -66,6 +47,7 @@ describe('Start Page', () => {
   describe(`some other person's event`, () => {
     it('should display the event details', async () => {
       (useMediaQuery as jest.Mock).mockReturnValue(true);
+      (useUserContext as jest.Mock).mockReturnValue(user);
 
       const eventId = 'dsgw46hrds';
       const event = {
@@ -78,8 +60,6 @@ describe('Start Page', () => {
         user: { id: 'vgjt8i8kuz', firstName: 'Person2' },
       };
       const scope = nock('http://localhost')
-        .get('/api/user')
-        .reply(200, { user })
         .get(`/api/events/${eventId}`)
         .reply(200, event);
 
@@ -108,6 +88,7 @@ describe('Start Page', () => {
     it('should display the event & delete it', async () => {
       (inquireConfirmation as jest.Mock).mockReturnValue(true);
       (useMediaQuery as jest.Mock).mockReturnValue(true);
+      (useUserContext as jest.Mock).mockReturnValue(user);
 
       const eventId = 'dsgw46hrds';
       let pathname = `/events/${eventId}`;
@@ -121,8 +102,6 @@ describe('Start Page', () => {
         user: { id: user.id, firstName: user.firstName },
       };
       const scope = nock('http://localhost')
-        .get('/api/user')
-        .reply(200, { user })
         .get(`/api/events/${eventId}`)
         .reply(200, event)
         .delete(`/api/events/${eventId}`)

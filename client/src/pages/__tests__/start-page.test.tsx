@@ -1,32 +1,13 @@
-import type { FC, ComponentType } from 'react';
+import type { FC } from 'react';
 import nock from 'nock';
 import { render, screen, waitFor } from '@testing-library/react';
 import { MemoryRouter as Router } from 'react-router-dom';
 import { initializeIcons } from '@uifabric/icons';
 
 import { StartPage } from '../start-page';
+import { useUserContext } from '../../hooks/use-user-context';
 
-jest.mock('../../components/private-route.tsx', () => {
-  const PrivateRoute: FC<{ component: ComponentType }> = ({
-    component: Comp,
-  }) => {
-    const user = {
-      id: 'TD0sIeaoz',
-      email: 'person.one@example.com',
-      firstName: 'Person1',
-      lastName: 'One',
-      role: 'user',
-    };
-    const { UserContext } = jest.requireActual('../../contexts/user-context');
-
-    return (
-      <UserContext value={user}>
-        <Comp />
-      </UserContext>
-    );
-  };
-  return { PrivateRoute };
-});
+jest.mock('../../hooks/use-user-context');
 
 jest.mock('../../components/layout.tsx', () => {
   const Layout: FC = ({ children }) => <>{children}</>;
@@ -54,9 +35,9 @@ describe('Start Page', () => {
 
   describe('No upcoming events', () => {
     it('should not display any events', async () => {
+      (useUserContext as jest.Mock).mockReturnValue(user);
+
       const scope = nock('http://localhost')
-        .get('/api/user')
-        .reply(200, { user })
         .get('/api/user/events')
         .query({ limit: 10 })
         .reply(200, { events: [] });
@@ -75,10 +56,10 @@ describe('Start Page', () => {
 
   describe('Some upcoming events', () => {
     it('should display events', async () => {
+      (useUserContext as jest.Mock).mockReturnValue(user);
+
       const [today] = new Date().toISOString().split('T');
       const scope = nock('http://localhost')
-        .get('/api/user')
-        .reply(200, { user })
         .get('/api/user/events')
         .query({ limit: 10 })
         .reply(200, {
