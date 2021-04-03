@@ -16,6 +16,7 @@ import { PasswordResetPage } from './pages/password-reset-page';
 import { PasswordUpdatePage } from './pages/password-update-page';
 import { PrivateRoute } from './components/private-route';
 import { UserProvider } from './components/user-provider';
+import { NotFoundPage } from './pages/not-found-page';
 
 const authenticatedRoutes: RouteProps[] = [
   {
@@ -97,6 +98,7 @@ ReactDOM.render(
             {publicRoutes.map((route, i) => (
               <Route key={i} {...route} />
             ))}
+            <Route path="*" component={NotFoundPage} />
           </Switch>
         </Router>
       </FabricBase>
