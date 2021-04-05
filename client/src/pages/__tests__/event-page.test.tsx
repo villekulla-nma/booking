@@ -45,19 +45,32 @@ describe('Start Page', () => {
   });
 
   describe(`some other person's event`, () => {
-    it('should display the event details', async () => {
+    it.each([
+      [
+        '2021-03-28T15:00:00.000Z',
+        '2021-03-28T17:00:00.000Z',
+        'etwa 2 Stunden',
+      ],
+      [
+        '2021-03-28T15:00:00.000Z',
+        '2021-03-29T12:30:00.000Z',
+        'etwa 22 Stunden',
+      ],
+      ['2021-03-28T15:00:00.000Z', '2021-03-29T15:00:00.000Z', 'ein Tag'],
+      ['2021-03-28T15:00:00.000Z', '2021-03-29T16:30:00.000Z', 'ein Tag'],
+    ])('should display the event details', async (start, end, duration) => {
       (useMediaQuery as jest.Mock).mockReturnValue(true);
       (useUserContext as jest.Mock).mockReturnValue(user);
 
       const eventId = 'dsgw46hrds';
       const event = {
         id: eventId,
-        start: '2021-03-28T15:00:00.000Z',
-        end: '2021-03-28T17:00:00.000Z',
         description: 'stuff',
         allDay: false,
         resource: { name: 'Resource #1' },
         user: { id: 'vgjt8i8kuz', firstName: 'Person2' },
+        start,
+        end,
       };
       const scope = nock('http://localhost')
         .get(`/api/events/${eventId}`)
@@ -70,7 +83,7 @@ describe('Start Page', () => {
       );
 
       await waitFor(() =>
-        screen.getByText('Resource #1 gebucht für 2 Stunden')
+        screen.getByText(`Resource #1 gebucht für ${duration}`)
       );
       screen.getByText('stuff');
       screen.getByText('Gebucht von Person2');
@@ -95,7 +108,7 @@ describe('Start Page', () => {
       const event = {
         id: eventId,
         start: '2021-03-28T00:00:00.000Z',
-        end: '2021-03-29T00:00:00.000Z',
+        end: '2021-03-30T00:00:00.000Z',
         description: 'thingies',
         allDay: true,
         resource: { name: 'Resource #2' },
@@ -120,7 +133,7 @@ describe('Start Page', () => {
         </Router>
       );
 
-      await waitFor(() => screen.getByText('Resource #2 komplett gebucht'));
+      await waitFor(() => screen.getByText('Resource #2 gebucht für 2 Tage'));
       screen.getByText('thingies');
       screen.getByText('Gebucht von Person1');
 

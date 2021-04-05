@@ -13,7 +13,7 @@ import type { IStackTokens, IButtonStyles } from '@fluentui/react';
 import { mergeStyleSets, mergeStyles } from '@fluentui/merge-styles';
 import { SharedColors } from '@fluentui/theme';
 import { memoizeFunction } from '@fluentui/utilities';
-import { formatDuration } from 'date-fns';
+import { formatDistance } from 'date-fns';
 import { de } from 'date-fns/locale';
 
 import { deleteEvent } from '../api';
@@ -111,18 +111,7 @@ export const EventPage: FC = () => {
   const backLinkUrl = calendarParams ? `/resources/${calendarParams}` : '/';
   const start = new Date(event.start);
   const end = new Date(event.end);
-  const duration = event.allDay
-    ? null
-    : formatDuration(
-        {
-          hours: end.getHours() - start.getHours(),
-          minutes: end.getMinutes() - start.getMinutes(),
-        },
-        { format: ['hours', 'minutes'], locale: de }
-      );
-  const headingSuffix = duration
-    ? `gebucht für ${duration}`
-    : 'komplett gebucht';
+  const duration = formatDistance(end, start, { locale: de });
   const footerHorizontalAlign = isMedium ? 'space-between' : 'start';
   const headingSize = isMedium ? 'xxLarge' : 'xLarge';
   const handleDelete = () => {
@@ -146,7 +135,7 @@ export const EventPage: FC = () => {
       </A>
       <Stack tokens={contentTokens}>
         <Text variant={headingSize} className={heading}>
-          {event.resource.name} {headingSuffix}
+          {event.resource.name} gebucht für {duration}
         </Text>
         <DateRange
           start={start.toISOString()}
