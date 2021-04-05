@@ -28,7 +28,7 @@ const fieldset = mergeStyles({
 });
 
 const fieldsetTokens: IStackTokens = {
-  childrenGap: 12,
+  childrenGap: 16,
 };
 
 const buttonGroupTokens: IStackTokens = {
