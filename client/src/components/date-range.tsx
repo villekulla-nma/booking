@@ -6,15 +6,17 @@ import { format, differenceInDays } from 'date-fns';
 import { de } from 'date-fns/locale';
 import classNames from 'classnames';
 
-import { denormalizeCalendarDate } from '../helpers/date';
+import {
+  denormalizeCalendarDate,
+  FORMAT_DATE_TIME,
+  FORMAT_DATE,
+} from '../helpers/date';
 
 interface Props {
   start: string;
   end: string;
   allDay?: boolean;
 }
-
-const FORMAT_DATE = 'd. MMMM y';
 
 const allDayHint = mergeStyles({
   marginLeft: '8px',
@@ -49,7 +51,7 @@ const formatDate = (date: string) =>
   format(denormalizeCalendarDate(date), FORMAT_DATE, { locale: de });
 
 const formatDateTime = (date: string) =>
-  format(denormalizeCalendarDate(date), `H:mm, ${FORMAT_DATE}`, {
+  format(denormalizeCalendarDate(date), FORMAT_DATE_TIME, {
     locale: de,
   });
 
