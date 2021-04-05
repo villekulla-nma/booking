@@ -195,7 +195,9 @@ describe('Reservation Page', () => {
       await expect(scopeIsDone(scope)).resolves.toBe(true);
     });
 
-    screen.getByText('Eine oder mehrere Angaben sind ungültig.');
+    await waitFor(() =>
+      screen.getByText('Eine oder mehrere Angaben sind ungültig.')
+    );
   });
 
   it('should display an error message', async () => {
@@ -231,6 +233,8 @@ describe('Reservation Page', () => {
       await expect(scopeIsDone(scope)).resolves.toBe(true);
     });
 
-    screen.getByText('Beim speichern der Buchung ist ein Fehler aufgetreten.');
+    await waitFor(() =>
+      screen.getByText('Beim speichern der Buchung ist ein Fehler aufgetreten.')
+    );
   });
 });
