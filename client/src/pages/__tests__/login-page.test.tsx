@@ -7,6 +7,7 @@ import { initializeIcons } from '@uifabric/icons';
 import { LoginPage } from '../login-page';
 import { redirect } from '../../helpers/location';
 import { scopeIsDone } from '../../helpers/nock';
+import { sleep } from '../../helpers/sleep';
 
 jest.mock('../../components/layout.tsx', () => {
   const Layout: FC = ({ children }) => <>{children}</>;
@@ -56,6 +57,7 @@ describe('Resource Page', () => {
     );
 
     await expect(scopeIsDone(scope)).resolves.toBe(true);
+    await sleep(50);
     expect(redirect).toHaveBeenCalledWith(from);
   });
 
