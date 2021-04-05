@@ -1,5 +1,9 @@
 import { roundToNearestMinutes } from 'date-fns';
 
+export const FORMAT_DATE = 'd. MMMM y';
+
+export const FORMAT_DATE_TIME = `H:mm, ${FORMAT_DATE}`;
+
 export const createRoundedDateString = (): string => {
   const date = roundToNearestMinutes(new Date(), { nearestTo: 30 });
   const utc = new Date(
