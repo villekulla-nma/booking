@@ -5,11 +5,14 @@ import { addMinutes } from 'date-fns';
 import { TextField, MessageBarType } from '@fluentui/react';
 
 import { Layout } from '../components/layout';
-import { createRoundedDateString } from '../helpers/date';
+import {
+  createRoundedDateString,
+  denormalizeCalendarDate,
+} from '../helpers/date';
 import { createEvent } from '../api';
 import { Form } from '../components/form';
-import { DateRange } from '../components/date-range';
 import { Feedback } from '../components/feedback';
+import { DateTimePicker } from '../components/date-time-picker';
 
 interface Params {
   resourceId: string;
@@ -41,10 +44,16 @@ export const ReservationPage: FC = () => {
   const [description, setDescription] = useState<string>('');
   const history = useHistory();
   const location = useLocation<LocationState>();
-  const { start, end, allDay } = getStateValues(location.state);
+  const { start: startString, end: endString, allDay } = getStateValues(
+    location.state
+  );
+  const [start, setStart] = useState<string>(startString);
+  const [end, setEnd] = useState<string>(endString);
   const params = useParams<Params>();
   const search = new URLSearchParams(location.search);
 
+  const handleStartChange = (dateTime: string): void => setStart(dateTime);
+  const handleEndChange = (dateTime: string): void => setEnd(dateTime);
   const handleDecriptionChange = (
     event: FormEvent<HTMLInputElement | HTMLTextAreaElement>
   ): void => {
@@ -92,7 +101,20 @@ export const ReservationPage: FC = () => {
         {feedback === '' || (
           <Feedback type={MessageBarType.error}>{feedback}</Feedback>
         )}
-        <DateRange start={start} end={end} allDay={allDay} />
+        <DateTimePicker
+          label="Beginn"
+          value={denormalizeCalendarDate(start)}
+          hideTime={allDay}
+          onChange={handleStartChange}
+          id="start"
+        />
+        <DateTimePicker
+          label="Ende"
+          value={denormalizeCalendarDate(end)}
+          hideTime={allDay}
+          onChange={handleEndChange}
+          id="end"
+        />
         <TextField
           as="textarea"
           label="Beschreibung"
