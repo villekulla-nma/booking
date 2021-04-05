@@ -67,7 +67,6 @@ export const ReservationPage: FC = () => {
       (status) => {
         switch (status) {
           case 'ok':
-            setDescription('');
             history.push(getBackUrl(params.resourceId, search));
             break;
           case 'overlapping':
