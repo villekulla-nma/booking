@@ -23,3 +23,9 @@ export const createRoundedDateString = (): string => {
 export const denormalizeCalendarDate = (date: string): Date => {
   return new Date(date.replace(/\.000z$/i, ''));
 };
+
+export const getDateTimeToday = (): Date => {
+  const d = new Date();
+
+  return new Date(d.getFullYear(), d.getMonth(), d.getDate());
+};

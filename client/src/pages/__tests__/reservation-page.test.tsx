@@ -1,11 +1,19 @@
 import type { FC } from 'react';
 import nock from 'nock';
-import { render, screen, fireEvent, act } from '@testing-library/react';
+import {
+  render,
+  screen,
+  fireEvent,
+  waitFor,
+  act,
+} from '@testing-library/react';
 import { MemoryRouter as Router, Route } from 'react-router-dom';
 import { initializeIcons } from '@uifabric/icons';
 
 import { ReservationPage } from '../reservation-page';
 import { scopeIsDone } from '../../helpers/nock';
+
+const DATE_REGEXP = /^(?:Mo|Di|Mi|Do|Fr|Sa|So),\s\d+\.\s(?:Januar|Februar|März|April|Mai|Juni|Juli|August|September|Oktober|November|Dezember)\s\d{4}$/;
 
 jest.mock('../../components/layout.tsx', () => {
   const Layout: FC = ({ children }) => <>{children}</>;
@@ -59,15 +67,23 @@ describe('Reservation Page', () => {
       </Router>
     );
 
-    const elemStart = screen.getByText('Beginn').nextElementSibling as Element;
-    const elemEnd = screen.getByText('Ende').nextElementSibling as Element;
+    const elemStart = screen.getByTestId('start');
+    const elemStartDate = elemStart.querySelector('input') as HTMLInputElement;
+    const elemStartTime = elemStart.querySelector(
+      '[aria-selected]'
+    ) as HTMLElement;
+    const elemEnd = screen.getByTestId('end');
+    const elemEndDate = elemEnd.querySelector('input') as HTMLInputElement;
+    const elemEndTime = elemEnd.querySelector('[aria-selected]') as HTMLElement;
     const textarea = screen.getByLabelText('Beschreibung');
     const submit = screen
       .getByText('Speichern')
       .closest('button') as HTMLButtonElement;
 
-    expect(elemStart.textContent).toContain('9:00');
-    expect(elemEnd.textContent).toContain('13:30');
+    expect(elemStartDate.value).toMatch(DATE_REGEXP);
+    expect(elemStartTime.textContent).toBe('09:00 Uhr');
+    expect(elemEndDate.value).toMatch(DATE_REGEXP);
+    expect(elemEndTime.textContent).toBe('13:30 Uhr');
 
     fireEvent.change(textarea, { target: { value: description } });
 
@@ -78,6 +94,35 @@ describe('Reservation Page', () => {
     });
 
     expect(pathname).toBe(`/resources/${resourceId}`);
+  });
+
+  it('should display the time for an all-day events', async () => {
+    const resourceId = 'Uj5SAS740';
+    const date = new Date(Date.now() + 24 * 3600 * 1000);
+    const [tomorrow] = date.toISOString().split('T');
+    const pathname = `/resources/${resourceId}/create`;
+    const start = `${tomorrow}T09:00:00.000Z`;
+    const end = `${tomorrow}T13:30:00.000Z`;
+    const state = { allDay: true, start, end };
+
+    render(
+      <Router initialEntries={[{ pathname, state }]}>
+        <Route
+          path="/resources/:resourceId/create"
+          component={ReservationPage}
+        />
+      </Router>
+    );
+
+    const elemStartTime = screen
+      .getByTestId('start')
+      .querySelector('[aria-selected]');
+    const elemEndTime = screen
+      .getByTestId('end')
+      .querySelector('[aria-selected]');
+
+    expect(elemStartTime).toBeNull();
+    expect(elemEndTime).toBeNull();
   });
 
   it('should warn on overlapping events', async () => {
@@ -110,8 +155,10 @@ describe('Reservation Page', () => {
       await expect(scopeIsDone(scope)).resolves.toBe(true);
     });
 
-    screen.getByText(
-      'Die Buchung überschneidet sich mit einer existierenden Buchung.'
+    await waitFor(() =>
+      screen.getByText(
+        'Die Buchung überschneidet sich mit einer existierenden Buchung.'
+      )
     );
   });
 
