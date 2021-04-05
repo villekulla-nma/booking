@@ -153,9 +153,11 @@ export const EventPage: FC = () => {
           end={end.toISOString()}
           allDay={event.allDay}
         />
-        <Text variant="medium" className={description}>
-          {event.description}
-        </Text>
+        {event.description && (
+          <Text variant="medium" className={description}>
+            {event.description}
+          </Text>
+        )}
         <Separator />
         <Stack horizontal={isMedium} horizontalAlign={footerHorizontalAlign}>
           <Text as="em" variant="medium" className={username}>
