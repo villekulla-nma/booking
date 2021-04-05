@@ -12,6 +12,7 @@ import { initializeIcons } from '@uifabric/icons';
 
 import { ReservationPage } from '../reservation-page';
 import { scopeIsDone } from '../../helpers/nock';
+import { sleep } from '../../helpers/sleep';
 
 const DATE_REGEXP = /^(?:Mo|Di|Mi|Do|Fr|Sa|So),\s\d+\.\s(?:Januar|Februar|März|April|Mai|Juni|Juli|August|September|Oktober|November|Dezember)\s\d{4}$/;
 
@@ -92,6 +93,7 @@ describe('Reservation Page', () => {
     await act(async () => {
       await expect(scopeIsDone(scope)).resolves.toBe(true);
     });
+    await sleep(50);
 
     expect(pathname).toBe(`/resources/${resourceId}`);
   });
