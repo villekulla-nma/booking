@@ -1,5 +1,5 @@
 {
-  "extends": ["config:base", ":maintainLockFilesWeekly"],
+  "extends": ["config:base"],
   "devDependencies": {
     "automerge": true,
     "commitBody": "[skip release]"
