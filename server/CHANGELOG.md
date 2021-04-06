@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 0.1.0-alpha.45 (2021-04-06)
+
+
+### Bug Fixes
+
+* **client:** prevent selecting home icon ([2fdbc3d](https://github.com/herschel666/villekulla-reservations/commit/2fdbc3db4306c8a5c8cf9ccdc3fa82c407ed15c2))
+
+
+
+
+
 # 0.1.0-alpha.44 (2021-04-06)
 
 
