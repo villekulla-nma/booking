@@ -102,7 +102,9 @@ export const EventPage: FC = () => {
   if (!user || !event) {
     return (
       <Layout>
-        <b>Loading event...</b>
+        <Text as="strong" variant="medium">
+          Lade Event…
+        </Text>
       </Layout>
     );
   }
