@@ -17,6 +17,10 @@ const header = mergeStyles({
   },
 });
 
+const home = mergeStyles({
+  userSelect: 'none',
+});
+
 const icon = mergeStyles({
   margin: '4px 4px 0 0',
   fontSize: '24px',
@@ -40,7 +44,7 @@ export const MainHeader: FC = () => {
         tokens={{ childrenGap: '0 32px' }}
       >
         <Stack.Item>
-          <A as={Link} to="/">
+          <A as={Link} to="/" className={home}>
             <Icon iconName="Home" className={icon} />
           </A>
         </Stack.Item>
