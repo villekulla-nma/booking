@@ -31,25 +31,27 @@ export const Layout: FC = ({ children }) => (
     <Stack as="main" grow={1}>
       {children}
     </Stack>
-    <Stack
-      as="footer"
-      horizontal={true}
-      tokens={footerTokens}
-      className={footer}
-    >
-      <Text variant="medium">{new Date().getFullYear()}</Text>
-      <Text variant="medium">&middot;</Text>
-      <Text variant="medium">Emanuel Kluge</Text>
-      <Text variant="medium">&middot;</Text>
-      <Text variant="medium">
-        <Link
-          href="https://github.com/herschel666/villekulla-reservations"
-          target="_blank"
-          rel="noreferrer"
-        >
-          Source
-        </Link>
-      </Text>
-    </Stack>
+    <Stack.Item>
+      <Stack
+        as="footer"
+        horizontal={true}
+        tokens={footerTokens}
+        className={footer}
+      >
+        <Text variant="medium">{new Date().getFullYear()}</Text>
+        <Text variant="medium">&middot;</Text>
+        <Text variant="medium">Emanuel Kluge</Text>
+        <Text variant="medium">&middot;</Text>
+        <Text variant="medium">
+          <Link
+            href="https://github.com/herschel666/villekulla-reservations"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Source
+          </Link>
+        </Text>
+      </Stack>
+    </Stack.Item>
   </Stack>
 );
