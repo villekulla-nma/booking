@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 0.1.0-alpha.44 (2021-04-06)
+
+
+### Bug Fixes
+
+* **deps:** update dependency @fluentui/react to v8.9.0 ([ac7038b](https://github.com/herschel666/villekulla-reservations/commit/ac7038b946788a0b1c729666ce65bcd0d48202d1))
+
+
+
+
+
 # 0.1.0-alpha.43 (2021-04-05)
 
 **Note:** Version bump only for package @villekulla-reservations/types
