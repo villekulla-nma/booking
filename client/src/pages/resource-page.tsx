@@ -98,7 +98,7 @@ const viewSelectionButton = {
 };
 
 const commandBar = {
-  root: { paddingRight: 0 },
+  root: { paddingRight: 0, paddingLeft: 0 },
 };
 
 const getViewTypeOption = (view: string | null): ViewTypeOption => {
@@ -217,6 +217,13 @@ export const ResourcePage: FC = () => {
   const buttonStyles: IButtonStyles = { root: { marginLeft: '32px' } };
   const navigationMenuItems: ICommandBarItemProps[] = [
     {
+      key: 'create',
+      onClick: handleReservation,
+      iconProps: { iconName: 'Add' },
+      disabled: typeof dateSelection === 'undefined',
+      iconOnly: true,
+    },
+    {
       key: 'prev',
       onClick: handlePrev,
       iconProps: { iconName: 'chevronLeft' },
@@ -267,9 +274,13 @@ export const ResourcePage: FC = () => {
     <Layout>
       <Stack tokens={wrapTokens}>
         <Stack horizontal={true} horizontalAlign="space-between">
-          <Stack horizontal={true} tokens={toolbarTokens} className={toolbar}>
-            {isDesktop && (
-              <>
+          {isDesktop ? (
+            <>
+              <Stack
+                horizontal={true}
+                tokens={toolbarTokens}
+                className={toolbar}
+              >
                 <DefaultButton aria-label="customPrev" onClick={handlePrev}>
                   <Icon iconName="chevronLeft" />
                 </DefaultButton>
@@ -282,33 +293,35 @@ export const ResourcePage: FC = () => {
                 >
                   Heute
                 </DefaultButton>
-              </>
-            )}
-          </Stack>
-          {isDesktop ? (
-            <Stack horizontal={true} tokens={toolbarTokens}>
-              <DefaultButton
-                styles={viewSelectionButton}
-                onClick={handleViewMonth}
-                primary={currentViewType === 'dayGridMonth'}
+              </Stack>
+              <Stack
+                horizontal={true}
+                tokens={toolbarTokens}
+                className={toolbar}
               >
-                Monat
-              </DefaultButton>
-              <DefaultButton
-                styles={viewSelectionButton}
-                onClick={handleViewWeek}
-                primary={currentViewType === 'timeGridWeek'}
-              >
-                Woche
-              </DefaultButton>
-              <DefaultButton
-                styles={viewSelectionButton}
-                onClick={handleViewDay}
-                primary={currentViewType === 'timeGridDay'}
-              >
-                Tag
-              </DefaultButton>
-            </Stack>
+                <DefaultButton
+                  styles={viewSelectionButton}
+                  onClick={handleViewMonth}
+                  primary={currentViewType === 'dayGridMonth'}
+                >
+                  Monat
+                </DefaultButton>
+                <DefaultButton
+                  styles={viewSelectionButton}
+                  onClick={handleViewWeek}
+                  primary={currentViewType === 'timeGridWeek'}
+                >
+                  Woche
+                </DefaultButton>
+                <DefaultButton
+                  styles={viewSelectionButton}
+                  onClick={handleViewDay}
+                  primary={currentViewType === 'timeGridDay'}
+                >
+                  Tag
+                </DefaultButton>
+              </Stack>
+            </>
           ) : (
             <CommandBar
               items={navigationMenuItems}
@@ -335,16 +348,18 @@ export const ResourcePage: FC = () => {
           initialDate={nowProp}
           aspectRatio={calendarAspectRatio}
         />
-        <Stack.Item>
-          <ActionButton
-            onClick={handleReservation}
-            iconProps={actionButtonIcon}
-            disabled={typeof dateSelection === 'undefined'}
-            className={actionButton}
-          >
-            Reservieren
-          </ActionButton>
-        </Stack.Item>
+        {isDesktop && (
+          <Stack.Item>
+            <ActionButton
+              onClick={handleReservation}
+              iconProps={actionButtonIcon}
+              disabled={typeof dateSelection === 'undefined'}
+              className={actionButton}
+            >
+              Reservieren
+            </ActionButton>
+          </Stack.Item>
+        )}
       </Stack>
     </Layout>
   );
