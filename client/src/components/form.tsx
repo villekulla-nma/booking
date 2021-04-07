@@ -27,7 +27,7 @@ const fieldset = mergeStyles({
   border: `1px solid ${NeutralColors.gray90}`,
 });
 
-const fieldsetTokens: IStackTokens = {
+const formInnerTokens: IStackTokens = {
   childrenGap: 16,
 };
 
@@ -54,12 +54,12 @@ export const Form: FC<Props> = ({
       onReset={onReset}
       className={form}
     >
-      <Stack as="fieldset" className={fieldset} tokens={fieldsetTokens}>
+      <fieldset className={fieldset}>
         <Text as="legend" variant="large">
           {label}
         </Text>
-        {children}
-      </Stack>
+        <Stack tokens={formInnerTokens}>{children}</Stack>
+      </fieldset>
       <Stack horizontal={true} tokens={buttonGroupTokens} horizontalAlign="end">
         {typeof onReset === 'function' && (
           <DefaultButton type="reset">Abbrechen</DefaultButton>
