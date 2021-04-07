@@ -45,7 +45,7 @@ const initProxy = (server: FastifyInstance): void => {
       replyOptions: {
         rewriteHeaders: (headers) => ({
           ...headers,
-          'Content-Security-Policy': CSP_DIRECTIVES.join('; '),
+          'Content-Security-Policy-Report-Only': CSP_DIRECTIVES.join('; '),
         }),
       },
     });
