@@ -8,9 +8,9 @@ export const useMediaQuery = (query: string): boolean => {
     const handler = () => setMatches(mediaMatcher.matches);
 
     setMatches(mediaMatcher.matches);
-    mediaMatcher.addEventListener('change', handler);
+    mediaMatcher.addListener(handler);
 
-    return () => mediaMatcher.removeEventListener('change', handler);
+    return () => mediaMatcher.removeListener(handler);
   }, [query]);
 
   return matches;
