@@ -7,7 +7,7 @@ import {
   waitFor,
   act,
 } from '@testing-library/react';
-import { MemoryRouter as Router, Route } from 'react-router-dom';
+import { MemoryRouter as Router, Route, Switch } from 'react-router-dom';
 import { initializeIcons } from '@uifabric/icons';
 
 import { ReservationPage } from '../reservation-page';
@@ -41,6 +41,7 @@ describe('Reservation Page', () => {
     const end = `${tomorrow}T13:30:00.000Z`;
     const state = { allDay: false, start, end };
     const description = 'Some nice event!';
+    const getUserConfirmation = jest.fn();
     const scope = nock('http://localhost')
       .put(
         `/api/resources/${resourceId}/events`,
@@ -53,7 +54,10 @@ describe('Reservation Page', () => {
       .reply(200, { status: 'ok' });
 
     render(
-      <Router initialEntries={[{ pathname, state }]}>
+      <Router
+        initialEntries={[{ pathname, state }]}
+        getUserConfirmation={getUserConfirmation}
+      >
         <Route
           path="/resources/:resourceId/create"
           component={ReservationPage}
@@ -96,6 +100,7 @@ describe('Reservation Page', () => {
     await sleep(50);
 
     expect(pathname).toBe(`/resources/${resourceId}`);
+    expect(getUserConfirmation).not.toHaveBeenCalled();
   });
 
   it('should display the time for an all-day events', async () => {
@@ -238,5 +243,90 @@ describe('Reservation Page', () => {
     await waitFor(() =>
       screen.getByText('Beim speichern der Buchung ist ein Fehler aufgetreten.')
     );
+  });
+
+  it('should prevent navigation when description is entered', async () => {
+    const resourceId = 'Uj5SAS740';
+    const date = new Date(Date.now() + 24 * 3600 * 1000);
+    const [tomorrow] = date.toISOString().split('T');
+    const pathname = `/resources/${resourceId}/create`;
+    const start = `${tomorrow}T09:00:00.000Z`;
+    const end = `${tomorrow}T13:30:00.000Z`;
+    const state = { allDay: false, start, end };
+    const description = 'Some nice event!';
+    const getUserConfirmation = jest.fn().mockReturnValue(false);
+    let navigatedAway = false;
+
+    render(
+      <Router
+        initialEntries={[{ pathname, state }]}
+        getUserConfirmation={getUserConfirmation}
+      >
+        <Switch>
+          <Route
+            path="/resources/:resourceId/create"
+            component={ReservationPage}
+          />
+          <Route
+            path="*"
+            render={() => {
+              navigatedAway = true;
+              return null;
+            }}
+          />
+        </Switch>
+      </Router>
+    );
+
+    const textarea = screen.getByLabelText(
+      'Beschreibung'
+    ) as HTMLTextAreaElement;
+    const abort = screen.getByText('Abbrechen');
+
+    fireEvent.change(textarea, { target: { value: description } });
+    fireEvent.click(abort);
+
+    expect(getUserConfirmation).toHaveBeenCalled();
+    expect(navigatedAway).toBe(false);
+  });
+
+  it('should navigate back on aborting', async () => {
+    const resourceId = 'Uj5SAS740';
+    const date = new Date(Date.now() + 24 * 3600 * 1000);
+    const [tomorrow] = date.toISOString().split('T');
+    const pathname = `/resources/${resourceId}/create`;
+    const start = `${tomorrow}T09:00:00.000Z`;
+    const end = `${tomorrow}T13:30:00.000Z`;
+    const state = { allDay: false, start, end };
+    const getUserConfirmation = jest.fn();
+    let newPathname = '';
+
+    render(
+      <Router
+        initialEntries={[{ pathname, state }]}
+        getUserConfirmation={getUserConfirmation}
+      >
+        <Switch>
+          <Route
+            path="/resources/:resourceId/create"
+            component={ReservationPage}
+          />
+          <Route
+            path="*"
+            render={({ location }) => {
+              newPathname = location.pathname;
+              return null;
+            }}
+          />
+        </Switch>
+      </Router>
+    );
+
+    const abort = screen.getByText('Abbrechen');
+
+    fireEvent.click(abort);
+
+    expect(getUserConfirmation).not.toHaveBeenCalled();
+    expect(newPathname).toBe(`/resources/${resourceId}`);
   });
 });
