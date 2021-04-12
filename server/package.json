@@ -40,7 +40,7 @@
     "@types/shortid": "0.0.29",
     "@typescript-eslint/eslint-plugin": "4.22.0",
     "@typescript-eslint/parser": "4.22.0",
-    "@vercel/ncc": "0.28.2",
+    "@vercel/ncc": "0.28.3",
     "@villekulla-reservations/types": "*",
     "eslint": "7.24.0",
     "eslint-config-prettier": "8.1.0",
