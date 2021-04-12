@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 0.1.0-alpha.48 (2021-04-12)
+
+
+### Features
+
+* **client:** add creation date to event detail page ([8d5d7ac](https://github.com/herschel666/villekulla-reservations/commit/8d5d7aca0dbbcf551b42a0be71eb979a1e3e0e4a))
+
+
+
+
+
 # 0.1.0-alpha.47 (2021-04-08)
 
 **Note:** Version bump only for package @villekulla-reservations/types
