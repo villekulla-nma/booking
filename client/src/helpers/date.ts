@@ -4,6 +4,8 @@ export const FORMAT_DATE = 'd. MMMM y';
 
 export const FORMAT_DATE_TIME = `H:mm, ${FORMAT_DATE}`;
 
+export const FORMAT_DATE_TIME_ALT = `${FORMAT_DATE}, H:mm`;
+
 export const createRoundedDateString = (): string => {
   const date = roundToNearestMinutes(new Date(), { nearestTo: 30 });
   const utc = new Date(

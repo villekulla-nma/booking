@@ -13,7 +13,7 @@ import type { IStackTokens, IButtonStyles } from '@fluentui/react';
 import { mergeStyleSets, mergeStyles } from '@fluentui/merge-styles';
 import { SharedColors } from '@fluentui/theme';
 import { memoizeFunction } from '@fluentui/utilities';
-import { formatDistance } from 'date-fns';
+import { format, formatDistance } from 'date-fns';
 import { de } from 'date-fns/locale';
 
 import { deleteEvent } from '../api';
@@ -24,6 +24,7 @@ import { DateRange } from '../components/date-range';
 import { inquireConfirmation } from '../helpers/inquire-confirmation';
 import { useMediaQuery } from '../hooks/use-media-query';
 import { MQ_IS_MEDIUM } from '../constants';
+import { FORMAT_DATE_TIME_ALT, denormalizeCalendarDate } from '../helpers/date';
 
 interface Params {
   eventId: string;
@@ -114,6 +115,13 @@ export const EventPage: FC = () => {
   const start = new Date(event.start);
   const end = new Date(event.end);
   const duration = formatDistance(end, start, { locale: de });
+  const createdAt = format(
+    denormalizeCalendarDate(event.createdAt),
+    FORMAT_DATE_TIME_ALT,
+    {
+      locale: de,
+    }
+  );
   const footerHorizontalAlign = isMedium ? 'space-between' : 'start';
   const headingSize = isMedium ? 'xxLarge' : 'xLarge';
   const handleDelete = () => {
@@ -152,7 +160,7 @@ export const EventPage: FC = () => {
         <Separator />
         <Stack horizontal={isMedium} horizontalAlign={footerHorizontalAlign}>
           <Text as="em" variant="medium" className={username}>
-            Gebucht von {event.user.firstName}
+            {event.user.firstName}; {createdAt}
           </Text>
           {user.id === event.user.id && (
             <CommandBarButton

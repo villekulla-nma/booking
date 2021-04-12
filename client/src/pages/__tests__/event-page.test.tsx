@@ -69,6 +69,7 @@ describe('Start Page', () => {
         allDay: false,
         resource: { name: 'Resource #1' },
         user: { id: 'vgjt8i8kuz', firstName: 'Person2' },
+        createdAt: '2021-03-25T10:15:56.000Z',
         start,
         end,
       };
@@ -86,7 +87,7 @@ describe('Start Page', () => {
         screen.getByText(`Resource #1 gebucht für ${duration}`)
       );
       screen.getByText('stuff');
-      screen.getByText('Gebucht von Person2');
+      screen.getByText('Person2; 25. März 2021, 10:15');
 
       expect(screen.queryByText('Eintrag löschen')).toBeNull();
       expect(scope.isDone()).toBe(true);
@@ -113,6 +114,7 @@ describe('Start Page', () => {
         allDay: true,
         resource: { name: 'Resource #2' },
         user: { id: user.id, firstName: user.firstName },
+        createdAt: '2021-03-25T10:15:56.000Z',
       };
       const scope = nock('http://localhost')
         .get(`/api/events/${eventId}`)
@@ -135,7 +137,7 @@ describe('Start Page', () => {
 
       await waitFor(() => screen.getByText('Resource #2 gebucht für 2 Tage'));
       screen.getByText('thingies');
-      screen.getByText('Gebucht von Person1');
+      screen.getByText('Person1; 25. März 2021, 10:15');
 
       const deleteButton = screen
         .getByText('Eintrag löschen')
