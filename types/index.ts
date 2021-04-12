@@ -30,11 +30,13 @@ export interface EventAttributes {
   allDay: boolean;
   resourceId: string;
   userId: string;
+  createdAt: string;
+  updatedAt?: string | null;
 }
 
 export type EventResult = Pick<
   EventAttributes,
-  'id' | 'start' | 'end' | 'description' | 'allDay'
+  'id' | 'start' | 'end' | 'description' | 'allDay' | 'createdAt'
 >;
 
 export type LoginResult = 'ok' | 'unverified' | 'invalid' | 'error';
