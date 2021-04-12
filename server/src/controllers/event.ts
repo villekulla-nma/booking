@@ -4,7 +4,7 @@ import type { EventResult } from '@villekulla-reservations/types';
 
 import type { Db } from '../db';
 import type { ResourceResult, UserResult } from './types';
-import { getToday } from '../utils/date';
+import { getNow, getToday } from '../utils/date';
 import type { EventInstance } from '../models';
 
 type SingleEventResult = EventResult & {
@@ -26,12 +26,13 @@ const pick = <Input, Key extends keyof Input>(
   }, {} as Pick<Input, Key>);
 
 const toEventResult = (events: EventInstance[]): EventResult[] =>
-  events.map(({ id, start, end, description, allDay }) => ({
+  events.map(({ id, start, end, description, allDay, createdAt }) => ({
     id,
     start,
     end,
     description,
     allDay,
+    createdAt,
   }));
 
 export const getScopedEvents = async (
@@ -118,7 +119,7 @@ export const getEventById = async (
     return null;
   }
 
-  const { start, end, description, allDay, user, resource } = event;
+  const { start, end, description, allDay, user, resource, createdAt } = event;
 
   return {
     user: pick(
@@ -136,6 +137,7 @@ export const getEventById = async (
     end,
     description,
     allDay,
+    createdAt,
   };
 };
 
@@ -156,13 +158,14 @@ export const getUpcomingEventsByUserId = async (
   });
 
   return upcomingEvents.map(
-    ({ id, start, end, description, allDay, resource }) => ({
+    ({ id, start, end, description, allDay, resource, createdAt }) => ({
       resource: resource.name,
       id,
       start,
       end,
       description,
       allDay,
+      createdAt,
     })
   );
 };
@@ -177,6 +180,7 @@ export const createEvent = async (
   userId: string
 ): Promise<string> => {
   const id = shortid();
+  const createdAt = getNow();
 
   await Event.create({
     id,
@@ -186,6 +190,7 @@ export const createEvent = async (
     description,
     resourceId,
     userId,
+    createdAt,
   });
 
   return id;

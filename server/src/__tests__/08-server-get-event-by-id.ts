@@ -36,6 +36,7 @@ describe('Server [GET] /api/events/:eventId', () => {
       resourceId: 'Uj5SAS740',
       description: 'A nice event',
       userId: 'TD0sIeaoz',
+      createdAt: '2021-03-25T10:15:56.000Z',
     });
 
     cookieValue = await signJwt({ id: 'TD0sIeaoz' }, process.env.JWT_SECRET);
