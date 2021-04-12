@@ -47,6 +47,7 @@ describe('Server [GET] /api/resources/:resourceId/events', () => {
         resourceId: 'Uj5SAS740',
         description: 'A nice event',
         userId: 'TD0sIeaoz',
+        createdAt: '2021-03-25T10:15:56.000Z',
       },
       {
         id: 'a85VfWRQA',
@@ -56,6 +57,7 @@ describe('Server [GET] /api/resources/:resourceId/events', () => {
         resourceId: 'gWH5T7Kdz',
         description: 'All-day event #1',
         userId: 'TD0sIeaoz',
+        createdAt: '2021-03-25T10:15:56.000Z',
       },
       {
         id: 'HBv7p7CVC',
@@ -65,6 +67,7 @@ describe('Server [GET] /api/resources/:resourceId/events', () => {
         resourceId: 'Uj5SAS740',
         description: 'A nice event',
         userId: 'TD0sIeaoz',
+        createdAt: '2021-03-25T10:15:56.000Z',
       },
       {
         id: 'W4zOBWmrf',
@@ -74,6 +77,7 @@ describe('Server [GET] /api/resources/:resourceId/events', () => {
         resourceId: 'gWH5T7Kdz',
         description: 'Another nice event',
         userId: 'TD0sIeaoz',
+        createdAt: '2021-03-25T10:15:56.000Z',
       },
       {
         id: 'MRaI4jIzw',
@@ -83,6 +87,7 @@ describe('Server [GET] /api/resources/:resourceId/events', () => {
         resourceId: 'gWH5T7Kdz',
         description: 'All-day event #2',
         userId: 'TD0sIeaoz',
+        createdAt: '2021-03-25T10:15:56.000Z',
       },
       {
         id: 'ctigHisJr',
@@ -92,6 +97,7 @@ describe('Server [GET] /api/resources/:resourceId/events', () => {
         resourceId: 'Uj5SAS740',
         description: 'Thingies',
         userId: 'TD0sIeaoz',
+        createdAt: '2021-03-25T10:15:56.000Z',
       },
     ]);
 

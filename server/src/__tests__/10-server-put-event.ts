@@ -62,6 +62,7 @@ describe('Server [PUT] /api/resources/:resourceId/events', () => {
         resourceId: 'Uj5SAS740',
         description: 'A nice event',
         userId: 'Ul2Zrv1BX',
+        createdAt: '2021-03-25T10:15:56.000Z',
       },
       {
         id: 'ctigHisJr',
@@ -71,6 +72,7 @@ describe('Server [PUT] /api/resources/:resourceId/events', () => {
         resourceId: 'gWH5T7Kdz',
         description: 'Thingies',
         userId: 'TD0sIeaoz',
+        createdAt: '2021-03-25T10:15:56.000Z',
       },
     ]);
 
@@ -140,6 +142,7 @@ describe('Server [PUT] /api/resources/:resourceId/events', () => {
           start: '2021-04-02T11:22:33.000Z',
           end: '2021-04-02T12:22:33.000Z',
           allDay: false,
+          createdAt: '2021-03-25T10:15:56.000Z',
         }),
       }
     );
@@ -168,6 +171,7 @@ describe('Server [PUT] /api/resources/:resourceId/events', () => {
           start: '2021-04-02T11:22:33.000Z',
           end: '2021-04-02T12:22:33.000Z',
           allDay: false,
+          createdAt: '2021-03-25T10:15:56.000Z',
         }),
       }
     );
@@ -212,6 +216,7 @@ describe('Server [PUT] /api/resources/:resourceId/events', () => {
               'content-type': 'application/json',
             },
             body: JSON.stringify({
+              createdAt: '2021-03-25T10:15:56.000Z',
               description,
               allDay,
               start,
