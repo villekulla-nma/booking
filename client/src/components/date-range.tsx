@@ -55,6 +55,7 @@ const formatDateTime = (date: string) =>
     locale: de,
   });
 
+// TODO: fix linting...
 export const DateRange: FC<Props> = ({ start, end, allDay }) => {
   const difference = differenceInDays(new Date(end), new Date(start));
   const formatFn = difference === 0 ? formatDateTime : formatDate;
