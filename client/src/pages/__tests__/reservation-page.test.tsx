@@ -72,23 +72,21 @@ describe('Reservation Page', () => {
       </Router>
     );
 
-    const elemStart = screen.getByTestId('start');
-    const elemStartDate = elemStart.querySelector('input') as HTMLInputElement;
-    const elemStartTime = elemStart.querySelector(
-      '[aria-selected]'
+    const elemStartDate = screen.getByLabelText('Beginn') as HTMLInputElement;
+    const elemStartTime = screen.getByLabelText(
+      'Beginn (Uhrzeit)'
     ) as HTMLElement;
-    const elemEnd = screen.getByTestId('end');
-    const elemEndDate = elemEnd.querySelector('input') as HTMLInputElement;
-    const elemEndTime = elemEnd.querySelector('[aria-selected]') as HTMLElement;
+    const elemEndDate = screen.getByLabelText('Ende') as HTMLInputElement;
+    const elemEndTime = screen.getByLabelText('Ende (Uhrzeit)') as HTMLElement;
     const textarea = screen.getByLabelText('Beschreibung');
     const submit = screen
       .getByText('Speichern')
       .closest('button') as HTMLButtonElement;
 
     expect(elemStartDate.value).toMatch(DATE_REGEXP);
-    expect(elemStartTime.textContent).toBe('09:00 Uhr');
+    expect(elemStartTime.textContent).toMatch(/^09:00 Uhr/);
     expect(elemEndDate.value).toMatch(DATE_REGEXP);
-    expect(elemEndTime.textContent).toBe('13:30 Uhr');
+    expect(elemEndTime.textContent).toMatch(/^13:30 Uhr/);
 
     fireEvent.change(textarea, { target: { value: description } });
 
