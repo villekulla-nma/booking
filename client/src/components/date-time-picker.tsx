@@ -1,23 +1,15 @@
 import type { FC } from 'react';
 import { useRef, useState } from 'react';
-import {
-  DatePicker,
-  DayOfWeek,
-  Dropdown,
-  Stack,
-  memoizeFunction,
-} from '@fluentui/react';
+import { Dropdown, Stack, memoizeFunction } from '@fluentui/react';
 import type {
-  IDatePickerStrings,
-  IDateFormatting,
   IDropdownOption,
   ISelectableOption,
   IStackTokens,
 } from '@fluentui/react';
 import { format, eachHourOfInterval } from 'date-fns';
-import { de } from 'date-fns/locale';
 
-import { getDateTimeToday, FORMAT_DATE } from '../helpers/date';
+import { getDateTimeToday } from '../helpers/date';
+import { DatePicker } from './date-picker';
 
 interface Props {
   label: string;
@@ -29,57 +21,6 @@ interface Props {
 
 const tokens: IStackTokens = {
   childrenGap: '16px',
-};
-
-const datePickerStrings: IDatePickerStrings = {
-  months: [
-    'Januar',
-    'Februar',
-    'März',
-    'April',
-    'Mai',
-    'Juni',
-    'Juli',
-    'August',
-    'September',
-    'Oktober',
-    'November',
-    'Dezember',
-  ],
-  shortMonths: [
-    'Jan',
-    'Feb',
-    'Mär',
-    'Apr',
-    'Mai',
-    'Jun',
-    'Jul',
-    'Aug',
-    'Sep',
-    'Okt',
-    'Nov',
-    'Dez',
-  ],
-
-  days: [
-    'Montag',
-    'Dienstag',
-    'Mittwoch',
-    'Donnerstag',
-    'Freitag',
-    'Samstag',
-    'Sonntag',
-  ],
-  shortDays: ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'],
-
-  goToToday: 'Heute',
-  prevMonthAriaLabel: 'vorheriger Monat',
-  nextMonthAriaLabel: 'nächster Monat',
-  prevYearAriaLabel: 'Vorheriges Jahr',
-  nextYearAriaLabel: 'Nächstes Jahr',
-  closeButtonAriaLabel: 'Schließen',
-  monthPickerHeaderAriaLabel: '{0}, wählen um das Jahr zu ändern',
-  yearPickerHeaderAriaLabel: '{0}, wählen um den Monat zu ändern',
 };
 
 const getHoursOfDay = memoizeFunction((start: Date): Date[] => {
@@ -128,27 +69,10 @@ const getTimePickerOptions = memoizeFunction(
       .flat()
 );
 
-const dateTimeFormatter: IDateFormatting = {
-  formatMonthDayYear: (date) =>
-    format(date, FORMAT_DATE, {
-      locale: de,
-    }),
-  formatMonthYear: (date) =>
-    format(date, 'MMMM y', {
-      locale: de,
-    }),
-  formatYear: (date) => format(date, 'y', { locale: de }),
-  formatMonth: (date) => format(date, 'MMMM', { locale: de }),
-  formatDay: (date) => format(date, 'd'),
-};
-
 const getDateStringFromValue = (date: Date): string =>
   format(date, 'yyyy-MM-dd');
 
 const getTimeStringFromValue = (date: Date): string => format(date, 'HH:mm');
-
-const formatDate = (date?: Date): string =>
-  date ? format(date, `eeeeee, ${FORMAT_DATE}`, { locale: de }) : '';
 
 export const DateTimePicker: FC<Props> = ({
   label,
@@ -179,15 +103,10 @@ export const DateTimePicker: FC<Props> = ({
       data-testid={id}
     >
       <DatePicker
-        firstDayOfWeek={DayOfWeek.Monday}
-        strings={datePickerStrings}
         minDate={today.current}
         label={label}
-        placeholder="Wähle ein Datum aus…"
         value={value}
         onSelectDate={handleDateChange}
-        dateTimeFormatter={dateTimeFormatter}
-        formatDate={formatDate}
       />
       {Boolean(hideTime) === false && (
         <Dropdown
