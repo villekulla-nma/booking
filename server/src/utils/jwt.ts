@@ -2,6 +2,12 @@ import jwt from 'jsonwebtoken';
 
 import { env } from './env';
 
+const DateNowInSeconds = (): number => {
+  const now = Date.now();
+
+  return Math.round(now / 1000);
+};
+
 export const signJwt = async (
   payload: Record<string, unknown>,
   expiresIn = '2 days'
@@ -22,7 +28,13 @@ export const verifyJwt = async (token: string): Promise<unknown> =>
       if (err) {
         reject(err);
       } else {
-        resolve(data);
+        const { exp } = data as Record<string, unknown>;
+
+        if (typeof exp === 'number' && exp > DateNowInSeconds()) {
+          resolve(data);
+        } else {
+          reject(new Error('token is expired'));
+        }
       }
     });
   });
