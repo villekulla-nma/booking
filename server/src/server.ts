@@ -42,6 +42,7 @@ const initProxy = (server: FastifyInstance): void => {
       upstream: clientUrl,
       base: '/app',
       http2: false,
+      logLevel: 'error',
       replyOptions: {
         rewriteHeaders: (headers) => ({
           ...headers,
