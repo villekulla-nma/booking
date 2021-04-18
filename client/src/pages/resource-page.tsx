@@ -32,6 +32,8 @@ import { Layout } from '../components/layout';
 import type { ViewTypeOption, ViewTypeParam } from '../types';
 import { DEFAULT_VIEW_OPTION, MQ_IS_DESKTOP, MQ_IS_MEDIUM } from '../constants';
 import { useMediaQuery } from '../hooks/use-media-query';
+import { UnauthenticatedError } from '../api';
+import { useRedirectUnauthenticatedUser } from '../hooks/use-redirect-unauthenticated-user';
 
 interface Params {
   resourceId: string;
@@ -124,6 +126,7 @@ const getNowFromString = (now: string | null): string | undefined => {
 };
 
 export const ResourcePage: FC = () => {
+  const redirect = useRedirectUnauthenticatedUser();
   const history = useHistory();
   const params = useParams<Params>();
   const currentViewType = getViewTypeOption(params.view);
@@ -133,6 +136,11 @@ export const ResourcePage: FC = () => {
   const isDesktop = useMediaQuery(MQ_IS_DESKTOP);
   const eventSource: EventSourceInput = {
     url: `/api/resources/${params.resourceId}/events`,
+    failure: (error) => {
+      if (error?.xhr.status === 401) {
+        redirect(new UnauthenticatedError());
+      }
+    },
   };
   const search = new URLSearchParams({
     view: params.view,

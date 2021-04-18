@@ -9,6 +9,7 @@ import { updatePassword } from '../api';
 import { Layout } from '../components/layout';
 import { Form } from '../components/form';
 import { Feedback } from '../components/feedback';
+import { useRedirectUnauthenticatedUser } from '../hooks/use-redirect-unauthenticated-user';
 
 interface Params {
   token: string;
@@ -60,6 +61,7 @@ const UserFeedback: FC<FeedbackProps> = ({ feedback }) => {
 };
 
 export const PasswordUpdatePage: FC = () => {
+  const redirect = useRedirectUnauthenticatedUser();
   const { token } = useParams<Params>();
   const [feedback, setFeedback] = useState<
     UpdatePasswordResponse | undefined
@@ -79,14 +81,17 @@ export const PasswordUpdatePage: FC = () => {
     setPasswordConfirm(event.currentTarget.value);
   };
   const handleSubmit = (): void => {
-    updatePassword(token, password, passwordConfirm).then((status) => {
-      setFeedback(status);
+    updatePassword(token, password, passwordConfirm).then(
+      (status) => {
+        setFeedback(status);
 
-      if (status === 'ok') {
-        setPassword('');
-        setPasswordConfirm('');
-      }
-    });
+        if (status === 'ok') {
+          setPassword('');
+          setPasswordConfirm('');
+        }
+      },
+      (error) => redirect(error)
+    );
   };
 
   return (
