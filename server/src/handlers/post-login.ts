@@ -63,7 +63,13 @@ export const assignPostLoginHandler: AssignHandlerFunction = (
 
       try {
         const cookie = await signJwt({ id: userId });
-        reply.header('set-cookie', `login=${cookie}; path=/; httpOnly=true`);
+        const expires = new Date();
+
+        expires.setDate(expires.getDate() + 2);
+        reply.header(
+          'set-cookie',
+          `login=${cookie}; expires=${expires.toUTCString()}; path=/; httpOnly=true`
+        );
       } catch (error) {
         server.log.trace(
           'Error creating token: %s; user: %s',
