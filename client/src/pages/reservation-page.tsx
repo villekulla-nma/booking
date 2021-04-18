@@ -16,6 +16,7 @@ import { createEvent } from '../api';
 import { Form } from '../components/form';
 import { Feedback } from '../components/feedback';
 import { DateTimePicker } from '../components/date-time-picker';
+import { useRedirectUnauthenticatedUser } from '../hooks/use-redirect-unauthenticated-user';
 
 interface Params {
   resourceId: string;
@@ -70,6 +71,7 @@ const getBackUrl = (resourceId: string, search: URLSearchParams): string => {
 };
 
 export const ReservationPage: FC = () => {
+  const redirect = useRedirectUnauthenticatedUser();
   const [submitted, setSubmitted] = useState<boolean>(false);
   const [feedback, setFeedback] = useState<string>('');
   const [description, setDescription] = useState<string>('');
@@ -113,29 +115,37 @@ export const ReservationPage: FC = () => {
       description.trim(),
       allDay,
       params.resourceId
-    ).then((status) => {
-      switch (status) {
-        case 'ok':
-          history.push(getBackUrl(params.resourceId, search));
-          break;
-        case 'overlapping':
-          setFeedback(
-            'Die Buchung überschneidet sich mit einer existierenden Buchung.'
-          );
-          setSubmitted(false);
-          break;
-        case 'invalid':
-          setFeedback('Eine oder mehrere Angaben sind ungültig.');
-          setSubmitted(false);
-          break;
-        case 'error':
-          setFeedback('Beim speichern der Buchung ist ein Fehler aufgetreten.');
-          setSubmitted(false);
-          break;
-        default:
-          ((_: never) => undefined)(status);
-      }
-    });
+    ).then(
+      (status) => {
+        switch (status) {
+          case 'ok':
+            history.push(getBackUrl(params.resourceId, search));
+            break;
+          case 'overlapping':
+            setFeedback(
+              'Die Buchung überschneidet sich mit einer existierenden Buchung.'
+            );
+            setSubmitted(false);
+            break;
+          case 'invalid':
+            setFeedback('Eine oder mehrere Angaben sind ungültig.');
+            setSubmitted(false);
+            break;
+          case 'error':
+            setFeedback(
+              'Beim speichern der Buchung ist ein Fehler aufgetreten.'
+            );
+            setSubmitted(false);
+            break;
+          default:
+            ((_: never) => undefined)(status);
+        }
+      },
+      (error) =>
+        redirect(error, () =>
+          alert('Das Event konnte leider nicht erstellt werden.')
+        )
+    );
   };
 
   return (

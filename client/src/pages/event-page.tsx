@@ -25,6 +25,7 @@ import { inquireConfirmation } from '../helpers/inquire-confirmation';
 import { useMediaQuery } from '../hooks/use-media-query';
 import { MQ_IS_MEDIUM } from '../constants';
 import { FORMAT_DATE_TIME_ALT, denormalizeCalendarDate } from '../helpers/date';
+import { useRedirectUnauthenticatedUser } from '../hooks/use-redirect-unauthenticated-user';
 
 interface Params {
   eventId: string;
@@ -93,6 +94,7 @@ const getCalendarParamsFromSearch = (search: string): string | undefined => {
 };
 
 export const EventPage: FC = () => {
+  const redirect = useRedirectUnauthenticatedUser();
   const history = useHistory();
   const location = useLocation();
   const { eventId } = useParams<Params>();
@@ -128,7 +130,10 @@ export const EventPage: FC = () => {
     if (inquireConfirmation('Soll der Eintrag wirklich geköscht werden?')) {
       deleteEvent(eventId).then(
         () => history.push(backLinkUrl),
-        () => alert('Der Eintrag konnte nicht gelöscht werden.')
+        (error) =>
+          redirect(error, () =>
+            alert('Der Eintrag konnte nicht gelöscht werden.')
+          )
       );
     }
   };

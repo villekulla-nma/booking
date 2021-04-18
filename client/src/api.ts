@@ -18,6 +18,16 @@ export type UserEvent = EventResult & {
   resource: string;
 };
 
+export class UnauthenticatedError extends Error {
+  public constructor() {
+    super('user not authenticated');
+  }
+
+  public get name(): string {
+    return 'UnauthenticatedError';
+  }
+}
+
 export const login = async (
   email: string,
   password: string
@@ -70,6 +80,11 @@ export const updatePassword = async (
     },
     body: JSON.stringify({ password, password_confirm: confirm }),
   });
+
+  if (response.status === 401) {
+    throw new UnauthenticatedError();
+  }
+
   const { status } = await response.json();
 
   if (!/^(ok|invalid|error)$/.test(status)) {
@@ -93,6 +108,11 @@ export const getUser = async (): Promise<UserResponse | undefined> => {
 
 export const getResources = async (): Promise<ResourceAttributes[]> => {
   const response = await fetch('/api/resources');
+
+  if (response.status === 401) {
+    throw new UnauthenticatedError();
+  }
+
   const resources = await response.json();
 
   return resources;
@@ -100,6 +120,11 @@ export const getResources = async (): Promise<ResourceAttributes[]> => {
 
 export const getEventById = async (eventId: string): Promise<EventByIdData> => {
   const response = await fetch(`/api/events/${eventId}`);
+
+  if (response.status === 401) {
+    throw new UnauthenticatedError();
+  }
+
   const event = await response.json();
 
   return event;
@@ -111,13 +136,22 @@ export const getUserEvents = async (limit?: number): Promise<UserEvent[]> => {
     : '';
   const glue = query ? '?' : '';
   const response = await fetch(`/api/user/events${glue}${query}`);
+
+  if (response.status === 401) {
+    throw new UnauthenticatedError();
+  }
+
   const { events = [] } = await response.json();
 
   return events;
 };
 
 export const deleteEvent = async (eventId: string): Promise<void> => {
-  await fetch(`/api/events/${eventId}`, { method: 'DELETE' });
+  const response = await fetch(`/api/events/${eventId}`, { method: 'DELETE' });
+
+  if (response.status === 401) {
+    throw new UnauthenticatedError();
+  }
 };
 
 export type CreateEventResponse = 'ok' | 'overlapping' | 'invalid' | 'error';
@@ -136,6 +170,11 @@ export const createEvent = async (
     },
     body: JSON.stringify({ start, end, description, allDay }),
   });
+
+  if (response.status === 401) {
+    throw new UnauthenticatedError();
+  }
+
   const { status } = await response.json();
 
   if (!/^(ok|overlapping|invalid|error)$/.test(status)) {
