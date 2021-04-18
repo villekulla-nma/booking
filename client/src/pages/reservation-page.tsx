@@ -1,12 +1,15 @@
 import type { FC, FormEvent } from 'react';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Prompt, useLocation, useParams, useHistory } from 'react-router-dom';
-import { addMinutes } from 'date-fns';
-import { TextField, MessageBarType } from '@fluentui/react';
+import { addMinutes, format } from 'date-fns';
+import { TextField, MessageBarType, Checkbox } from '@fluentui/react';
+import { mergeStyles } from '@fluentui/merge-styles';
 
 import { Layout } from '../components/layout';
 import {
+  getDateTimeToday,
   createRoundedDateString,
+  normalizeCalendarDate,
   denormalizeCalendarDate,
 } from '../helpers/date';
 import { createEvent } from '../api';
@@ -24,12 +27,39 @@ interface LocationState {
   allDay?: boolean;
 }
 
-const getStateValues = (state: LocationState = {}): Required<LocationState> => {
-  const start = state.start || createRoundedDateString();
-  const end = state.end || addMinutes(new Date(start), 30).toISOString();
+interface DateTime {
+  date: string;
+  time: string;
+}
+
+interface InitalValues {
+  start: DateTime;
+  end: DateTime;
+  allDay: boolean;
+}
+
+const checkbox = mergeStyles({
+  margin: '16px 0 8px 0',
+});
+
+const getStateValues = (state: LocationState = {}): InitalValues => {
+  const start = denormalizeCalendarDate(
+    state.start || createRoundedDateString()
+  );
+  const startDateTime = {
+    date: format(start, 'yyyy-MM-dd'),
+    time: format(start, 'HH:mm'),
+  };
+  const end = denormalizeCalendarDate(
+    state.end || normalizeCalendarDate(addMinutes(start, 30))
+  );
+  const endDateTime = {
+    date: format(end, 'yyyy-MM-dd'),
+    time: format(end, 'HH:mm'),
+  };
   const allDay = state.allDay ?? false;
 
-  return { start, end, allDay };
+  return { start: startDateTime, end: endDateTime, allDay };
 };
 
 const getBackUrl = (resourceId: string, search: URLSearchParams): string => {
@@ -45,16 +75,24 @@ export const ReservationPage: FC = () => {
   const [description, setDescription] = useState<string>('');
   const history = useHistory();
   const location = useLocation<LocationState>();
-  const { start: startString, end: endString, allDay } = getStateValues(
-    location.state
-  );
-  const [start, setStart] = useState<string>(startString);
-  const [end, setEnd] = useState<string>(endString);
+  const {
+    start: initialStart,
+    end: initialEnd,
+    allDay: initialAllDay,
+  } = getStateValues(location.state);
+  const [start, setStart] = useState<DateTime>(initialStart);
+  const [end, setEnd] = useState<DateTime>(initialEnd);
+  const [allDay, setAllDay] = useState<boolean>(initialAllDay);
+  const today = useRef<Date>(getDateTimeToday());
   const params = useParams<Params>();
   const search = new URLSearchParams(location.search);
 
-  const handleStartChange = (dateTime: string): void => setStart(dateTime);
-  const handleEndChange = (dateTime: string): void => setEnd(dateTime);
+  const handleStartDateTimeChange = (date: string, time: string): void =>
+    setStart({ date, time });
+  const handleEndDateTimeChange = (date: string, time: string): void =>
+    setEnd({ date, time });
+  const handleAllDayChange = (_: unknown, checked: boolean | undefined): void =>
+    setAllDay(typeof checked === 'boolean' ? checked : !allDay);
   const handleDecriptionChange = (
     event: FormEvent<HTMLInputElement | HTMLTextAreaElement>
   ): void => {
@@ -66,33 +104,38 @@ export const ReservationPage: FC = () => {
   const handleSubmit = () => {
     setSubmitted(true);
 
-    createEvent(start, end, description.trim(), allDay, params.resourceId).then(
-      (status) => {
-        switch (status) {
-          case 'ok':
-            history.push(getBackUrl(params.resourceId, search));
-            break;
-          case 'overlapping':
-            setFeedback(
-              'Die Buchung überschneidet sich mit einer existierenden Buchung.'
-            );
-            setSubmitted(false);
-            break;
-          case 'invalid':
-            setFeedback('Eine oder mehrere Angaben sind ungültig.');
-            setSubmitted(false);
-            break;
-          case 'error':
-            setFeedback(
-              'Beim speichern der Buchung ist ein Fehler aufgetreten.'
-            );
-            setSubmitted(false);
-            break;
-          default:
-            ((_: never) => undefined)(status);
-        }
+    const startTime = allDay ? '00:00' : start.time;
+    const endTime = allDay ? '00:00' : end.time;
+
+    createEvent(
+      `${start.date}T${startTime}:00.000Z`,
+      `${end.date}T${endTime}:00.000Z`,
+      description.trim(),
+      allDay,
+      params.resourceId
+    ).then((status) => {
+      switch (status) {
+        case 'ok':
+          history.push(getBackUrl(params.resourceId, search));
+          break;
+        case 'overlapping':
+          setFeedback(
+            'Die Buchung überschneidet sich mit einer existierenden Buchung.'
+          );
+          setSubmitted(false);
+          break;
+        case 'invalid':
+          setFeedback('Eine oder mehrere Angaben sind ungültig.');
+          setSubmitted(false);
+          break;
+        case 'error':
+          setFeedback('Beim speichern der Buchung ist ein Fehler aufgetreten.');
+          setSubmitted(false);
+          break;
+        default:
+          ((_: never) => undefined)(status);
       }
-    );
+    });
   };
 
   return (
@@ -112,18 +155,27 @@ export const ReservationPage: FC = () => {
         )}
         <DateTimePicker
           label="Beginn"
-          value={denormalizeCalendarDate(start)}
+          value={start}
+          minDate={today.current}
           hideTime={allDay}
-          onChange={handleStartChange}
+          onChange={handleStartDateTimeChange}
           id="start"
         />
         <DateTimePicker
           label="Ende"
-          value={denormalizeCalendarDate(end)}
+          value={end}
+          minDate={today.current}
           hideTime={allDay}
-          onChange={handleEndChange}
+          onChange={handleEndDateTimeChange}
           id="end"
         />
+        <div>
+          <Checkbox
+            label="ganztägig"
+            className={checkbox}
+            onChange={handleAllDayChange}
+          />
+        </div>
         <TextField
           as="textarea"
           label="Beschreibung"

@@ -220,7 +220,6 @@ export const ResourcePage: FC = () => {
       key: 'create',
       onClick: handleReservation,
       iconProps: { iconName: 'Add' },
-      disabled: typeof dateSelection === 'undefined',
       iconOnly: true,
     },
     {
@@ -353,7 +352,6 @@ export const ResourcePage: FC = () => {
             <ActionButton
               onClick={handleReservation}
               iconProps={actionButtonIcon}
-              disabled={typeof dateSelection === 'undefined'}
               className={actionButton}
             >
               Reservieren

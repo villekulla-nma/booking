@@ -1,22 +1,22 @@
 import type { FC } from 'react';
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import { Dropdown, Stack, memoizeFunction } from '@fluentui/react';
 import type {
   IDropdownOption,
   ISelectableOption,
   IStackTokens,
 } from '@fluentui/react';
-import { format, eachHourOfInterval } from 'date-fns';
+import { format, parse, eachHourOfInterval } from 'date-fns';
 
-import { getDateTimeToday } from '../helpers/date';
 import { DatePicker } from './date-picker';
 
 interface Props {
   label: string;
-  value: Date;
+  value: { date: string; time: string };
+  minDate: Date;
   hideTime?: boolean;
   id?: string;
-  onChange: (dateTime: string) => void;
+  onChange: (date: string, time: string) => void;
 }
 
 const tokens: IStackTokens = {
@@ -72,27 +72,25 @@ const getTimePickerOptions = memoizeFunction(
 const getDateStringFromValue = (date: Date): string =>
   format(date, 'yyyy-MM-dd');
 
-const getTimeStringFromValue = (date: Date): string => format(date, 'HH:mm');
-
 export const DateTimePicker: FC<Props> = ({
   label,
   value,
+  minDate,
   hideTime,
   id,
   onChange,
 }) => {
-  const [date, setDate] = useState<string>(getDateStringFromValue(value));
-  const [time, setTime] = useState<string>(getTimeStringFromValue(value));
-  const today = useRef<Date>(getDateTimeToday());
+  const [date, setDate] = useState<string>(value.date);
+  const [time, setTime] = useState<string>(value.time);
   const handleDateChange = (d: Date | null | undefined): void => {
     const newDate = d instanceof Date ? getDateStringFromValue(d) : date;
     setDate(newDate);
-    onChange(`${newDate}T${time}:00.000Z`);
+    onChange(newDate, time);
   };
   const handleTimeChange = (_: unknown, option?: IDropdownOption): void => {
     const newTime = option?.id || time;
     setTime(newTime);
-    onChange(`${date}T${newTime}:00.000Z`);
+    onChange(date, newTime);
   };
 
   return (
@@ -103,16 +101,16 @@ export const DateTimePicker: FC<Props> = ({
       data-testid={id}
     >
       <DatePicker
-        minDate={today.current}
+        minDate={minDate}
         label={label}
-        value={value}
+        value={parse(date, 'yyyy-MM-dd', new Date())}
         onSelectDate={handleDateChange}
       />
       {Boolean(hideTime) === false && (
         <Dropdown
           placeholder="Wähle eine Uhrzeit aus…"
           ariaLabel={`${label} (Uhrzeit)`}
-          options={getTimePickerOptions(getHoursOfDay(today.current), time)}
+          options={getTimePickerOptions(getHoursOfDay(minDate), time)}
           onChange={handleTimeChange}
         />
       )}
