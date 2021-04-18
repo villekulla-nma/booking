@@ -24,7 +24,7 @@ export const createRoundedDateString = (): string => {
 };
 
 export const getDateTimeToday = (): Date => {
-  const d = new Date();
+  const [date] = new Date().toISOString().split('T');
 
-  return new Date(d.getFullYear(), d.getMonth(), d.getDate());
+  return parseISO(`${date}T00:00:00`);
 };
