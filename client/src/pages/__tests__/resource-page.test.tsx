@@ -54,11 +54,8 @@ describe('Resource Page', () => {
         />
       </Router>
     );
-    const button = screen
-      .getByText('Reservieren')
-      .closest('button') as HTMLButtonElement;
+    screen.getByText('Reservieren').closest('button') as HTMLButtonElement;
 
     await expect(scopeIsDone(scope)).resolves.toBe(true);
-    expect(button.disabled).toBe(true);
   });
 });
