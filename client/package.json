@@ -9,7 +9,7 @@
     "prelint": "tsc --noEmit",
     "lint": "eslint .",
     "test:watch": "react-scripts test",
-    "test": "CI=true react-scripts test"
+    "test": "CI=true react-scripts test  --runInBand"
   },
   "eslintConfig": {
     "extends": [

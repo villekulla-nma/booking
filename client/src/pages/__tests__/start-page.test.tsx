@@ -1,11 +1,13 @@
 import type { FC } from 'react';
 import nock from 'nock';
 import { render, screen, waitFor } from '@testing-library/react';
-import { MemoryRouter as Router } from 'react-router-dom';
+import { MemoryRouter as Router, Route, Switch } from 'react-router-dom';
+import type { Location } from 'history';
 import { initializeIcons } from '@uifabric/icons';
 
 import { StartPage } from '../start-page';
 import { useUserContext } from '../../hooks/use-user-context';
+import { scopeIsDone } from '../../helpers/nock';
 
 jest.mock('../../hooks/use-user-context');
 
@@ -31,6 +33,40 @@ describe('Start Page', () => {
 
   afterAll(() => {
     nock.restore();
+  });
+
+  describe('invalid session', () => {
+    it('should redirect to the login page', async () => {
+      (useUserContext as jest.Mock).mockReturnValue(user);
+
+      let pathname = '';
+      let from: string | undefined;
+
+      const scope = nock('http://localhost')
+        .get('/api/user/events')
+        .query({ limit: 10 })
+        .reply(401, { status: 'error' });
+
+      render(
+        <Router initialEntries={['/']}>
+          <Switch>
+            <Route path="/" exact={true} component={StartPage} />
+            <Route
+              path="*"
+              render={({ location }) => {
+                pathname = location.pathname;
+                from = (location as Location<{ from?: string }>).state.from;
+                return null;
+              }}
+            />
+          </Switch>
+        </Router>
+      );
+
+      await expect(scopeIsDone(scope)).resolves.toBe(true);
+      expect(pathname).toBe('/login');
+      expect(from).toBe('/');
+    });
   });
 
   describe('No upcoming events', () => {

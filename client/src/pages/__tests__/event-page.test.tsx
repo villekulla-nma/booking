@@ -1,7 +1,8 @@
 import type { FC } from 'react';
 import nock from 'nock';
 import { render, screen, waitFor, fireEvent } from '@testing-library/react';
-import { MemoryRouter as Router, Route } from 'react-router-dom';
+import { MemoryRouter as Router, Route, Switch } from 'react-router-dom';
+import type { Location } from 'history';
 import { initializeIcons } from '@uifabric/icons';
 
 import { EventPage } from '../event-page';
@@ -25,7 +26,7 @@ jest.mock('../../hooks/use-media-query', () => ({
   useMediaQuery: jest.fn(),
 }));
 
-describe('Start Page', () => {
+describe('Event Page', () => {
   const user = {
     id: 'TD0sIeaoz',
     email: 'person.one@example.com',
@@ -42,6 +43,38 @@ describe('Start Page', () => {
 
   afterAll(() => {
     nock.restore();
+  });
+
+  describe('invalid session', () => {
+    it('should redirect to the login page', async () => {
+      const eventId = 'dsgw46hrds';
+      const eventPagePath = `/events/${eventId}`;
+      const scope = nock('http://localhost')
+        .get(`/api/events/${eventId}`)
+        .reply(401, { status: 'error' });
+      let pathname = '';
+      let from: string | undefined;
+
+      render(
+        <Router initialEntries={[eventPagePath]}>
+          <Switch>
+            <Route path="/events/:eventId" exact={true} component={EventPage} />
+            <Route
+              path="*"
+              render={({ location }) => {
+                pathname = location.pathname;
+                from = (location as Location<{ from?: string }>).state.from;
+                return null;
+              }}
+            />
+          </Switch>
+        </Router>
+      );
+
+      await expect(scopeIsDone(scope)).resolves.toBe(true);
+      expect(pathname).toBe('/login');
+      expect(from).toBe(eventPagePath);
+    });
   });
 
   describe(`some other person's event`, () => {
