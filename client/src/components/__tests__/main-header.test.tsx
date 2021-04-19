@@ -1,6 +1,7 @@
 import type { FC } from 'react';
 import nock from 'nock';
-import { MemoryRouter as Router } from 'react-router-dom';
+import { MemoryRouter as Router, Route, Switch } from 'react-router-dom';
+import type { Location } from 'history';
 import {
   render,
   screen,
@@ -51,7 +52,40 @@ describe('Main-Header', () => {
     nock.restore();
   });
 
-  describe(`logged-in`, () => {
+  describe('invalid session', () => {
+    it('should redirect to the login page', async () => {
+      (useUserContext as jest.Mock).mockReturnValue(user);
+
+      const currentPagePath = '/';
+      const scope = nock('http://localhost')
+        .get('/api/resources')
+        .reply(401, { status: 'error' });
+      let pathname = '';
+      let from: string | undefined;
+
+      render(
+        <Router initialEntries={[currentPagePath]}>
+          <Switch>
+            <Route path="/" exact={true} component={MainHeader} />
+            <Route
+              path="*"
+              render={({ location }) => {
+                pathname = location.pathname;
+                from = (location as Location<{ from?: string }>).state.from;
+                return null;
+              }}
+            />
+          </Switch>
+        </Router>
+      );
+
+      await expect(scopeIsDone(scope)).resolves.toBe(true);
+      expect(pathname).toBe('/login');
+      expect(from).toBe(currentPagePath);
+    });
+  });
+
+  describe('logged-in', () => {
     it('should display resource (Desktop)', async () => {
       (useMediaQuery as jest.Mock).mockReturnValue(true);
       (useUserContext as jest.Mock).mockReturnValue(user);
