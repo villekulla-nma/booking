@@ -1,4 +1,3 @@
-import type { FC } from 'react';
 import nock from 'nock';
 import { MemoryRouter as Router, Route, Switch } from 'react-router-dom';
 import type { Location } from 'history';
@@ -19,11 +18,6 @@ import { useUserContext } from '../../hooks/use-user-context';
 import { scopeIsDone } from '../../helpers/nock';
 
 jest.mock('../../hooks/use-user-context');
-
-jest.mock('../../components/layout.tsx', () => {
-  const Layout: FC = ({ children }) => <>{children}</>;
-  return { Layout };
-});
 
 jest.mock('../../helpers/location', () => ({
   reload: jest.fn(),
