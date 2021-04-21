@@ -6,6 +6,7 @@ import { initializeIcons } from '@uifabric/icons';
 import { FabricBase, loadTheme } from '@fluentui/react';
 
 import './main.css';
+import { ErrorBoundary } from './components/error-boundary';
 import { EventPage } from './pages/event-page';
 import { RedirectToResourcePage } from './pages/redirect-to-resource-page';
 import { ResourcePage } from './pages/resource-page';
@@ -88,21 +89,23 @@ const theme = loadTheme({
 
 ReactDOM.render(
   <StrictMode>
-    <UserProvider>
-      <FabricBase theme={theme}>
-        <Router basename="app">
-          <Switch>
-            {authenticatedRoutes.map((route, i) => (
-              <PrivateRoute key={i} {...route} />
-            ))}
-            {publicRoutes.map((route, i) => (
-              <Route key={i} {...route} />
-            ))}
-            <Route path="*" component={NotFoundPage} />
-          </Switch>
-        </Router>
-      </FabricBase>
-    </UserProvider>
+    <Router basename="app">
+      <ErrorBoundary>
+        <UserProvider>
+          <FabricBase theme={theme}>
+            <Switch>
+              {authenticatedRoutes.map((route, i) => (
+                <PrivateRoute key={i} {...route} />
+              ))}
+              {publicRoutes.map((route, i) => (
+                <Route key={i} {...route} />
+              ))}
+              <Route path="*" component={NotFoundPage} />
+            </Switch>
+          </FabricBase>
+        </UserProvider>
+      </ErrorBoundary>
+    </Router>
   </StrictMode>,
   document.getElementById('root')
 );
