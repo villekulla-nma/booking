@@ -9,6 +9,10 @@ import { LogoutButton } from './logout-button';
 import { MainNav } from './main-nav';
 import { MQ_IS_DESKTOP } from '../constants';
 
+interface Props {
+  onHomeClick?: () => void;
+}
+
 const header = mergeStyles({
   marginBottom: '16px',
   borderBottom: `1px solid ${NeutralColors.gray90}`,
@@ -26,8 +30,12 @@ const icon = mergeStyles({
   fontSize: '24px',
 });
 
-export const MainHeader: FC = () => {
+export const MainHeader: FC<Props> = ({ onHomeClick }) => {
   const resources = useResourceList();
+  const homeLinkAs = typeof onHomeClick === 'function' ? undefined : Link;
+  const homeLinkTo = typeof onHomeClick === 'function' ? undefined : '/';
+  const homeLinkOnClick =
+    typeof onHomeClick === 'function' ? onHomeClick : undefined;
 
   return (
     <Stack
@@ -44,7 +52,12 @@ export const MainHeader: FC = () => {
         tokens={{ childrenGap: '0 32px' }}
       >
         <Stack.Item>
-          <A as={Link} to="/" className={home}>
+          <A
+            as={homeLinkAs}
+            to={homeLinkTo}
+            onClick={homeLinkOnClick}
+            className={home}
+          >
             <Icon iconName="Home" className={icon} />
           </A>
         </Stack.Item>

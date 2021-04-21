@@ -5,6 +5,10 @@ import { mergeStyles } from '@fluentui/merge-styles';
 
 import { MainHeader } from './main-header';
 
+interface Props {
+  onHomeClick?: () => void;
+}
+
 const styles = mergeStyles({
   minHeight: '100vh',
   maxWidth: '860px',
@@ -25,9 +29,9 @@ const footer = mergeStyles({
   fontSize: '14px',
 });
 
-export const Layout: FC = ({ children }) => (
+export const Layout: FC<Props> = ({ children, onHomeClick }) => (
   <Stack className={styles}>
-    <MainHeader />
+    <MainHeader onHomeClick={onHomeClick} />
     <Stack as="main" grow={1}>
       {children}
     </Stack>
