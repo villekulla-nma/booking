@@ -1,6 +1,6 @@
 {
   "name": "@villekulla-reservations/client",
-  "version": "0.1.0-alpha.49",
+  "version": "0.1.0-alpha.50",
   "author": "Emanuel Kluge (https://emanuel-kluge.de/)",
   "license": "MIT",
   "scripts": {
@@ -44,10 +44,10 @@
     "@fullcalendar/timegrid": "5.6.0",
     "@uifabric/icons": "7.5.23",
     "classnames": "2.3.1",
-    "react-error-boundary": "3.1.1",
     "date-fns": "2.21.1",
     "react": "17.0.1",
     "react-dom": "17.0.1",
+    "react-error-boundary": "3.1.1",
     "react-router-dom": "5.2.0"
   },
   "devDependencies": {
