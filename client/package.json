@@ -54,7 +54,6 @@
     "@testing-library/react": "11.2.6",
     "@testing-library/react-hooks": "5.1.1",
     "@testing-library/user-event": "13.1.5",
-    "@types/classnames": "2.3.0",
     "@types/jest": "26.0.22",
     "@types/node": "12.20.10",
     "@types/react": "17.0.3",
