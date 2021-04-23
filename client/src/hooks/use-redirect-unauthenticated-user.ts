@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useCallback } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import type { Location } from 'history';
 
@@ -13,19 +13,23 @@ export const useRedirectUnauthenticatedUser = (): RedirectFn => {
   const history = useHistory();
   const initialLocation = useLocation();
   const location = useRef<Location>(initialLocation);
-  const redirect = useRef<RedirectFn>((error, fn) => {
-    if (error instanceof UnauthenticatedError) {
-      const from = `${location.current.pathname}${location.current.search}`;
+  const redirectFn = useCallback<RedirectFn>(
+    (error, fn) => {
+      if (error instanceof UnauthenticatedError) {
+        const from = `${location.current.pathname}${location.current.search}`;
 
-      history.replace('/login', location.current.state || { from });
-    } else {
-      if (typeof fn === 'function') {
-        fn(error);
+        history.replace('/login', location.current.state || { from });
       } else {
-        throw error;
+        if (typeof fn === 'function') {
+          fn(error);
+        } else {
+          throw error;
+        }
       }
-    }
-  });
+    },
+    [location, history]
+  );
+  const redirect = useRef<RedirectFn>(redirectFn);
 
   useEffect(
     () =>
