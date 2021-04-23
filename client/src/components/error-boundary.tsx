@@ -11,7 +11,7 @@ const tokens: IStackTokens = {
   childrenGap: '16px',
 };
 
-const mailTo = (errorMessage: string, errorStack?: string): string => {
+const mailTo = (errorMessage?: string, errorStack?: string): string => {
   const { innerWidth: width, innerHeight: height } = window;
   const subject = encodeURIComponent('Fehler im Buchungstool');
   const hint =
@@ -21,9 +21,8 @@ const mailTo = (errorMessage: string, errorStack?: string): string => {
     '',
     '',
     `⌄⌄⌄${hint}⌄⌄⌄`,
-    '',
-    errorMessage,
-    errorStack || '',
+    errorMessage ? `\n${errorMessage}` : null,
+    errorStack ? `\n${errorStack}` : null,
     '',
     `=> Fensterbreite: ${width}px`,
     `=> Fensterhöhe: ${height}px`,
@@ -31,6 +30,7 @@ const mailTo = (errorMessage: string, errorStack?: string): string => {
     '',
     `^^^${hint}^^^`,
   ]
+    .filter((x: string | null): x is string => typeof x === 'string')
     .map((s) => encodeURIComponent(s))
     .join('%0A');
 
@@ -52,7 +52,7 @@ const Fallback: FC<FallbackProps> = ({ error, resetErrorBoundary }) => {
         </Text>
         <Text variant="large">
           Wenn das öfter auftritt,{' '}
-          <A href={mailTo(error.message, error.stack)}>
+          <A href={mailTo(error?.message, error?.stack)}>
             wende dich bitte an den Webmaster
           </A>
           .
