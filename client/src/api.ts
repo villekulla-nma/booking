@@ -5,7 +5,7 @@ import type {
   EventResult,
   LoginResult,
   UserResponse,
-} from '@villekulla-reservations/types';
+} from '@booking/types';
 
 import { isUser } from './helpers/is-user';
 

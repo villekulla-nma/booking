@@ -1,5 +1,5 @@
 import type { RouteShorthandOptions } from 'fastify';
-import type { LoginResult } from '@villekulla-reservations/types';
+import type { LoginResult } from '@booking/types';
 
 import type { AssignHandlerFunction } from './type';
 import { signJwt } from '../utils/jwt';

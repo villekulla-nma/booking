@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import type { ResourceAttributes } from '@villekulla-reservations/types';
+import type { ResourceAttributes } from '@booking/types';
 
 import { getResources } from '../api';
 import { useUserContext } from './use-user-context';

@@ -15,7 +15,7 @@ import classNames from 'classnames';
 
 import { useMediaQuery } from '../hooks/use-media-query';
 import { MQ_IS_DESKTOP } from '../constants';
-import type { ResourceAttributes } from '@villekulla-reservations/types';
+import type { ResourceAttributes } from '@booking/types';
 
 interface Props {
   resources: ResourceAttributes[];

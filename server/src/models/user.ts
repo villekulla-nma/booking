@@ -7,7 +7,7 @@ import type {
   Sequelize,
   Transaction,
 } from 'sequelize';
-import type { UserAttributes } from '@villekulla-reservations/types';
+import type { UserAttributes } from '@booking/types';
 
 type UserCreationAttributes = Optional<
   Optional<UserAttributes, 'id'>,

@@ -1,5 +1,5 @@
 import type { RouteShorthandOptions } from 'fastify';
-import type { UserResponse } from '@villekulla-reservations/types';
+import type { UserResponse } from '@booking/types';
 
 import type { AssignHandlerFunction } from './type';
 import type { Request } from './pre-verify-session';

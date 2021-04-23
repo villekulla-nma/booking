@@ -6,7 +6,7 @@ import type {
   Optional,
   Sequelize,
 } from 'sequelize';
-import type { EventAttributes } from '@villekulla-reservations/types';
+import type { EventAttributes } from '@booking/types';
 import type { ResourceInstance } from './resource';
 import type { UserInstance } from './user';
 

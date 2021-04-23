@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import type { UserResponse } from '@villekulla-reservations/types';
+import type { UserResponse } from '@booking/types';
 
 import { getUser } from '../api';
 

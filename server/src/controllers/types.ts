@@ -2,7 +2,7 @@ import type {
   GroupAttributes,
   ResourceAttributes,
   UserAttributes,
-} from '@villekulla-reservations/types';
+} from '@booking/types';
 
 export type UserResult = Pick<
   UserAttributes,

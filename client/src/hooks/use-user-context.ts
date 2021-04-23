@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import type { UserResponse } from '@villekulla-reservations/types';
+import type { UserResponse } from '@booking/types';
 
 import { UserContext } from '../contexts/user-context';
 import { isUser } from '../helpers/is-user';

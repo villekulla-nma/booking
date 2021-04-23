@@ -1,6 +1,6 @@
 import { Op } from 'sequelize';
 import { generate as shortid } from 'shortid';
-import type { EventResult } from '@villekulla-reservations/types';
+import type { EventResult } from '@booking/types';
 
 import type { Db } from '../db';
 import type { ResourceResult, UserResult } from './types';

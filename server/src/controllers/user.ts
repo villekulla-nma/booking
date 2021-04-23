@@ -1,5 +1,5 @@
 import { Op } from 'sequelize';
-import type { UserAttributes } from '@villekulla-reservations/types';
+import type { UserAttributes } from '@booking/types';
 
 import type { UserResult } from './types';
 import type { Db } from '../db';

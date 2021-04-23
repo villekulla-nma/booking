@@ -7,7 +7,7 @@ import type {
   Sequelize,
   Transaction,
 } from 'sequelize';
-import type { ResourceAttributes } from '@villekulla-reservations/types';
+import type { ResourceAttributes } from '@booking/types';
 
 type ResourceCreationAttributes = Optional<ResourceAttributes, 'id'>;
 

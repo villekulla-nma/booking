@@ -7,7 +7,7 @@ import type {
   Sequelize,
   Transaction,
 } from 'sequelize';
-import type { GroupAttributes } from '@villekulla-reservations/types';
+import type { GroupAttributes } from '@booking/types';
 
 type GroupCreationAttributes = Optional<GroupAttributes, 'id'>;
 

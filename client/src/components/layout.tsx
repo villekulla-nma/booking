@@ -48,7 +48,7 @@ export const Layout: FC<Props> = ({ children, onHomeClick }) => (
         <Text variant="medium">&middot;</Text>
         <Text variant="medium">
           <Link
-            href="https://github.com/herschel666/villekulla-reservations"
+            href="https://github.com/villekulla-nma/booking"
             target="_blank"
             rel="noreferrer"
           >
