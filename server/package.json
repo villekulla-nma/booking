@@ -1,6 +1,6 @@
 {
   "name": "@booking/server",
-  "version": "0.1.0-alpha.50",
+  "version": "0.1.0-alpha.51",
   "author": "Emanuel Kluge (https://emanuel-kluge.de/)",
   "license": "MIT",
   "scripts": {
@@ -32,6 +32,7 @@
     "sqlite3": "5.0.2"
   },
   "devDependencies": {
+    "@booking/types": "*",
     "@types/bcryptjs": "2.4.2",
     "@types/jest": "26.0.22",
     "@types/jsonwebtoken": "8.5.1",
@@ -41,7 +42,6 @@
     "@typescript-eslint/eslint-plugin": "4.22.0",
     "@typescript-eslint/parser": "4.22.0",
     "@vercel/ncc": "0.28.3",
-    "@booking/types": "*",
     "eslint": "7.24.0",
     "eslint-config-prettier": "8.2.0",
     "eslint-plugin-prettier": "3.4.0",
