@@ -8,6 +8,7 @@ import { initializeIcons } from '@uifabric/icons';
 import { ResourcePage } from '../resource-page';
 import { useMediaQuery } from '../../hooks/use-media-query';
 import { scopeIsDone } from '../../helpers/nock';
+import { waitFor as customWaitFor } from '../../helpers/wait-for';
 
 jest.mock('../../components/layout.tsx', () => {
   const Layout: FC = ({ children }) => <>{children}</>;
@@ -80,6 +81,9 @@ describe('Resource Page', () => {
       await act(async () => {
         await expect(scopeIsDone(scope)).resolves.toBe(true);
       });
+
+      await customWaitFor(() => pathname !== '', 200);
+
       expect(pathname).toBe('/login');
       expect(from).toBe(resourcePagePath);
     });

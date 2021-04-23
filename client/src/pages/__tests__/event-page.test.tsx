@@ -10,6 +10,7 @@ import { inquireConfirmation } from '../../helpers/inquire-confirmation';
 import { useMediaQuery } from '../../hooks/use-media-query';
 import { useUserContext } from '../../hooks/use-user-context';
 import { scopeIsDone } from '../../helpers/nock';
+import { waitFor as customWaitFor } from '../../helpers/wait-for';
 
 jest.mock('../../hooks/use-user-context');
 
@@ -72,6 +73,7 @@ describe('Event Page', () => {
       );
 
       await expect(scopeIsDone(scope)).resolves.toBe(true);
+      await customWaitFor(() => pathname !== '', 200);
       expect(pathname).toBe('/login');
       expect(from).toBe(eventPagePath);
     });
