@@ -19,6 +19,7 @@ import {
   Icon,
   Stack,
   FontWeights,
+  Text,
 } from '@fluentui/react';
 import type {
   IButtonStyles,
@@ -34,6 +35,7 @@ import { DEFAULT_VIEW_OPTION, MQ_IS_DESKTOP, MQ_IS_MEDIUM } from '../constants';
 import { useMediaQuery } from '../hooks/use-media-query';
 import { UnauthenticatedError } from '../api';
 import { useRedirectUnauthenticatedUser } from '../hooks/use-redirect-unauthenticated-user';
+import { useResourceList } from '../hooks/use-resource-list';
 
 interface Params {
   resourceId: string;
@@ -61,6 +63,11 @@ const toolbar = mergeStyles({
   [`@media ${MQ_IS_DESKTOP}`]: {
     marginBottom: '32px',
   },
+});
+
+const caption = mergeStyles({
+  margin: 0,
+  textAlign: 'center',
 });
 
 // Increase specifity to overrule Fullcalendar styles
@@ -127,6 +134,7 @@ const getNowFromString = (now: string | null): string | undefined => {
 
 export const ResourcePage: FC = () => {
   const redirect = useRedirectUnauthenticatedUser();
+  const resources = useResourceList();
   const history = useHistory();
   const params = useParams<Params>();
   const currentViewType = getViewTypeOption(params.view);
@@ -150,7 +158,8 @@ export const ResourcePage: FC = () => {
   const calendarAspectRatio = isDesktop
     ? BASE_OPTION_DEFAULTS.aspectRatio
     : 0.95;
-
+  const { name: resourceName = 'Unbekannt' } =
+    resources.find(({ id }) => params.resourceId === id) || {};
   const plugins = [dayGridPlugin, timeGridPlugin, interactionPlugin];
   const headerToolbar = { left: '', center: 'title', right: '' };
   const replaceView = (view: ViewTypeParam): void =>
@@ -280,6 +289,16 @@ export const ResourcePage: FC = () => {
   return (
     <Layout>
       <Stack tokens={wrapTokens}>
+        {isDesktop || (
+          <Text
+            variant="large"
+            className={caption}
+            as="h1"
+            data-testid="caption"
+          >
+            {resourceName}
+          </Text>
+        )}
         <Stack horizontal={true} horizontalAlign="space-between">
           {isDesktop ? (
             <>
