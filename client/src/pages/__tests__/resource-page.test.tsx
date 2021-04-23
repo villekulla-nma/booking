@@ -86,14 +86,14 @@ describe('Resource Page', () => {
   });
 
   describe('valid session', () => {
-    it('should render the calendar somehow...', async () => {
-      (useMediaQuery as jest.Mock).mockReturnValue(true);
+    const resourceId = 'Uj5SAS740';
+    const date = new Date(Date.now() + 24 * 3600 * 1000);
+    const [tomorrow] = date.toISOString().split('T');
+    const [year] = date.toISOString().split('-');
+    let scope: nock.Scope;
 
-      const resourceId = 'Uj5SAS740';
-      const date = new Date(Date.now() + 24 * 3600 * 1000);
-      const [tomorrow] = date.toISOString().split('T');
-      const [year] = date.toISOString().split('-');
-      const scope = nock('http://localhost')
+    beforeEach(() => {
+      scope = nock('http://localhost')
         .get(`/api/resources/${resourceId}/events`)
         .query(
           ({ start, end, timeZone, ...rest }) =>
@@ -103,6 +103,10 @@ describe('Resource Page', () => {
             Object.keys(rest).length === 0
         )
         .reply(200, []);
+    });
+
+    it('should show a caption on small screens', async () => {
+      (useMediaQuery as jest.Mock).mockReturnValue(false);
 
       render(
         <Router initialEntries={[`/resources/${resourceId}/week/${tomorrow}`]}>
@@ -112,8 +116,26 @@ describe('Resource Page', () => {
           />
         </Router>
       );
-      screen.getByText('Reservieren').closest('button') as HTMLButtonElement;
 
+      screen.getByTestId('caption');
+      await act(async () => {
+        await expect(scopeIsDone(scope)).resolves.toBe(true);
+      });
+    });
+
+    it('should not show a caption on small screens', async () => {
+      (useMediaQuery as jest.Mock).mockReturnValue(true);
+
+      render(
+        <Router initialEntries={[`/resources/${resourceId}/week/${tomorrow}`]}>
+          <Route
+            path="/resources/:resourceId/:view/:now"
+            component={ResourcePage}
+          />
+        </Router>
+      );
+
+      expect(screen.queryByTestId('caption')).toBeNull();
       await expect(scopeIsDone(scope)).resolves.toBe(true);
     });
   });
