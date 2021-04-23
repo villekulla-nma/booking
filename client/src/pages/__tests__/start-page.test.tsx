@@ -8,6 +8,7 @@ import { initializeIcons } from '@uifabric/icons';
 import { StartPage } from '../start-page';
 import { useUserContext } from '../../hooks/use-user-context';
 import { scopeIsDone } from '../../helpers/nock';
+import { waitFor as customWaitFor } from '../../helpers/wait-for';
 
 jest.mock('../../hooks/use-user-context');
 
@@ -64,6 +65,7 @@ describe('Start Page', () => {
       );
 
       await expect(scopeIsDone(scope)).resolves.toBe(true);
+      await customWaitFor(() => pathname !== '', 200);
       expect(pathname).toBe('/login');
       expect(from).toBe('/');
     });
