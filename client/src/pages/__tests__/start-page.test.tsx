@@ -78,7 +78,7 @@ describe('Start Page', () => {
       const scope = nock('http://localhost')
         .get('/api/user/events')
         .query({ limit: 10 })
-        .reply(200, { events: [] });
+        .reply(200, { payload: [] });
 
       render(
         <Router>
@@ -101,7 +101,7 @@ describe('Start Page', () => {
         .get('/api/user/events')
         .query({ limit: 10 })
         .reply(200, {
-          events: [
+          payload: [
             {
               id: 'SHYVTIGoM',
               start: `${today}T09:00:00.000Z`,

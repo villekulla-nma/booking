@@ -113,7 +113,7 @@ export const getResources = async (): Promise<ResourceAttributes[]> => {
     throw new UnauthenticatedError();
   }
 
-  const resources = await response.json();
+  const { payload: resources } = await response.json();
 
   return resources;
 };
@@ -125,7 +125,7 @@ export const getEventById = async (eventId: string): Promise<EventByIdData> => {
     throw new UnauthenticatedError();
   }
 
-  const event = await response.json();
+  const { payload: event } = await response.json();
 
   return event;
 };
@@ -141,7 +141,7 @@ export const getUserEvents = async (limit?: number): Promise<UserEvent[]> => {
     throw new UnauthenticatedError();
   }
 
-  const { events = [] } = await response.json();
+  const { payload: events = [] } = await response.json();
 
   return events;
 };

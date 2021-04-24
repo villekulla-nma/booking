@@ -110,7 +110,7 @@ describe('Event Page', () => {
       };
       const scope = nock('http://localhost')
         .get(`/api/events/${eventId}`)
-        .reply(200, event);
+        .reply(200, { status: 'ok', payload: event });
 
       render(
         <Router initialEntries={[`/events/${eventId}`]}>
@@ -153,7 +153,7 @@ describe('Event Page', () => {
       };
       const scope = nock('http://localhost')
         .get(`/api/events/${eventId}`)
-        .reply(200, event)
+        .reply(200, { status: 'ok', payload: event })
         .delete(`/api/events/${eventId}`)
         .reply(200);
 
