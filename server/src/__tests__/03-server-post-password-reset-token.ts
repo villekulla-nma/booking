@@ -52,7 +52,10 @@ describe('Server [POST] /api/password-reset/:token', () => {
         headers: {
           'content-type': 'application/json',
         },
-        body: JSON.stringify({ password: '1234', password_confirm: '6789' }),
+        body: JSON.stringify({
+          password: '12345678',
+          password_confirm: '90123456',
+        }),
       }
     );
     const data = await response.json();
@@ -69,7 +72,10 @@ describe('Server [POST] /api/password-reset/:token', () => {
         headers: {
           'content-type': 'application/json',
         },
-        body: JSON.stringify({ password: '1234', password_confirm: '1234' }),
+        body: JSON.stringify({
+          password: '12345678',
+          password_confirm: '12345678',
+        }),
       }
     );
     const data = await response.json();
@@ -91,7 +97,10 @@ describe('Server [POST] /api/password-reset/:token', () => {
         headers: {
           'content-type': 'application/json',
         },
-        body: JSON.stringify({ password: '1234', password_confirm: '1234' }),
+        body: JSON.stringify({
+          password: '12345678',
+          password_confirm: '12345678',
+        }),
       }
     );
     const data = await response.json();
@@ -115,7 +124,10 @@ describe('Server [POST] /api/password-reset/:token', () => {
         headers: {
           'content-type': 'application/json',
         },
-        body: JSON.stringify({ password: 'test', password_confirm: 'test' }),
+        body: JSON.stringify({
+          password: 'test1234',
+          password_confirm: 'test1234',
+        }),
       }
     );
     const data = await response.json();
@@ -124,7 +136,7 @@ describe('Server [POST] /api/password-reset/:token', () => {
     expect(response.status).toBe(200);
     expect(data.status).toBe('ok');
     expect(user.password).toBe(
-      '$2a$10$Fu9T8J7sDe8yQYTInoCS/eTMQn1mxS6IBxlg26I0dq3KKl4CJQY1S'
+      '$2a$10$Fu9T8J7sDe8yQYTInoCS/eBfJgIGkkl91QTCsV0mNcUiXmUBor9rK'
     );
     expect(user.passwordReset).toBeNull();
   });
