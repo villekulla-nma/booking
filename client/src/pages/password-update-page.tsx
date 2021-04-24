@@ -94,6 +94,7 @@ export const PasswordUpdatePage: FC = () => {
     );
   };
 
+  // TODO: add hint on min-length of 8
   return (
     <Layout>
       <Form label="Passwort neu setzen" onSubmit={handleSubmit}>
