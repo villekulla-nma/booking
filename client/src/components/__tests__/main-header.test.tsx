@@ -90,16 +90,19 @@ describe('Main-Header', () => {
 
       const scope = nock('http://localhost')
         .get('/api/resources')
-        .reply(200, [
-          {
-            id: 'Uj5SAS740',
-            name: 'Resource #1',
-          },
-          {
-            id: 'gWH5T7Kdz',
-            name: 'Resource #2',
-          },
-        ]);
+        .reply(200, {
+          status: 'ok',
+          payload: [
+            {
+              id: 'Uj5SAS740',
+              name: 'Resource #1',
+            },
+            {
+              id: 'gWH5T7Kdz',
+              name: 'Resource #2',
+            },
+          ],
+        });
 
       render(<MainHeader />, { wrapper: Router });
 
@@ -115,16 +118,19 @@ describe('Main-Header', () => {
 
       const scope = nock('http://localhost')
         .get('/api/resources')
-        .reply(200, [
-          {
-            id: 'Uj5SAS740',
-            name: 'Resource #1',
-          },
-          {
-            id: 'gWH5T7Kdz',
-            name: 'Resource #2',
-          },
-        ]);
+        .reply(200, {
+          status: 'ok',
+          payload: [
+            {
+              id: 'Uj5SAS740',
+              name: 'Resource #1',
+            },
+            {
+              id: 'gWH5T7Kdz',
+              name: 'Resource #2',
+            },
+          ],
+        });
 
       render(<MainHeader />, { wrapper: Router });
 
@@ -146,7 +152,7 @@ describe('Main-Header', () => {
 
       const scope = nock('http://localhost')
         .get('/api/resources')
-        .reply(200, [])
+        .reply(200, { status: 'ok', payload: [] })
         .post('/api/logout')
         .reply(200);
 
