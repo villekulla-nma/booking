@@ -3,12 +3,15 @@ import type {
   FastifyReply,
   RouteShorthandOptions,
 } from 'fastify';
+import S from 'fluent-json-schema';
 
+import { STATUS } from '../constants';
 import type { AssignHandlerFunction } from './type';
 import type { Request } from './pre-verify-session';
 import { preVerifySessionHandler } from './pre-verify-session';
 import { createEvent, getOverlappingEvents } from '../controllers/event';
 import type { Db } from '../db';
+import { defaultResponseSchema, rawBaseEventSchema } from '../utils/schema';
 
 interface Params {
   resourceId: string;
@@ -21,24 +24,21 @@ interface Body {
   allDay: boolean;
 }
 
+const bodySchema = S.object()
+  .additionalProperties(false)
+  .extend(rawBaseEventSchema)
+  .valueOf();
+
+const paramsSchema = S.object()
+  .prop('resourceId', S.string().required())
+  .prop('userId', S.string())
+  .valueOf();
+
 const opts: RouteShorthandOptions = {
   schema: {
-    body: {
-      type: 'object',
-      properties: {
-        start: { type: 'string' },
-        end: { type: 'string' },
-        description: { type: 'string' },
-        allDay: { type: 'boolean' },
-      },
-    },
-    params: {
-      type: 'object',
-      properties: {
-        resourceId: { type: 'string' },
-        userId: { type: 'string' },
-      },
-    },
+    body: bodySchema,
+    params: paramsSchema,
+    response: defaultResponseSchema,
   },
   preHandler: [preVerifySessionHandler],
 };
@@ -57,7 +57,7 @@ const createCheckOverlappingEvents = (db: Db) => async (
   );
 
   if (overlappingEvents.length > 0) {
-    reply.status(400).send({ status: 'overlapping' });
+    reply.status(400).send({ status: STATUS.OVERLAPPING });
   }
 };
 
@@ -76,8 +76,8 @@ export const assignPutEventHandler: AssignHandlerFunction = (
   }
 
   server.put(route, opts, async (request: Request<Params>, reply) => {
-    let status = 200;
-    const response = { status: 'ok' };
+    let code = 200;
+    const response = { status: STATUS.OK };
     const { resourceId, userId } = request.params;
     const { start, end, description, allDay } = request.body as Body;
 
@@ -93,10 +93,10 @@ export const assignPutEventHandler: AssignHandlerFunction = (
       );
     } catch (error) {
       console.log(error);
-      status = error.name === 'SequelizeValidationError' ? 400 : 500;
-      response.status = status === 400 ? 'invalid' : 'error';
+      code = error.name === 'SequelizeValidationError' ? 400 : 500;
+      response.status = code === 400 ? STATUS.INVALID : STATUS.ERROR;
     }
 
-    reply.status(status).send(response);
+    reply.status(code).send(response);
   });
 };

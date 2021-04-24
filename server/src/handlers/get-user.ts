@@ -1,44 +1,28 @@
 import type { RouteShorthandOptions } from 'fastify';
 import type { UserResponse } from '@booking/types';
+import S from 'fluent-json-schema';
 
 import type { AssignHandlerFunction } from './type';
 import type { Request } from './pre-verify-session';
 import { preVerifySessionHandler } from './pre-verify-session';
 import { getUserById } from '../controllers/user';
+import { responseSchema4xx, rawUserSchema } from '../utils/schema';
+import { STATUS } from '../constants';
+
+const paramsSchema = S.object().prop('userId', S.string()).valueOf();
+
+const responseSchema200 = S.object()
+  .definition('user', rawUserSchema)
+  .prop('user', S.ref('#user').required())
+  .prop('status', S.const(STATUS.OK).required())
+  .valueOf();
 
 const opts: RouteShorthandOptions = {
   schema: {
-    params: {
-      type: 'object',
-      properties: {
-        userId: { type: 'string' },
-      },
-    },
+    params: paramsSchema,
     response: {
-      200: {
-        type: 'object',
-        properties: {
-          user: {
-            type: 'object',
-            properties: {
-              id: { type: 'string' },
-              role: { type: 'string', enum: ['user', 'admin'] },
-              firstName: { type: 'string' },
-              lastName: { type: 'string' },
-              email: { type: 'string' },
-            },
-          },
-          status: { type: 'string' },
-        },
-        required: ['user', 'status'],
-      },
-      '4xx': {
-        type: 'object',
-        properties: {
-          status: { type: 'string' },
-        },
-        required: ['status'],
-      },
+      200: responseSchema200,
+      '4xx': responseSchema4xx,
     },
   },
   preHandler: preVerifySessionHandler,
@@ -55,7 +39,7 @@ export const assignGetUserHandler: AssignHandlerFunction = (
       request.params.userId
     );
     const user: UserResponse = { id, role, firstName, lastName, email };
-    const response = { status: 'ok', user };
+    const response = { status: STATUS.OK, user };
 
     reply.status(200).send(response);
   });

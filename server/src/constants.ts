@@ -21,3 +21,11 @@ export const CSP_DIRECTIVES = [
   `manifest-src 'self'`,
 ];
 /* eslint-enable quotes */
+
+export enum STATUS {
+  OK = 'ok',
+  INVALID = 'invalid',
+  ERROR = 'error',
+  UNVERIFIED = 'unverified',
+  OVERLAPPING = 'overlapping',
+}

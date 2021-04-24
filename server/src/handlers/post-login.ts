@@ -1,25 +1,28 @@
 import type { RouteShorthandOptions } from 'fastify';
 import type { LoginResult } from '@booking/types';
+import S from 'fluent-json-schema';
 
 import type { AssignHandlerFunction } from './type';
 import { signJwt } from '../utils/jwt';
 import { verifyPassword } from '../utils/crypto';
 import { getUserByKey } from '../controllers/user';
+import { defaultResponseSchema } from '../utils/schema';
+import { STATUS } from '../constants';
 
 interface Body {
   email: string;
   password: string;
 }
 
+const bodySchema = S.object()
+  .prop('email', S.string().format(S.FORMATS.EMAIL).required())
+  .prop('password', S.string().required())
+  .valueOf();
+
 const opts: RouteShorthandOptions = {
   schema: {
-    body: {
-      type: 'object',
-      properties: {
-        email: { type: 'string' },
-        password: { type: 'string' },
-      },
-    },
+    body: bodySchema,
+    response: defaultResponseSchema,
   },
 };
 
@@ -30,7 +33,7 @@ export const assignPostLoginHandler: AssignHandlerFunction = (
 ) => {
   server.post(route, opts, async (request, reply) => {
     let status = 200;
-    let result: { status: LoginResult } = { status: 'ok' };
+    let result: { status: LoginResult } = { status: STATUS.OK };
     const { email, password } = request.body as Body;
 
     do {
@@ -39,14 +42,14 @@ export const assignPostLoginHandler: AssignHandlerFunction = (
       if (!user) {
         server.log.trace('Unknown user with email %s', email);
         status = 401;
-        result = { status: 'invalid' };
+        result = { status: STATUS.INVALID };
         break;
       }
 
       if (user.password === null) {
         server.log.trace('Unverified user with email %s', email);
         status = 400;
-        result = { status: 'unverified' };
+        result = { status: STATUS.UNVERIFIED };
         break;
       }
 
@@ -57,7 +60,7 @@ export const assignPostLoginHandler: AssignHandlerFunction = (
       if (!passwordIsValid) {
         server.log.trace('Invalid password by user with email %s', email);
         status = 401;
-        result = { status: 'invalid' };
+        result = { status: STATUS.INVALID };
         break;
       }
 
@@ -77,7 +80,7 @@ export const assignPostLoginHandler: AssignHandlerFunction = (
           email
         );
         status = 500;
-        result = { status: 'error' };
+        result = { status: STATUS.ERROR };
       }
     } while (false); // eslint-disable-line no-constant-condition
 
