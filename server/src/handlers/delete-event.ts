@@ -1,4 +1,5 @@
 import type { RouteShorthandOptions } from 'fastify';
+import S from 'fluent-json-schema';
 
 import type { AssignHandlerFunction } from './type';
 import type { Request } from './pre-verify-session';
@@ -9,15 +10,14 @@ interface Params {
   eventId: string;
 }
 
+const paramsSchema = S.object()
+  .prop('eventId', S.string().required())
+  .prop('userId', S.string())
+  .valueOf();
+
 const opts: RouteShorthandOptions = {
   schema: {
-    params: {
-      type: 'object',
-      properties: {
-        eventId: { type: 'string' },
-        userId: { type: 'string' },
-      },
-    },
+    params: paramsSchema,
   },
   preHandler: preVerifySessionHandler,
 };

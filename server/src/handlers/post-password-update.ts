@@ -3,11 +3,14 @@ import type {
   FastifyRequest,
   FastifyReply,
 } from 'fastify';
+import S from 'fluent-json-schema';
 
 import type { Db } from '../db';
 import { hashPassword } from '../utils/crypto';
 import type { AssignHandlerFunction } from './type';
 import { getUserByKey, updateUser } from '../controllers/user';
+import { defaultResponseSchema } from '../utils/schema';
+import { STATUS } from '../constants';
 
 interface Body {
   password: string;
@@ -24,23 +27,21 @@ interface Request {
   Params: Params;
 }
 
+const paramsSchema = S.object()
+  .prop('token', S.string().required())
+  .prop('userId', S.string())
+  .valueOf();
+
+const bodySchema = S.object()
+  .prop('password', S.string().minLength(8).required())
+  .prop('password_confirm', S.string().minLength(8).required())
+  .valueOf();
+
 const opts: RouteShorthandOptions = {
   schema: {
-    params: {
-      type: 'object',
-      properties: {
-        token: { type: 'string' },
-        userId: { type: 'string' },
-      },
-      required: ['token'],
-    },
-    body: {
-      type: 'object',
-      properties: {
-        password: { type: 'string' },
-        password_confirm: { type: 'string' },
-      },
-    },
+    params: paramsSchema,
+    body: bodySchema,
+    response: defaultResponseSchema,
   },
 };
 
@@ -51,7 +52,7 @@ const createPreHandler = (db: Db) => async (
   const { password, password_confirm: confirm } = request.body;
 
   if (password !== confirm) {
-    reply.code(400).send({ status: 'invalid' });
+    reply.code(400).send({ status: STATUS.INVALID });
     return;
   }
 
@@ -60,7 +61,7 @@ const createPreHandler = (db: Db) => async (
 
   // TODO: respond with status "expired"
   if (!user) {
-    reply.code(400).send({ status: 'error' });
+    reply.code(400).send({ status: STATUS.ERROR });
     return;
   }
 
@@ -85,10 +86,10 @@ export const assignPostPasswordUpdateHandler: AssignHandlerFunction = (
     });
 
     if (!succeeded) {
-      reply.code(400).send({ status: 'error' });
+      reply.code(400).send({ status: STATUS.ERROR });
       return;
     }
 
-    reply.send({ status: 'ok' });
+    reply.send({ status: STATUS.OK });
   });
 };
