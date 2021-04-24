@@ -13,7 +13,7 @@ const paramsSchema = S.object().prop('userId', S.string()).valueOf();
 
 const responseSchema200 = S.object()
   .definition('user', rawUserSchema)
-  .prop('user', S.ref('#user').required())
+  .prop('payload', S.ref('#user').required())
   .prop('status', S.const(STATUS.OK).required())
   .valueOf();
 
@@ -39,7 +39,7 @@ export const assignGetUserHandler: AssignHandlerFunction = (
       request.params.userId
     );
     const user: UserResponse = { id, role, firstName, lastName, email };
-    const response = { status: STATUS.OK, user };
+    const response = { status: STATUS.OK, payload: user };
 
     reply.status(200).send(response);
   });

@@ -71,7 +71,7 @@ describe('Server [GET] /api/user', () => {
 
     expect(response.status).toBe(200);
     expect(data.status).toBe('ok');
-    expect(data.user).toEqual({
+    expect(data.payload).toEqual({
       id: 'TD0sIeaoz',
       email: 'person.one@example.com',
       firstName: 'Person1',

@@ -121,11 +121,12 @@ describe('Server [GET] /api/resources/:resourceId/events', () => {
         },
       }
     );
-    const events = await response.json();
+    const data = await response.json();
 
     expect(response.status).toBe(200);
-    expect(events.length).toBe(1);
-    expect(events[0].description).toBe('A nice event');
+    expect(data.status).toBe('ok');
+    expect(data.payload.length).toBe(1);
+    expect(data.payload[0].description).toBe('A nice event');
   });
 
   it('should respond with 200 on success for resource gWH5T7Kdz', async () => {
@@ -140,13 +141,14 @@ describe('Server [GET] /api/resources/:resourceId/events', () => {
         },
       }
     );
-    const events = await response.json();
+    const data = await response.json();
 
     expect(response.status).toBe(200);
-    expect(events.length).toBe(3);
-    expect(events[0].description).toBe('All-day event #1');
-    expect(events[1].description).toBe('Another nice event');
-    expect(events[2].description).toBe('All-day event #2');
+    expect(data.status).toBe('ok');
+    expect(data.payload.length).toBe(3);
+    expect(data.payload[0].description).toBe('All-day event #1');
+    expect(data.payload[1].description).toBe('Another nice event');
+    expect(data.payload[2].description).toBe('All-day event #2');
   });
 
   it('should respond with an empty list', async () => {
@@ -161,8 +163,9 @@ describe('Server [GET] /api/resources/:resourceId/events', () => {
         },
       }
     );
-    const events = await response.json();
+    const data = await response.json();
 
-    expect(events).toEqual([]);
+    expect(data.status).toBe('ok');
+    expect(data.payload).toEqual([]);
   });
 });
