@@ -54,7 +54,7 @@ describe('Server [GET] /api/user/events', () => {
 
       expect(response.status).toBe(200);
       expect(data.status).toBe('ok');
-      expect(data.events).toEqual([]);
+      expect(data.payload).toEqual([]);
     });
   });
 
@@ -116,7 +116,7 @@ describe('Server [GET] /api/user/events', () => {
 
       expect(response.status).toBe(200);
       expect(data.status).toBe('ok');
-      expect(data.events).toEqual([
+      expect(data.payload).toEqual([
         {
           id: 'SHYVTIGoM',
           start: `${today}T00:00:00.000Z`,
@@ -149,7 +149,7 @@ describe('Server [GET] /api/user/events', () => {
       );
       const data = await response.json();
 
-      expect(data.events).toEqual([
+      expect(data.payload).toEqual([
         {
           id: 'SHYVTIGoM',
           start: `${today}T00:00:00.000Z`,

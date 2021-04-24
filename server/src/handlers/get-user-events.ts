@@ -25,7 +25,7 @@ const rawEventSchema = S.object()
 
 const reponseSchema200 = S.object()
   .prop('status', S.const(STATUS.OK).required())
-  .prop('events', S.array().items(rawEventSchema).required())
+  .prop('payload', S.array().items(rawEventSchema).required())
   .valueOf();
 
 const opts: RouteShorthandOptions = {
@@ -49,7 +49,7 @@ export const assignGetUserEventsHandler: AssignHandlerFunction = (
     const { userId } = request.params;
     const { limit } = request.query as Querystring;
     const events = await getUpcomingEventsByUserId(db, userId, limit);
-    const response = { status: STATUS.OK, events };
+    const response = { status: STATUS.OK, payload: events };
 
     reply.status(200).send(response);
   });

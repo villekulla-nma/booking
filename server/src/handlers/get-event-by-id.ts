@@ -10,6 +10,7 @@ import {
   rawUserSchema,
   rawResourceSchema,
 } from '../utils/schema';
+import { STATUS } from '../constants';
 
 interface Params {
   eventId: string;
@@ -20,7 +21,8 @@ const paramsSchema = S.object()
   .prop('userId', S.string())
   .valueOf();
 
-const responseSchema200 = S.object()
+const eventSchema = S.object()
+  .id('#event')
   .definition('user', rawUserSchema)
   .definition('resource', rawResourceSchema)
   .additionalProperties(false)
@@ -29,6 +31,12 @@ const responseSchema200 = S.object()
   .prop('resource', S.ref('#resource'))
   .prop('user', S.ref('#user'))
   .extend(rawBaseEventSchema);
+
+const responseSchema200 = S.object()
+  .definition('event', eventSchema)
+  .prop('payload', S.ref('#event'))
+  .prop('status', S.const(STATUS.OK).required())
+  .valueOf();
 
 const opts: RouteShorthandOptions = {
   schema: {
@@ -47,7 +55,8 @@ export const assignGetEventByIdHandler: AssignHandlerFunction = (
     const { eventId } = request.params;
 
     const event = await getEventById(db, eventId);
+    const response = { status: STATUS.OK, payload: event };
 
-    reply.send(event);
+    reply.send(response);
   });
 };

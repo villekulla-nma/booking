@@ -6,6 +6,7 @@ import type { Request } from './pre-verify-session';
 import { preVerifySessionHandler } from './pre-verify-session';
 import { getScopedEvents } from '../controllers/event';
 import { rawBaseEventSchema } from '../utils/schema';
+import { STATUS } from '../constants';
 
 interface Querystring {
   start: string;
@@ -34,7 +35,10 @@ const eventSchema = S.object()
   .prop('createdAt', S.string().format(S.FORMATS.DATE_TIME).required())
   .extend(rawBaseEventSchema);
 
-const responseSchema200 = S.array().items(eventSchema).valueOf();
+const responseSchema200 = S.object()
+  .prop('payload', S.array().items(eventSchema).required())
+  .prop('status', S.const(STATUS.OK).required())
+  .valueOf();
 
 const opts: RouteShorthandOptions = {
   schema: {
@@ -55,7 +59,8 @@ export const assignGetAllEventsHandler: AssignHandlerFunction = (
     const { resourceId } = request.params;
 
     const events = await getScopedEvents(db, resourceId, start, end);
+    const response = { status: STATUS.OK, payload: events };
 
-    reply.send(events);
+    reply.send(response);
   });
 };

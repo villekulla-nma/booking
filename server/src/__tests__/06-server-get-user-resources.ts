@@ -47,10 +47,11 @@ describe('Server [GET] /api/resources', () => {
         cookie: `login=${cookieValue}`,
       },
     });
-    const events = await response.json();
+    const data = await response.json();
 
     expect(response.status).toBe(200);
-    expect(events).toEqual([
+    expect(data.status).toBe('ok');
+    expect(data.payload).toEqual([
       {
         id: 'Uj5SAS740',
         name: 'Resource #1',

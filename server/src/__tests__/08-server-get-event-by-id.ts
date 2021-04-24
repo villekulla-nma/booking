@@ -53,9 +53,10 @@ describe('Server [GET] /api/events/:eventId', () => {
         cookie: `login=${cookieValue}`,
       },
     });
-    const event = await response.json();
+    const data = await response.json();
 
     expect(response.status).toBe(200);
-    expect(event.description).toBe('A nice event');
+    expect(data.status).toBe('ok');
+    expect(data.payload.description).toBe('A nice event');
   });
 });
