@@ -101,7 +101,7 @@ export const getUser = async (): Promise<UserResponse | undefined> => {
     return undefined;
   }
 
-  const { user } = await response.json();
+  const { payload: user } = await response.json();
 
   return isUser(user) ? user : undefined;
 };
