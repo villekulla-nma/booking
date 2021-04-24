@@ -54,6 +54,7 @@ export const PasswordResetPage: FC = () => {
           value={email}
           onChange={handleChange}
           placeholder="Deine Email-Adresse &hellip;"
+          required={true}
         />
       </Form>
     </Layout>

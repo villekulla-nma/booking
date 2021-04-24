@@ -66,6 +66,7 @@ export const LoginPage: FC = () => {
             value={email}
             placeholder="Dein Email-Adresse &hellip;"
             onChange={handleEmailChange}
+            required={true}
           />
         </div>
         <div>
@@ -78,6 +79,7 @@ export const LoginPage: FC = () => {
             placeholder="Dein Passwort &hellip;"
             canRevealPassword={true}
             onChange={handlePasswordChange}
+            required={true}
           />
         </div>
         <p>

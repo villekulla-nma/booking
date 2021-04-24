@@ -94,7 +94,6 @@ export const PasswordUpdatePage: FC = () => {
     );
   };
 
-  // TODO: add hint on min-length of 8
   return (
     <Layout>
       <Form label="Passwort neu setzen" onSubmit={handleSubmit}>
@@ -107,6 +106,9 @@ export const PasswordUpdatePage: FC = () => {
             name="password"
             value={password}
             onChange={handlePasswordChange}
+            minLength={8}
+            required={true}
+            description="Mindestens 8 Zeichen"
           />
           <TextField
             type="password"
@@ -115,6 +117,8 @@ export const PasswordUpdatePage: FC = () => {
             name="password_confirm"
             value={passwordConfirm}
             onChange={handlePasswordConfirmChange}
+            minLength={8}
+            required={true}
           />
         </Stack>
       </Form>
