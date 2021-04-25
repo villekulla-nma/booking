@@ -1,5 +1,6 @@
 import { Op } from 'sequelize';
-import type { UserAttributes } from '@booking/types';
+import { generate as shortid } from 'shortid';
+import type { UserAttributes, UserRole } from '@booking/types';
 
 import type { UserResult } from './types';
 import type { Db } from '../db';
@@ -37,6 +38,28 @@ export const getUserByKey = async (
   const { id, role, firstName, lastName, fullName, email, password } = user;
 
   return { id, role, firstName, lastName, fullName, email, password };
+};
+
+export const createUser = async (
+  { User }: Db,
+  role: UserRole,
+  email: string,
+  firstName: string,
+  lastName: string,
+  groupId: string
+): Promise<string> => {
+  const id = shortid();
+
+  await User.create({
+    id,
+    role,
+    email,
+    firstName,
+    lastName,
+    groupId,
+  });
+
+  return id;
 };
 
 export const updateUser = async (
