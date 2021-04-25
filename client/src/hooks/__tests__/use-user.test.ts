@@ -1,5 +1,6 @@
 import { renderHook, act } from '@testing-library/react-hooks/dom';
 import nock from 'nock';
+import { UserResponse } from '@booking/types';
 
 import { useUser } from '../use-user';
 import { getUser } from '../../api';
@@ -7,7 +8,7 @@ import { getUser } from '../../api';
 jest.mock('../../api');
 
 describe('User-User', () => {
-  const user = {
+  const user: UserResponse = {
     id: 'TD0sIeaoz',
     email: 'person.one@example.com',
     firstName: 'Person1',
