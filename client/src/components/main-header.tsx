@@ -7,7 +7,8 @@ import { Icon, NeutralColors, Link as A } from '@fluentui/react';
 import { useResourceList } from '../hooks/use-resource-list';
 import { LogoutButton } from './logout-button';
 import { MainNav } from './main-nav';
-import { MQ_IS_DESKTOP } from '../constants';
+import { MQ_IS_DESKTOP, ROLE } from '../constants';
+import { useUserContext } from '../hooks/use-user-context';
 
 interface Props {
   onHomeClick?: () => void;
@@ -21,7 +22,7 @@ const header = mergeStyles({
   },
 });
 
-const home = mergeStyles({
+const iconLink = mergeStyles({
   userSelect: 'none',
 });
 
@@ -32,6 +33,7 @@ const icon = mergeStyles({
 
 export const MainHeader: FC<Props> = ({ onHomeClick }) => {
   const resources = useResourceList();
+  const user = useUserContext();
   const homeLinkAs = typeof onHomeClick === 'function' ? undefined : Link;
   const homeLinkTo = typeof onHomeClick === 'function' ? undefined : '/';
   const homeLinkOnClick =
@@ -56,11 +58,23 @@ export const MainHeader: FC<Props> = ({ onHomeClick }) => {
             as={homeLinkAs}
             to={homeLinkTo}
             onClick={homeLinkOnClick}
-            className={home}
+            className={iconLink}
           >
             <Icon iconName="Home" className={icon} />
           </A>
         </Stack.Item>
+        {user?.role === ROLE.ADMIN && (
+          <Stack.Item>
+            <A
+              as={Link}
+              to="/admin"
+              className={iconLink}
+              data-testid="admin-link"
+            >
+              <Icon iconName="ProcessMetaTask" className={icon} />
+            </A>
+          </Stack.Item>
+        )}
         <MainNav resources={resources} />
       </Stack>
       <Stack horizontal={true} horizontalAlign="end">
