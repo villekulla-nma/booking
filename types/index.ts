@@ -8,7 +8,7 @@ export interface ResourceAttributes {
   name: string;
 }
 
-type UserRole = 'user' | 'admin';
+export type UserRole = 'user' | 'admin';
 
 export interface UserAttributes {
   id: string;
