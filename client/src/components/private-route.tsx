@@ -10,6 +10,7 @@ type Props = RouteProps & {
   role?: ROLE;
 };
 
+// TODO: add test
 export const PrivateRoute: FC<Props> = ({
   role = ROLE.USER,
   component,
