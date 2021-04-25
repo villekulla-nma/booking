@@ -18,6 +18,8 @@ import { PasswordUpdatePage } from './pages/password-update-page';
 import { PrivateRoute } from './components/private-route';
 import { UserProvider } from './components/user-provider';
 import { NotFoundPage } from './pages/not-found-page';
+import { AdminStartPage } from './pages/admin-start-page';
+import { ROLE } from './constants';
 
 const authenticatedRoutes: RouteProps[] = [
   {
@@ -47,6 +49,15 @@ const authenticatedRoutes: RouteProps[] = [
   {
     path: '/events/:eventId',
     component: EventPage,
+    strict: true,
+    exact: true,
+  },
+];
+
+const adminRoutes: RouteProps[] = [
+  {
+    path: '/admin',
+    component: AdminStartPage,
     strict: true,
     exact: true,
   },
@@ -96,6 +107,9 @@ ReactDOM.render(
             <Switch>
               {authenticatedRoutes.map((route, i) => (
                 <PrivateRoute key={i} {...route} />
+              ))}
+              {adminRoutes.map((route, i) => (
+                <PrivateRoute key={i} role={ROLE.ADMIN} {...route} />
               ))}
               {publicRoutes.map((route, i) => (
                 <Route key={i} {...route} />
