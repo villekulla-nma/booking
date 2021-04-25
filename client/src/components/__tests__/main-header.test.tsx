@@ -109,6 +109,7 @@ describe('Main-Header', () => {
       await waitFor(() => screen.getByText('Resource #1'));
       screen.getByText('Resource #2');
 
+      expect(screen.queryByTestId('admin-link')).toBeNull();
       expect(scope.isDone()).toBe(true);
     });
 
@@ -170,6 +171,27 @@ describe('Main-Header', () => {
       });
 
       expect(reload).toHaveBeenCalled();
+    });
+  });
+
+  describe('admin user', () => {
+    it('should display a link to the admin area', async () => {
+      (useMediaQuery as jest.Mock).mockReturnValue(false);
+      (useUserContext as jest.Mock).mockReturnValue({ ...user, role: 'admin' });
+
+      const scope = nock('http://localhost').get('/api/resources').reply(200, {
+        status: 'ok',
+        payload: [],
+      });
+
+      render(<MainHeader />, { wrapper: Router });
+
+      const link = screen.getByTestId('admin-link') as HTMLAnchorElement | null;
+
+      expect(link?.href).toMatch(/\/admin$/);
+      await act(async () => {
+        await expect(scopeIsDone(scope)).resolves.toBe(true);
+      });
     });
   });
 
