@@ -76,6 +76,7 @@ describe('Server [GET] /api/user', () => {
       email: 'person.one@example.com',
       firstName: 'Person1',
       lastName: 'One',
+      fullName: 'Person1 One',
       role: 'user',
     });
   });

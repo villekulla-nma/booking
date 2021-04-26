@@ -101,4 +101,23 @@ describe('Server [DELETE] /api/user', () => {
 
     expect(response.status).toBe(500);
   });
+
+  it('should allow delete own account', async () => {
+    (removeUser as jest.Mock).mockImplementation(
+      jest.requireActual('../controllers/user').removeUser
+    );
+
+    const response = await fetch('http://localhost:9150/api/user', {
+      method: 'DELETE',
+      headers: {
+        cookie: `login=${cookieValue}`,
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify({ id: 'Ul2Zrv1BX' }),
+    });
+    const { message } = await response.json();
+
+    expect(response.status).toBe(400);
+    expect(message).toBe('Cannot delete your own account.');
+  });
 });

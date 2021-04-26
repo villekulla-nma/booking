@@ -6,8 +6,11 @@ import type { UserResult } from './types';
 import type { Db } from '../db';
 import type { UserInstance } from '../models/user';
 
-const toUserResult = (user: UserInstance): UserResult => {
-  const { id, role, firstName, lastName, fullName, email } = user;
+const toUserResult = (
+  user: UserInstance,
+  includePassword = false
+): UserResult => {
+  const { id, role, firstName, lastName, fullName, email, password } = user;
 
   return {
     id,
@@ -16,6 +19,7 @@ const toUserResult = (user: UserInstance): UserResult => {
     lastName,
     fullName,
     email,
+    ...(includePassword === true ? { password } : undefined),
   };
 };
 
@@ -53,7 +57,7 @@ export const getUserByKey = async (
     return null;
   }
 
-  return toUserResult(user);
+  return toUserResult(user, true);
 };
 
 export const createUser = async (

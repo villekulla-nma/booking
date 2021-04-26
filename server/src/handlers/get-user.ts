@@ -1,5 +1,4 @@
 import type { RouteShorthandOptions } from 'fastify';
-import type { UserResponse } from '@booking/types';
 import S from 'fluent-json-schema';
 
 import type { AssignHandlerFunction } from './type';
@@ -34,11 +33,7 @@ export const assignGetUserHandler: AssignHandlerFunction = (
   db
 ) => {
   server.get(route, opts, async (request: Request, reply) => {
-    const { id, role, firstName, lastName, email } = await getUserById(
-      db,
-      request.params.userId
-    );
-    const user: UserResponse = { id, role, firstName, lastName, email };
+    const user = await getUserById(db, request.params.userId);
     const response = { status: STATUS.OK, payload: user };
 
     reply.status(200).send(response);
