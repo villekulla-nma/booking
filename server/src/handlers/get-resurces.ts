@@ -24,7 +24,7 @@ const opts: RouteShorthandOptions = {
   preHandler: preVerifySessionHandler,
 };
 
-export const getResourcesHandler: AssignHandlerFunction = (
+export const assignGetResourcesHandler: AssignHandlerFunction = (
   route,
   server,
   db
