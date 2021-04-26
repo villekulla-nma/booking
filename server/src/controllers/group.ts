@@ -1,4 +1,5 @@
 import type { GroupAttributes as GroupResult } from '@booking/types';
+import { Op } from 'sequelize';
 import { generate as shortid } from 'shortid';
 
 import type { Db } from '../db';
@@ -32,4 +33,17 @@ export const createGroup = async (
   await Group.create({ id, name });
 
   return id;
+};
+
+export const removeGroup = async (
+  { Group }: Db,
+  groupId: string
+): Promise<boolean> => {
+  const result = await Group.destroy({
+    where: {
+      id: { [Op.eq]: groupId },
+    },
+  });
+
+  return result === 1;
 };
