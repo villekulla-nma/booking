@@ -24,6 +24,7 @@ import { assignPutResourceHandler } from './handlers/put-resource';
 import { assignDeleteUserHandler } from './handlers/delete-user';
 import { assignDeleteResourceHandler } from './handlers/delete-resource';
 import { assignDeleteGroupHandler } from './handlers/delete-group';
+import { assignGetGroupsHandler } from './handlers/get-groups';
 
 const routes: [string, AssignHandlerFunction][] = [
   ['/api/_health', assignGetHealthHandler],
@@ -42,6 +43,7 @@ const routes: [string, AssignHandlerFunction][] = [
   ['/api/resources/:resourceId/events', assignGetAllEventsHandler],
   ['/api/events/:eventId', assignGetEventByIdHandler],
   ['/api/events/:eventId', assignDeleteEventHandler],
+  ['/api/groups', assignGetGroupsHandler],
   ['/api/groups', assignPutGroupHandler],
   ['/api/groups', assignDeleteGroupHandler],
 ];
