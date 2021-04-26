@@ -5,7 +5,7 @@ import proxy from 'fastify-http-proxy';
 import { env } from './utils/env';
 import type { Db } from './db';
 import type { AssignHandlerFunction } from './handlers/type';
-import { getResourcesHandler } from './handlers/get-resurces';
+import { assignGetResourcesHandler } from './handlers/get-resurces';
 import { assignPutEventHandler } from './handlers/put-event';
 import { assignGetAllEventsHandler } from './handlers/get-all-events';
 import { assignGetEventByIdHandler } from './handlers/get-event-by-id';
@@ -20,6 +20,7 @@ import { assignPostPasswordUpdateHandler } from './handlers/post-password-update
 import { assignGetHealthHandler } from './handlers/get-health';
 import { CSP_DIRECTIVES } from './constants';
 import { assignPutGroupHandler } from './handlers/put-group';
+import { assignPutResourceHandler } from './handlers/put-resource';
 
 const routes: [string, AssignHandlerFunction][] = [
   ['/api/_health', assignGetHealthHandler],
@@ -30,7 +31,8 @@ const routes: [string, AssignHandlerFunction][] = [
   ['/api/user', assignGetUserHandler],
   ['/api/user', assignPutUserHandler],
   ['/api/user/events', assignGetUserEventsHandler],
-  ['/api/resources', getResourcesHandler],
+  ['/api/resources', assignGetResourcesHandler],
+  ['/api/resources', assignPutResourceHandler],
   ['/api/resources/:resourceId/events', assignPutEventHandler],
   ['/api/resources/:resourceId/events', assignGetAllEventsHandler],
   ['/api/events/:eventId', assignGetEventByIdHandler],
