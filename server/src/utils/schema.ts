@@ -37,6 +37,7 @@ export const rawUserSchema = S.object()
   )
   .prop('firstName', S.string().required())
   .prop('lastName', S.string().required())
+  .prop('fullName', S.string().required())
   .prop('email', S.string().format(S.FORMATS.EMAIL).required());
 
 export const rawBaseEventSchema = S.object()

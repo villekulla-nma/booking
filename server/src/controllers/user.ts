@@ -4,6 +4,26 @@ import type { UserAttributes, UserRole } from '@booking/types';
 
 import type { UserResult } from './types';
 import type { Db } from '../db';
+import type { UserInstance } from '../models/user';
+
+const toUserResult = (user: UserInstance): UserResult => {
+  const { id, role, firstName, lastName, fullName, email } = user;
+
+  return {
+    id,
+    role,
+    firstName,
+    lastName,
+    fullName,
+    email,
+  };
+};
+
+export const getAllUsers = async ({ User }: Db): Promise<UserResult[]> => {
+  const users = await User.findAll();
+
+  return users.map((user) => toUserResult(user));
+};
 
 export const getUserById = async (
   { User }: Db,
@@ -15,9 +35,7 @@ export const getUserById = async (
     return null;
   }
 
-  const { role, firstName, lastName, fullName, email, password } = user;
-
-  return { id, role, firstName, lastName, fullName, email, password };
+  return toUserResult(user);
 };
 
 export const getUserByKey = async (
@@ -35,9 +53,7 @@ export const getUserByKey = async (
     return null;
   }
 
-  const { id, role, firstName, lastName, fullName, email, password } = user;
-
-  return { id, role, firstName, lastName, fullName, email, password };
+  return toUserResult(user);
 };
 
 export const createUser = async (
