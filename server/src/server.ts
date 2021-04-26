@@ -19,6 +19,7 @@ import { assignPostPasswordResetHandler } from './handlers/post-password-reset';
 import { assignPostPasswordUpdateHandler } from './handlers/post-password-update';
 import { assignGetHealthHandler } from './handlers/get-health';
 import { CSP_DIRECTIVES } from './constants';
+import { assignPutGroupHandler } from './handlers/put-group';
 
 const routes: [string, AssignHandlerFunction][] = [
   ['/api/_health', assignGetHealthHandler],
@@ -34,6 +35,7 @@ const routes: [string, AssignHandlerFunction][] = [
   ['/api/resources/:resourceId/events', assignGetAllEventsHandler],
   ['/api/events/:eventId', assignGetEventByIdHandler],
   ['/api/events/:eventId', assignDeleteEventHandler],
+  ['/api/groups', assignPutGroupHandler],
 ];
 
 const initProxy = (server: FastifyInstance): void => {
