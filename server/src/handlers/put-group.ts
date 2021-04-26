@@ -5,7 +5,7 @@ import { STATUS } from '../constants';
 import type { AssignHandlerFunction } from './type';
 import type { Request } from './pre-verify-session';
 import { preVerifySessionHandler } from './pre-verify-session';
-import { createPreAuthorizeSessionHandler } from './create-pre-authorize-session';
+import { createPreVerifyAuthorizationHandler } from './create-pre-verify-authorization';
 import { createGroup } from '../controllers/group';
 import { defaultResponseSchema } from '../utils/schema';
 
@@ -28,12 +28,12 @@ export const assignPutGroupHandler: AssignHandlerFunction = (
   server,
   db
 ) => {
-  const preAuthorizeSessionHandler = createPreAuthorizeSessionHandler(db);
+  const preVerifyAuthorizationHandler = createPreVerifyAuthorizationHandler(db);
 
   if (Array.isArray(opts.preHandler)) {
-    opts.preHandler.push(preAuthorizeSessionHandler);
+    opts.preHandler.push(preVerifyAuthorizationHandler);
   } else {
-    opts.preHandler = preAuthorizeSessionHandler;
+    opts.preHandler = preVerifyAuthorizationHandler;
   }
 
   server.put(route, opts, async (request: Request, reply) => {

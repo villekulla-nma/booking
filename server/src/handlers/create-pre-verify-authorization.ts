@@ -5,8 +5,8 @@ import { getUserById } from '../controllers/user';
 import { STATUS } from '../constants';
 import type { Request } from './pre-verify-session';
 
-export const createPreAuthorizeSessionHandler = (db: Db) =>
-  async function preAuthorizeSessionHandler(
+export const createPreVerifyAuthorizationHandler = (db: Db) =>
+  async function preVerifyAuthorizationHandler(
     request: Request,
     reply: FastifyReply
   ): Promise<void> {
