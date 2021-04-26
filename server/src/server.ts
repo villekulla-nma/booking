@@ -25,6 +25,7 @@ import { assignDeleteUserHandler } from './handlers/delete-user';
 import { assignDeleteResourceHandler } from './handlers/delete-resource';
 import { assignDeleteGroupHandler } from './handlers/delete-group';
 import { assignGetGroupsHandler } from './handlers/get-groups';
+import { assignGetAllUsersHandler } from './handlers/get-all-users';
 
 const routes: [string, AssignHandlerFunction][] = [
   ['/api/_health', assignGetHealthHandler],
@@ -35,6 +36,7 @@ const routes: [string, AssignHandlerFunction][] = [
   ['/api/user', assignGetUserHandler],
   ['/api/user', assignPutUserHandler],
   ['/api/user', assignDeleteUserHandler],
+  ['/api/users', assignGetAllUsersHandler],
   ['/api/user/events', assignGetUserEventsHandler],
   ['/api/resources', assignGetResourcesHandler],
   ['/api/resources', assignPutResourceHandler],
