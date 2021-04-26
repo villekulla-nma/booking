@@ -21,6 +21,7 @@ import { assignGetHealthHandler } from './handlers/get-health';
 import { CSP_DIRECTIVES } from './constants';
 import { assignPutGroupHandler } from './handlers/put-group';
 import { assignPutResourceHandler } from './handlers/put-resource';
+import { assignDeleteUserHandler } from './handlers/delete-user';
 
 const routes: [string, AssignHandlerFunction][] = [
   ['/api/_health', assignGetHealthHandler],
@@ -30,6 +31,7 @@ const routes: [string, AssignHandlerFunction][] = [
   ['/api/password-reset/:token', assignPostPasswordUpdateHandler],
   ['/api/user', assignGetUserHandler],
   ['/api/user', assignPutUserHandler],
+  ['/api/user', assignDeleteUserHandler],
   ['/api/user/events', assignGetUserEventsHandler],
   ['/api/resources', assignGetResourcesHandler],
   ['/api/resources', assignPutResourceHandler],

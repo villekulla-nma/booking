@@ -15,6 +15,5 @@ export const createPreAuthorizeSessionHandler = (db: Db) =>
 
     if (role !== 'admin') {
       reply.code(401).send({ status: STATUS.INVALID });
-      return;
     }
   };
