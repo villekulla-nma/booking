@@ -23,6 +23,7 @@ import { assignPutGroupHandler } from './handlers/put-group';
 import { assignPutResourceHandler } from './handlers/put-resource';
 import { assignDeleteUserHandler } from './handlers/delete-user';
 import { assignDeleteResourceHandler } from './handlers/delete-resource';
+import { assignDeleteGroupHandler } from './handlers/delete-group';
 
 const routes: [string, AssignHandlerFunction][] = [
   ['/api/_health', assignGetHealthHandler],
@@ -42,6 +43,7 @@ const routes: [string, AssignHandlerFunction][] = [
   ['/api/events/:eventId', assignGetEventByIdHandler],
   ['/api/events/:eventId', assignDeleteEventHandler],
   ['/api/groups', assignPutGroupHandler],
+  ['/api/groups', assignDeleteGroupHandler],
 ];
 
 const initProxy = (server: FastifyInstance): void => {
