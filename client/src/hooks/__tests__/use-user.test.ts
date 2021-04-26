@@ -66,7 +66,7 @@ describe('User-User', () => {
 
       const scope = nock('http://localhost')
         .get('/api/user')
-        .reply(200, { status: 'ok', user });
+        .reply(200, { status: 'ok', payload: user });
 
       await act(async () => {
         const hook = renderHook(() => useUser());
