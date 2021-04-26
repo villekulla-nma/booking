@@ -29,7 +29,7 @@ export const createGroup = async (
 ): Promise<string> => {
   const id = shortid();
 
-  await Group.create({ name });
+  await Group.create({ id, name });
 
   return id;
 };

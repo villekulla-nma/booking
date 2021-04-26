@@ -17,7 +17,7 @@ export const createResource = async (
 ): Promise<string> => {
   const id = shortid();
 
-  await Resource.create({ name });
+  await Resource.create({ id, name });
 
   return id;
 };
