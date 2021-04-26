@@ -62,6 +62,19 @@ export const createUser = async (
   return id;
 };
 
+export const removeUser = async (
+  { User }: Db,
+  userId: string
+): Promise<boolean> => {
+  const result = await User.destroy({
+    where: {
+      id: { [Op.eq]: userId },
+    },
+  });
+
+  return result === 1;
+};
+
 export const updateUser = async (
   { User }: Db,
   id: string,
