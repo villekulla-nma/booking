@@ -7,6 +7,10 @@ import { preVerifySessionHandler } from './pre-verify-session';
 import { createPreVerifyAuthorizationHandler } from './create-pre-verify-authorization';
 import { removeUser } from '../controllers/user';
 
+interface Params {
+  userId: string;
+}
+
 interface Body {
   id: string;
 }
@@ -33,9 +37,15 @@ export const assignDeleteUserHandler: AssignHandlerFunction = (
     opts.preHandler = preVerifyAuthorizationHandler;
   }
 
-  server.delete(route, opts, async (request: Request, reply) => {
+  server.delete(route, opts, async (request: Request<Params>, reply) => {
     let code = 200;
+    const { userId: ownerId } = request.params;
     const { id: userId } = request.body as Body;
+
+    if (ownerId === userId) {
+      reply.status(400).send(new Error('Cannot delete your own account.'));
+      return;
+    }
 
     try {
       if (!(await removeUser(db, userId))) {
