@@ -35,7 +35,7 @@
   "devDependencies": {
     "@booking/types": "*",
     "@types/bcryptjs": "2.4.2",
-    "@types/jest": "26.0.22",
+    "@types/jest": "26.0.23",
     "@types/jsonwebtoken": "8.5.1",
     "@types/node": "12.20.10",
     "@types/node-fetch": "2.5.10",
