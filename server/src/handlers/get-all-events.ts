@@ -17,11 +17,9 @@ interface Params {
   resourceId: string;
 }
 
-const reDate = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$/;
-
 const querystringSchema = S.object()
-  .prop('start', S.string().pattern(reDate).required())
-  .prop('end', S.string().pattern(reDate).required())
+  .prop('start', S.string().format(S.FORMATS.DATE_TIME).required())
+  .prop('end', S.string().format(S.FORMATS.DATE_TIME).required())
   .valueOf();
 
 const paramsSchema = S.object()
