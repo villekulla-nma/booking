@@ -70,6 +70,7 @@ const getBackUrl = (resourceId: string, search: URLSearchParams): string => {
   return `/resources/${resourceId}${viewParam}${nowParam}`;
 };
 
+// TODO: update end-date on change of start-date to always be after start-date
 export const ReservationPage: FC = () => {
   const redirect = useRedirectUnauthenticatedUser();
   const [submitted, setSubmitted] = useState<boolean>(false);

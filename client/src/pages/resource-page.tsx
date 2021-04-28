@@ -5,6 +5,7 @@ import type {
   DateSelectArg,
   EventSourceInput,
   EventClickArg,
+  EventInput,
 } from '@fullcalendar/react';
 import locale from '@fullcalendar/core/locales/de';
 import dayGridPlugin from '@fullcalendar/daygrid';
@@ -33,7 +34,7 @@ import { Layout } from '../components/layout';
 import type { ViewTypeOption, ViewTypeParam } from '../types';
 import { DEFAULT_VIEW_OPTION, MQ_IS_DESKTOP, MQ_IS_MEDIUM } from '../constants';
 import { useMediaQuery } from '../hooks/use-media-query';
-import { UnauthenticatedError } from '../api';
+import { UnauthenticatedError, getEventsByResourceId } from '../api';
 import { useRedirectUnauthenticatedUser } from '../hooks/use-redirect-unauthenticated-user';
 import { useResourceList } from '../hooks/use-resource-list';
 
@@ -49,7 +50,7 @@ interface SelectionRange {
   allDay: boolean;
 }
 
-const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+const timeZone = 'Europe/Berlin';
 
 const wrapTokens: IStackTokens = {
   childrenGap: '16px',
@@ -142,14 +143,39 @@ export const ResourcePage: FC = () => {
   const calendar = useRef<FullCalendar>();
   const [dateSelection, setDateSelection] = useState<SelectionRange>();
   const isDesktop = useMediaQuery(MQ_IS_DESKTOP);
-  const eventSource: EventSourceInput = {
-    url: `/api/resources/${params.resourceId}/events`,
-    failure: (error) => {
-      if (error?.xhr.status === 401) {
-        redirect(new UnauthenticatedError());
-      }
+  const eventSource = useRef<EventSourceInput>({
+    events: (info, successCallback, errorCallback): void => {
+      const args = {
+        resourceId: params.resourceId,
+        start: info.start.toISOString(),
+        end: info.end.toISOString(),
+        timeZone,
+      };
+
+      getEventsByResourceId(args).then(
+        (events) => {
+          successCallback(
+            events.map(
+              ({ id, start, end, allDay, description: title }): EventInput => ({
+                id,
+                start,
+                end,
+                allDay,
+                title,
+              })
+            )
+          );
+        },
+        (error) => {
+          if (error instanceof UnauthenticatedError) {
+            redirect(error);
+          } else {
+            errorCallback(error);
+          }
+        }
+      );
     },
-  };
+  });
   const search = new URLSearchParams({
     view: params.view,
     now: params.now,
@@ -364,7 +390,7 @@ export const ResourcePage: FC = () => {
           timeZone={timeZone}
           plugins={plugins}
           headerToolbar={headerToolbar}
-          eventSources={[eventSource]}
+          eventSources={[eventSource.current]}
           initialView={currentViewType}
           selectable={currentViewType !== 'dayGridMonth'}
           eventClick={handleClick}
