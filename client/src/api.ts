@@ -8,6 +8,7 @@ import type {
 } from '@booking/types';
 
 import { isUser } from './helpers/is-user';
+import { isEvent } from './helpers/is-event';
 
 export type EventByIdData = EventAttributes & {
   user: UserAttributes;
@@ -116,6 +117,31 @@ export const getResources = async (): Promise<ResourceAttributes[]> => {
   const { payload: resources } = await response.json();
 
   return resources;
+};
+
+export const getEventsByResourceId = async ({
+  resourceId,
+  start,
+  end,
+  timeZone,
+}: {
+  resourceId: string;
+  start: string;
+  end: string;
+  timeZone: string;
+}): Promise<EventResult[]> => {
+  const query = new URLSearchParams({ start, end, timeZone }).toString();
+  const response = await fetch(`/api/resources/${resourceId}/events?${query}`);
+
+  if (response.status === 401) {
+    throw new UnauthenticatedError();
+  }
+
+  const { payload: events } = await response.json();
+
+  return Array.isArray(events)
+    ? events.filter((event: unknown): event is EventResult => isEvent(event))
+    : [];
 };
 
 export const getEventById = async (eventId: string): Promise<EventByIdData> => {
