@@ -110,8 +110,8 @@ describe('Server [GET] /api/resources/:resourceId/events', () => {
   });
 
   it('should respond with 200 on success for resource Uj5SAS740', async () => {
-    const start = `${tomorrow}T00:00:00`;
-    const end = `${dayAfterTomorrow}T00:00:00`;
+    const start = `${tomorrow}T00:00:00.000Z`;
+    const end = `${dayAfterTomorrow}T00:00:00.000Z`;
     const search = new URLSearchParams({ start, end }).toString();
     const response = await fetch(
       `http://localhost:9070/api/resources/Uj5SAS740/events?${search}`,
@@ -130,8 +130,8 @@ describe('Server [GET] /api/resources/:resourceId/events', () => {
   });
 
   it('should respond with 200 on success for resource gWH5T7Kdz', async () => {
-    const start = `${today}T00:00:00`;
-    const end = `${dayAfterTomorrow}T00:00:00`;
+    const start = `${today}T00:00:00.000Z`;
+    const end = `${dayAfterTomorrow}T00:00:00.000Z`;
     const search = new URLSearchParams({ start, end }).toString();
     const response = await fetch(
       `http://localhost:9070/api/resources/gWH5T7Kdz/events?${search}`,
@@ -152,8 +152,8 @@ describe('Server [GET] /api/resources/:resourceId/events', () => {
   });
 
   it('should respond with an empty list', async () => {
-    const start = `${threeDaysAhead}T00:00:00`;
-    const end = `${threeDaysAhead}T23:59:59`;
+    const start = `${threeDaysAhead}T00:00:00.000Z`;
+    const end = `${threeDaysAhead}T23:59:59.000Z`;
     const search = new URLSearchParams({ start, end }).toString();
     const response = await fetch(
       `http://localhost:9070/api/resources/Uj5SAS740/events?${search}`,
