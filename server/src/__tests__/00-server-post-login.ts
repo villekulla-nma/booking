@@ -130,5 +130,6 @@ describe('Server [POST] /api/login', () => {
     expect(response.status).toBe(200);
     expect(data.status).toBe('ok');
     expect(jwtData.id).toBe('TD0sIeaoz');
+    expect(jwtData.role).toBe('user');
   });
 });

@@ -65,7 +65,7 @@ export const assignPostLoginHandler: AssignHandlerFunction = (
       }
 
       try {
-        const cookie = await signJwt({ id: userId });
+        const cookie = await signJwt({ id: userId, role: user.role });
         const expires = new Date();
 
         expires.setDate(expires.getDate() + 2);
