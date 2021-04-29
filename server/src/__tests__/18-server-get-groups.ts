@@ -35,7 +35,10 @@ describe('Server [GET] /api/groups', () => {
       },
     ]);
 
-    cookieValue = await signJwt({ id: 'TD0sIeaoz' }, process.env.JWT_SECRET);
+    cookieValue = await signJwt(
+      { id: 'TD0sIeaoz', role: 'user' },
+      process.env.JWT_SECRET
+    );
   });
 
   afterAll(async () => {

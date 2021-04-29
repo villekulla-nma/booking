@@ -5,7 +5,7 @@ import { STATUS } from '../constants';
 import type { AssignHandlerFunction } from './type';
 import type { Request } from './pre-verify-session';
 import { preVerifySessionHandler } from './pre-verify-session';
-import { createPreVerifyAuthorizationHandler } from './create-pre-verify-authorization';
+import { preVerifyAuthorizationHandler } from './pre-verify-authorization';
 import { createResource } from '../controllers/resource';
 import { defaultResponseSchema } from '../utils/schema';
 
@@ -20,7 +20,7 @@ const opts: RouteShorthandOptions = {
     body: bodySchema,
     response: defaultResponseSchema,
   },
-  preHandler: [preVerifySessionHandler],
+  preHandler: [preVerifySessionHandler, preVerifyAuthorizationHandler],
 };
 
 export const assignPutResourceHandler: AssignHandlerFunction = (
@@ -28,14 +28,6 @@ export const assignPutResourceHandler: AssignHandlerFunction = (
   server,
   db
 ) => {
-  const preVerifyAuthorizationHandler = createPreVerifyAuthorizationHandler(db);
-
-  if (Array.isArray(opts.preHandler)) {
-    opts.preHandler.push(preVerifyAuthorizationHandler);
-  } else {
-    opts.preHandler = preVerifyAuthorizationHandler;
-  }
-
   server.put(route, opts, async (request: Request, reply) => {
     let code = 200;
     const response = { status: STATUS.OK };

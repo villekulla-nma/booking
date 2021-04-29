@@ -101,7 +101,10 @@ describe('Server [GET] /api/resources/:resourceId/events', () => {
       },
     ]);
 
-    cookieValue = await signJwt({ id: 'TD0sIeaoz' }, process.env.JWT_SECRET);
+    cookieValue = await signJwt(
+      { id: 'TD0sIeaoz', role: 'user' },
+      process.env.JWT_SECRET
+    );
   });
 
   afterAll(async () => {

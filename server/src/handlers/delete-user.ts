@@ -4,7 +4,7 @@ import S from 'fluent-json-schema';
 import type { AssignHandlerFunction } from './type';
 import type { Request } from './pre-verify-session';
 import { preVerifySessionHandler } from './pre-verify-session';
-import { createPreVerifyAuthorizationHandler } from './create-pre-verify-authorization';
+import { preVerifyAuthorizationHandler } from './pre-verify-authorization';
 import { removeUser } from '../controllers/user';
 
 interface Params {
@@ -21,7 +21,7 @@ const opts: RouteShorthandOptions = {
   schema: {
     body: bodySchema,
   },
-  preHandler: [preVerifySessionHandler],
+  preHandler: [preVerifySessionHandler, preVerifyAuthorizationHandler],
 };
 
 export const assignDeleteUserHandler: AssignHandlerFunction = (
@@ -29,14 +29,6 @@ export const assignDeleteUserHandler: AssignHandlerFunction = (
   server,
   db
 ) => {
-  const preVerifyAuthorizationHandler = createPreVerifyAuthorizationHandler(db);
-
-  if (Array.isArray(opts.preHandler)) {
-    opts.preHandler.push(preVerifyAuthorizationHandler);
-  } else {
-    opts.preHandler = preVerifyAuthorizationHandler;
-  }
-
   server.delete(route, opts, async (request: Request<Params>, reply) => {
     let code = 200;
     const { userId: ownerId } = request.params;

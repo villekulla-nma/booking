@@ -23,8 +23,14 @@ describe('Server [GET] /api/user', () => {
       role: 'user',
       groupId: 'YLBqxvCCm',
     });
-    cookieValue = await signJwt({ id: 'TD0sIeaoz' }, process.env.JWT_SECRET);
-    invalidCookieValue = await signJwt({ id: 'TD0sIeaoz' }, 'wrong-secret');
+    cookieValue = await signJwt(
+      { id: 'TD0sIeaoz', role: 'user' },
+      process.env.JWT_SECRET
+    );
+    invalidCookieValue = await signJwt(
+      { id: 'TD0sIeaoz', role: 'user' },
+      'wrong-secret'
+    );
   });
 
   afterAll(async () => {

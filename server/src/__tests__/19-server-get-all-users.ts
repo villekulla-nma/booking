@@ -31,8 +31,6 @@ describe('Server [GET] /api/users', () => {
       role: 'admin',
       groupId: 'MTpZEtFhN',
     });
-
-    cookieValue = await signJwt({ id: 'TD0sIeaoz' }, process.env.JWT_SECRET);
   });
 
   afterAll(async () => {
@@ -42,7 +40,10 @@ describe('Server [GET] /api/users', () => {
 
   describe('Unauthorized user', () => {
     beforeAll(async () => {
-      cookieValue = await signJwt({ id: 'TD0sIeaoz' }, process.env.JWT_SECRET);
+      cookieValue = await signJwt(
+        { id: 'TD0sIeaoz', role: 'user' },
+        process.env.JWT_SECRET
+      );
     });
 
     afterAll(() => {
@@ -64,7 +65,10 @@ describe('Server [GET] /api/users', () => {
 
   describe('Authorized user', () => {
     beforeAll(async () => {
-      cookieValue = await signJwt({ id: 'Ul2Zrv1BX' }, process.env.JWT_SECRET);
+      cookieValue = await signJwt(
+        { id: 'Ul2Zrv1BX', role: 'admin' },
+        process.env.JWT_SECRET
+      );
     });
 
     afterAll(() => {

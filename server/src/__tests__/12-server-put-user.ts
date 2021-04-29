@@ -5,7 +5,7 @@ import type { Db } from '../db';
 import { initDb } from '../db';
 import { initServer } from '../server';
 import { signJwt } from './helpers/sign-jwt';
-import { createUser, getUserByKey, getUserById } from '../controllers/user';
+import { createUser, getUserByKey } from '../controllers/user';
 
 jest.mock('../controllers/user');
 
@@ -30,9 +30,6 @@ describe('Server [PUT] /api/user', () => {
 
     console.log = () => undefined;
 
-    (getUserById as jest.Mock).mockImplementation(
-      jest.requireActual('../controllers/user').getUserById
-    );
     (getUserByKey as jest.Mock).mockImplementation(
       jest.requireActual('../controllers/user').getUserByKey
     );
@@ -40,22 +37,6 @@ describe('Server [PUT] /api/user', () => {
     await db.Group.create({
       id: 'Uj5SAS740',
       name: 'Super Group #1',
-    });
-    await db.User.create({
-      id: 'TD0sIeaoz',
-      email: 'person.one@example.com',
-      firstName: 'Person1',
-      lastName: 'One',
-      role: 'user',
-      groupId: 'YLBqxvCCm',
-    });
-    await db.User.create({
-      id: 'Ul2Zrv1BX',
-      email: 'person.two@example.com',
-      firstName: 'Person2',
-      lastName: 'Two',
-      role: 'admin',
-      groupId: 'MTpZEtFhN',
     });
   });
 
@@ -68,7 +49,10 @@ describe('Server [PUT] /api/user', () => {
 
   describe('Unauthorized user', () => {
     beforeAll(async () => {
-      cookieValue = await signJwt({ id: 'TD0sIeaoz' }, process.env.JWT_SECRET);
+      cookieValue = await signJwt(
+        { id: 'TD0sIeaoz', role: 'user' },
+        process.env.JWT_SECRET
+      );
     });
 
     afterAll(() => {
@@ -93,7 +77,10 @@ describe('Server [PUT] /api/user', () => {
 
   describe('Authorized user', () => {
     beforeAll(async () => {
-      cookieValue = await signJwt({ id: 'Ul2Zrv1BX' }, process.env.JWT_SECRET);
+      cookieValue = await signJwt(
+        { id: 'Ul2Zrv1BX', role: 'admin' },
+        process.env.JWT_SECRET
+      );
     });
 
     afterAll(() => {

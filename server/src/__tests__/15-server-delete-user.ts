@@ -5,7 +5,7 @@ import type { Db } from '../db';
 import { initDb } from '../db';
 import { initServer } from '../server';
 import { signJwt } from './helpers/sign-jwt';
-import { removeUser, getUserById } from '../controllers/user';
+import { removeUser } from '../controllers/user';
 
 jest.mock('../controllers/user');
 
@@ -21,10 +21,6 @@ describe('Server [DELETE] /api/user', () => {
     log = console.error;
 
     console.error = () => undefined;
-
-    (getUserById as jest.Mock).mockImplementation(
-      jest.requireActual('../controllers/user').getUserById
-    );
 
     await db.User.create({
       id: 'TD0sIeaoz',
@@ -43,7 +39,10 @@ describe('Server [DELETE] /api/user', () => {
       groupId: 'MTpZEtFhN',
     });
 
-    cookieValue = await signJwt({ id: 'Ul2Zrv1BX' }, process.env.JWT_SECRET);
+    cookieValue = await signJwt(
+      { id: 'Ul2Zrv1BX', role: 'admin' },
+      process.env.JWT_SECRET
+    );
   });
 
   afterAll(async () => {
@@ -102,7 +101,7 @@ describe('Server [DELETE] /api/user', () => {
     expect(response.status).toBe(500);
   });
 
-  it('should allow delete own account', async () => {
+  it('should not allow to delete own account', async () => {
     (removeUser as jest.Mock).mockImplementation(
       jest.requireActual('../controllers/user').removeUser
     );
