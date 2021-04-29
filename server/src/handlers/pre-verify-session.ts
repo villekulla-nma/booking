@@ -4,7 +4,7 @@ import { verifyJwt } from '../utils/jwt';
 import { LOGOUT_COOKIE, STATUS } from '../constants';
 
 export type Request<T = Record<string, unknown>> = FastifyRequest<{
-  Params: { userId: string } & T;
+  Params: { userId: string; role: string } & T;
 }>;
 
 export const preVerifySessionHandler = async (
@@ -34,6 +34,7 @@ export const preVerifySessionHandler = async (
     return;
   }
 
-  const { id: userId } = result as Record<string, unknown>;
+  const { id: userId, role } = result as Record<string, unknown>;
   request.params.userId = String(userId);
+  request.params.role = String(role);
 };

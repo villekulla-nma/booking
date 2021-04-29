@@ -58,7 +58,10 @@ describe('Server [PUT] /api/groups', () => {
 
   describe('Unauthorized user', () => {
     beforeAll(async () => {
-      cookieValue = await signJwt({ id: 'TD0sIeaoz' }, process.env.JWT_SECRET);
+      cookieValue = await signJwt(
+        { id: 'TD0sIeaoz', role: 'user' },
+        process.env.JWT_SECRET
+      );
     });
 
     afterAll(() => {
@@ -83,7 +86,10 @@ describe('Server [PUT] /api/groups', () => {
 
   describe('Authorized user', () => {
     beforeAll(async () => {
-      cookieValue = await signJwt({ id: 'Ul2Zrv1BX' }, process.env.JWT_SECRET);
+      cookieValue = await signJwt(
+        { id: 'Ul2Zrv1BX', role: 'admin' },
+        process.env.JWT_SECRET
+      );
     });
 
     afterAll(() => {

@@ -39,7 +39,10 @@ describe('Server [GET] /api/events/:eventId', () => {
       createdAt: '2021-03-25T10:15:56.000Z',
     });
 
-    cookieValue = await signJwt({ id: 'TD0sIeaoz' }, process.env.JWT_SECRET);
+    cookieValue = await signJwt(
+      { id: 'TD0sIeaoz', role: 'user' },
+      process.env.JWT_SECRET
+    );
   });
 
   afterAll(async () => {

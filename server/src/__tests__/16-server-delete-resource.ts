@@ -35,7 +35,10 @@ describe('Server [DELETE] /api/resources', () => {
       groupId: 'MTpZEtFhN',
     });
 
-    cookieValue = await signJwt({ id: 'Ul2Zrv1BX' }, process.env.JWT_SECRET);
+    cookieValue = await signJwt(
+      { id: 'Ul2Zrv1BX', role: 'admin' },
+      process.env.JWT_SECRET
+    );
   });
 
   afterAll(async () => {
