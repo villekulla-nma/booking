@@ -1,10 +1,12 @@
+/* eslint @typescript-eslint/no-explicit-any: off, @typescript-eslint/explicit-module-boundary-types: off */
+
 import type { UserResponse } from '@booking/types';
 
 import { ROLE } from '../constants';
 
 const roles = Object.values(ROLE) as string[];
 
-export const isUser = (user: UserResponse | null): user is UserResponse => {
+export const isUser = (user: any): user is UserResponse => {
   return (
     typeof user === 'object' &&
     user !== null &&
@@ -12,6 +14,7 @@ export const isUser = (user: UserResponse | null): user is UserResponse => {
     roles.includes(String(user.role)) &&
     typeof user.firstName === 'string' &&
     typeof user.lastName === 'string' &&
+    typeof user.fullName === 'string' &&
     typeof user.email === 'string'
   );
 };
