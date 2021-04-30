@@ -41,10 +41,7 @@ export type EventResult = Pick<
 
 export type LoginResult = 'ok' | 'unverified' | 'invalid' | 'error';
 
-export interface UserResponse {
-  id: string;
-  role: UserRole;
-  firstName: string;
-  lastName: string;
-  email: string;
-}
+export type UserResponse = Pick<
+  UserAttributes,
+  'id' | 'role' | 'firstName' | 'lastName' | 'fullName' | 'email'
+>;
