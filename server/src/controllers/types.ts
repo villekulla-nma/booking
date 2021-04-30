@@ -2,12 +2,10 @@ import type {
   GroupAttributes,
   ResourceAttributes,
   UserAttributes,
+  UserResponse,
 } from '@booking/types';
 
-export type UserResult = Pick<
-  UserAttributes,
-  'id' | 'role' | 'firstName' | 'lastName' | 'fullName' | 'email' | 'password'
->;
+export type UserResult = UserResponse & Pick<UserAttributes, 'password'>;
 
 export type ResourceResult = Pick<ResourceAttributes, 'id' | 'name'>;
 
