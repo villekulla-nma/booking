@@ -5,9 +5,11 @@ import type {
   EventResult,
   LoginResult,
   UserResponse,
+  GroupAttributes,
 } from '@booking/types';
 
 import { isUser } from './helpers/is-user';
+import { isGroup } from './helpers/is-group';
 import { isEvent } from './helpers/is-event';
 
 export type EventByIdData = EventAttributes & {
@@ -115,6 +117,20 @@ export const getUser = async (): Promise<UserResponse | undefined> => {
   const { payload: user } = await response.json();
 
   return isUser(user) ? user : undefined;
+};
+
+export const getAllGroups = async (): Promise<GroupAttributes[]> => {
+  const response = await fetch('/api/groups');
+
+  if (response.status === 401) {
+    throw new UnauthenticatedError();
+  }
+
+  const { payload: groups } = await response.json();
+
+  return groups.filter((group: unknown): group is GroupAttributes =>
+    isGroup(group)
+  );
 };
 
 export const getResources = async (): Promise<ResourceAttributes[]> => {
