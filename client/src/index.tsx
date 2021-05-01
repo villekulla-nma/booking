@@ -19,6 +19,7 @@ import { PrivateRoute } from './components/private-route';
 import { UserProvider } from './components/user-provider';
 import { NotFoundPage } from './pages/not-found-page';
 import { AdminStartPage } from './pages/admin-start-page';
+import { AdminUsersPage } from './pages/admin-users-page';
 import { ROLE } from './constants';
 
 const authenticatedRoutes: RouteProps[] = [
@@ -58,6 +59,12 @@ const adminRoutes: RouteProps[] = [
   {
     path: '/admin',
     component: AdminStartPage,
+    strict: true,
+    exact: true,
+  },
+  {
+    path: '/admin/users',
+    component: AdminUsersPage,
     strict: true,
     exact: true,
   },
