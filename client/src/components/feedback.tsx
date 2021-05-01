@@ -5,6 +5,7 @@ import { mergeStyles } from '@fluentui/merge-styles';
 
 interface Props {
   type: MessageBarType;
+  className?: string;
 }
 
 const feedbackText = mergeStyles({
@@ -13,8 +14,12 @@ const feedbackText = mergeStyles({
 
 const feedbackStyles: IMessageBarStyles = { text: feedbackText };
 
-export const Feedback: FC<Props> = ({ type, children }) => (
-  <MessageBar messageBarType={type} styles={feedbackStyles}>
+export const Feedback: FC<Props> = ({ type, className, children }) => (
+  <MessageBar
+    messageBarType={type}
+    styles={feedbackStyles}
+    className={className}
+  >
     {children}
   </MessageBar>
 );
