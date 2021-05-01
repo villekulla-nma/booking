@@ -31,6 +31,7 @@ import type { ResponseStatus } from '../api';
 import { Form } from '../components/form';
 import { Feedback } from '../components/feedback';
 import { useGroupList } from '../hooks/use-group-list';
+import { inquireConfirmation } from '../helpers/inquire-confirmation';
 
 interface FeedbackProps {
   feedback: ResponseStatus | undefined;
@@ -121,6 +122,7 @@ const createOnRenderItemColumn = (
         className={editLink}
         onClick={() => handleUserDeletion(item.id)}
         ariaLabel="Delete user"
+        data-testid={`delete-user-${item.id}`}
       />
     );
   }
@@ -238,7 +240,7 @@ export const AdminUsersPage: FC = () => {
     });
   };
   const handleUserDeletion = (userId: string): void => {
-    if (window.confirm('Are you sure?')) {
+    if (inquireConfirmation('Are you sure?')) {
       deleteUser(userId).then((success) => {
         if (success) {
           setUsers(undefined);
@@ -260,7 +262,11 @@ export const AdminUsersPage: FC = () => {
     <Layout>
       <AdminLayout>
         {showForm && (
-          <Overlay isDarkThemed={true} className={overlay}>
+          <Overlay
+            isDarkThemed={true}
+            className={overlay}
+            data-testid="overlay"
+          >
             <div className={formWrap}>
               <UserFeedback feedback={feedback} />
               <Form
@@ -293,12 +299,14 @@ export const AdminUsersPage: FC = () => {
                   label="Role"
                   required={true}
                   onChange={handleRoleChange}
+                  data-testid="role-select"
                 />
                 <Dropdown
                   options={toDropDownOptions(groupList, groupId)}
                   label="Group"
                   required={true}
                   onChange={handleGroupChange}
+                  data-testid="group-select"
                 />
               </Form>
             </div>
