@@ -5,6 +5,7 @@ import type {
   EventResult,
   LoginResult,
   UserResponse,
+  UserRole,
   GroupAttributes,
 } from '@booking/types';
 
@@ -117,6 +118,56 @@ export const getUser = async (): Promise<UserResponse | undefined> => {
   const { payload: user } = await response.json();
 
   return isUser(user) ? user : undefined;
+};
+
+export const getAllUsers = async (): Promise<UserResponse[]> => {
+  const response = await fetch('/api/users');
+
+  if (response.status === 401) {
+    throw new UnauthenticatedError();
+  }
+
+  const { payload: users } = await response.json();
+
+  return users.filter((user: unknown): user is UserResponse => isUser(user));
+};
+
+export const createUser = async (
+  firstName: string,
+  lastName: string,
+  email: string,
+  role: UserRole,
+  groupId: string
+): Promise<ResponseStatus> => {
+  const response = await fetch('/api/user', {
+    method: 'PUT',
+    headers: {
+      'content-type': 'application/json',
+    },
+    body: JSON.stringify({ firstName, lastName, email, role, groupId }),
+  });
+
+  if (response.status === 401) {
+    throw new UnauthenticatedError();
+  }
+
+  const { status } = await response.json();
+
+  assertResponseStatus(status, '/api/user');
+
+  return status;
+};
+
+export const deleteUser = async (userId: string): Promise<boolean> => {
+  const response = await fetch('/api/user', {
+    method: 'DELETE',
+    headers: {
+      'content-type': 'application/json',
+    },
+    body: JSON.stringify({ id: userId }),
+  });
+
+  return response.status === 200;
 };
 
 export const getAllGroups = async (): Promise<GroupAttributes[]> => {
