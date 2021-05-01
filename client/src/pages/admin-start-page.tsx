@@ -1,11 +1,6 @@
 import type { FC } from 'react';
-
-import { Layout } from '../components/layout';
+import { Redirect } from 'react-router-dom';
 
 export const AdminStartPage: FC = () => {
-  return (
-    <Layout>
-      <p>Admin</p>
-    </Layout>
-  );
+  return <Redirect to="/admin/users" />;
 };
