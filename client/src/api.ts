@@ -19,6 +19,13 @@ export type UserEvent = EventResult & {
   resource: string;
 };
 
+export type ResponseStatus =
+  | 'ok'
+  | 'overlapping'
+  | 'unverified'
+  | 'invalid'
+  | 'error';
+
 export class UnauthenticatedError extends Error {
   public constructor() {
     super('user not authenticated');
@@ -28,6 +35,15 @@ export class UnauthenticatedError extends Error {
     return 'UnauthenticatedError';
   }
 }
+
+const assertResponseStatus = (
+  status: ResponseStatus,
+  route: string
+): void | never => {
+  if (!/^(ok|overlapping|unverified|invalid|error)$/.test(status)) {
+    throw new Error(`Invalid response from ${route}`);
+  }
+};
 
 export const login = async (
   email: string,
@@ -42,9 +58,7 @@ export const login = async (
   });
   const { status } = await response.json();
 
-  if (!/^(ok|unverified|invalid|error)$/.test(status)) {
-    throw new Error('Invalid response from /api/login');
-  }
+  assertResponseStatus(status, '/api/login');
 
   return status as LoginResult;
 };
@@ -67,13 +81,11 @@ export const requestPasswordReset = async (email: string): Promise<void> => {
   }
 };
 
-export type UpdatePasswordResponse = 'ok' | 'invalid' | 'error';
-
 export const updatePassword = async (
   token: string,
   password: string,
   confirm: string
-): Promise<UpdatePasswordResponse> => {
+): Promise<ResponseStatus> => {
   const response = await fetch(`/api/password-reset/${token}`, {
     method: 'POST',
     headers: {
@@ -88,9 +100,7 @@ export const updatePassword = async (
 
   const { status } = await response.json();
 
-  if (!/^(ok|invalid|error)$/.test(status)) {
-    throw new Error('Invalid response from /api/password-reset/:token');
-  }
+  assertResponseStatus(status, '/api/password-reset/:token');
 
   return status;
 };
@@ -180,15 +190,13 @@ export const deleteEvent = async (eventId: string): Promise<void> => {
   }
 };
 
-export type CreateEventResponse = 'ok' | 'overlapping' | 'invalid' | 'error';
-
 export const createEvent = async (
   start: string,
   end: string,
   description: string,
   allDay: boolean,
   resourceId: string
-): Promise<CreateEventResponse> => {
+): Promise<ResponseStatus> => {
   const response = await fetch(`/api/resources/${resourceId}/events`, {
     method: 'PUT',
     headers: {
@@ -203,9 +211,7 @@ export const createEvent = async (
 
   const { status } = await response.json();
 
-  if (!/^(ok|overlapping|invalid|error)$/.test(status)) {
-    throw new Error('Invalid response from /api/resources/:resourceId/events');
-  }
+  assertResponseStatus(status, '/api/resources/:resourceId/events');
 
   return status;
 };

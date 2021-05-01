@@ -138,6 +138,8 @@ export const ReservationPage: FC = () => {
             );
             setSubmitted(false);
             break;
+          case 'unverified':
+            throw new Error('Unexpected response status "unverified".');
           default:
             ((_: never) => undefined)(status);
         }

@@ -4,7 +4,7 @@ import { Link, useParams } from 'react-router-dom';
 import { Stack, TextField, MessageBarType, Link as A } from '@fluentui/react';
 import type { IStackTokens } from '@fluentui/react';
 
-import type { UpdatePasswordResponse } from '../api';
+import type { ResponseStatus } from '../api';
 import { updatePassword } from '../api';
 import { Layout } from '../components/layout';
 import { Form } from '../components/form';
@@ -16,7 +16,7 @@ interface Params {
 }
 
 interface FeedbackProps {
-  feedback: UpdatePasswordResponse | undefined;
+  feedback: ResponseStatus | undefined;
 }
 
 const tokens: IStackTokens = {
@@ -44,6 +44,9 @@ const UserFeedback: FC<FeedbackProps> = ({ feedback }) => {
       message = 'Ein Fehler ist aufgetreten. Bitte versuch es noch einmal.';
       type = MessageBarType.error;
       break;
+    case 'overlapping':
+    case 'unverified':
+      throw new Error(`Unexpected type "${feedback}".`);
     default:
       throw new Error(`Unknown type "${feedback}".`);
   }
@@ -63,9 +66,7 @@ const UserFeedback: FC<FeedbackProps> = ({ feedback }) => {
 export const PasswordUpdatePage: FC = () => {
   const redirect = useRedirectUnauthenticatedUser();
   const { token } = useParams<Params>();
-  const [feedback, setFeedback] = useState<
-    UpdatePasswordResponse | undefined
-  >();
+  const [feedback, setFeedback] = useState<ResponseStatus | undefined>();
   const [password, setPassword] = useState<string>('');
   const [passwordConfirm, setPasswordConfirm] = useState<string>('');
   const handlePasswordChange = (
