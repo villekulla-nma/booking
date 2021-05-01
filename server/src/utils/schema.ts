@@ -10,7 +10,12 @@ export const responseSchema4xx = S.object()
   .prop(
     'status',
     S.string()
-      .enum([STATUS.OVERLAPPING, STATUS.INVALID, STATUS.ERROR])
+      .enum([
+        STATUS.OVERLAPPING,
+        STATUS.INVALID,
+        STATUS.ERROR,
+        STATUS.UNVERIFIED,
+      ])
       .required()
   )
   .valueOf();
