@@ -9,7 +9,6 @@ import {
   ActionButton,
   TextField,
   Link as A,
-  Overlay,
   Dropdown,
   DetailsListLayoutMode,
   SelectionMode,
@@ -30,6 +29,7 @@ import { getAllUsers, createUser, deleteUser } from '../api';
 import type { ResponseStatus } from '../api';
 import { Form } from '../components/form';
 import { Feedback } from '../components/feedback';
+import { Overlay } from '../components/overlay';
 import { useGroupList } from '../hooks/use-group-list';
 import { inquireConfirmation } from '../helpers/inquire-confirmation';
 
@@ -77,17 +77,6 @@ const columns: IColumn[] = [
 const editLink = mergeStyles({
   height: 'auto',
   fontSize: '16px',
-});
-
-const overlay = mergeStyles({
-  zIndex: 100,
-});
-
-const formWrap = mergeStyles({
-  maxWidth: '400px',
-  padding: '32px',
-  margin: '64px auto 32px auto',
-  backgroundColor: 'white',
 });
 
 const feedbackStyles = mergeStyles({
@@ -261,57 +250,49 @@ export const AdminUsersPage: FC = () => {
   return (
     <Layout>
       <AdminLayout>
-        {showForm && (
-          <Overlay
-            isDarkThemed={true}
-            className={overlay}
-            data-testid="overlay"
+        <Overlay visible={showForm}>
+          <UserFeedback feedback={feedback} />
+          <Form
+            label="Create new user…"
+            buttonLabel="Create"
+            onSubmit={handleSubmit}
+            onReset={resetForm}
           >
-            <div className={formWrap}>
-              <UserFeedback feedback={feedback} />
-              <Form
-                label="Create new user…"
-                buttonLabel="Create"
-                onSubmit={handleSubmit}
-                onReset={resetForm}
-              >
-                <TextField
-                  label="First name"
-                  required={true}
-                  value={firstName}
-                  onChange={handleFirstNameChange}
-                />
-                <TextField
-                  label="Last name"
-                  required={true}
-                  value={lastName}
-                  onChange={handleLastNameChange}
-                />
-                <TextField
-                  label="Email"
-                  type="email"
-                  required={true}
-                  value={email}
-                  onChange={handleEmailChange}
-                />
-                <Dropdown
-                  options={getRoleOptions(role)}
-                  label="Role"
-                  required={true}
-                  onChange={handleRoleChange}
-                  data-testid="role-select"
-                />
-                <Dropdown
-                  options={toDropDownOptions(groupList, groupId)}
-                  label="Group"
-                  required={true}
-                  onChange={handleGroupChange}
-                  data-testid="group-select"
-                />
-              </Form>
-            </div>
-          </Overlay>
-        )}
+            <TextField
+              label="First name"
+              required={true}
+              value={firstName}
+              onChange={handleFirstNameChange}
+            />
+            <TextField
+              label="Last name"
+              required={true}
+              value={lastName}
+              onChange={handleLastNameChange}
+            />
+            <TextField
+              label="Email"
+              type="email"
+              required={true}
+              value={email}
+              onChange={handleEmailChange}
+            />
+            <Dropdown
+              options={getRoleOptions(role)}
+              label="Role"
+              required={true}
+              onChange={handleRoleChange}
+              data-testid="role-select"
+            />
+            <Dropdown
+              options={toDropDownOptions(groupList, groupId)}
+              label="Group"
+              required={true}
+              onChange={handleGroupChange}
+              data-testid="group-select"
+            />
+          </Form>
+        </Overlay>
         <ActionButton onClick={showFormHandler} iconProps={actionButtonIcon}>
           Create new user
         </ActionButton>
