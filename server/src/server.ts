@@ -28,6 +28,7 @@ import { assignGetGroupsHandler } from './handlers/get-groups';
 import { assignGetAllUsersHandler } from './handlers/get-all-users';
 import { assignPostGroupHandler } from './handlers/post-group';
 import { assignPostResourceHandler } from './handlers/post-resource';
+import { assignPostUserHandler } from './handlers/post-user';
 
 const routes: [string, AssignHandlerFunction][] = [
   ['/api/_health', assignGetHealthHandler],
@@ -37,6 +38,7 @@ const routes: [string, AssignHandlerFunction][] = [
   ['/api/password-reset/:token', assignPostPasswordUpdateHandler],
   ['/api/user', assignGetUserHandler],
   ['/api/user', assignPutUserHandler],
+  ['/api/user', assignPostUserHandler],
   ['/api/user', assignDeleteUserHandler],
   ['/api/users', assignGetAllUsersHandler],
   ['/api/user/events', assignGetUserEventsHandler],
