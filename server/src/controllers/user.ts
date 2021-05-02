@@ -10,7 +10,16 @@ const toUserResult = (
   user: UserInstance,
   includePassword = false
 ): UserResult => {
-  const { id, role, firstName, lastName, fullName, email, password } = user;
+  const {
+    id,
+    role,
+    firstName,
+    lastName,
+    fullName,
+    email,
+    groupId,
+    password,
+  } = user;
 
   return {
     id,
@@ -19,6 +28,7 @@ const toUserResult = (
     lastName,
     fullName,
     email,
+    groupId,
     ...(includePassword === true ? { password } : undefined),
   };
 };
