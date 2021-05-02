@@ -35,6 +35,22 @@ export const createGroup = async (
   return id;
 };
 
+export const updateGroup = async (
+  { Group }: Db,
+  groupId: string,
+  name: string
+): Promise<boolean> => {
+  const [result] = await Group.update(
+    { name },
+    {
+      where: {
+        id: { [Op.eq]: groupId },
+      },
+    }
+  );
+  return result === 1;
+};
+
 export const removeGroup = async (
   { Group }: Db,
   groupId: string
