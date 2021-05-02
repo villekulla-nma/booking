@@ -26,6 +26,7 @@ import { assignDeleteResourceHandler } from './handlers/delete-resource';
 import { assignDeleteGroupHandler } from './handlers/delete-group';
 import { assignGetGroupsHandler } from './handlers/get-groups';
 import { assignGetAllUsersHandler } from './handlers/get-all-users';
+import { assignPostGroupHandler } from './handlers/post-group';
 
 const routes: [string, AssignHandlerFunction][] = [
   ['/api/_health', assignGetHealthHandler],
@@ -47,6 +48,7 @@ const routes: [string, AssignHandlerFunction][] = [
   ['/api/events/:eventId', assignDeleteEventHandler],
   ['/api/groups', assignGetGroupsHandler],
   ['/api/groups', assignPutGroupHandler],
+  ['/api/groups', assignPostGroupHandler],
   ['/api/groups', assignDeleteGroupHandler],
 ];
 
