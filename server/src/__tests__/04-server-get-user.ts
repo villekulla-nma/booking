@@ -84,6 +84,7 @@ describe('Server [GET] /api/user', () => {
       lastName: 'One',
       fullName: 'Person1 One',
       role: 'user',
+      groupId: 'YLBqxvCCm',
     });
   });
 });
