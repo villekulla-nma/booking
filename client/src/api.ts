@@ -158,6 +158,40 @@ export const createUser = async (
   return status;
 };
 
+export const updateUser = async (
+  userId: string,
+  firstName: string,
+  lastName: string,
+  email: string,
+  role: UserRole,
+  groupId: string
+): Promise<ResponseStatus> => {
+  const response = await fetch('/api/user', {
+    method: 'POST',
+    headers: {
+      'content-type': 'application/json',
+    },
+    body: JSON.stringify({
+      id: userId,
+      firstName,
+      lastName,
+      email,
+      role,
+      groupId,
+    }),
+  });
+
+  if (response.status === 401) {
+    throw new UnauthenticatedError();
+  }
+
+  const { status } = await response.json();
+
+  assertResponseStatus(status, '/api/user');
+
+  return status;
+};
+
 export const deleteUser = async (userId: string): Promise<boolean> => {
   const response = await fetch('/api/user', {
     method: 'DELETE',
