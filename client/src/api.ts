@@ -271,6 +271,29 @@ export const createResource = async (name: string): Promise<ResponseStatus> => {
   return status;
 };
 
+export const updateResource = async (
+  resourceId: string,
+  name: string
+): Promise<ResponseStatus> => {
+  const response = await fetch('/api/resources', {
+    method: 'POST',
+    headers: {
+      'content-type': 'application/json',
+    },
+    body: JSON.stringify({ id: resourceId, name }),
+  });
+
+  if (response.status === 401) {
+    throw new UnauthenticatedError();
+  }
+
+  const { status } = await response.json();
+
+  assertResponseStatus(status, '/api/resources');
+
+  return status;
+};
+
 export const deleteResource = async (resourceId: string): Promise<boolean> => {
   const response = await fetch('/api/resources', {
     method: 'DELETE',
