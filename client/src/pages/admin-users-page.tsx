@@ -96,7 +96,7 @@ const UserFeedback: FC<FeedbackProps> = ({ feedback }) => {
 };
 
 export const AdminUsersPage: FC = () => {
-  const groupList = useGroupList();
+  const [groupList] = useGroupList();
   const [showForm, setShowForm] = useState<boolean>(false);
   const [firstName, setFirstName] = useState<string>('');
   const [lastName, setLastName] = useState<string>('');

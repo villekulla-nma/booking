@@ -5,21 +5,23 @@ import { getAllGroups } from '../api';
 import { useUserContext } from './use-user-context';
 import { useRedirectUnauthenticatedUser } from './use-redirect-unauthenticated-user';
 
-export const useGroupList = (): GroupAttributes[] => {
+type ReloadGroupList = () => void;
+
+export const useGroupList = (): [GroupAttributes[], ReloadGroupList] => {
   const redirect = useRedirectUnauthenticatedUser();
   const user = useUserContext();
-  const [group, setGroup] = useState<GroupAttributes[]>([]);
+  const [groups, setGroups] = useState<GroupAttributes[] | undefined>();
 
   useEffect(() => {
-    if (user) {
+    if (user && typeof groups === 'undefined') {
       getAllGroups()
         .then(
-          (groupList) => setGroup(groupList),
+          (groupList) => setGroups(groupList),
           (error) => redirect(error)
         )
         .catch(console.error);
     }
-  }, [user, redirect]);
+  }, [groups, user, redirect]);
 
-  return group;
+  return [groups || [], () => setGroups(undefined)];
 };
