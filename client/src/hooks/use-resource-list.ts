@@ -5,19 +5,26 @@ import { getResources } from '../api';
 import { useUserContext } from './use-user-context';
 import { useRedirectUnauthenticatedUser } from './use-redirect-unauthenticated-user';
 
-export const useResourceList = (): ResourceAttributes[] => {
+type ReloadResourcesList = () => void;
+
+export const useResourceList = (): [
+  ResourceAttributes[],
+  ReloadResourcesList
+] => {
   const redirect = useRedirectUnauthenticatedUser();
   const user = useUserContext();
-  const [list, setList] = useState<ResourceAttributes[]>([]);
+  const [resources, setResources] = useState<
+    ResourceAttributes[] | undefined
+  >();
 
   useEffect(() => {
-    if (user) {
+    if (user && typeof resources === 'undefined') {
       getResources().then(
-        (resourceList) => setList(resourceList),
+        (resourceList) => setResources(resourceList),
         (error) => redirect(error)
       );
     }
-  }, [user, redirect]);
+  }, [resources, user, redirect]);
 
-  return list;
+  return [resources || [], () => setResources(undefined)];
 };
