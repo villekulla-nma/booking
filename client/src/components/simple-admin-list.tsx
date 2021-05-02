@@ -86,6 +86,7 @@ const createOnRenderItemColumn = (onEdit: Handler, onDelete: Handler) => (
           onClick={() => onEdit(item.id)}
           ariaLabel="Edit element"
           data-testid={`edit-element-${item.id}`}
+          disabled={true}
         />
       );
     case 'delete':
