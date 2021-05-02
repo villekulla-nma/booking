@@ -94,8 +94,8 @@ describe('Admin Users Page', () => {
         await expect(scopeIsDone(scope)).resolves.toBe(true);
       });
 
-      screen.getByText('Person1 One');
-      screen.getByText('Person2 Two');
+      screen.getByText('Person1 One [user]');
+      screen.getByText('Person2 Two [admin]');
     });
   });
 
@@ -132,7 +132,7 @@ describe('Admin Users Page', () => {
         await expect(scopeIsDone(initialScope)).resolves.toBe(true);
       });
 
-      expect(screen.queryByText(fullName)).toBeNull();
+      expect(screen.queryByText(`${fullName} [${userThree.role}]`)).toBeNull();
 
       fireEvent.click(screen.getByText(/Create new user/) as Element);
 
@@ -170,7 +170,7 @@ describe('Admin Users Page', () => {
         await expect(scopeIsDone(creationScope)).resolves.toBe(true);
       });
 
-      screen.getByText(fullName);
+      screen.getByText(`${fullName} [${userThree.role}]`);
     });
   });
 
@@ -203,15 +203,15 @@ describe('Admin Users Page', () => {
         await expect(scopeIsDone(initialScope)).resolves.toBe(true);
       });
 
-      screen.getByText(fullName);
+      screen.getByText(`${fullName} [${userThree.role}]`);
 
-      fireEvent.click(screen.getByTestId(`delete-user-${userThree.id}`));
+      fireEvent.click(screen.getByTestId(`delete-element-${userThree.id}`));
 
       await act(async () => {
         await expect(scopeIsDone(deletionScope)).resolves.toBe(true);
       });
 
-      expect(screen.queryByText(fullName)).toBeNull();
+      expect(screen.queryByText(`${fullName} [${userThree.role}]`)).toBeNull();
     });
   });
 });

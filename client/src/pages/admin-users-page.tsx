@@ -1,25 +1,12 @@
-import type { FC, ReactNode } from 'react';
+import type { FC } from 'react';
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import {
-  DetailsList,
-  Text,
-  Icon,
-  IconButton,
   ActionButton,
   TextField,
-  Link as A,
   Dropdown,
-  DetailsListLayoutMode,
-  SelectionMode,
   MessageBarType,
 } from '@fluentui/react';
-import type {
-  IColumn,
-  IDetailsListProps,
-  IIconProps,
-  IDropdownOption,
-} from '@fluentui/react';
+import type { IIconProps, IDropdownOption } from '@fluentui/react';
 import { mergeStyles } from '@fluentui/merge-styles';
 import { UserResponse, GroupAttributes, UserRole } from '@booking/types';
 
@@ -31,101 +18,23 @@ import { Form } from '../components/form';
 import { Feedback } from '../components/feedback';
 import { Overlay } from '../components/overlay';
 import { useGroupList } from '../hooks/use-group-list';
+import { SimpleAdminList } from '../components/simple-admin-list';
+import type { SimplAdminListItem } from '../components/simple-admin-list';
 import { inquireConfirmation } from '../helpers/inquire-confirmation';
 
 interface FeedbackProps {
   feedback: ResponseStatus | undefined;
 }
 
-const columns: IColumn[] = [
-  {
-    key: 'edit',
-    name: 'Edit',
-    fieldName: 'edit',
-    minWidth: 50,
-    maxWidth: 50,
-  },
-  {
-    key: 'delete',
-    name: 'Delete',
-    fieldName: 'delete',
-    minWidth: 70,
-    maxWidth: 70,
-  },
-  {
-    key: 'id',
-    name: 'ID',
-    fieldName: 'id',
-    minWidth: 80,
-    maxWidth: 120,
-  },
-  {
-    key: 'role',
-    name: 'Role',
-    fieldName: 'role',
-    minWidth: 80,
-    maxWidth: 120,
-  },
-  {
-    key: 'name',
-    name: 'Name',
-    fieldName: 'name',
-    minWidth: 200,
-  },
-];
-
-const editLink = mergeStyles({
-  height: 'auto',
-  fontSize: '16px',
-});
-
 const feedbackStyles = mergeStyles({
   marginBottom: '16px',
 });
 
-const deleteIcon: IIconProps = { iconName: 'Delete' };
-
 const actionButtonIcon: IIconProps = { iconName: 'AddFriend' };
 
-const createOnRenderItemColumn = (
-  handleUserDeletion: (userId: string) => void
-) => (
-  item: Record<string, string>,
-  _: unknown,
-  column?: IColumn
-): ReactNode => {
-  const fieldName = column?.fieldName;
-
-  if (fieldName === 'edit') {
-    return (
-      <A as={Link} to={`/admin/users/${item.id}`} className={editLink}>
-        <Icon iconName="EditContact" />
-      </A>
-    );
-  }
-
-  if (fieldName === 'delete') {
-    return (
-      <IconButton
-        iconProps={deleteIcon}
-        className={editLink}
-        onClick={() => handleUserDeletion(item.id)}
-        ariaLabel="Delete user"
-        data-testid={`delete-user-${item.id}`}
-      />
-    );
-  }
-  const value = !fieldName || !item[fieldName] ? '-' : item[fieldName];
-
-  return <Text variant="medium">{value}</Text>;
-};
-
-const toListItems = (users: UserResponse[]): IDetailsListProps['items'] =>
+const toListItems = (users: UserResponse[]): SimplAdminListItem[] =>
   users.map(({ id, fullName, role }) => ({
-    key: id,
-    edit: '',
-    name: fullName,
-    role,
+    name: `${fullName} [${role}]`,
     id,
   }));
 
@@ -239,7 +148,6 @@ export const AdminUsersPage: FC = () => {
       });
     }
   };
-  const onRenderItemColumn = createOnRenderItemColumn(handleUserDeletion);
 
   useEffect(() => {
     if (typeof users === 'undefined') {
@@ -296,12 +204,10 @@ export const AdminUsersPage: FC = () => {
         <ActionButton onClick={showFormHandler} iconProps={actionButtonIcon}>
           Create new user
         </ActionButton>
-        <DetailsList
+        <SimpleAdminList
           items={toListItems(users || [])}
-          columns={columns}
-          layoutMode={DetailsListLayoutMode.justified}
-          selectionMode={SelectionMode.none}
-          onRenderItemColumn={onRenderItemColumn}
+          onEdit={(id) => console.log('Edit', id)}
+          onDelete={handleUserDeletion}
         />
       </AdminLayout>
     </Layout>
