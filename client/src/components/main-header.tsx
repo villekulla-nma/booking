@@ -32,7 +32,7 @@ const icon = mergeStyles({
 });
 
 export const MainHeader: FC<Props> = ({ onHomeClick }) => {
-  const resources = useResourceList();
+  const [resources] = useResourceList();
   const user = useUserContext();
   const homeLinkAs = typeof onHomeClick === 'function' ? undefined : Link;
   const homeLinkTo = typeof onHomeClick === 'function' ? undefined : '/';

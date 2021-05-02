@@ -135,7 +135,7 @@ const getNowFromString = (now: string | null): string | undefined => {
 
 export const ResourcePage: FC = () => {
   const redirect = useRedirectUnauthenticatedUser();
-  const resources = useResourceList();
+  const [resources] = useResourceList();
   const history = useHistory();
   const params = useParams<Params>();
   const currentViewType = getViewTypeOption(params.view);
