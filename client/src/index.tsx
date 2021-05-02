@@ -21,6 +21,7 @@ import { NotFoundPage } from './pages/not-found-page';
 import { AdminStartPage } from './pages/admin-start-page';
 import { AdminUsersPage } from './pages/admin-users-page';
 import { AdminGroupsPage } from './pages/admin-groups-page';
+import { AdminResourcesPage } from './pages/admin-resources-page';
 import { ROLE } from './constants';
 
 const authenticatedRoutes: RouteProps[] = [
@@ -72,6 +73,12 @@ const adminRoutes: RouteProps[] = [
   {
     path: '/admin/groups',
     component: AdminGroupsPage,
+    strict: true,
+    exact: true,
+  },
+  {
+    path: '/admin/resources',
+    component: AdminResourcesPage,
     strict: true,
     exact: true,
   },

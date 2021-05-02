@@ -216,7 +216,7 @@ export const deleteGroup = async (groupId: string): Promise<boolean> => {
   return response.status === 200;
 };
 
-export const getResources = async (): Promise<ResourceAttributes[]> => {
+export const getAllResources = async (): Promise<ResourceAttributes[]> => {
   const response = await fetch('/api/resources');
 
   if (response.status === 401) {
@@ -226,6 +226,38 @@ export const getResources = async (): Promise<ResourceAttributes[]> => {
   const { payload: resources } = await response.json();
 
   return resources;
+};
+
+export const createResource = async (name: string): Promise<ResponseStatus> => {
+  const response = await fetch('/api/resources', {
+    method: 'PUT',
+    headers: {
+      'content-type': 'application/json',
+    },
+    body: JSON.stringify({ name }),
+  });
+
+  if (response.status === 401) {
+    throw new UnauthenticatedError();
+  }
+
+  const { status } = await response.json();
+
+  assertResponseStatus(status, '/api/resources');
+
+  return status;
+};
+
+export const deleteResource = async (resourceId: string): Promise<boolean> => {
+  const response = await fetch('/api/resources', {
+    method: 'DELETE',
+    headers: {
+      'content-type': 'application/json',
+    },
+    body: JSON.stringify({ id: resourceId }),
+  });
+
+  return response.status === 200;
 };
 
 export const getEventsByResourceId = async ({
