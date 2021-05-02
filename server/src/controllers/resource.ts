@@ -23,6 +23,22 @@ export const createResource = async (
   return id;
 };
 
+export const updateResource = async (
+  { Resource }: Db,
+  resourceId: string,
+  name: string
+): Promise<boolean> => {
+  const [result] = await Resource.update(
+    { name },
+    {
+      where: {
+        id: { [Op.eq]: resourceId },
+      },
+    }
+  );
+  return result === 1;
+};
+
 export const removeResource = async (
   { Resource }: Db,
   resourceId: string
