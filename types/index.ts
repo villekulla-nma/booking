@@ -43,5 +43,5 @@ export type LoginResult = 'ok' | 'unverified' | 'invalid' | 'error';
 
 export type UserResponse = Pick<
   UserAttributes,
-  'id' | 'role' | 'firstName' | 'lastName' | 'fullName' | 'email'
+  'id' | 'role' | 'firstName' | 'lastName' | 'fullName' | 'email' | 'groupId'
 >;
