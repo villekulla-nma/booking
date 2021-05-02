@@ -15,6 +15,7 @@ import type {
   EventInstance,
 } from './models';
 import { getScaffoldingData, writeScaffoldingData } from './utils/scaffolding';
+import { getAdminListFromEnv } from './utils/get-admin-list-from-env';
 
 export interface Db {
   Event: ModelCtor<EventInstance>;
@@ -37,6 +38,11 @@ export const initDb = async (): Promise<Db> => {
   const User = createUserInstance(sequelize);
   const Event = createEventInstance(sequelize);
   const [data] = await Promise.all([dataPromise, sequelize.sync()]);
+
+  data.User = [
+    ...((data.User as unknown[] | undefined) || []),
+    ...getAdminListFromEnv(),
+  ];
 
   User.belongsTo(Group, { foreignKey: 'groupId', as: 'group' });
   Event.belongsTo(User, { foreignKey: 'userId', as: 'user' });
