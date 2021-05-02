@@ -9,7 +9,7 @@ import type {
 } from 'sequelize';
 import type { UserAttributes } from '@booking/types';
 
-type UserCreationAttributes = Optional<
+export type UserCreationAttributes = Optional<
   Optional<UserAttributes, 'id'>,
   'fullName'
 >;
