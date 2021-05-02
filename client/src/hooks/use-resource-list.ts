@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import type { ResourceAttributes } from '@booking/types';
 
-import { getResources } from '../api';
+import { getAllResources } from '../api';
 import { useUserContext } from './use-user-context';
 import { useRedirectUnauthenticatedUser } from './use-redirect-unauthenticated-user';
 
@@ -19,7 +19,7 @@ export const useResourceList = (): [
 
   useEffect(() => {
     if (user && typeof resources === 'undefined') {
-      getResources().then(
+      getAllResources().then(
         (resourceList) => setResources(resourceList),
         (error) => redirect(error)
       );
