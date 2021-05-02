@@ -184,6 +184,38 @@ export const getAllGroups = async (): Promise<GroupAttributes[]> => {
   );
 };
 
+export const createGroup = async (name: string): Promise<ResponseStatus> => {
+  const response = await fetch('/api/groups', {
+    method: 'PUT',
+    headers: {
+      'content-type': 'application/json',
+    },
+    body: JSON.stringify({ name }),
+  });
+
+  if (response.status === 401) {
+    throw new UnauthenticatedError();
+  }
+
+  const { status } = await response.json();
+
+  assertResponseStatus(status, '/api/groups');
+
+  return status;
+};
+
+export const deleteGroup = async (groupId: string): Promise<boolean> => {
+  const response = await fetch('/api/groups', {
+    method: 'DELETE',
+    headers: {
+      'content-type': 'application/json',
+    },
+    body: JSON.stringify({ id: groupId }),
+  });
+
+  return response.status === 200;
+};
+
 export const getResources = async (): Promise<ResourceAttributes[]> => {
   const response = await fetch('/api/resources');
 
