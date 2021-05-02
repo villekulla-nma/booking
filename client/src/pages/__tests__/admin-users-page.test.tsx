@@ -46,6 +46,7 @@ describe('Admin Users Page', () => {
     lastName: 'One',
     fullName: 'Person1 One',
     role: 'user',
+    groupId: 'Uj5SAS740',
   };
   const userTwo = {
     id: 'Ul2Zrv1BX',
@@ -54,6 +55,7 @@ describe('Admin Users Page', () => {
     lastName: 'Two',
     fullName: 'Person2 Two',
     role: 'admin',
+    groupId: 'gWH5T7Kdz',
   };
   const userThree = {
     id: 'oibxhRu2L',
@@ -62,6 +64,7 @@ describe('Admin Users Page', () => {
     lastName: 'Three',
     fullName: 'Person3 Three',
     role: 'user',
+    groupId: 'Uj5SAS740',
   };
 
   initializeIcons();
@@ -170,7 +173,73 @@ describe('Admin Users Page', () => {
         await expect(scopeIsDone(creationScope)).resolves.toBe(true);
       });
 
+      expect(screen.queryByTestId('overlay')).toBeNull();
+
       screen.getByText(`${fullName} [${userThree.role}]`);
+    });
+  });
+
+  describe('updating a user', () => {
+    it('should update an existing user', async () => {
+      (useUserContext as jest.Mock).mockReturnValue(userTwo);
+
+      const newFirstName = 'Persona Uno';
+      const initialScope = nock('http://localhost')
+        .get('/api/groups')
+        .reply(200, { status: 'ok', payload: groups })
+        .get('/api/users')
+        .reply(200, { status: 'ok', payload: [userOne] });
+      const updateScope = nock('http://localhost')
+        .post('/api/user', {
+          id: userOne.id,
+          firstName: newFirstName,
+          lastName: userOne.lastName,
+          email: userOne.email,
+          role: userOne.role,
+          groupId: userOne.groupId,
+        })
+        .reply(200, { status: 'ok' })
+        .get('/api/users')
+        .reply(200, {
+          status: 'ok',
+          payload: [
+            {
+              ...userOne,
+              firstName: newFirstName,
+              fullName: `${newFirstName} ${userOne.lastName}`,
+            },
+          ],
+        });
+
+      render(
+        <Router>
+          <AdminUsersPage />
+        </Router>
+      );
+
+      await act(async () => {
+        await expect(scopeIsDone(initialScope)).resolves.toBe(true);
+      });
+
+      fireEvent.click(
+        screen.getByTestId(`edit-element-${userOne.id}`) as Element
+      );
+
+      await waitFor(() => screen.getByTestId('overlay'));
+
+      fireEvent.change(screen.getByLabelText('First name'), {
+        target: { value: newFirstName },
+      });
+
+      fireEvent.click(screen.getByText('Update').closest('button') as Element);
+
+      await act(async () => {
+        await expect(scopeIsDone(updateScope)).resolves.toBe(true);
+      });
+
+      expect(screen.queryByTestId('overlay')).toBeNull();
+
+      screen.getByText(`${newFirstName} ${userOne.lastName} [${userOne.role}]`);
     });
   });
 

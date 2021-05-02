@@ -15,6 +15,7 @@ export const isUser = (user: any): user is UserResponse => {
     typeof user.firstName === 'string' &&
     typeof user.lastName === 'string' &&
     typeof user.fullName === 'string' &&
-    typeof user.email === 'string'
+    typeof user.email === 'string' &&
+    typeof user.groupId === 'string'
   );
 };

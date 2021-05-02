@@ -12,7 +12,7 @@ import { UserResponse, GroupAttributes, UserRole } from '@booking/types';
 
 import { Layout } from '../components/layout';
 import { AdminLayout } from '../components/admin-layout';
-import { getAllUsers, createUser, deleteUser } from '../api';
+import { getAllUsers, createUser, updateUser, deleteUser } from '../api';
 import type { ResponseStatus } from '../api';
 import { Form } from '../components/form';
 import { Feedback } from '../components/feedback';
@@ -24,6 +24,11 @@ import { inquireConfirmation } from '../helpers/inquire-confirmation';
 
 interface FeedbackProps {
   feedback: ResponseStatus | undefined;
+}
+
+enum FormType {
+  CREATE,
+  EDIT,
 }
 
 const feedbackStyles = mergeStyles({
@@ -95,9 +100,21 @@ const UserFeedback: FC<FeedbackProps> = ({ feedback }) => {
   );
 };
 
+const getFormSubmitLabel = (formType?: FormType): string | undefined => {
+  switch (formType) {
+    case FormType.CREATE:
+      return 'Create';
+    case FormType.EDIT:
+      return 'Update';
+    default:
+      return undefined;
+  }
+};
+
 export const AdminUsersPage: FC = () => {
   const [groupList] = useGroupList();
-  const [showForm, setShowForm] = useState<boolean>(false);
+  const [formType, setFormType] = useState<FormType | undefined>();
+  const [userId, setUserId] = useState<string | undefined>();
   const [firstName, setFirstName] = useState<string>('');
   const [lastName, setLastName] = useState<string>('');
   const [email, setEmail] = useState<string>('');
@@ -105,7 +122,22 @@ export const AdminUsersPage: FC = () => {
   const [groupId, setGroupId] = useState<string | undefined>();
   const [users, setUsers] = useState<UserResponse[] | undefined>();
   const [feedback, setFeedback] = useState<ResponseStatus | undefined>();
-  const showFormHandler = (): void => setShowForm(true);
+  const showCreateFormHandler = (): void => setFormType(FormType.CREATE);
+  const showEditFormHandler = (userId: string): void => {
+    const user = (users || []).find(({ id }) => id === userId);
+
+    if (!user) {
+      return;
+    }
+
+    setFormType(FormType.EDIT);
+    setUserId(userId);
+    setFirstName(user.firstName);
+    setLastName(user.lastName);
+    setEmail(user.email);
+    setRole(user.role);
+    setGroupId(user.groupId);
+  };
   const handleFirstNameChange = (_: unknown, value = ''): void =>
     setFirstName(value);
   const handleLastNameChange = (_: unknown, value = ''): void =>
@@ -119,8 +151,10 @@ export const AdminUsersPage: FC = () => {
     setFirstName('');
     setLastName('');
     setEmail('');
+    setRole(undefined);
+    setGroupId(undefined);
     setFeedback(undefined);
-    setShowForm(false);
+    setFormType(undefined);
   };
   const handleSubmit = (): void => {
     if (typeof role === 'undefined' || typeof groupId === 'undefined') {
@@ -128,14 +162,32 @@ export const AdminUsersPage: FC = () => {
       return;
     }
 
-    createUser(firstName, lastName, email, role, groupId).then((status) => {
-      setFeedback(status);
+    if (formType === FormType.CREATE) {
+      createUser(firstName, lastName, email, role, groupId).then((status) => {
+        setFeedback(status);
 
-      if (status === 'ok') {
-        resetForm();
-        setUsers(undefined);
-      }
-    });
+        if (status === 'ok') {
+          resetForm();
+          requestAnimationFrame(() => setUsers(undefined));
+        }
+      });
+    }
+
+    if (formType === FormType.EDIT && typeof userId !== 'undefined') {
+      updateUser(userId, firstName, lastName, email, role, groupId).then(
+        (status) => {
+          setFeedback(status);
+
+          if (status === 'ok') {
+            resetForm();
+            requestAnimationFrame(() => {
+              setUserId(undefined);
+              setUsers(undefined);
+            });
+          }
+        }
+      );
+    }
   };
   const handleUserDeletion = (userId: string): void => {
     if (inquireConfirmation('Are you sure?')) {
@@ -158,11 +210,11 @@ export const AdminUsersPage: FC = () => {
   return (
     <Layout>
       <AdminLayout>
-        <Overlay visible={showForm}>
+        <Overlay visible={typeof formType !== 'undefined'}>
           <UserFeedback feedback={feedback} />
           <Form
             label="Create new user…"
-            buttonLabel="Create"
+            buttonLabel={getFormSubmitLabel(formType)}
             onSubmit={handleSubmit}
             onReset={resetForm}
           >
@@ -201,12 +253,15 @@ export const AdminUsersPage: FC = () => {
             />
           </Form>
         </Overlay>
-        <ActionButton onClick={showFormHandler} iconProps={actionButtonIcon}>
+        <ActionButton
+          onClick={showCreateFormHandler}
+          iconProps={actionButtonIcon}
+        >
           Create new user
         </ActionButton>
         <SimpleAdminList
           items={toListItems(users || [])}
-          onEdit={(id) => console.log('Edit', id)}
+          onEdit={showEditFormHandler}
           onDelete={handleUserDeletion}
         />
       </AdminLayout>
