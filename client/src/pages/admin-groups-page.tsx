@@ -1,7 +1,13 @@
 import type { FC, FormEvent } from 'react';
 import { useState } from 'react';
-import { Stack, TextField, PrimaryButton } from '@fluentui/react';
+import {
+  Stack,
+  TextField,
+  PrimaryButton,
+  MessageBarType,
+} from '@fluentui/react';
 import type { IStackTokens } from '@fluentui/react';
+import { mergeStyles } from '@fluentui/merge-styles';
 
 import { Layout } from '../components/layout';
 import { AdminLayout } from '../components/admin-layout';
@@ -9,11 +15,49 @@ import { useGroupList } from '../hooks/use-group-list';
 import { SimpleAdminList } from '../components/simple-admin-list';
 import { Overlay } from '../components/overlay';
 import { Form } from '../components/form';
-import { createGroup, deleteGroup } from '../api';
+import { Feedback } from '../components/feedback';
+import { createGroup, updateGroup, deleteGroup } from '../api';
+import type { ResponseStatus } from '../api';
 import { inquireConfirmation } from '../helpers/inquire-confirmation';
+
+interface FeedbackProps {
+  feedback: ResponseStatus | undefined;
+}
 
 const formTokens: IStackTokens = {
   childrenGap: '16px',
+};
+
+const feedbackStyles = mergeStyles({
+  marginBottom: '16px',
+});
+
+const UserFeedback: FC<FeedbackProps> = ({ feedback }) => {
+  if (!feedback || feedback === 'ok') {
+    return null;
+  }
+
+  let message: string;
+  let type: MessageBarType;
+
+  switch (feedback) {
+    case 'invalid':
+    case 'error':
+      message = 'Ein Fehler ist aufgetreten. Bitte versuch es noch einmal.';
+      type = MessageBarType.error;
+      break;
+    case 'overlapping':
+    case 'unverified':
+      throw new Error(`Unexpected type "${feedback}".`);
+    default:
+      throw new Error(`Unknown type "${feedback}".`);
+  }
+
+  return (
+    <Feedback type={type} className={feedbackStyles}>
+      {message}
+    </Feedback>
+  );
 };
 
 export const AdminGroupsPage: FC = () => {
@@ -22,6 +66,7 @@ export const AdminGroupsPage: FC = () => {
   const [newName, setNewName] = useState<string>('');
   const [editName, setEditName] = useState<string>('');
   const [editId, setEditId] = useState<string>('');
+  const [feedback, setFeedback] = useState<ResponseStatus | undefined>();
   const handleDelete = (groupId: string) => {
     if (inquireConfirmation('Are you sure?')) {
       deleteGroup(groupId).then((success) => {
@@ -48,9 +93,14 @@ export const AdminGroupsPage: FC = () => {
     setShowForm(false);
   };
   const handleEditSubmit = () => {
-    // TODO: implement API endpoint
-    console.log('Edit group', editName, editId);
-    resetEditForm();
+    updateGroup(editId, editName).then((status) => {
+      setFeedback(status);
+
+      if (status === 'ok') {
+        resetEditForm();
+        requestAnimationFrame(() => reloadGroupList());
+      }
+    });
   };
   const handleEditChange = (_: unknown, value?: string) =>
     setEditName(value || '');
@@ -73,6 +123,7 @@ export const AdminGroupsPage: FC = () => {
     <Layout>
       <AdminLayout>
         <Overlay visible={showForm}>
+          <UserFeedback feedback={feedback} />
           <Form
             label="Edit group…"
             onSubmit={handleEditSubmit}

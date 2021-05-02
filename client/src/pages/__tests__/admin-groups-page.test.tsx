@@ -1,6 +1,12 @@
 import type { FC } from 'react';
 import { MemoryRouter as Router } from 'react-router-dom';
-import { render, screen, act, fireEvent } from '@testing-library/react';
+import {
+  render,
+  screen,
+  act,
+  fireEvent,
+  waitFor,
+} from '@testing-library/react';
 import nock from 'nock';
 import { initializeIcons } from '@uifabric/icons';
 
@@ -117,6 +123,54 @@ describe('Admin Groups Page', () => {
       });
 
       screen.getByText('Group #3');
+    });
+  });
+
+  describe('Editing a group', () => {
+    it('should update group #2', async () => {
+      (useUserContext as jest.Mock).mockReturnValue(user);
+
+      const newName = 'Awesome Group #2';
+      const initialScope = nock('http://localhost')
+        .get('/api/groups')
+        .reply(200, { status: 'ok', payload: groups });
+      const updateScope = nock('http://localhost')
+        .post('/api/groups', {
+          id: groups[1].id,
+          name: newName,
+        })
+        .reply(200, { status: 'ok' })
+        .get('/api/groups')
+        .reply(200, {
+          status: 'ok',
+          payload: [groups[0], { id: groups[1].id, name: newName }],
+        });
+
+      render(
+        <Router>
+          <AdminGroupsPage />
+        </Router>
+      );
+
+      await act(async () => {
+        await expect(scopeIsDone(initialScope)).resolves.toBe(true);
+      });
+
+      fireEvent.click(screen.getByTestId(`edit-element-${groups[1].id}`));
+
+      await waitFor(() => screen.getByTestId('overlay'));
+
+      fireEvent.change(screen.getByLabelText('Group name'), {
+        target: { value: newName },
+      });
+
+      fireEvent.click(screen.getByText('Absenden'));
+
+      await act(async () => {
+        await expect(scopeIsDone(updateScope)).resolves.toBe(true);
+      });
+
+      screen.getByText(newName);
     });
   });
 
