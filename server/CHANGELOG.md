@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 0.1.0-alpha.55 (2021-05-04)
+
+**Note:** Version bump only for package @booking/server
+
+
+
+
+
 # 0.1.0-alpha.54 (2021-04-26)
 
 **Note:** Version bump only for package @booking/server
