@@ -20,7 +20,7 @@
     "debug": "npm-run-all -c -p debug:client dev:server",
     "prelint": "npm run fmt:check",
     "lint": "lerna run lint --no-bail",
-    "test": "lerna run test --no-bail --stream",
+    "test": "lerna run test --no-bail --stream --concurrency 1",
     "prebuild": "rm -rf ./dist",
     "__postbuild_comment__": "Whyever this file is put there by ncc anyways...",
     "postbuild": "rm ./dist/api/package.json",
