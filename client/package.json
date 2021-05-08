@@ -22,7 +22,8 @@
     ],
     "rules": {
       "@typescript-eslint/no-unused-vars": "error"
-    }
+    },
+    "ignorePatterns": ["/config.override.js"]
   },
   "browserslist": {
     "production": [
