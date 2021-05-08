@@ -69,6 +69,7 @@ const toListItems = (items: SimplAdminListItem[]): IDetailsListProps['items'] =>
     id,
   }));
 
+// TODO: support additional columns
 const createOnRenderItemColumn = (onEdit: Handler, onDelete: Handler) => (
   item: Record<string, string>,
   _: unknown,
