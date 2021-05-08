@@ -29,14 +29,19 @@ import type {
   ICommandBarItemProps,
 } from '@fluentui/react';
 import { mergeStyles } from '@fluentui/merge-styles';
+import type { ResourceAttributes } from '@booking/types';
 
 import { Layout } from '../components/layout';
 import type { ViewTypeOption, ViewTypeParam } from '../types';
 import { DEFAULT_VIEW_OPTION, MQ_IS_DESKTOP, MQ_IS_MEDIUM } from '../constants';
 import { useMediaQuery } from '../hooks/use-media-query';
-import { UnauthenticatedError, getEventsByResourceId } from '../api';
+import {
+  getAllResources,
+  UnauthenticatedError,
+  getEventsByResourceId,
+} from '../api';
 import { useRedirectUnauthenticatedUser } from '../hooks/use-redirect-unauthenticated-user';
-import { useResourceList } from '../hooks/use-resource-list';
+import { useAuthenticatedFetch } from '../hooks/use-authenticated-fetch';
 
 interface Params {
   resourceId: string;
@@ -135,7 +140,10 @@ const getNowFromString = (now: string | null): string | undefined => {
 
 export const ResourcePage: FC = () => {
   const redirect = useRedirectUnauthenticatedUser();
-  const [resources] = useResourceList();
+  const [resources] = useAuthenticatedFetch<ResourceAttributes[]>(
+    getAllResources,
+    []
+  );
   const history = useHistory();
   const params = useParams<Params>();
   const currentViewType = getViewTypeOption(params.view);

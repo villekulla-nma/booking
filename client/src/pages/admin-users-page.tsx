@@ -1,5 +1,5 @@
 import type { FC } from 'react';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { ActionButton } from '@fluentui/react';
 import type { IIconProps } from '@fluentui/react';
@@ -9,6 +9,7 @@ import { Layout } from '../components/layout';
 import { AdminLayout } from '../components/admin-layout';
 import { getAllUsers, updateUser, deleteUser } from '../api';
 import type { ResponseStatus } from '../api';
+import { useAuthenticatedFetch } from '../hooks/use-authenticated-fetch';
 import { UserForm } from '../components/user-form';
 import type { FormValues } from '../components/user-form';
 import { Overlay } from '../components/overlay';
@@ -27,7 +28,10 @@ const toListItems = (users: UserResponse[]): SimplAdminListItem[] =>
 export const AdminUsersPage: FC = () => {
   const history = useHistory();
   const [user, setUser] = useState<UserResponse | undefined>();
-  const [users, setUsers] = useState<UserResponse[] | undefined>();
+  const [users, reloadUsers] = useAuthenticatedFetch<UserResponse[]>(
+    getAllUsers,
+    []
+  );
   const [feedback, setFeedback] = useState<ResponseStatus | undefined>();
   const handleCreateNewUser = (): void => history.push('/admin/users/create');
   const showEditFormHandler = (userId: string): void => {
@@ -66,7 +70,7 @@ export const AdminUsersPage: FC = () => {
 
         if (status === 'ok') {
           setUser(undefined);
-          setUsers(undefined);
+          reloadUsers();
         }
       }
     );
@@ -75,19 +79,13 @@ export const AdminUsersPage: FC = () => {
     if (inquireConfirmation('Soll das Nutzerkonto wirklich gelöscht werden?')) {
       deleteUser(userId).then((success) => {
         if (success) {
-          setUsers(undefined);
+          reloadUsers();
         } else {
           alert('Etwas ist schief gelaufen.');
         }
       });
     }
   };
-
-  useEffect(() => {
-    if (typeof users === 'undefined') {
-      getAllUsers().then((users) => setUsers(users));
-    }
-  }, [users]);
 
   return (
     <Layout>

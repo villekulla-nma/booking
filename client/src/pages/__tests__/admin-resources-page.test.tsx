@@ -98,7 +98,10 @@ describe('Admin Resources Page', () => {
         })
         .reply(200, { status: 'ok' })
         .get('/api/resources')
-        .reply(200, { status: 'ok', payload: [...resources, newResource] });
+        .reply(200, {
+          status: 'ok',
+          payload: [...resources, newResource],
+        });
 
       render(
         <Router>

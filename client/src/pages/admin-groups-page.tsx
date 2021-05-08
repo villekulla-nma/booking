@@ -8,15 +8,16 @@ import {
 } from '@fluentui/react';
 import type { IStackTokens } from '@fluentui/react';
 import { mergeStyles } from '@fluentui/merge-styles';
+import type { GroupAttributes } from '@booking/types';
 
 import { Layout } from '../components/layout';
 import { AdminLayout } from '../components/admin-layout';
-import { useGroupList } from '../hooks/use-group-list';
+import { useAuthenticatedFetch } from '../hooks/use-authenticated-fetch';
 import { SimpleAdminList } from '../components/simple-admin-list';
 import { Overlay } from '../components/overlay';
 import { Form } from '../components/form';
 import { Feedback } from '../components/feedback';
-import { createGroup, updateGroup, deleteGroup } from '../api';
+import { getAllGroups, createGroup, updateGroup, deleteGroup } from '../api';
 import type { ResponseStatus } from '../api';
 import { inquireConfirmation } from '../helpers/inquire-confirmation';
 
@@ -61,7 +62,10 @@ const UserFeedback: FC<FeedbackProps> = ({ feedback }) => {
 };
 
 export const AdminGroupsPage: FC = () => {
-  const [groupList, reloadGroupList] = useGroupList();
+  const [groupList, reloadGroupList] = useAuthenticatedFetch<GroupAttributes[]>(
+    getAllGroups,
+    []
+  );
   const [showForm, setShowForm] = useState<boolean>(false);
   const [newName, setNewName] = useState<string>('');
   const [editName, setEditName] = useState<string>('');

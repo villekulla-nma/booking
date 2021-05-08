@@ -3,8 +3,10 @@ import { Stack } from '@fluentui/react';
 import { Link } from 'react-router-dom';
 import { mergeStyles } from '@fluentui/merge-styles';
 import { Icon, NeutralColors, Link as A } from '@fluentui/react';
+import type { ResourceAttributes } from '@booking/types';
 
-import { useResourceList } from '../hooks/use-resource-list';
+import { useAuthenticatedFetch } from '../hooks/use-authenticated-fetch';
+import { getAllResources } from '../api';
 import { LogoutButton } from './logout-button';
 import { MainNav } from './main-nav';
 import { MQ_IS_DESKTOP, ROLE } from '../constants';
@@ -32,7 +34,10 @@ const icon = mergeStyles({
 });
 
 export const MainHeader: FC<Props> = ({ onHomeClick }) => {
-  const [resources] = useResourceList();
+  const [resources] = useAuthenticatedFetch<ResourceAttributes[]>(
+    getAllResources,
+    []
+  );
   const user = useUserContext();
   const homeLinkAs = typeof onHomeClick === 'function' ? undefined : Link;
   const homeLinkTo = typeof onHomeClick === 'function' ? undefined : '/';

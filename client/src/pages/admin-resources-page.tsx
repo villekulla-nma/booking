@@ -8,15 +8,21 @@ import {
 } from '@fluentui/react';
 import type { IStackTokens } from '@fluentui/react';
 import { mergeStyles } from '@fluentui/merge-styles';
+import type { ResourceAttributes } from '@booking/types';
 
 import { Layout } from '../components/layout';
 import { AdminLayout } from '../components/admin-layout';
-import { useResourceList } from '../hooks/use-resource-list';
+import { useAuthenticatedFetch } from '../hooks/use-authenticated-fetch';
 import { SimpleAdminList } from '../components/simple-admin-list';
 import { Overlay } from '../components/overlay';
 import { Form } from '../components/form';
 import { Feedback } from '../components/feedback';
-import { createResource, updateResource, deleteResource } from '../api';
+import {
+  getAllResources,
+  createResource,
+  updateResource,
+  deleteResource,
+} from '../api';
 import type { ResponseStatus } from '../api';
 import { inquireConfirmation } from '../helpers/inquire-confirmation';
 
@@ -61,7 +67,9 @@ const UserFeedback: FC<FeedbackProps> = ({ feedback }) => {
 };
 
 export const AdminResourcesPage: FC = () => {
-  const [resourceList, reloadResourceList] = useResourceList();
+  const [resourceList, reloadResourceList] = useAuthenticatedFetch<
+    ResourceAttributes[]
+  >(getAllResources, []);
   const [showForm, setShowForm] = useState<boolean>(false);
   const [newName, setNewName] = useState<string>('');
   const [editName, setEditName] = useState<string>('');

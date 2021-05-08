@@ -12,7 +12,8 @@ import { mergeStyles } from '@fluentui/merge-styles';
 import type { UserRole, GroupAttributes } from '@booking/types';
 
 import type { ResponseStatus } from '../api';
-import { useGroupList } from '../hooks/use-group-list';
+import { useAuthenticatedFetch } from '../hooks/use-authenticated-fetch';
+import { getAllGroups } from '../api';
 import { Form } from './form';
 import { Feedback } from '../components/feedback';
 
@@ -108,7 +109,10 @@ export const UserForm: FC<Props> = ({
   onReset,
   onSubmit,
 }) => {
-  const [groupList] = useGroupList();
+  const [groupList] = useAuthenticatedFetch<GroupAttributes[]>(
+    getAllGroups,
+    []
+  );
   const [firstName, setFirstName] = useState<string>(initialFirstName);
   const [lastName, setLastName] = useState<string>(initialLastName);
   const [email, setEmail] = useState<string>(initialEmail);

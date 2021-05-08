@@ -1,12 +1,6 @@
 import type { FC } from 'react';
 import { MemoryRouter as Router } from 'react-router-dom';
-import {
-  render,
-  screen,
-  act,
-  fireEvent,
-  waitFor,
-} from '@testing-library/react';
+import { render, screen, act, fireEvent } from '@testing-library/react';
 import nock from 'nock';
 import { initializeIcons } from '@uifabric/icons';
 
