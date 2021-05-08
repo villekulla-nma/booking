@@ -1,5 +1,5 @@
 import type { FC } from 'react';
-import { useState } from 'react';
+import { useState, memo } from 'react';
 import { Dropdown, Stack, memoizeFunction } from '@fluentui/react';
 import type {
   IDropdownOption,
@@ -72,48 +72,43 @@ const getTimePickerOptions = memoizeFunction(
 const getDateStringFromValue = (date: Date): string =>
   format(date, 'yyyy-MM-dd');
 
-export const DateTimePicker: FC<Props> = ({
-  label,
-  value,
-  minDate,
-  hideTime,
-  id,
-  onChange,
-}) => {
-  const [date, setDate] = useState<string>(value.date);
-  const [time, setTime] = useState<string>(value.time);
-  const handleDateChange = (d: Date | null | undefined): void => {
-    const newDate = d instanceof Date ? getDateStringFromValue(d) : date;
-    setDate(newDate);
-    onChange(newDate, time);
-  };
-  const handleTimeChange = (_: unknown, option?: IDropdownOption): void => {
-    const newTime = option?.id || time;
-    setTime(newTime);
-    onChange(date, newTime);
-  };
+export const DateTimePicker: FC<Props> = memo(
+  ({ label, value, minDate, hideTime, id, onChange }) => {
+    const [date, setDate] = useState<string>(value.date);
+    const [time, setTime] = useState<string>(value.time);
+    const handleDateChange = (d: Date | null | undefined): void => {
+      const newDate = d instanceof Date ? getDateStringFromValue(d) : date;
+      setDate(newDate);
+      onChange(newDate, time);
+    };
+    const handleTimeChange = (_: unknown, option?: IDropdownOption): void => {
+      const newTime = option?.id || time;
+      setTime(newTime);
+      onChange(date, newTime);
+    };
 
-  return (
-    <Stack
-      horizontal={true}
-      verticalAlign="end"
-      tokens={tokens}
-      data-testid={id}
-    >
-      <DatePicker
-        minDate={minDate}
-        label={label}
-        value={parse(date, 'yyyy-MM-dd', new Date())}
-        onSelectDate={handleDateChange}
-      />
-      {Boolean(hideTime) === false && (
-        <Dropdown
-          placeholder="Wähle eine Uhrzeit aus…"
-          ariaLabel={`${label} (Uhrzeit)`}
-          options={getTimePickerOptions(getHoursOfDay(minDate), time)}
-          onChange={handleTimeChange}
+    return (
+      <Stack
+        horizontal={true}
+        verticalAlign="end"
+        tokens={tokens}
+        data-testid={id}
+      >
+        <DatePicker
+          minDate={minDate}
+          label={label}
+          value={parse(date, 'yyyy-MM-dd', new Date())}
+          onSelectDate={handleDateChange}
         />
-      )}
-    </Stack>
-  );
-};
+        {Boolean(hideTime) === false && (
+          <Dropdown
+            placeholder="Wähle eine Uhrzeit aus…"
+            ariaLabel={`${label} (Uhrzeit)`}
+            options={getTimePickerOptions(getHoursOfDay(minDate), time)}
+            onChange={handleTimeChange}
+          />
+        )}
+      </Stack>
+    );
+  }
+);

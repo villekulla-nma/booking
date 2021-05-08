@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import type { FC } from 'react';
 import { Stack } from '@fluentui/react';
 import { Link } from 'react-router-dom';
@@ -33,7 +34,7 @@ const icon = mergeStyles({
   fontSize: '24px',
 });
 
-export const MainHeader: FC<Props> = ({ onHomeClick }) => {
+export const MainHeader: FC<Props> = memo(({ onHomeClick }) => {
   const [resources] = useAuthenticatedFetch<ResourceAttributes[]>(
     getAllResources,
     []
@@ -87,4 +88,4 @@ export const MainHeader: FC<Props> = ({ onHomeClick }) => {
       </Stack>
     </Stack>
   );
-};
+});

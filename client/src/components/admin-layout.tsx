@@ -1,4 +1,5 @@
 import type { FC, ReactNode } from 'react';
+import { memo } from 'react';
 import { Link, useRouteMatch } from 'react-router-dom';
 import { Stack, Text, Link as A, NeutralColors } from '@fluentui/react';
 import type { IStackTokens, IStyle } from '@fluentui/react';
@@ -60,7 +61,7 @@ const renderLink = (
   </Text>
 );
 
-export const AdminLayout: FC = ({ children }) => {
+export const AdminLayout: FC = memo(({ children }) => {
   const match = useRouteMatch<Section>({
     path: '/admin/:section',
   });
@@ -80,4 +81,4 @@ export const AdminLayout: FC = ({ children }) => {
       <Stack.Item>{children}</Stack.Item>
     </Stack>
   );
-};
+});

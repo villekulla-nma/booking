@@ -1,4 +1,5 @@
 import type { FC } from 'react';
+import { memo } from 'react';
 import { Stack, NeutralColors, Text, Link } from '@fluentui/react';
 import type { IStackTokens } from '@fluentui/react';
 import { mergeStyles } from '@fluentui/merge-styles';
@@ -29,7 +30,7 @@ const footer = mergeStyles({
   fontSize: '14px',
 });
 
-export const Layout: FC<Props> = ({ children, onHomeClick }) => (
+export const Layout: FC<Props> = memo(({ children, onHomeClick }) => (
   <Stack className={styles}>
     <MainHeader onHomeClick={onHomeClick} />
     <Stack as="main" grow={1}>
@@ -58,4 +59,4 @@ export const Layout: FC<Props> = ({ children, onHomeClick }) => (
       </Stack>
     </Stack.Item>
   </Stack>
-);
+));

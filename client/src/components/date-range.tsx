@@ -1,4 +1,5 @@
 import type { FC } from 'react';
+import { memo } from 'react';
 import { Stack, Text, NeutralColors } from '@fluentui/react';
 import type { IStackTokens } from '@fluentui/react';
 import { mergeStyles } from '@fluentui/merge-styles';
@@ -56,7 +57,7 @@ const formatDateTime = (date: string) =>
   });
 
 // TODO: fix linting...
-export const DateRange: FC<Props> = ({ start, end, allDay }) => {
+export const DateRange: FC<Props> = memo(({ start, end, allDay }) => {
   const difference = differenceInDays(new Date(end), new Date(start));
   const formatFn = difference === 0 ? formatDateTime : formatDate;
 
@@ -93,4 +94,4 @@ export const DateRange: FC<Props> = ({ start, end, allDay }) => {
       </Stack>
     </dl>
   );
-};
+});

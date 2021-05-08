@@ -1,4 +1,5 @@
 import type { FC, ReactNode } from 'react';
+import { memo } from 'react';
 import {
   DetailsList,
   IconButton,
@@ -104,16 +105,18 @@ const createOnRenderItemColumn = (onEdit: Handler, onDelete: Handler) => (
   }
 };
 
-export const SimpleAdminList: FC<Props> = ({ items, onEdit, onDelete }) => {
-  const onRenderItemColumn = createOnRenderItemColumn(onEdit, onDelete);
+export const SimpleAdminList: FC<Props> = memo(
+  ({ items, onEdit, onDelete }) => {
+    const onRenderItemColumn = createOnRenderItemColumn(onEdit, onDelete);
 
-  return (
-    <DetailsList
-      items={toListItems(items)}
-      columns={columns}
-      layoutMode={DetailsListLayoutMode.justified}
-      selectionMode={SelectionMode.none}
-      onRenderItemColumn={onRenderItemColumn}
-    />
-  );
-};
+    return (
+      <DetailsList
+        items={toListItems(items)}
+        columns={columns}
+        layoutMode={DetailsListLayoutMode.justified}
+        selectionMode={SelectionMode.none}
+        onRenderItemColumn={onRenderItemColumn}
+      />
+    );
+  }
+);

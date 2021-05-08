@@ -1,4 +1,5 @@
 import type { FC, FormEvent } from 'react';
+import { memo } from 'react';
 import {
   Stack,
   Text,
@@ -35,37 +36,37 @@ const buttonGroupTokens: IStackTokens = {
   childrenGap: 16,
 };
 
-export const Form: FC<Props> = ({
-  children,
-  onSubmit,
-  onReset,
-  label,
-  buttonLabel = 'Absenden',
-}) => {
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    onSubmit();
-  };
+export const Form: FC<Props> = memo(
+  ({ children, onSubmit, onReset, label, buttonLabel = 'Absenden' }) => {
+    const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
+      onSubmit();
+    };
 
-  return (
-    <form
-      method="post"
-      onSubmit={handleSubmit}
-      onReset={onReset}
-      className={form}
-    >
-      <fieldset className={fieldset}>
-        <Text as="legend" variant="large">
-          {label}
-        </Text>
-        <Stack tokens={formInnerTokens}>{children}</Stack>
-      </fieldset>
-      <Stack horizontal={true} tokens={buttonGroupTokens} horizontalAlign="end">
-        {typeof onReset === 'function' && (
-          <DefaultButton type="reset">Abbrechen</DefaultButton>
-        )}
-        <PrimaryButton type="submit">{buttonLabel}</PrimaryButton>
-      </Stack>
-    </form>
-  );
-};
+    return (
+      <form
+        method="post"
+        onSubmit={handleSubmit}
+        onReset={onReset}
+        className={form}
+      >
+        <fieldset className={fieldset}>
+          <Text as="legend" variant="large">
+            {label}
+          </Text>
+          <Stack tokens={formInnerTokens}>{children}</Stack>
+        </fieldset>
+        <Stack
+          horizontal={true}
+          tokens={buttonGroupTokens}
+          horizontalAlign="end"
+        >
+          {typeof onReset === 'function' && (
+            <DefaultButton type="reset">Abbrechen</DefaultButton>
+          )}
+          <PrimaryButton type="submit">{buttonLabel}</PrimaryButton>
+        </Stack>
+      </form>
+    );
+  }
+);

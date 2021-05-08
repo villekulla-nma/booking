@@ -1,5 +1,5 @@
 import type { FC } from 'react';
-import { useState } from 'react';
+import { useState, memo } from 'react';
 import { Link, useRouteMatch, useHistory } from 'react-router-dom';
 import {
   Stack,
@@ -46,7 +46,7 @@ const nav = mergeStyles({
 
 const iconProps: IIconProps = { iconName: 'GlobalNavButton' };
 
-const MobileNav: FC<Props & ResourceId> = ({ resources, resourceId }) => {
+const MobileNav: FC<Props & ResourceId> = memo(({ resources, resourceId }) => {
   const history = useHistory();
   const [open, setOpen] = useState<boolean>(false);
 
@@ -87,9 +87,9 @@ const MobileNav: FC<Props & ResourceId> = ({ resources, resourceId }) => {
       </Panel>
     </>
   );
-};
+});
 
-export const MainNav: FC<Props> = ({ resources }) => {
+export const MainNav: FC<Props> = memo(({ resources }) => {
   const isDesktop = useMediaQuery(MQ_IS_DESKTOP);
   const match = useRouteMatch<ResourceId>({
     path: '/resources/:resourceId',
@@ -117,4 +117,4 @@ export const MainNav: FC<Props> = ({ resources }) => {
       resourceId={match?.params.resourceId || ''}
     />
   );
-};
+});
