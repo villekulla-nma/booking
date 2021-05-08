@@ -8,6 +8,7 @@ import { scopeIsDone } from '../../helpers/nock';
 import { useUserContext } from '../../hooks/use-user-context';
 import { AdminUsersPage } from '../admin-users-page';
 import { inquireConfirmation } from '../../helpers/inquire-confirmation';
+import { sleep } from '../../helpers/sleep';
 
 jest.mock('../../hooks/use-user-context');
 jest.mock('../../helpers/inquire-confirmation');
@@ -136,6 +137,7 @@ describe('Admin Users Page', () => {
       await act(async () => {
         await expect(scopeIsDone(initialScope)).resolves.toBe(true);
       });
+      await sleep(100);
 
       fireEvent.click(
         screen.getByTestId(`edit-element-${userOne.id}`) as Element
@@ -158,6 +160,7 @@ describe('Admin Users Page', () => {
       await act(async () => {
         await expect(scopeIsDone(updateScope)).resolves.toBe(true);
       });
+      await sleep(100);
 
       expect(screen.queryByTestId('overlay')).toBeNull();
 
@@ -191,6 +194,7 @@ describe('Admin Users Page', () => {
       await act(async () => {
         await expect(scopeIsDone(initialScope)).resolves.toBe(true);
       });
+      await sleep(100);
 
       screen.getByText(`${fullName} [${userThree.role}]`);
 
@@ -199,6 +203,7 @@ describe('Admin Users Page', () => {
       await act(async () => {
         await expect(scopeIsDone(deletionScope)).resolves.toBe(true);
       });
+      await sleep(100);
 
       expect(screen.queryByText(`${fullName} [${userThree.role}]`)).toBeNull();
     });
