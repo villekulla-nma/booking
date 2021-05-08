@@ -74,7 +74,9 @@ describe('Main-Header', () => {
         </Router>
       );
 
-      await expect(scopeIsDone(scope)).resolves.toBe(true);
+      await act(async () => {
+        await expect(scopeIsDone(scope)).resolves.toBe(true);
+      });
 
       await customWaitFor(() => pathname !== '', 200);
 

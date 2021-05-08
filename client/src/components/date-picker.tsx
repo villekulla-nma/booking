@@ -1,4 +1,5 @@
 import type { FC } from 'react';
+import { memo } from 'react';
 import { DatePicker as FluentUiDatePicker, DayOfWeek } from '@fluentui/react';
 import type { IDatePickerStrings, IDateFormatting } from '@fluentui/react';
 import { format } from 'date-fns';
@@ -81,23 +82,20 @@ const dateTimeFormatter: IDateFormatting = {
 const formatDate = (date?: Date): string =>
   date ? format(date, `eeeeee, ${FORMAT_DATE}`, { locale: de }) : '';
 
-export const DatePicker: FC<Props> = ({
-  label,
-  minDate,
-  value,
-  onSelectDate,
-}) => {
-  return (
-    <FluentUiDatePicker
-      firstDayOfWeek={DayOfWeek.Monday}
-      strings={datePickerStrings}
-      minDate={minDate}
-      label={label}
-      placeholder="Wähle ein Datum aus…"
-      value={value}
-      onSelectDate={onSelectDate}
-      dateTimeFormatter={dateTimeFormatter}
-      formatDate={formatDate}
-    />
-  );
-};
+export const DatePicker: FC<Props> = memo(
+  ({ label, minDate, value, onSelectDate }) => {
+    return (
+      <FluentUiDatePicker
+        firstDayOfWeek={DayOfWeek.Monday}
+        strings={datePickerStrings}
+        minDate={minDate}
+        label={label}
+        placeholder="Wähle ein Datum aus…"
+        value={value}
+        onSelectDate={onSelectDate}
+        dateTimeFormatter={dateTimeFormatter}
+        formatDate={formatDate}
+      />
+    );
+  }
+);

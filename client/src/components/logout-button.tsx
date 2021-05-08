@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import type { FC } from 'react';
 import { PrimaryButton } from '@fluentui/react';
 
@@ -5,7 +6,7 @@ import { logout } from '../api';
 import { reload } from '../helpers/location';
 import { useUserContext } from '../hooks/use-user-context';
 
-export const LogoutButton: FC = () => {
+export const LogoutButton: FC = memo(() => {
   const user = useUserContext();
   const handleClick = () => {
     logout().then(() => reload());
@@ -16,4 +17,4 @@ export const LogoutButton: FC = () => {
   }
 
   return <PrimaryButton onClick={handleClick}>Abmelden</PrimaryButton>;
-};
+});

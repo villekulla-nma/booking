@@ -14,6 +14,7 @@ import { scopeIsDone } from '../../helpers/nock';
 import { useUserContext } from '../../hooks/use-user-context';
 import { AdminResourcesPage } from '../admin-resources-page';
 import { inquireConfirmation } from '../../helpers/inquire-confirmation';
+import { sleep } from '../../helpers/sleep';
 
 jest.mock('../../hooks/use-user-context');
 jest.mock('../../helpers/inquire-confirmation');
@@ -98,7 +99,10 @@ describe('Admin Resources Page', () => {
         })
         .reply(200, { status: 'ok' })
         .get('/api/resources')
-        .reply(200, { status: 'ok', payload: [...resources, newResource] });
+        .reply(200, {
+          status: 'ok',
+          payload: [...resources, newResource],
+        });
 
       render(
         <Router>
@@ -124,6 +128,7 @@ describe('Admin Resources Page', () => {
       await act(async () => {
         await expect(scopeIsDone(creationScope)).resolves.toBe(true);
       });
+      await sleep(100);
 
       screen.getByText('Resource #3');
     });
@@ -158,6 +163,7 @@ describe('Admin Resources Page', () => {
       await act(async () => {
         await expect(scopeIsDone(initialScope)).resolves.toBe(true);
       });
+      await sleep(100);
 
       fireEvent.click(screen.getByTestId(`edit-element-${resources[1].id}`));
 
@@ -172,6 +178,7 @@ describe('Admin Resources Page', () => {
       await act(async () => {
         await expect(scopeIsDone(updateScope)).resolves.toBe(true);
       });
+      await sleep(100);
 
       screen.getByText(newName);
     });

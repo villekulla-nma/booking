@@ -1,4 +1,5 @@
 import type { FC } from 'react';
+import { memo } from 'react';
 import { Overlay as OverlayComp } from '@fluentui/react';
 import { mergeStyles } from '@fluentui/merge-styles';
 
@@ -17,7 +18,7 @@ const inner = mergeStyles({
   backgroundColor: 'white',
 });
 
-export const Overlay: FC<Props> = ({ visible, children }) => {
+export const Overlay: FC<Props> = memo(({ visible, children }) => {
   if (!visible) {
     return null;
   }
@@ -27,4 +28,4 @@ export const Overlay: FC<Props> = ({ visible, children }) => {
       <div className={inner}>{children}</div>
     </OverlayComp>
   );
-};
+});

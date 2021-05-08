@@ -1,4 +1,5 @@
 import type { FC } from 'react';
+import { memo } from 'react';
 import type { IStackTokens } from '@fluentui/react';
 import { Stack, Text, NeutralColors } from '@fluentui/react';
 import { mergeStyles } from '@fluentui/merge-styles';
@@ -38,34 +39,28 @@ const descriptionText = mergeStyles({
   textOverflow: 'ellipsis',
 });
 
-export const EventTile: FC<UserEvent & Props> = ({
-  id,
-  resource,
-  start,
-  end,
-  allDay,
-  description,
-  className,
-}) => {
-  const history = useHistory();
-  const eventUrl = `/events/${id}`;
-  const handleClick = () => history.push(eventUrl);
+export const EventTile: FC<UserEvent & Props> = memo(
+  ({ id, resource, start, end, allDay, description, className }) => {
+    const history = useHistory();
+    const eventUrl = `/events/${id}`;
+    const handleClick = () => history.push(eventUrl);
 
-  return (
-    <Stack
-      tokens={wrapTokens}
-      className={classNames(wrap, className)}
-      onClick={handleClick}
-    >
-      <Text variant="large">
-        <Link to={eventUrl} className={link}>
-          {resource}
-        </Link>
-      </Text>
-      <DateRange start={start} end={end} allDay={allDay} />
-      <Text variant="medium" className={descriptionText}>
-        {description || '—'}
-      </Text>
-    </Stack>
-  );
-};
+    return (
+      <Stack
+        tokens={wrapTokens}
+        className={classNames(wrap, className)}
+        onClick={handleClick}
+      >
+        <Text variant="large">
+          <Link to={eventUrl} className={link}>
+            {resource}
+          </Link>
+        </Text>
+        <DateRange start={start} end={end} allDay={allDay} />
+        <Text variant="medium" className={descriptionText}>
+          {description || '—'}
+        </Text>
+      </Stack>
+    );
+  }
+);

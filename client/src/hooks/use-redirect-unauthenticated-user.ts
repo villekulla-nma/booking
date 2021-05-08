@@ -4,24 +4,28 @@ import type { Location } from 'history';
 
 import { UnauthenticatedError } from '../api';
 
+type IsRedirecting = boolean;
+
 type RedirectFn = (
   error: unknown,
   fn?: (error: Error | unknown) => void
-) => void;
+) => IsRedirecting;
 
 export const useRedirectUnauthenticatedUser = (): RedirectFn => {
   const history = useHistory();
   const initialLocation = useLocation();
   const location = useRef<Location>(initialLocation);
   const redirectFn = useCallback<RedirectFn>(
-    (error, fn) => {
+    (error, fn): IsRedirecting => {
       if (error instanceof UnauthenticatedError) {
         const from = `${location.current.pathname}${location.current.search}`;
 
         history.replace('/login', location.current.state || { from });
+        return true;
       } else {
         if (typeof fn === 'function') {
           fn(error);
+          return false;
         } else {
           throw error;
         }

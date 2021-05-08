@@ -1,4 +1,5 @@
 import type { FC } from 'react';
+import { memo } from 'react';
 import { MessageBar } from '@fluentui/react';
 import type { IMessageBarStyles, MessageBarType } from '@fluentui/react';
 import { mergeStyles } from '@fluentui/merge-styles';
@@ -14,7 +15,7 @@ const feedbackText = mergeStyles({
 
 const feedbackStyles: IMessageBarStyles = { text: feedbackText };
 
-export const Feedback: FC<Props> = ({ type, className, children }) => (
+export const Feedback: FC<Props> = memo(({ type, className, children }) => (
   <MessageBar
     messageBarType={type}
     styles={feedbackStyles}
@@ -22,4 +23,4 @@ export const Feedback: FC<Props> = ({ type, className, children }) => (
   >
     {children}
   </MessageBar>
-);
+));
