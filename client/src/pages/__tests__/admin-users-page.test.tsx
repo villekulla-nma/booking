@@ -82,8 +82,6 @@ describe('Admin Users Page', () => {
       (useUserContext as jest.Mock).mockReturnValue(userTwo);
 
       const scope = nock('http://localhost')
-        .get('/api/groups')
-        .reply(200, { status: 'ok', payload: groups })
         .get('/api/users')
         .reply(200, { status: 'ok', payload: [userOne, userTwo] });
 
@@ -102,94 +100,17 @@ describe('Admin Users Page', () => {
     });
   });
 
-  describe('adding a user', () => {
-    it('should create a new user', async () => {
-      (useUserContext as jest.Mock).mockReturnValue(userTwo);
-
-      const groupId = 'Uj5SAS740';
-      const fullName = 'Person3 Three';
-      const initialScope = nock('http://localhost')
-        .get('/api/groups')
-        .reply(200, { status: 'ok', payload: groups })
-        .get('/api/users')
-        .reply(200, { status: 'ok', payload: [userOne, userTwo] });
-      const creationScope = nock('http://localhost')
-        .put('/api/user', {
-          firstName: userThree.firstName,
-          lastName: userThree.lastName,
-          email: userThree.email,
-          role: userThree.role,
-          groupId,
-        })
-        .reply(200, { status: 'ok' })
-        .get('/api/users')
-        .reply(200, { status: 'ok', payload: [userOne, userTwo, userThree] });
-
-      render(
-        <Router>
-          <AdminUsersPage />
-        </Router>
-      );
-
-      await act(async () => {
-        await expect(scopeIsDone(initialScope)).resolves.toBe(true);
-      });
-
-      expect(screen.queryByText(`${fullName} [${userThree.role}]`)).toBeNull();
-
-      fireEvent.click(screen.getByText(/Create new user/) as Element);
-
-      await waitFor(() => screen.getByTestId('overlay'));
-
-      fireEvent.change(screen.getByLabelText('First name'), {
-        target: { value: userThree.firstName },
-      });
-      fireEvent.change(screen.getByLabelText('Last name'), {
-        target: { value: userThree.lastName },
-      });
-      fireEvent.change(screen.getByLabelText('Email'), {
-        target: { value: userThree.email },
-      });
-
-      const roleSelect = screen.getByTestId('role-select');
-      fireEvent.click(roleSelect);
-      fireEvent.click(
-        screen.getByText('User', {
-          selector: 'span',
-        })
-      );
-
-      const groupSelect = screen.getByTestId('group-select');
-      fireEvent.click(groupSelect);
-      fireEvent.click(
-        screen.getByText('Group #1', {
-          selector: 'span',
-        })
-      );
-
-      fireEvent.click(screen.getByText('Create').closest('button') as Element);
-
-      await act(async () => {
-        await expect(scopeIsDone(creationScope)).resolves.toBe(true);
-      });
-
-      expect(screen.queryByTestId('overlay')).toBeNull();
-
-      screen.getByText(`${fullName} [${userThree.role}]`);
-    });
-  });
-
-  // TODO: get this test running
-  xdescribe('updating a user', () => {
+  describe('updating a user', () => {
     it('should update an existing user', async () => {
       (useUserContext as jest.Mock).mockReturnValue(userTwo);
 
       const newFirstName = 'Persona Uno';
       const initialScope = nock('http://localhost')
-        .get('/api/groups')
-        .reply(200, { status: 'ok', payload: groups })
         .get('/api/users')
         .reply(200, { status: 'ok', payload: [userOne] });
+      const overlayScope = nock('http://localhost')
+        .get('/api/groups')
+        .reply(200, { status: 'ok', payload: groups });
       const updateScope = nock('http://localhost')
         .post('/api/user', {
           id: userOne.id,
@@ -226,13 +147,19 @@ describe('Admin Users Page', () => {
         screen.getByTestId(`edit-element-${userOne.id}`) as Element
       );
 
-      await waitFor(() => screen.getByTestId('overlay'));
+      await act(async () => {
+        await expect(scopeIsDone(overlayScope)).resolves.toBe(true);
+      });
 
-      fireEvent.change(screen.getByLabelText('First name'), {
+      screen.getByTestId('overlay');
+
+      fireEvent.change(screen.getByLabelText('Vorname'), {
         target: { value: newFirstName },
       });
 
-      fireEvent.click(screen.getByText('Update').closest('button') as Element);
+      fireEvent.click(
+        screen.getByText('Absenden').closest('button') as Element
+      );
 
       await act(async () => {
         await expect(scopeIsDone(updateScope)).resolves.toBe(true);
@@ -251,8 +178,6 @@ describe('Admin Users Page', () => {
 
       const fullName = 'Person3 Three';
       const initialScope = nock('http://localhost')
-        .get('/api/groups')
-        .reply(200, { status: 'ok', payload: groups })
         .get('/api/users')
         .reply(200, { status: 'ok', payload: [userOne, userTwo, userThree] });
       const deletionScope = nock('http://localhost')
