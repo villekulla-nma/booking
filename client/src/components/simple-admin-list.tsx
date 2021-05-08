@@ -25,14 +25,14 @@ interface Props {
 const columns: IColumn[] = [
   {
     key: 'edit',
-    name: 'Edit',
+    name: 'Bearbeiten',
     fieldName: 'edit',
-    minWidth: 50,
-    maxWidth: 50,
+    minWidth: 90,
+    maxWidth: 90,
   },
   {
     key: 'delete',
-    name: 'Delete',
+    name: 'Löschen',
     fieldName: 'delete',
     minWidth: 70,
     maxWidth: 70,
