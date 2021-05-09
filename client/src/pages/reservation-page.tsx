@@ -187,6 +187,7 @@ export const ReservationPage: FC = () => {
             label="ganztägig"
             className={checkbox}
             onChange={handleAllDayChange}
+            checked={allDay}
           />
         </div>
         <TextField

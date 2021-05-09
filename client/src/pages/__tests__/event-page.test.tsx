@@ -11,6 +11,7 @@ import { useMediaQuery } from '../../hooks/use-media-query';
 import { useUserContext } from '../../hooks/use-user-context';
 import { scopeIsDone } from '../../helpers/nock';
 import { waitFor as customWaitFor } from '../../helpers/wait-for';
+import { sleep } from '../../helpers/sleep';
 
 jest.mock('../../hooks/use-user-context');
 
@@ -185,6 +186,7 @@ describe('Event Page', () => {
       );
 
       await expect(scopeIsDone(scope)).resolves.toBe(true);
+      await sleep(50);
       expect(window.alert).not.toHaveBeenCalled();
       expect(pathname).toBe('/');
     });

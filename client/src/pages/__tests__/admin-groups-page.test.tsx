@@ -14,7 +14,6 @@ import { scopeIsDone } from '../../helpers/nock';
 import { useUserContext } from '../../hooks/use-user-context';
 import { AdminGroupsPage } from '../admin-groups-page';
 import { inquireConfirmation } from '../../helpers/inquire-confirmation';
-import { sleep } from '../../helpers/sleep';
 
 jest.mock('../../hooks/use-user-context');
 jest.mock('../../helpers/inquire-confirmation');
@@ -81,7 +80,7 @@ describe('Admin Groups Page', () => {
         await expect(scopeIsDone(scope)).resolves.toBe(true);
       });
 
-      screen.getByText('Group #1');
+      await waitFor(() => screen.getByText('Group #1'));
       screen.getByText('Group #2');
     });
   });
@@ -111,9 +110,13 @@ describe('Admin Groups Page', () => {
         await expect(scopeIsDone(initialScope)).resolves.toBe(true);
       });
 
+      const createButton = await waitFor(
+        () => screen.getByLabelText(/Create new group/) as Element
+      );
+
       expect(screen.queryByText('Group #3')).toBeNull();
 
-      fireEvent.change(screen.getByLabelText(/Create new group/) as Element, {
+      fireEvent.change(createButton, {
         target: { value: newGroup.name },
       });
 
@@ -122,13 +125,12 @@ describe('Admin Groups Page', () => {
       await act(async () => {
         await expect(scopeIsDone(creationScope)).resolves.toBe(true);
       });
-      await sleep(100);
 
-      screen.getByText('Group #3');
+      await waitFor(() => screen.getByText('Group #3'));
     });
   });
 
-  describe('Editing a group', () => {
+  describe('editing a group', () => {
     it('should update group #2', async () => {
       (useUserContext as jest.Mock).mockReturnValue(user);
 
@@ -157,9 +159,12 @@ describe('Admin Groups Page', () => {
       await act(async () => {
         await expect(scopeIsDone(initialScope)).resolves.toBe(true);
       });
-      await sleep(100);
 
-      fireEvent.click(screen.getByTestId(`edit-element-${groups[1].id}`));
+      const editButton = await waitFor(
+        () => screen.getByTestId(`edit-element-${groups[1].id}`) as Element
+      );
+
+      fireEvent.click(editButton);
 
       await waitFor(() => screen.getByTestId('overlay'));
 
@@ -172,9 +177,8 @@ describe('Admin Groups Page', () => {
       await act(async () => {
         await expect(scopeIsDone(updateScope)).resolves.toBe(true);
       });
-      await sleep(100);
 
-      screen.getByText(newName);
+      await waitFor(() => screen.getByText(newName));
     });
   });
 
@@ -204,7 +208,7 @@ describe('Admin Groups Page', () => {
         await expect(scopeIsDone(initialScope)).resolves.toBe(true);
       });
 
-      screen.getByText('Group #2');
+      await waitFor(() => screen.getByText('Group #2'));
 
       fireEvent.click(screen.getByTestId(`delete-element-${groups[1].id}`));
 

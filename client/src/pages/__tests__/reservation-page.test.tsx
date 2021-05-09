@@ -155,6 +155,9 @@ describe('Reservation Page', () => {
         const elemEndTime = screen.getByLabelText(
           'Ende (Uhrzeit)'
         ) as HTMLElement;
+        const allDayCheckbox = screen.getByLabelText(
+          'ganztägig'
+        ) as HTMLInputElement;
         const textarea = screen.getByLabelText('Beschreibung');
         const submit = screen
           .getByText('Speichern')
@@ -164,6 +167,7 @@ describe('Reservation Page', () => {
         expect(elemStartTime.textContent).toMatch(/^09:00 Uhr/);
         expect(elemEndDate.value).toMatch(DATE_REGEXP);
         expect(elemEndTime.textContent).toMatch(/^13:30 Uhr/);
+        expect(allDayCheckbox.checked).toBe(false);
 
         fireEvent.change(textarea, { target: { value: description } });
 
@@ -212,12 +216,16 @@ describe('Reservation Page', () => {
         const elemEndTime = screen
           .getByTestId('end')
           .querySelector('[aria-selected]');
+        const allDayCheckbox = screen.getByLabelText(
+          'ganztägig'
+        ) as HTMLInputElement;
         const submit = screen
           .getByText('Speichern')
           .closest('button') as HTMLButtonElement;
 
         expect(elemStartTime).toBeNull();
         expect(elemEndTime).toBeNull();
+        expect(allDayCheckbox.checked).toBe(true);
 
         expect(fireEvent.click(submit)).toBe(true);
 
