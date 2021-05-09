@@ -7,6 +7,7 @@ import { initializeIcons } from '@uifabric/icons';
 import { scopeIsDone } from '../../helpers/nock';
 import { useUserContext } from '../../hooks/use-user-context';
 import { AdminUsersCreatePage } from '../admin-users-create-page';
+import { sleep } from '../../helpers/sleep';
 
 jest.mock('../../hooks/use-user-context');
 
@@ -90,6 +91,9 @@ describe('Admin Users Create Page', () => {
       await act(async () => {
         await expect(scopeIsDone(scope)).resolves.toBe(true);
       });
+      await sleep(50);
+
+      expect(screen.queryByText(/Lade Gruppen/)).toBeNull();
 
       act(() => {
         fireEvent.click(screen.getByText('Abbrechen'));
@@ -139,6 +143,12 @@ describe('Admin Users Create Page', () => {
       await act(async () => {
         await expect(scopeIsDone(initialScope)).resolves.toBe(true);
       });
+
+      await act(async () => {
+        await sleep(50);
+      });
+
+      expect(screen.queryByText(/Lade Gruppen/)).toBeNull();
 
       fireEvent.change(screen.getByLabelText('Vorname'), {
         target: { value: newUser.firstName },

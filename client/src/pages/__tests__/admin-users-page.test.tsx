@@ -1,6 +1,12 @@
 import type { FC } from 'react';
 import { MemoryRouter as Router } from 'react-router-dom';
-import { render, screen, act, fireEvent } from '@testing-library/react';
+import {
+  render,
+  screen,
+  act,
+  fireEvent,
+  waitFor,
+} from '@testing-library/react';
 import nock from 'nock';
 import { initializeIcons } from '@uifabric/icons';
 
@@ -90,7 +96,7 @@ describe('Admin Users Page', () => {
         await expect(scopeIsDone(scope)).resolves.toBe(true);
       });
 
-      screen.getByText('Person1 One [user]');
+      await waitFor(() => screen.getByText('Person1 One [user]'));
       screen.getByText('Person2 Two [admin]');
     });
   });
@@ -137,11 +143,12 @@ describe('Admin Users Page', () => {
       await act(async () => {
         await expect(scopeIsDone(initialScope)).resolves.toBe(true);
       });
-      await sleep(100);
 
-      fireEvent.click(
-        screen.getByTestId(`edit-element-${userOne.id}`) as Element
+      const editButton = await waitFor(
+        () => screen.getByTestId(`edit-element-${userOne.id}`) as Element
       );
+
+      fireEvent.click(editButton);
 
       await act(async () => {
         await expect(scopeIsDone(overlayScope)).resolves.toBe(true);
@@ -160,7 +167,10 @@ describe('Admin Users Page', () => {
       await act(async () => {
         await expect(scopeIsDone(updateScope)).resolves.toBe(true);
       });
-      await sleep(100);
+
+      await act(async () => {
+        await sleep(50);
+      });
 
       expect(screen.queryByTestId('overlay')).toBeNull();
 
@@ -173,7 +183,7 @@ describe('Admin Users Page', () => {
       (useUserContext as jest.Mock).mockReturnValue(userTwo);
       (inquireConfirmation as jest.Mock).mockReturnValue(true);
 
-      const fullName = 'Person3 Three';
+      const fullName = `${userThree.firstName} ${userThree.lastName} [${userThree.role}]`;
       const initialScope = nock('http://localhost')
         .get('/api/users')
         .reply(200, { status: 'ok', payload: [userOne, userTwo, userThree] });
@@ -194,18 +204,20 @@ describe('Admin Users Page', () => {
       await act(async () => {
         await expect(scopeIsDone(initialScope)).resolves.toBe(true);
       });
-      await sleep(100);
 
-      screen.getByText(`${fullName} [${userThree.role}]`);
+      await waitFor(() => screen.getByText(fullName));
 
       fireEvent.click(screen.getByTestId(`delete-element-${userThree.id}`));
 
       await act(async () => {
         await expect(scopeIsDone(deletionScope)).resolves.toBe(true);
       });
-      await sleep(100);
 
-      expect(screen.queryByText(`${fullName} [${userThree.role}]`)).toBeNull();
+      await act(async () => {
+        await sleep(50);
+      });
+
+      expect(screen.queryByText(fullName)).toBeNull();
     });
   });
 });

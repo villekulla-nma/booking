@@ -78,7 +78,9 @@ describe('Main-Header', () => {
         await expect(scopeIsDone(scope)).resolves.toBe(true);
       });
 
-      await customWaitFor(() => pathname !== '', 200);
+      await act(async () => {
+        await customWaitFor(() => pathname !== '', 200);
+      });
 
       expect(pathname).toBe('/login');
       expect(from).toBe(currentPagePath);
@@ -137,13 +139,17 @@ describe('Main-Header', () => {
 
       render(<MainHeader />, { wrapper: Router });
 
-      expect(screen.queryByText('Resource #2')).toBeNull();
-
       await act(async () => {
         await expect(scopeIsDone(scope)).resolves.toBe(true);
       });
 
-      fireEvent.click(screen.getByTitle('Menü einblenden'));
+      const menuButton = await waitFor(
+        () => screen.getByTitle('Menü einblenden') as Element
+      );
+
+      expect(screen.queryByText('Resource #2')).toBeNull();
+
+      fireEvent.click(menuButton);
 
       screen.getByText('Resource #1');
       screen.getByText('Resource #2');
@@ -188,7 +194,9 @@ describe('Main-Header', () => {
 
       render(<MainHeader />, { wrapper: Router });
 
-      const link = screen.getByTestId('admin-link') as HTMLAnchorElement | null;
+      const link = await waitFor(
+        () => screen.getByTestId('admin-link') as HTMLAnchorElement | null
+      );
 
       expect(link?.href).toMatch(/\/admin$/);
       await act(async () => {
@@ -218,7 +226,7 @@ describe('Main-Header', () => {
       render(<MainHeader />, { wrapper: Router });
 
       await act(async () => {
-        await sleep(100);
+        await sleep(50);
       });
 
       expect(screen.queryByTitle('Menü einblenden')).toBeNull();
