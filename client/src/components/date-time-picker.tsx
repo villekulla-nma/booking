@@ -17,6 +17,7 @@ interface Props {
   minDate: Date;
   hideTime?: boolean;
   id?: string;
+  required?: boolean;
   onChange: (date: string, time: string) => void;
 }
 
@@ -106,6 +107,7 @@ export const DateTimePicker: FC<Props> = memo(
           label={label}
           value={parse(date, 'yyyy-MM-dd', new Date())}
           onSelectDate={handleDateChange}
+          required={true}
         />
         {Boolean(hideTime) === false && (
           <Dropdown
@@ -114,6 +116,7 @@ export const DateTimePicker: FC<Props> = memo(
             options={getTimePickerOptions(getHoursOfDay(minDate), time)}
             onChange={handleTimeChange}
             className={timepicker}
+            required={true}
           />
         )}
       </Stack>

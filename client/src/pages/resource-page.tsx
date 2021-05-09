@@ -42,6 +42,7 @@ import {
 } from '../api';
 import { useRedirectUnauthenticatedUser } from '../hooks/use-redirect-unauthenticated-user';
 import { useAuthenticatedFetch } from '../hooks/use-authenticated-fetch';
+import { normalizeCalendarDate } from '../helpers/date';
 
 interface Params {
   resourceId: string;
@@ -401,6 +402,9 @@ export const ResourcePage: FC = () => {
           eventSources={[eventSource.current]}
           initialView={currentViewType}
           selectable={currentViewType !== 'dayGridMonth'}
+          selectConstraint={{
+            start: normalizeCalendarDate(new Date()),
+          }}
           eventClick={handleClick}
           select={handleSelect}
           unselect={handleUnselect}
