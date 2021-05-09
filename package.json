@@ -14,10 +14,8 @@
   ],
   "scripts": {
     "dev:client": "cd client && npm run dev",
-    "debug:client": "cd client && npm run dev",
     "dev:server": "cd server && npm run dev",
     "dev": "lerna run dev --parallel --no-bail",
-    "debug": "npm-run-all -c -p debug:client dev:server",
     "prelint": "npm run fmt:check",
     "lint": "lerna run lint --no-bail",
     "test": "lerna run test --no-bail --stream",
