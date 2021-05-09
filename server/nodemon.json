@@ -1,5 +1,8 @@
 {
   "watch": ["src"],
   "ext": "ts,json",
-  "exec": "ts-node ./src"
+  "exec": "ts-node ./src",
+  "env": {
+    "NODE_OPTIONS": "--enable-source-maps"
+  }
 }
