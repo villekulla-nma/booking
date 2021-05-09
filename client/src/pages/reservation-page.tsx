@@ -172,6 +172,7 @@ export const ReservationPage: FC = () => {
           minDate={today.current}
           hideTime={allDay}
           onChange={handleStartDateTimeChange}
+          required={true}
           id="start"
         />
         <DateTimePicker

@@ -11,6 +11,7 @@ interface Props {
   label: string;
   minDate: Date;
   value: Date;
+  required?: boolean;
   onSelectDate: (date: Date | null | undefined) => void;
 }
 
@@ -95,6 +96,7 @@ export const DatePicker: FC<Props> = memo(
         onSelectDate={onSelectDate}
         dateTimeFormatter={dateTimeFormatter}
         formatDate={formatDate}
+        isRequired={true}
       />
     );
   }
