@@ -6,6 +6,7 @@ import type {
   ISelectableOption,
   IStackTokens,
 } from '@fluentui/react';
+import { mergeStyles } from '@fluentui/merge-styles';
 import { format, parse, eachHourOfInterval } from 'date-fns';
 
 import { DatePicker } from './date-picker';
@@ -72,6 +73,12 @@ const getTimePickerOptions = memoizeFunction(
 const getDateStringFromValue = (date: Date): string =>
   format(date, 'yyyy-MM-dd');
 
+// TODO: remove as soon as <DatePicker /> isn't enigmatically 5px
+// higher than its content determines
+const timepicker = mergeStyles({
+  marginBottom: '5px',
+});
+
 export const DateTimePicker: FC<Props> = memo(
   ({ label, value, minDate, hideTime, id, onChange }) => {
     const [date, setDate] = useState<string>(value.date);
@@ -106,6 +113,7 @@ export const DateTimePicker: FC<Props> = memo(
             ariaLabel={`${label} (Uhrzeit)`}
             options={getTimePickerOptions(getHoursOfDay(minDate), time)}
             onChange={handleTimeChange}
+            className={timepicker}
           />
         )}
       </Stack>
