@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 0.1.0-alpha.57 (2021-05-09)
+
+
+### Bug Fixes
+
+* **client:** vertically align inputs ([8a1538c](https://github.com/villekulla-nma/booking/commit/8a1538cc3ad56cb66e1aab60186741bea73e020e))
+
+
+
+
+
 # 0.1.0-alpha.56 (2021-05-08)
 
 **Note:** Version bump only for package @booking/client
