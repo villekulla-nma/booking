@@ -71,39 +71,37 @@ const toListItems = (items: SimplAdminListItem[]): IDetailsListProps['items'] =>
   }));
 
 // TODO: support additional columns
-const createOnRenderItemColumn = (onEdit: Handler, onDelete: Handler) => (
-  item: Record<string, string>,
-  _: unknown,
-  column?: IColumn
-): ReactNode => {
-  const fieldName = column?.fieldName;
-  const value = !fieldName || !item[fieldName] ? '-' : item[fieldName];
+const createOnRenderItemColumn =
+  (onEdit: Handler, onDelete: Handler) =>
+  (item: Record<string, string>, _: unknown, column?: IColumn): ReactNode => {
+    const fieldName = column?.fieldName;
+    const value = !fieldName || !item[fieldName] ? '-' : item[fieldName];
 
-  switch (fieldName) {
-    case 'edit':
-      return (
-        <IconButton
-          iconProps={editIcon}
-          className={action}
-          onClick={() => onEdit(item.id)}
-          ariaLabel="Edit element"
-          data-testid={`edit-element-${item.id}`}
-        />
-      );
-    case 'delete':
-      return (
-        <IconButton
-          iconProps={deleteIcon}
-          className={action}
-          onClick={() => onDelete(item.id)}
-          ariaLabel="Delete element"
-          data-testid={`delete-element-${item.id}`}
-        />
-      );
-    default:
-      return <Text variant="medium">{value}</Text>;
-  }
-};
+    switch (fieldName) {
+      case 'edit':
+        return (
+          <IconButton
+            iconProps={editIcon}
+            className={action}
+            onClick={() => onEdit(item.id)}
+            ariaLabel="Edit element"
+            data-testid={`edit-element-${item.id}`}
+          />
+        );
+      case 'delete':
+        return (
+          <IconButton
+            iconProps={deleteIcon}
+            className={action}
+            onClick={() => onDelete(item.id)}
+            ariaLabel="Delete element"
+            data-testid={`delete-element-${item.id}`}
+          />
+        );
+      default:
+        return <Text variant="medium">{value}</Text>;
+    }
+  };
 
 export const SimpleAdminList: FC<Props> = memo(
   ({ items, onEdit, onDelete }) => {

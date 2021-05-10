@@ -42,23 +42,21 @@ export const writeScaffoldingData = async (
 ): Promise<void> => {
   await sequelize.transaction(async (t) => {
     return await Promise.all(
-      Object.keys(data).map(
-        async (key: string): Promise<unknown> => {
-          switch (key) {
-            case 'Resource': {
-              return scaffoldResources(instances.Resource, data.Resource, t);
-            }
-            case 'Group': {
-              return scaffoldGroups(instances.Group, data.Group, t);
-            }
-            case 'User': {
-              return scaffoldUsers(instances.User, data.User, t);
-            }
-            default:
-              return Promise.resolve();
+      Object.keys(data).map(async (key: string): Promise<unknown> => {
+        switch (key) {
+          case 'Resource': {
+            return scaffoldResources(instances.Resource, data.Resource, t);
           }
+          case 'Group': {
+            return scaffoldGroups(instances.Group, data.Group, t);
+          }
+          case 'User': {
+            return scaffoldUsers(instances.User, data.User, t);
+          }
+          default:
+            return Promise.resolve();
         }
-      )
+      })
     );
   });
 };

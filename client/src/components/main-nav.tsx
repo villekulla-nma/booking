@@ -56,21 +56,19 @@ const MobileNav: FC<Props & ResourceId> = memo(({ resources, resourceId }) => {
 
   const openPanel = () => setOpen(true);
   const closePanel = () => setOpen(false);
-  const links = resources.map(
-    ({ id, name }): INavLink => {
-      const handleClick: INavLink['onClick'] = (event, item) => {
-        event?.preventDefault();
-        history.push(item?.url || '');
-      };
+  const links = resources.map(({ id, name }): INavLink => {
+    const handleClick: INavLink['onClick'] = (event, item) => {
+      event?.preventDefault();
+      history.push(item?.url || '');
+    };
 
-      return {
-        onClick: handleClick,
-        url: `/resources/${id}`,
-        key: id,
-        name,
-      };
-    }
-  );
+    return {
+      onClick: handleClick,
+      url: `/resources/${id}`,
+      key: id,
+      name,
+    };
+  });
 
   return (
     <>

@@ -61,11 +61,11 @@ describe('Error-Boundary', () => {
   });
 
   it('should reset the error & navigate to the start page', async () => {
-    const history = ({
+    const history = {
       replace: jest.fn(),
       listen: jest.fn(),
       location: {},
-    } as unknown) as History;
+    } as unknown as History;
 
     render(
       <Router history={history}>
