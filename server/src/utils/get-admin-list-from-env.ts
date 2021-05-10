@@ -19,9 +19,9 @@ const keyPartsToCamelCase = ([first, ...rest]: string[]): string =>
   ].join('');
 
 export const getAdminListFromEnv = (): UserCreationAttributes[] => {
-  const rawEntries = Object.entries(
-    process.env
-  ).filter(([k]: [string, string]) => k.startsWith('VILLEKULLA_ADMIN_'));
+  const rawEntries = Object.entries(process.env).filter(
+    ([k]: [string, string]) => k.startsWith('VILLEKULLA_ADMIN_')
+  );
   const entries = rawEntries
     .map(([k, value]: [string, string]): [number, string, string] | null => {
       const [indexString, ...keyParts] = k

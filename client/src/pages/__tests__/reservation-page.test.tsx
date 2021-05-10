@@ -22,7 +22,8 @@ import {
 } from '../../helpers/date';
 import { waitFor as customWaitFor } from '../../helpers/wait-for';
 
-const DATE_REGEXP = /^(?:Mo|Di|Mi|Do|Fr|Sa|So),\s\d+\.\s(?:Januar|Februar|März|April|Mai|Juni|Juli|August|September|Oktober|November|Dezember)\s\d{4}$/;
+const DATE_REGEXP =
+  /^(?:Mo|Di|Mi|Do|Fr|Sa|So),\s\d+\.\s(?:Januar|Februar|März|April|Mai|Juni|Juli|August|September|Oktober|November|Dezember)\s\d{4}$/;
 
 jest.mock('../../components/layout.tsx', () => {
   const Layout: FC = ({ children }) => <>{children}</>;

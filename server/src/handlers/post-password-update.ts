@@ -45,28 +45,30 @@ const opts: RouteShorthandOptions = {
   },
 };
 
-const createPreHandler = (db: Db) => async (
-  request: FastifyRequest<{ Params: Params; Body: Body }>,
-  reply: FastifyReply
-) => {
-  const { password, password_confirm: confirm } = request.body;
+const createPreHandler =
+  (db: Db) =>
+  async (
+    request: FastifyRequest<{ Params: Params; Body: Body }>,
+    reply: FastifyReply
+  ) => {
+    const { password, password_confirm: confirm } = request.body;
 
-  if (password !== confirm) {
-    reply.code(400).send({ status: STATUS.INVALID });
-    return;
-  }
+    if (password !== confirm) {
+      reply.code(400).send({ status: STATUS.INVALID });
+      return;
+    }
 
-  const { token } = request.params;
-  const user = await getUserByKey(db, 'passwordReset', token);
+    const { token } = request.params;
+    const user = await getUserByKey(db, 'passwordReset', token);
 
-  // TODO: respond with status "expired"
-  if (!user) {
-    reply.code(400).send({ status: STATUS.ERROR });
-    return;
-  }
+    // TODO: respond with status "expired"
+    if (!user) {
+      reply.code(400).send({ status: STATUS.ERROR });
+      return;
+    }
 
-  request.params.userId = user.id;
-};
+    request.params.userId = user.id;
+  };
 
 export const assignPostPasswordUpdateHandler: AssignHandlerFunction = (
   route,

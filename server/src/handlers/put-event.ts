@@ -43,23 +43,25 @@ const opts: RouteShorthandOptions = {
   preHandler: [preVerifySessionHandler],
 };
 
-const createCheckOverlappingEvents = (db: Db) => async (
-  request: FastifyRequest<{ Params: Params; Body: Body }>,
-  reply: FastifyReply
-) => {
-  const { start, end } = request.body;
-  const { resourceId } = request.params;
-  const overlappingEvents = await getOverlappingEvents(
-    db,
-    resourceId,
-    start,
-    end
-  );
+const createCheckOverlappingEvents =
+  (db: Db) =>
+  async (
+    request: FastifyRequest<{ Params: Params; Body: Body }>,
+    reply: FastifyReply
+  ) => {
+    const { start, end } = request.body;
+    const { resourceId } = request.params;
+    const overlappingEvents = await getOverlappingEvents(
+      db,
+      resourceId,
+      start,
+      end
+    );
 
-  if (overlappingEvents.length > 0) {
-    reply.status(400).send({ status: STATUS.OVERLAPPING });
-  }
-};
+    if (overlappingEvents.length > 0) {
+      reply.status(400).send({ status: STATUS.OVERLAPPING });
+    }
+  };
 
 // TODO: check that start is before end
 export const assignPutEventHandler: AssignHandlerFunction = (
