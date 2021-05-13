@@ -7,7 +7,7 @@ export const getToday = (): string => {
   return utc.toISOString();
 };
 
-export const getNow = (): string => {
+export const getNow = (): Date => {
   const date = new Date();
   const utc = new Date(
     Date.UTC(
@@ -20,5 +20,5 @@ export const getNow = (): string => {
     )
   );
 
-  return utc.toISOString();
+  return utc;
 };

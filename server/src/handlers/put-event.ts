@@ -12,6 +12,7 @@ import { preVerifySessionHandler } from './pre-verify-session';
 import { createEvent, getOverlappingEvents } from '../controllers/event';
 import type { Db } from '../db';
 import { defaultResponseSchema, rawBaseEventSchema } from '../utils/schema';
+import { getNow } from '../utils/date';
 
 interface Params {
   resourceId: string;
@@ -43,6 +44,23 @@ const opts: RouteShorthandOptions = {
   preHandler: [preVerifySessionHandler],
 };
 
+const checkChronologicalValidity = async (
+  request: FastifyRequest<{ Params: Params; Body: Body }>,
+  reply: FastifyReply
+) => {
+  const { start: startString, end: endString } = request.body;
+  const start = new Date(startString).getTime();
+  const end = new Date(endString).getTime();
+  const now = getNow().getTime();
+  const startTooEarly = start < now;
+  const endTooEarly = end < now;
+  const rangeInverted = end <= start;
+
+  if (startTooEarly || endTooEarly || rangeInverted) {
+    reply.status(400).send({ status: STATUS.INVALID });
+  }
+};
+
 const createCheckOverlappingEvents =
   (db: Db) =>
   async (
@@ -63,7 +81,6 @@ const createCheckOverlappingEvents =
     }
   };
 
-// TODO: check that start is before end
 export const assignPutEventHandler: AssignHandlerFunction = (
   route,
   server,
@@ -72,9 +89,9 @@ export const assignPutEventHandler: AssignHandlerFunction = (
   const checkOverlappingEvents = createCheckOverlappingEvents(db);
 
   if (Array.isArray(opts.preHandler)) {
-    opts.preHandler.push(checkOverlappingEvents);
+    opts.preHandler.push(checkChronologicalValidity, checkOverlappingEvents);
   } else {
-    opts.preHandler = checkOverlappingEvents;
+    opts.preHandler = [checkChronologicalValidity, checkOverlappingEvents];
   }
 
   server.put(route, opts, async (request: Request<Params>, reply) => {

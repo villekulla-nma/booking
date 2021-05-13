@@ -178,7 +178,7 @@ export const createEvent = async (
   userId: string
 ): Promise<string> => {
   const id = shortid();
-  const createdAt = getNow();
+  const createdAt = getNow().toISOString();
 
   await Event.create({
     id,
