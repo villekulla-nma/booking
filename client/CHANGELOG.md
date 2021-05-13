@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 0.1.0-alpha.58 (2021-05-13)
+
+
+### Bug Fixes
+
+* **server:** prevent creating events in the past ([80a07fd](https://github.com/villekulla-nma/booking/commit/80a07fd959d8662e4f34f0d94b7c9b2e05241dd4))
+
+
+
+
+
 # 0.1.0-alpha.57 (2021-05-09)
 
 
