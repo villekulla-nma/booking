@@ -6,18 +6,21 @@ import { initDb } from '../db';
 import { initServer } from '../server';
 import { signJwt } from './helpers/sign-jwt';
 import { removeUser } from '../controllers/user';
+import { getPort } from './helpers/get-port';
 
 jest.mock('../controllers/user');
 
 describe('Server [DELETE] /api/user', () => {
+  let port: string;
   let cookieValue: string;
   let server: FastifyInstance;
   let db: Db;
   let log: Console['error'];
 
   beforeAll(async () => {
+    port = getPort(__filename);
     db = await initDb();
-    server = await initServer(db, '9150');
+    server = await initServer(db, port);
     log = console.error;
 
     console.error = () => undefined;
@@ -57,7 +60,7 @@ describe('Server [DELETE] /api/user', () => {
       jest.requireActual('../controllers/user').removeUser
     );
 
-    const response = await fetch('http://localhost:9150/api/user', {
+    const response = await fetch(`http://localhost:${port}/api/user`, {
       method: 'DELETE',
       headers: {
         cookie: `login=${cookieValue}`,
@@ -74,7 +77,7 @@ describe('Server [DELETE] /api/user', () => {
   it('should respond with 400 on failure', async () => {
     (removeUser as jest.Mock).mockResolvedValue(false);
 
-    const response = await fetch('http://localhost:9150/api/user', {
+    const response = await fetch(`http://localhost:${port}/api/user`, {
       method: 'DELETE',
       headers: {
         cookie: `login=${cookieValue}`,
@@ -89,7 +92,7 @@ describe('Server [DELETE] /api/user', () => {
   it('should respond with 500 on error', async () => {
     (removeUser as jest.Mock).mockRejectedValue(new Error('nope'));
 
-    const response = await fetch('http://localhost:9150/api/user', {
+    const response = await fetch(`http://localhost:${port}/api/user`, {
       method: 'DELETE',
       headers: {
         cookie: `login=${cookieValue}`,
@@ -106,7 +109,7 @@ describe('Server [DELETE] /api/user', () => {
       jest.requireActual('../controllers/user').removeUser
     );
 
-    const response = await fetch('http://localhost:9150/api/user', {
+    const response = await fetch(`http://localhost:${port}/api/user`, {
       method: 'DELETE',
       headers: {
         cookie: `login=${cookieValue}`,

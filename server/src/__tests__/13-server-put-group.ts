@@ -6,10 +6,12 @@ import { initDb } from '../db';
 import { initServer } from '../server';
 import { signJwt } from './helpers/sign-jwt';
 import { createGroup, getAllGroups } from '../controllers/group';
+import { getPort } from './helpers/get-port';
 
 jest.mock('../controllers/group');
 
 describe('Server [PUT] /api/groups', () => {
+  let port: string;
   let cookieValue: string;
   let server: FastifyInstance;
   let db: Db;
@@ -21,8 +23,9 @@ describe('Server [PUT] /api/groups', () => {
   };
 
   beforeAll(async () => {
+    port = getPort(__filename);
     db = await initDb();
-    server = await initServer(db, '9130');
+    server = await initServer(db, port);
     log = console.log;
 
     console.log = () => undefined;
@@ -69,7 +72,7 @@ describe('Server [PUT] /api/groups', () => {
     });
 
     it('should respond with 401/invalid', async () => {
-      const response = await fetch('http://localhost:9130/api/groups', {
+      const response = await fetch(`http://localhost:${port}/api/groups`, {
         method: 'PUT',
         headers: {
           cookie: `login=${cookieValue}`,
@@ -101,7 +104,7 @@ describe('Server [PUT] /api/groups', () => {
         Object.assign(new Error('wrong'), { name: 'SequelizeValidationError' })
       );
 
-      const response = await fetch('http://localhost:9130/api/groups', {
+      const response = await fetch(`http://localhost:${port}/api/groups`, {
         method: 'PUT',
         headers: {
           cookie: `login=${cookieValue}`,
@@ -118,7 +121,7 @@ describe('Server [PUT] /api/groups', () => {
     it('should respond with 500/error on failure', async () => {
       (createGroup as jest.Mock).mockRejectedValue(new Error('nope'));
 
-      const response = await fetch('http://localhost:9130/api/groups', {
+      const response = await fetch(`http://localhost:${port}/api/groups`, {
         method: 'PUT',
         headers: {
           cookie: `login=${cookieValue}`,
@@ -137,7 +140,7 @@ describe('Server [PUT] /api/groups', () => {
         jest.requireActual('../controllers/group').createGroup
       );
 
-      const response = await fetch('http://localhost:9130/api/groups', {
+      const response = await fetch(`http://localhost:${port}/api/groups`, {
         method: 'PUT',
         headers: {
           cookie: `login=${cookieValue}`,

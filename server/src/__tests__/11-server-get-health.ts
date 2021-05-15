@@ -4,14 +4,17 @@ import fetch from 'node-fetch';
 import type { Db } from '../db';
 import { initDb } from '../db';
 import { initServer } from '../server';
+import { getPort } from './helpers/get-port';
 
 describe('Server [GET] /api/_health', () => {
+  let port: string;
   let server: FastifyInstance;
   let db: Db;
 
   beforeAll(async () => {
+    port = getPort(__filename);
     db = await initDb();
-    server = await initServer(db, '9110');
+    server = await initServer(db, port);
   });
 
   afterAll(async () => {
@@ -20,7 +23,7 @@ describe('Server [GET] /api/_health', () => {
   });
 
   it('should respond with 200 on success', async () => {
-    const response = await fetch('http://localhost:9110/api/_health');
+    const response = await fetch(`http://localhost:${port}/api/_health`);
     const status = await response.text();
 
     expect(response.status).toBe(200);

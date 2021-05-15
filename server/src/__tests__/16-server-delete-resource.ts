@@ -6,18 +6,21 @@ import { initDb } from '../db';
 import { initServer } from '../server';
 import { signJwt } from './helpers/sign-jwt';
 import { removeResource } from '../controllers/resource';
+import { getPort } from './helpers/get-port';
 
 jest.mock('../controllers/resource');
 
 describe('Server [DELETE] /api/resources', () => {
+  let port: string;
   let cookieValue: string;
   let server: FastifyInstance;
   let db: Db;
   let log: Console['error'];
 
   beforeAll(async () => {
+    port = getPort(__filename);
     db = await initDb();
-    server = await initServer(db, '9160');
+    server = await initServer(db, port);
     log = console.error;
 
     console.error = () => undefined;
@@ -53,7 +56,7 @@ describe('Server [DELETE] /api/resources', () => {
       jest.requireActual('../controllers/resource').removeResource
     );
 
-    const response = await fetch('http://localhost:9160/api/resources', {
+    const response = await fetch(`http://localhost:${port}/api/resources`, {
       method: 'DELETE',
       headers: {
         cookie: `login=${cookieValue}`,
@@ -70,7 +73,7 @@ describe('Server [DELETE] /api/resources', () => {
   it('should respond with 400 on failure', async () => {
     (removeResource as jest.Mock).mockResolvedValue(false);
 
-    const response = await fetch('http://localhost:9160/api/resources', {
+    const response = await fetch(`http://localhost:${port}/api/resources`, {
       method: 'DELETE',
       headers: {
         cookie: `login=${cookieValue}`,
@@ -85,7 +88,7 @@ describe('Server [DELETE] /api/resources', () => {
   it('should respond with 500 on error', async () => {
     (removeResource as jest.Mock).mockRejectedValue(new Error('nope'));
 
-    const response = await fetch('http://localhost:9160/api/resources', {
+    const response = await fetch(`http://localhost:${port}/api/resources`, {
       method: 'DELETE',
       headers: {
         cookie: `login=${cookieValue}`,

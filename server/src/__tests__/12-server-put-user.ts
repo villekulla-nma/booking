@@ -6,10 +6,12 @@ import { initDb } from '../db';
 import { initServer } from '../server';
 import { signJwt } from './helpers/sign-jwt';
 import { createUser, getUserByKey } from '../controllers/user';
+import { getPort } from './helpers/get-port';
 
 jest.mock('../controllers/user');
 
 describe('Server [PUT] /api/user', () => {
+  let port: string;
   let cookieValue: string;
   let server: FastifyInstance;
   let db: Db;
@@ -24,8 +26,9 @@ describe('Server [PUT] /api/user', () => {
   };
 
   beforeAll(async () => {
+    port = getPort(__filename);
     db = await initDb();
-    server = await initServer(db, '9120');
+    server = await initServer(db, port);
     log = console.log;
 
     console.log = () => undefined;
@@ -60,7 +63,7 @@ describe('Server [PUT] /api/user', () => {
     });
 
     it('should respond with 401/invalid', async () => {
-      const response = await fetch('http://localhost:9120/api/user', {
+      const response = await fetch(`http://localhost:${port}/api/user`, {
         method: 'PUT',
         headers: {
           cookie: `login=${cookieValue}`,
@@ -94,7 +97,7 @@ describe('Server [PUT] /api/user', () => {
         })
       );
 
-      const response = await fetch('http://localhost:9120/api/user', {
+      const response = await fetch(`http://localhost:${port}/api/user`, {
         method: 'PUT',
         headers: {
           cookie: `login=${cookieValue}`,
@@ -116,7 +119,7 @@ describe('Server [PUT] /api/user', () => {
         Object.assign(new Error('wrong'), { name: 'SequelizeValidationError' })
       );
 
-      const response = await fetch('http://localhost:9120/api/user', {
+      const response = await fetch(`http://localhost:${port}/api/user`, {
         method: 'PUT',
         headers: {
           cookie: `login=${cookieValue}`,
@@ -133,7 +136,7 @@ describe('Server [PUT] /api/user', () => {
     it('should respond with 500/error on failure', async () => {
       (createUser as jest.Mock).mockRejectedValue(new Error('nope'));
 
-      const response = await fetch('http://localhost:9120/api/user', {
+      const response = await fetch(`http://localhost:${port}/api/user`, {
         method: 'PUT',
         headers: {
           cookie: `login=${cookieValue}`,
@@ -152,7 +155,7 @@ describe('Server [PUT] /api/user', () => {
         jest.requireActual('../controllers/user').createUser
       );
 
-      const response = await fetch('http://localhost:9120/api/user', {
+      const response = await fetch(`http://localhost:${port}/api/user`, {
         method: 'PUT',
         headers: {
           cookie: `login=${cookieValue}`,

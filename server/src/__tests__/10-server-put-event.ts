@@ -11,6 +11,7 @@ import type { ResourceInstance } from '../models/resource';
 import { createEvent, getOverlappingEvents } from '../controllers/event';
 import type { EventInstance } from '../models/event';
 import { getNow } from '../utils/date';
+import { getPort } from './helpers/get-port';
 
 jest.mock('../controllers/event');
 
@@ -18,14 +19,16 @@ jest.mock('../utils/date');
 
 describe('Server [PUT] /api/resources/:resourceId/events', () => {
   const { today, tomorrow, dayAfterTomorrow } = getDates();
+  let port: string;
   let cookieValue: string;
   let server: FastifyInstance;
   let db: Db;
   let log: Console['log'];
 
   beforeAll(async () => {
+    port = getPort(__filename);
     db = await initDb();
-    server = await initServer(db, '9100');
+    server = await initServer(db, port);
     log = console.log;
 
     console.log = () => undefined;
@@ -108,7 +111,7 @@ describe('Server [PUT] /api/resources/:resourceId/events', () => {
       );
 
       const response = await fetch(
-        'http://localhost:9100/api/resources/Uj5SAS740/events',
+        `http://localhost:${port}/api/resources/Uj5SAS740/events`,
         {
           method: 'PUT',
           headers: {
@@ -140,7 +143,7 @@ describe('Server [PUT] /api/resources/:resourceId/events', () => {
     );
 
     const response = await fetch(
-      'http://localhost:9100/api/resources/Uj5SAS740/events',
+      `http://localhost:${port}/api/resources/Uj5SAS740/events`,
       {
         method: 'PUT',
         headers: {
@@ -173,7 +176,7 @@ describe('Server [PUT] /api/resources/:resourceId/events', () => {
     );
 
     const response = await fetch(
-      'http://localhost:9100/api/resources/Uj5SAS740/events',
+      `http://localhost:${port}/api/resources/Uj5SAS740/events`,
       {
         method: 'PUT',
         headers: {
@@ -205,7 +208,7 @@ describe('Server [PUT] /api/resources/:resourceId/events', () => {
     (createEvent as jest.Mock).mockRejectedValue(new Error('nope'));
 
     const response = await fetch(
-      'http://localhost:9100/api/resources/Uj5SAS740/events',
+      `http://localhost:${port}/api/resources/Uj5SAS740/events`,
       {
         method: 'PUT',
         headers: {
@@ -256,7 +259,7 @@ describe('Server [PUT] /api/resources/:resourceId/events', () => {
         );
 
         const response = await fetch(
-          `http://localhost:9100/api/resources/${resourceId}/events`,
+          `http://localhost:${port}/api/resources/${resourceId}/events`,
           {
             method: 'PUT',
             headers: {

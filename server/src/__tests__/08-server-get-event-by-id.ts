@@ -5,16 +5,19 @@ import type { Db } from '../db';
 import { initDb } from '../db';
 import { initServer } from '../server';
 import { signJwt } from './helpers/sign-jwt';
+import { getPort } from './helpers/get-port';
 
 describe('Server [GET] /api/events/:eventId', () => {
   const [today] = new Date().toISOString().split('T');
+  let port: string;
   let cookieValue: string;
   let server: FastifyInstance;
   let db: Db;
 
   beforeAll(async () => {
+    port = getPort(__filename);
     db = await initDb();
-    server = await initServer(db, '9080');
+    server = await initServer(db, port);
 
     await db.User.create({
       id: 'TD0sIeaoz',
@@ -51,11 +54,14 @@ describe('Server [GET] /api/events/:eventId', () => {
   });
 
   it('should respond with 200 on success', async () => {
-    const response = await fetch('http://localhost:9080/api/events/Zbfn4lu5t', {
-      headers: {
-        cookie: `login=${cookieValue}`,
-      },
-    });
+    const response = await fetch(
+      `http://localhost:${port}/api/events/Zbfn4lu5t`,
+      {
+        headers: {
+          cookie: `login=${cookieValue}`,
+        },
+      }
+    );
     const data = await response.json();
 
     expect(response.status).toBe(200);

@@ -3,12 +3,15 @@ import fetch from 'node-fetch';
 
 import type { Db } from '../db';
 import { initServer } from '../server';
+import { getPort } from './helpers/get-port';
 
 describe('Server [POST] /api/logout', () => {
+  let port: string;
   let server: FastifyInstance;
 
   beforeAll(async () => {
-    server = await initServer({} as Db, '9010');
+    port = getPort(__filename);
+    server = await initServer({} as Db, port);
   });
 
   afterAll(async () => {
@@ -16,7 +19,7 @@ describe('Server [POST] /api/logout', () => {
   });
 
   it('should delete the login cookie', async () => {
-    const response = await fetch('http://localhost:9010/api/logout', {
+    const response = await fetch(`http://localhost:${port}/api/logout`, {
       method: 'POST',
     });
     const cookie = response.headers.get('set-cookie');

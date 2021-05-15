@@ -6,6 +6,7 @@ import { initDb } from '../db';
 import { initServer } from '../server';
 import { signJwt } from './helpers/sign-jwt';
 import { updateResource } from '../controllers/resource';
+import { getPort } from './helpers/get-port';
 
 jest.mock('../controllers/resource');
 
@@ -17,15 +18,17 @@ describe('Server [POST] /api/resources', () => {
   const newName = 'Resource #2';
   const updatedResource = { name: newName, id: resource.id };
 
+  let port: string;
   let cookieValue: string;
   let server: FastifyInstance;
   let db: Db;
   let log: Console['log'];
 
   beforeAll(async () => {
+    port = getPort(__filename);
     log = console.log;
     db = await initDb();
-    server = await initServer(db, '9210');
+    server = await initServer(db, port);
 
     console.log = () => undefined;
 
@@ -68,7 +71,7 @@ describe('Server [POST] /api/resources', () => {
     });
 
     it('should respond with 401/invalid', async () => {
-      const response = await fetch('http://localhost:9210/api/resources', {
+      const response = await fetch(`http://localhost:${port}/api/resources`, {
         method: 'POST',
         headers: {
           cookie: `login=${cookieValue}`,
@@ -98,7 +101,7 @@ describe('Server [POST] /api/resources', () => {
     it('should respond with 400/error on failure', async () => {
       (updateResource as jest.Mock).mockResolvedValueOnce(false);
 
-      const response = await fetch('http://localhost:9210/api/resources', {
+      const response = await fetch(`http://localhost:${port}/api/resources`, {
         method: 'POST',
         headers: {
           cookie: `login=${cookieValue}`,
@@ -117,7 +120,7 @@ describe('Server [POST] /api/resources', () => {
         Object.assign(new Error('nope'), { name: 'SequelizeValidationError' })
       );
 
-      const response = await fetch('http://localhost:9210/api/resources', {
+      const response = await fetch(`http://localhost:${port}/api/resources`, {
         method: 'POST',
         headers: {
           cookie: `login=${cookieValue}`,
@@ -134,7 +137,7 @@ describe('Server [POST] /api/resources', () => {
     it('should respond with 500/error on general error', async () => {
       (updateResource as jest.Mock).mockRejectedValueOnce(new Error('nope'));
 
-      const response = await fetch('http://localhost:9210/api/resources', {
+      const response = await fetch(`http://localhost:${port}/api/resources`, {
         method: 'POST',
         headers: {
           cookie: `login=${cookieValue}`,
@@ -153,7 +156,7 @@ describe('Server [POST] /api/resources', () => {
         jest.requireActual('../controllers/resource').updateResource
       );
 
-      const response = await fetch('http://localhost:9210/api/resources', {
+      const response = await fetch(`http://localhost:${port}/api/resources`, {
         method: 'POST',
         headers: {
           cookie: `login=${cookieValue}`,

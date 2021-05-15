@@ -6,6 +6,7 @@ import { initDb } from '../db';
 import { initServer } from '../server';
 import { signJwt } from './helpers/sign-jwt';
 import { updateGroup } from '../controllers/group';
+import { getPort } from './helpers/get-port';
 
 jest.mock('../controllers/group');
 
@@ -17,15 +18,17 @@ describe('Server [POST] /api/groups', () => {
   const newName = 'Awesome Group #1';
   const updatedGroup = { name: newName, id: group.id };
 
+  let port: string;
   let cookieValue: string;
   let server: FastifyInstance;
   let db: Db;
   let log: Console['log'];
 
   beforeAll(async () => {
+    port = getPort(__filename);
     log = console.log;
     db = await initDb();
-    server = await initServer(db, '9200');
+    server = await initServer(db, port);
 
     console.log = () => undefined;
 
@@ -68,7 +71,7 @@ describe('Server [POST] /api/groups', () => {
     });
 
     it('should respond with 401/invalid', async () => {
-      const response = await fetch('http://localhost:9200/api/groups', {
+      const response = await fetch(`http://localhost:${port}/api/groups`, {
         method: 'POST',
         headers: {
           cookie: `login=${cookieValue}`,
@@ -98,7 +101,7 @@ describe('Server [POST] /api/groups', () => {
     it('should respond with 400/error on failure', async () => {
       (updateGroup as jest.Mock).mockResolvedValueOnce(false);
 
-      const response = await fetch('http://localhost:9200/api/groups', {
+      const response = await fetch(`http://localhost:${port}/api/groups`, {
         method: 'POST',
         headers: {
           cookie: `login=${cookieValue}`,
@@ -117,7 +120,7 @@ describe('Server [POST] /api/groups', () => {
         Object.assign(new Error('nope'), { name: 'SequelizeValidationError' })
       );
 
-      const response = await fetch('http://localhost:9200/api/groups', {
+      const response = await fetch(`http://localhost:${port}/api/groups`, {
         method: 'POST',
         headers: {
           cookie: `login=${cookieValue}`,
@@ -134,7 +137,7 @@ describe('Server [POST] /api/groups', () => {
     it('should respond with 500/error on general error', async () => {
       (updateGroup as jest.Mock).mockRejectedValueOnce(new Error('nope'));
 
-      const response = await fetch('http://localhost:9200/api/groups', {
+      const response = await fetch(`http://localhost:${port}/api/groups`, {
         method: 'POST',
         headers: {
           cookie: `login=${cookieValue}`,
@@ -153,7 +156,7 @@ describe('Server [POST] /api/groups', () => {
         jest.requireActual('../controllers/group').updateGroup
       );
 
-      const response = await fetch('http://localhost:9200/api/groups', {
+      const response = await fetch(`http://localhost:${port}/api/groups`, {
         method: 'POST',
         headers: {
           cookie: `login=${cookieValue}`,

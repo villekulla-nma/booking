@@ -6,15 +6,18 @@ import { initDb } from '../db';
 import { initServer } from '../server';
 import { signJwt } from './helpers/sign-jwt';
 import type { ResourceInstance } from '../models/resource';
+import { getPort } from './helpers/get-port';
 
 describe('Server [GET] /api/resources', () => {
+  let port: string;
   let cookieValue: string;
   let server: FastifyInstance;
   let db: Db;
 
   beforeAll(async () => {
+    port = getPort(__filename);
     db = await initDb();
-    server = await initServer(db, '9060');
+    server = await initServer(db, port);
     await db.User.create({
       id: 'TD0sIeaoz',
       email: 'person.one@example.com',
@@ -45,7 +48,7 @@ describe('Server [GET] /api/resources', () => {
   });
 
   it('should respond with the resources', async () => {
-    const response = await fetch('http://localhost:9060/api/resources', {
+    const response = await fetch(`http://localhost:${port}/api/resources`, {
       headers: {
         cookie: `login=${cookieValue}`,
       },

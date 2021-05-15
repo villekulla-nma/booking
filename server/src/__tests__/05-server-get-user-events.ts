@@ -8,15 +8,18 @@ import { signJwt } from './helpers/sign-jwt';
 import type { ResourceInstance } from '../models/resource';
 import type { EventInstance } from '../models/event';
 import { getDates } from './helpers/get-dates';
+import { getPort } from './helpers/get-port';
 
 describe('Server [GET] /api/user/events', () => {
+  let port: string;
   let cookieValue: string;
   let server: FastifyInstance;
   let db: Db;
 
   beforeAll(async () => {
+    port = getPort(__filename);
     db = await initDb();
-    server = await initServer(db, '9050');
+    server = await initServer(db, port);
     await db.User.create({
       id: 'TD0sIeaoz',
       email: 'person.one@example.com',
@@ -48,7 +51,7 @@ describe('Server [GET] /api/user/events', () => {
 
   describe('empty response', () => {
     it('should respond with 200/ok', async () => {
-      const response = await fetch('http://localhost:9050/api/user/events', {
+      const response = await fetch(`http://localhost:${port}/api/user/events`, {
         headers: {
           cookie: `login=${cookieValue}`,
         },
@@ -110,7 +113,7 @@ describe('Server [GET] /api/user/events', () => {
     });
 
     it('should respond with the events', async () => {
-      const response = await fetch('http://localhost:9050/api/user/events', {
+      const response = await fetch(`http://localhost:${port}/api/user/events`, {
         headers: {
           cookie: `login=${cookieValue}`,
         },
@@ -143,7 +146,7 @@ describe('Server [GET] /api/user/events', () => {
 
     it('should respect the limit-param', async () => {
       const response = await fetch(
-        'http://localhost:9050/api/user/events?limit=1',
+        `http://localhost:${port}/api/user/events?limit=1`,
         {
           headers: {
             cookie: `login=${cookieValue}`,

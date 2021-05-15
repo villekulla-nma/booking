@@ -6,17 +6,20 @@ import type { Db } from '../db';
 import { initDb } from '../db';
 import { initServer } from '../server';
 import { updateUser, getUserByKey } from '../controllers/user';
+import { getPort } from './helpers/get-port';
 
 jest.mock('../controllers/user');
 
 describe('Server [POST] /api/password-reset/:token', () => {
+  let port: string;
   const token = 'c2c4a54d1f64ed8eca662783b013bf6e';
   let server: FastifyInstance;
   let db: Db;
 
   beforeAll(async () => {
+    port = getPort(__filename);
     db = await initDb();
-    server = await initServer(db, '9030');
+    server = await initServer(db, port);
   });
 
   afterAll(async () => {
@@ -46,7 +49,7 @@ describe('Server [POST] /api/password-reset/:token', () => {
 
   it('should respond with 400/invalid if confirm does not match', async () => {
     const response = await fetch(
-      `http://localhost:9030/api/password-reset/${token}`,
+      `http://localhost:${port}/api/password-reset/${token}`,
       {
         method: 'POST',
         headers: {
@@ -66,7 +69,7 @@ describe('Server [POST] /api/password-reset/:token', () => {
 
   it('should respond with 400/error if token does not exist', async () => {
     const response = await fetch(
-      'http://localhost:9030/api/password-reset/non-exisiting-token',
+      `http://localhost:${port}/api/password-reset/non-exisiting-token`,
       {
         method: 'POST',
         headers: {
@@ -91,7 +94,7 @@ describe('Server [POST] /api/password-reset/:token', () => {
     (updateUser as jest.Mock).mockResolvedValue(false);
 
     const response = await fetch(
-      'http://localhost:9030/api/password-reset/non-exisiting-token',
+      `http://localhost:${port}/api/password-reset/non-exisiting-token`,
       {
         method: 'POST',
         headers: {
@@ -118,7 +121,7 @@ describe('Server [POST] /api/password-reset/:token', () => {
     );
 
     const response = await fetch(
-      `http://localhost:9030/api/password-reset/${token}`,
+      `http://localhost:${port}/api/password-reset/${token}`,
       {
         method: 'POST',
         headers: {

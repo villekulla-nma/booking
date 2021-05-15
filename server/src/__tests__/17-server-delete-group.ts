@@ -6,18 +6,21 @@ import { initDb } from '../db';
 import { initServer } from '../server';
 import { signJwt } from './helpers/sign-jwt';
 import { removeGroup } from '../controllers/group';
+import { getPort } from './helpers/get-port';
 
 jest.mock('../controllers/group');
 
 describe('Server [DELETE] /api/groups', () => {
+  let port: string;
   let cookieValue: string;
   let server: FastifyInstance;
   let db: Db;
   let log: Console['error'];
 
   beforeAll(async () => {
+    port = getPort(__filename);
     db = await initDb();
-    server = await initServer(db, '9170');
+    server = await initServer(db, port);
     log = console.error;
 
     console.error = () => undefined;
@@ -53,7 +56,7 @@ describe('Server [DELETE] /api/groups', () => {
       jest.requireActual('../controllers/group').removeGroup
     );
 
-    const response = await fetch('http://localhost:9170/api/groups', {
+    const response = await fetch(`http://localhost:${port}/api/groups`, {
       method: 'DELETE',
       headers: {
         cookie: `login=${cookieValue}`,
@@ -70,7 +73,7 @@ describe('Server [DELETE] /api/groups', () => {
   it('should respond with 400 on failure', async () => {
     (removeGroup as jest.Mock).mockResolvedValue(false);
 
-    const response = await fetch('http://localhost:9170/api/groups', {
+    const response = await fetch(`http://localhost:${port}/api/groups`, {
       method: 'DELETE',
       headers: {
         cookie: `login=${cookieValue}`,
@@ -85,7 +88,7 @@ describe('Server [DELETE] /api/groups', () => {
   it('should respond with 500 on error', async () => {
     (removeGroup as jest.Mock).mockRejectedValue(new Error('nope'));
 
-    const response = await fetch('http://localhost:9170/api/groups', {
+    const response = await fetch(`http://localhost:${port}/api/groups`, {
       method: 'DELETE',
       headers: {
         cookie: `login=${cookieValue}`,

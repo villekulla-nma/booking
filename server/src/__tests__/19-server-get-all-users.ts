@@ -5,15 +5,18 @@ import type { Db } from '../db';
 import { initDb } from '../db';
 import { initServer } from '../server';
 import { signJwt } from './helpers/sign-jwt';
+import { getPort } from './helpers/get-port';
 
 describe('Server [GET] /api/users', () => {
+  let port: string;
   let cookieValue: string;
   let server: FastifyInstance;
   let db: Db;
 
   beforeAll(async () => {
+    port = getPort(__filename);
     db = await initDb();
-    server = await initServer(db, '9190');
+    server = await initServer(db, port);
 
     await db.User.create({
       id: 'TD0sIeaoz',
@@ -51,7 +54,7 @@ describe('Server [GET] /api/users', () => {
     });
 
     it('should respond with 401/invalid', async () => {
-      const response = await fetch('http://localhost:9190/api/users', {
+      const response = await fetch(`http://localhost:${port}/api/users`, {
         headers: {
           cookie: `login=${cookieValue}`,
         },
@@ -76,7 +79,7 @@ describe('Server [GET] /api/users', () => {
     });
 
     it('should respond with 200 & a list', async () => {
-      const response = await fetch('http://localhost:9190/api/users', {
+      const response = await fetch(`http://localhost:${port}/api/users`, {
         headers: {
           cookie: `login=${cookieValue}`,
         },

@@ -4,14 +4,17 @@ import fetch from 'node-fetch';
 import type { Db } from '../db';
 import { initDb } from '../db';
 import { initServer } from '../server';
+import { getPort } from './helpers/get-port';
 
 describe('Server [POST] /api/password-reset', () => {
+  let port: string;
   let server: FastifyInstance;
   let db: Db;
 
   beforeAll(async () => {
+    port = getPort(__filename);
     db = await initDb();
-    server = await initServer(db, '9020');
+    server = await initServer(db, port);
 
     await db.User.create({
       id: 'TD0sIeaoz',
@@ -29,13 +32,16 @@ describe('Server [POST] /api/password-reset', () => {
   });
 
   it('should always respond with status "ok"', async () => {
-    const response = await fetch('http://localhost:9020/api/password-reset', {
-      method: 'POST',
-      headers: {
-        'content-type': 'application/json',
-      },
-      body: JSON.stringify({ email: 'nobody@example.com' }),
-    });
+    const response = await fetch(
+      `http://localhost:${port}/api/password-reset`,
+      {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+        },
+        body: JSON.stringify({ email: 'nobody@example.com' }),
+      }
+    );
     const data = await response.json();
 
     expect(response.status).toBe(200);
@@ -43,13 +49,16 @@ describe('Server [POST] /api/password-reset', () => {
   });
 
   it('should add a password reset token to the user', async () => {
-    const response = await fetch('http://localhost:9020/api/password-reset', {
-      method: 'POST',
-      headers: {
-        'content-type': 'application/json',
-      },
-      body: JSON.stringify({ email: 'person.one@example.com' }),
-    });
+    const response = await fetch(
+      `http://localhost:${port}/api/password-reset`,
+      {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+        },
+        body: JSON.stringify({ email: 'person.one@example.com' }),
+      }
+    );
     const data = await response.json();
     const user = await db.User.findByPk('TD0sIeaoz');
 

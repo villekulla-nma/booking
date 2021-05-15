@@ -6,18 +6,21 @@ import { initDb } from '../db';
 import { initServer } from '../server';
 import { signJwt } from './helpers/sign-jwt';
 import { removeEvent } from '../controllers/event';
+import { getPort } from './helpers/get-port';
 
 jest.mock('../controllers/event');
 
 describe('Server [DELETE] /api/events/:eventId', () => {
   const [today] = new Date().toISOString().split('T');
+  let port: string;
   let cookieValue: string;
   let server: FastifyInstance;
   let db: Db;
 
   beforeAll(async () => {
+    port = getPort(__filename);
     db = await initDb();
-    server = await initServer(db, '9090');
+    server = await initServer(db, port);
 
     await db.User.create({
       id: 'TD0sIeaoz',
@@ -58,12 +61,15 @@ describe('Server [DELETE] /api/events/:eventId', () => {
       jest.requireActual('../controllers/event').removeEvent
     );
 
-    const response = await fetch('http://localhost:9090/api/events/Zbfn4lu5t', {
-      method: 'DELETE',
-      headers: {
-        cookie: `login=${cookieValue}`,
-      },
-    });
+    const response = await fetch(
+      `http://localhost:${port}/api/events/Zbfn4lu5t`,
+      {
+        method: 'DELETE',
+        headers: {
+          cookie: `login=${cookieValue}`,
+        },
+      }
+    );
     const event = await db.Event.findByPk('Zbfn4lu5t');
 
     expect(response.status).toBe(200);
@@ -75,12 +81,15 @@ describe('Server [DELETE] /api/events/:eventId', () => {
       jest.requireActual('../controllers/event').removeEvent
     );
 
-    const response = await fetch('http://localhost:9090/api/events/GjcSASl40', {
-      method: 'DELETE',
-      headers: {
-        cookie: `login=${cookieValue}`,
-      },
-    });
+    const response = await fetch(
+      `http://localhost:${port}/api/events/GjcSASl40`,
+      {
+        method: 'DELETE',
+        headers: {
+          cookie: `login=${cookieValue}`,
+        },
+      }
+    );
 
     expect(response.status).toBe(400);
   });
@@ -88,12 +97,15 @@ describe('Server [DELETE] /api/events/:eventId', () => {
   it('should respond with 500 on error', async () => {
     (removeEvent as jest.Mock).mockRejectedValue(new Error('nope'));
 
-    const response = await fetch('http://localhost:9090/api/events/Zbfn4lu5t', {
-      method: 'DELETE',
-      headers: {
-        cookie: `login=${cookieValue}`,
-      },
-    });
+    const response = await fetch(
+      `http://localhost:${port}/api/events/Zbfn4lu5t`,
+      {
+        method: 'DELETE',
+        headers: {
+          cookie: `login=${cookieValue}`,
+        },
+      }
+    );
 
     expect(response.status).toBe(500);
   });

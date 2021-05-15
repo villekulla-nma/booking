@@ -5,16 +5,19 @@ import type { Db } from '../db';
 import { initDb } from '../db';
 import { initServer } from '../server';
 import { signJwt } from '../utils/jwt';
+import { getPort } from './helpers/get-port';
 
 jest.mock('../utils/jwt');
 
 describe('Server [POST] /api/login', () => {
+  let port: string;
   let server: FastifyInstance;
   let db: Db;
 
   beforeAll(async () => {
+    port = getPort(__filename);
     db = await initDb();
-    server = await initServer(db, '9000');
+    server = await initServer(db, port);
 
     await db.User.create({
       id: 'TD0sIeaoz',
@@ -41,7 +44,7 @@ describe('Server [POST] /api/login', () => {
   });
 
   it('should respond with 401/invalid to unknown users', async () => {
-    const response = await fetch('http://localhost:9000/api/login', {
+    const response = await fetch(`http://localhost:${port}/api/login`, {
       method: 'POST',
       headers: {
         'content-type': 'application/json',
@@ -55,7 +58,7 @@ describe('Server [POST] /api/login', () => {
   });
 
   it('should respond with 400/invalid to users without password', async () => {
-    const response = await fetch('http://localhost:9000/api/login', {
+    const response = await fetch(`http://localhost:${port}/api/login`, {
       method: 'POST',
       headers: {
         'content-type': 'application/json',
@@ -72,7 +75,7 @@ describe('Server [POST] /api/login', () => {
   });
 
   it('should respond with 401/invalid on invalid password', async () => {
-    const response = await fetch('http://localhost:9000/api/login', {
+    const response = await fetch(`http://localhost:${port}/api/login`, {
       method: 'POST',
       headers: {
         'content-type': 'application/json',
@@ -91,7 +94,7 @@ describe('Server [POST] /api/login', () => {
   it('should respond with 500/error if cookie creation fails', async () => {
     (signJwt as jest.Mock).mockRejectedValue(new Error('failed'));
 
-    const response = await fetch('http://localhost:9000/api/login', {
+    const response = await fetch(`http://localhost:${port}/api/login`, {
       method: 'POST',
       headers: {
         'content-type': 'application/json',
@@ -112,7 +115,7 @@ describe('Server [POST] /api/login', () => {
       jest.requireActual('../utils/jwt').signJwt
     );
 
-    const response = await fetch('http://localhost:9000/api/login', {
+    const response = await fetch(`http://localhost:${port}/api/login`, {
       method: 'POST',
       headers: {
         'content-type': 'application/json',

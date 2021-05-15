@@ -6,15 +6,18 @@ import { initDb } from '../db';
 import { initServer } from '../server';
 import { signJwt } from './helpers/sign-jwt';
 import type { GroupInstance } from '../models/group';
+import { getPort } from './helpers/get-port';
 
 describe('Server [GET] /api/groups', () => {
+  let port: string;
   let cookieValue: string;
   let server: FastifyInstance;
   let db: Db;
 
   beforeAll(async () => {
+    port = getPort(__filename);
     db = await initDb();
-    server = await initServer(db, '9180');
+    server = await initServer(db, port);
 
     await db.User.create({
       id: 'TD0sIeaoz',
@@ -47,7 +50,7 @@ describe('Server [GET] /api/groups', () => {
   });
 
   it('should respond with 200 & a list', async () => {
-    const response = await fetch('http://localhost:9180/api/groups', {
+    const response = await fetch(`http://localhost:${port}/api/groups`, {
       headers: {
         cookie: `login=${cookieValue}`,
       },

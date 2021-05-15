@@ -6,10 +6,12 @@ import { initDb } from '../db';
 import { initServer } from '../server';
 import { signJwt } from './helpers/sign-jwt';
 import { createResource, getAllResources } from '../controllers/resource';
+import { getPort } from './helpers/get-port';
 
 jest.mock('../controllers/resource');
 
 describe('Server [PUT] /api/resources', () => {
+  let port: string;
   let cookieValue: string;
   let server: FastifyInstance;
   let db: Db;
@@ -21,8 +23,9 @@ describe('Server [PUT] /api/resources', () => {
   };
 
   beforeAll(async () => {
+    port = getPort(__filename);
     db = await initDb();
-    server = await initServer(db, '9140');
+    server = await initServer(db, port);
     log = console.log;
 
     console.log = () => undefined;
@@ -69,7 +72,7 @@ describe('Server [PUT] /api/resources', () => {
     });
 
     it('should respond with 401/invalid', async () => {
-      const response = await fetch('http://localhost:9140/api/resources', {
+      const response = await fetch(`http://localhost:${port}/api/resources`, {
         method: 'PUT',
         headers: {
           cookie: `login=${cookieValue}`,
@@ -101,7 +104,7 @@ describe('Server [PUT] /api/resources', () => {
         Object.assign(new Error('wrong'), { name: 'SequelizeValidationError' })
       );
 
-      const response = await fetch('http://localhost:9140/api/resources', {
+      const response = await fetch(`http://localhost:${port}/api/resources`, {
         method: 'PUT',
         headers: {
           cookie: `login=${cookieValue}`,
@@ -118,7 +121,7 @@ describe('Server [PUT] /api/resources', () => {
     it('should respond with 500/error on failure', async () => {
       (createResource as jest.Mock).mockRejectedValue(new Error('nope'));
 
-      const response = await fetch('http://localhost:9140/api/resources', {
+      const response = await fetch(`http://localhost:${port}/api/resources`, {
         method: 'PUT',
         headers: {
           cookie: `login=${cookieValue}`,
@@ -137,7 +140,7 @@ describe('Server [PUT] /api/resources', () => {
         jest.requireActual('../controllers/resource').createResource
       );
 
-      const response = await fetch('http://localhost:9140/api/resources', {
+      const response = await fetch(`http://localhost:${port}/api/resources`, {
         method: 'PUT',
         headers: {
           cookie: `login=${cookieValue}`,

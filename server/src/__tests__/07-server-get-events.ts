@@ -9,16 +9,19 @@ import { signJwt } from './helpers/sign-jwt';
 import { getDates } from './helpers/get-dates';
 import type { ResourceInstance } from '../models/resource';
 import type { EventInstance } from '../models/event';
+import { getPort } from './helpers/get-port';
 
 describe('Server [GET] /api/resources/:resourceId/events', () => {
   const { today, tomorrow, dayAfterTomorrow, threeDaysAhead } = getDates();
+  let port: string;
   let cookieValue: string;
   let server: FastifyInstance;
   let db: Db;
 
   beforeAll(async () => {
+    port = getPort(__filename);
     db = await initDb();
-    server = await initServer(db, '9070');
+    server = await initServer(db, port);
 
     await db.User.create({
       id: 'TD0sIeaoz',
@@ -117,7 +120,7 @@ describe('Server [GET] /api/resources/:resourceId/events', () => {
     const end = `${dayAfterTomorrow}T00:00:00.000Z`;
     const search = new URLSearchParams({ start, end }).toString();
     const response = await fetch(
-      `http://localhost:9070/api/resources/Uj5SAS740/events?${search}`,
+      `http://localhost:${port}/api/resources/Uj5SAS740/events?${search}`,
       {
         headers: {
           cookie: `login=${cookieValue}`,
@@ -137,7 +140,7 @@ describe('Server [GET] /api/resources/:resourceId/events', () => {
     const end = `${dayAfterTomorrow}T00:00:00.000Z`;
     const search = new URLSearchParams({ start, end }).toString();
     const response = await fetch(
-      `http://localhost:9070/api/resources/gWH5T7Kdz/events?${search}`,
+      `http://localhost:${port}/api/resources/gWH5T7Kdz/events?${search}`,
       {
         headers: {
           cookie: `login=${cookieValue}`,
@@ -159,7 +162,7 @@ describe('Server [GET] /api/resources/:resourceId/events', () => {
     const end = `${threeDaysAhead}T23:59:59.000Z`;
     const search = new URLSearchParams({ start, end }).toString();
     const response = await fetch(
-      `http://localhost:9070/api/resources/Uj5SAS740/events?${search}`,
+      `http://localhost:${port}/api/resources/Uj5SAS740/events?${search}`,
       {
         headers: {
           cookie: `login=${cookieValue}`,
