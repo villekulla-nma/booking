@@ -6,7 +6,7 @@ import type { AssignHandlerFunction } from './type';
 import type { Request } from './pre-verify-session';
 import { preVerifySessionHandler } from './pre-verify-session';
 import { preVerifyAuthorizationHandler } from './pre-verify-authorization';
-import { updateGroup } from '../controllers/group';
+import { updateUnit } from '../controllers/unit';
 import { defaultResponseSchema } from '../utils/schema';
 
 interface Body {
@@ -27,7 +27,7 @@ const opts: RouteShorthandOptions = {
   preHandler: [preVerifySessionHandler, preVerifyAuthorizationHandler],
 };
 
-export const assignPostGroupHandler: AssignHandlerFunction = (
+export const assignPostUnitHandler: AssignHandlerFunction = (
   route,
   server,
   db
@@ -35,10 +35,10 @@ export const assignPostGroupHandler: AssignHandlerFunction = (
   server.post(route, opts, async (request: Request, reply) => {
     let code = 200;
     const response = { status: STATUS.OK };
-    const { id: groupId, name } = request.body as Body;
+    const { id: unitId, name } = request.body as Body;
 
     try {
-      const succeeded = await updateGroup(db, groupId, name);
+      const succeeded = await updateUnit(db, unitId, name);
 
       if (!succeeded) {
         code = 400;

@@ -22,7 +22,7 @@ describe('Server [PUT] /api/user', () => {
     email: 'person.three@example.com',
     firstName: 'Person3',
     lastName: 'Three',
-    groupId: 'Uj5SAS740',
+    unitId: 'Uj5SAS740',
   };
 
   beforeAll(async () => {
@@ -37,9 +37,9 @@ describe('Server [PUT] /api/user', () => {
       jest.requireActual('../controllers/user').getUserByKey
     );
 
-    await db.Group.create({
+    await db.Unit.create({
       id: 'Uj5SAS740',
-      name: 'Super Group #1',
+      name: 'Super Unit #1',
     });
   });
 
@@ -90,7 +90,7 @@ describe('Server [PUT] /api/user', () => {
       cookieValue = undefined;
     });
 
-    it('should respond with 400/invalid on non-existing group', async () => {
+    it('should respond with 400/invalid on non-existing unit', async () => {
       (createUser as jest.Mock).mockRejectedValue(
         Object.assign(new Error('wrong'), {
           name: 'SequelizeValidationError',
@@ -105,7 +105,7 @@ describe('Server [PUT] /api/user', () => {
         },
         body: JSON.stringify({
           ...newUser,
-          groupId: newUser.groupId.replace(/./g, 'x'),
+          unitId: newUser.unitId.replace(/./g, 'x'),
         }),
       });
       const data = await response.json();

@@ -20,7 +20,7 @@ import { UserProvider } from './components/user-provider';
 import { NotFoundPage } from './pages/not-found-page';
 import { AdminStartPage } from './pages/admin-start-page';
 import { AdminUsersPage } from './pages/admin-users-page';
-import { AdminGroupsPage } from './pages/admin-groups-page';
+import { AdminUnitsPage } from './pages/admin-units-page';
 import { AdminResourcesPage } from './pages/admin-resources-page';
 import { AdminUsersCreatePage } from './pages/admin-users-create-page';
 import { ROLE } from './constants';
@@ -78,8 +78,8 @@ const adminRoutes: RouteProps[] = [
     exact: true,
   },
   {
-    path: '/admin/groups',
-    component: AdminGroupsPage,
+    path: '/admin/units',
+    component: AdminUnitsPage,
     strict: true,
     exact: true,
   },

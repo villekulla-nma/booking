@@ -9,7 +9,7 @@ const attributes: Attributes[] = [
   'email',
   'password',
   'role',
-  'groupId',
+  'unitId',
 ];
 
 const keyPartsToCamelCase = ([first, ...rest]: string[]): string =>
@@ -49,7 +49,7 @@ export const getAdminListFromEnv = (): UserCreationAttributes[] => {
     }, [])
     .map((item: Record<string, string>) => {
       item.role = 'admin';
-      item.groupId = 'tbd';
+      item.unitId = 'tbd';
 
       return item;
     })

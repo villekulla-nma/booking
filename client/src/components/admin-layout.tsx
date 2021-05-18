@@ -10,7 +10,7 @@ interface Section {
   section: string;
 }
 
-const sections = ['Users', 'Groups', 'Resources'];
+const sections = ['Users', 'Units', 'Resources'];
 
 const navTokens: IStackTokens = {
   childrenGap: 16,

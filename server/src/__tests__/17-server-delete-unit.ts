@@ -5,12 +5,12 @@ import type { Db } from '../db';
 import { initDb } from '../db';
 import { initServer } from '../server';
 import { signJwt } from './helpers/sign-jwt';
-import { removeGroup } from '../controllers/group';
+import { removeUnit } from '../controllers/unit';
 import { getPort } from './helpers/get-port';
 
-jest.mock('../controllers/group');
+jest.mock('../controllers/unit');
 
-describe('Server [DELETE] /api/groups', () => {
+describe('Server [DELETE] /api/units', () => {
   let port: string;
   let cookieValue: string;
   let server: FastifyInstance;
@@ -25,9 +25,9 @@ describe('Server [DELETE] /api/groups', () => {
 
     console.error = () => undefined;
 
-    await db.Group.create({
+    await db.Unit.create({
       id: 'Uj5SAS740',
-      name: 'Super Group #1',
+      name: 'Super Unit #1',
     });
     await db.User.create({
       id: 'Ul2Zrv1BX',
@@ -35,7 +35,7 @@ describe('Server [DELETE] /api/groups', () => {
       firstName: 'Person2',
       lastName: 'Two',
       role: 'admin',
-      groupId: 'MTpZEtFhN',
+      unitId: 'MTpZEtFhN',
     });
 
     cookieValue = await signJwt(
@@ -52,11 +52,11 @@ describe('Server [DELETE] /api/groups', () => {
   });
 
   it('should respond with 200 on success', async () => {
-    (removeGroup as jest.Mock).mockImplementation(
-      jest.requireActual('../controllers/group').removeGroup
+    (removeUnit as jest.Mock).mockImplementation(
+      jest.requireActual('../controllers/unit').removeUnit
     );
 
-    const response = await fetch(`http://localhost:${port}/api/groups`, {
+    const response = await fetch(`http://localhost:${port}/api/units`, {
       method: 'DELETE',
       headers: {
         cookie: `login=${cookieValue}`,
@@ -64,16 +64,16 @@ describe('Server [DELETE] /api/groups', () => {
       },
       body: JSON.stringify({ id: 'Uj5SAS740' }),
     });
-    const group = await db.Group.findByPk('Uj5SAS740');
+    const unit = await db.Unit.findByPk('Uj5SAS740');
 
     expect(response.status).toBe(200);
-    expect(group).toBeNull();
+    expect(unit).toBeNull();
   });
 
   it('should respond with 400 on failure', async () => {
-    (removeGroup as jest.Mock).mockResolvedValue(false);
+    (removeUnit as jest.Mock).mockResolvedValue(false);
 
-    const response = await fetch(`http://localhost:${port}/api/groups`, {
+    const response = await fetch(`http://localhost:${port}/api/units`, {
       method: 'DELETE',
       headers: {
         cookie: `login=${cookieValue}`,
@@ -86,9 +86,9 @@ describe('Server [DELETE] /api/groups', () => {
   });
 
   it('should respond with 500 on error', async () => {
-    (removeGroup as jest.Mock).mockRejectedValue(new Error('nope'));
+    (removeUnit as jest.Mock).mockRejectedValue(new Error('nope'));
 
-    const response = await fetch(`http://localhost:${port}/api/groups`, {
+    const response = await fetch(`http://localhost:${port}/api/units`, {
       method: 'DELETE',
       headers: {
         cookie: `login=${cookieValue}`,

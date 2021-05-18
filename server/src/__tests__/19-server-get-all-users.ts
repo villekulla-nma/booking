@@ -24,7 +24,7 @@ describe('Server [GET] /api/users', () => {
       firstName: 'Person1',
       lastName: 'One',
       role: 'user',
-      groupId: 'YLBqxvCCm',
+      unitId: 'YLBqxvCCm',
     });
     await db.User.create({
       id: 'Ul2Zrv1BX',
@@ -32,7 +32,7 @@ describe('Server [GET] /api/users', () => {
       firstName: 'Person2',
       lastName: 'Two',
       role: 'admin',
-      groupId: 'MTpZEtFhN',
+      unitId: 'MTpZEtFhN',
     });
   });
 

@@ -127,7 +127,7 @@ export const getEventById = async (
       'lastName',
       'fullName',
       'email',
-      'groupId'
+      'unitId'
     ),
     resource: pick(resource, 'id', 'name'),
     id,

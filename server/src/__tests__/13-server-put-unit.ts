@@ -5,21 +5,21 @@ import type { Db } from '../db';
 import { initDb } from '../db';
 import { initServer } from '../server';
 import { signJwt } from './helpers/sign-jwt';
-import { createGroup, getAllGroups } from '../controllers/group';
+import { createUnit, getAllUnits } from '../controllers/unit';
 import { getPort } from './helpers/get-port';
 
-jest.mock('../controllers/group');
+jest.mock('../controllers/unit');
 
-describe('Server [PUT] /api/groups', () => {
+describe('Server [PUT] /api/units', () => {
   let port: string;
   let cookieValue: string;
   let server: FastifyInstance;
   let db: Db;
   let log: Console['log'];
 
-  const newGroup = {
+  const newUnit = {
     id: 'Uj5SAS740',
-    name: 'Super Group #1',
+    name: 'Super Unit #1',
   };
 
   beforeAll(async () => {
@@ -30,8 +30,8 @@ describe('Server [PUT] /api/groups', () => {
 
     console.log = () => undefined;
 
-    (getAllGroups as jest.Mock).mockImplementation(
-      jest.requireActual('../controllers/group').getAllGroups
+    (getAllUnits as jest.Mock).mockImplementation(
+      jest.requireActual('../controllers/unit').getAllUnits
     );
 
     await db.User.create({
@@ -40,7 +40,7 @@ describe('Server [PUT] /api/groups', () => {
       firstName: 'Person1',
       lastName: 'One',
       role: 'user',
-      groupId: 'YLBqxvCCm',
+      unitId: 'YLBqxvCCm',
     });
     await db.User.create({
       id: 'Ul2Zrv1BX',
@@ -48,7 +48,7 @@ describe('Server [PUT] /api/groups', () => {
       firstName: 'Person2',
       lastName: 'Two',
       role: 'admin',
-      groupId: 'MTpZEtFhN',
+      unitId: 'MTpZEtFhN',
     });
   });
 
@@ -72,13 +72,13 @@ describe('Server [PUT] /api/groups', () => {
     });
 
     it('should respond with 401/invalid', async () => {
-      const response = await fetch(`http://localhost:${port}/api/groups`, {
+      const response = await fetch(`http://localhost:${port}/api/units`, {
         method: 'PUT',
         headers: {
           cookie: `login=${cookieValue}`,
           'content-type': 'application/json',
         },
-        body: JSON.stringify(newGroup),
+        body: JSON.stringify(newUnit),
       });
       const data = await response.json();
 
@@ -100,17 +100,17 @@ describe('Server [PUT] /api/groups', () => {
     });
 
     it('should respond with 400/invalid on Sequelize Validation Error', async () => {
-      (createGroup as jest.Mock).mockRejectedValue(
+      (createUnit as jest.Mock).mockRejectedValue(
         Object.assign(new Error('wrong'), { name: 'SequelizeValidationError' })
       );
 
-      const response = await fetch(`http://localhost:${port}/api/groups`, {
+      const response = await fetch(`http://localhost:${port}/api/units`, {
         method: 'PUT',
         headers: {
           cookie: `login=${cookieValue}`,
           'content-type': 'application/json',
         },
-        body: JSON.stringify(newGroup),
+        body: JSON.stringify(newUnit),
       });
       const data = await response.json();
 
@@ -119,15 +119,15 @@ describe('Server [PUT] /api/groups', () => {
     });
 
     it('should respond with 500/error on failure', async () => {
-      (createGroup as jest.Mock).mockRejectedValue(new Error('nope'));
+      (createUnit as jest.Mock).mockRejectedValue(new Error('nope'));
 
-      const response = await fetch(`http://localhost:${port}/api/groups`, {
+      const response = await fetch(`http://localhost:${port}/api/units`, {
         method: 'PUT',
         headers: {
           cookie: `login=${cookieValue}`,
           'content-type': 'application/json',
         },
-        body: JSON.stringify(newGroup),
+        body: JSON.stringify(newUnit),
       });
       const data = await response.json();
 
@@ -136,26 +136,26 @@ describe('Server [PUT] /api/groups', () => {
     });
 
     it('should successfully ceate a user', async () => {
-      (createGroup as jest.Mock).mockImplementation(
-        jest.requireActual('../controllers/group').createGroup
+      (createUnit as jest.Mock).mockImplementation(
+        jest.requireActual('../controllers/unit').createUnit
       );
 
-      const response = await fetch(`http://localhost:${port}/api/groups`, {
+      const response = await fetch(`http://localhost:${port}/api/units`, {
         method: 'PUT',
         headers: {
           cookie: `login=${cookieValue}`,
           'content-type': 'application/json',
         },
-        body: JSON.stringify(newGroup),
+        body: JSON.stringify(newUnit),
       });
       const data = await response.json();
-      const group = (await getAllGroups(db)).find(
-        ({ name }) => name === newGroup.name
+      const unit = (await getAllUnits(db)).find(
+        ({ name }) => name === newUnit.name
       );
 
       expect(response.status).toBe(200);
       expect(data.status).toBe('ok');
-      expect(group).toBeDefined();
+      expect(unit).toBeDefined();
     });
   });
 });

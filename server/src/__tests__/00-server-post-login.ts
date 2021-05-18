@@ -26,7 +26,7 @@ describe('Server [POST] /api/login', () => {
       lastName: 'One',
       password: '$2a$10$Fu9T8J7sDe8yQYTInoCS/eTMQn1mxS6IBxlg26I0dq3KKl4CJQY1S', // test
       role: 'user',
-      groupId: 'YLBqxvCCm',
+      unitId: 'YLBqxvCCm',
     });
     await db.User.create({
       id: 'Ul2Zrv1BX',
@@ -34,7 +34,7 @@ describe('Server [POST] /api/login', () => {
       firstName: 'Person2',
       lastName: 'Two',
       role: 'user',
-      groupId: 'MTpZEtFhN',
+      unitId: 'MTpZEtFhN',
     });
   });
 

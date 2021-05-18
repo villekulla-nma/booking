@@ -25,7 +25,7 @@ describe('Server [GET] /api/events/:eventId', () => {
       firstName: 'Person1',
       lastName: 'One',
       role: 'user',
-      groupId: 'YLBqxvCCm',
+      unitId: 'YLBqxvCCm',
     });
     await db.Resource.create({
       id: 'Uj5SAS740',

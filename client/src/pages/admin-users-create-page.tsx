@@ -18,14 +18,14 @@ export const AdminUsersCreatePage: FC = () => {
     lastName,
     email,
     role,
-    groupId,
+    unitId,
   }: FormValues): void => {
-    if (typeof role === 'undefined' || typeof groupId === 'undefined') {
+    if (typeof role === 'undefined' || typeof unitId === 'undefined') {
       setFeedback('invalid');
       return;
     }
 
-    createUser(firstName, lastName, email, role, groupId).then((status) => {
+    createUser(firstName, lastName, email, role, unitId).then((status) => {
       setFeedback(status);
 
       if (status === 'ok') {

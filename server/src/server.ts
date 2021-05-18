@@ -19,14 +19,14 @@ import { assignPostLogoutHandler } from './handlers/post-logout';
 import { assignPostPasswordResetHandler } from './handlers/post-password-reset';
 import { assignPostPasswordUpdateHandler } from './handlers/post-password-update';
 import { assignGetHealthHandler } from './handlers/get-health';
-import { assignPutGroupHandler } from './handlers/put-group';
+import { assignPutUnitHandler } from './handlers/put-unit';
 import { assignPutResourceHandler } from './handlers/put-resource';
 import { assignDeleteUserHandler } from './handlers/delete-user';
 import { assignDeleteResourceHandler } from './handlers/delete-resource';
-import { assignDeleteGroupHandler } from './handlers/delete-group';
-import { assignGetGroupsHandler } from './handlers/get-groups';
+import { assignDeleteUnitHandler } from './handlers/delete-unit';
+import { assignGetUnitsHandler } from './handlers/get-units';
 import { assignGetAllUsersHandler } from './handlers/get-all-users';
-import { assignPostGroupHandler } from './handlers/post-group';
+import { assignPostUnitHandler } from './handlers/post-unit';
 import { assignPostResourceHandler } from './handlers/post-resource';
 import { assignPostUserHandler } from './handlers/post-user';
 
@@ -50,10 +50,10 @@ const routes: [string, AssignHandlerFunction][] = [
   ['/api/resources/:resourceId/events', assignGetAllEventsHandler],
   ['/api/events/:eventId', assignGetEventByIdHandler],
   ['/api/events/:eventId', assignDeleteEventHandler],
-  ['/api/groups', assignGetGroupsHandler],
-  ['/api/groups', assignPutGroupHandler],
-  ['/api/groups', assignPostGroupHandler],
-  ['/api/groups', assignDeleteGroupHandler],
+  ['/api/units', assignGetUnitsHandler],
+  ['/api/units', assignPutUnitHandler],
+  ['/api/units', assignPostUnitHandler],
+  ['/api/units', assignDeleteUnitHandler],
 ];
 
 const initProxy = (server: FastifyInstance): void => {

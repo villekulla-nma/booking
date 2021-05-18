@@ -39,7 +39,7 @@ describe('Server [PUT] /api/resources/:resourceId/events', () => {
       firstName: 'Person1',
       lastName: 'One',
       role: 'user',
-      groupId: 'YLBqxvCCm',
+      unitId: 'YLBqxvCCm',
     });
     await db.User.create({
       id: 'Ul2Zrv1BX',
@@ -47,7 +47,7 @@ describe('Server [PUT] /api/resources/:resourceId/events', () => {
       firstName: 'Person2',
       lastName: 'Two',
       role: 'user',
-      groupId: 'MTpZEtFhN',
+      unitId: 'MTpZEtFhN',
     });
     await db.Resource.bulkCreate<ResourceInstance>([
       {

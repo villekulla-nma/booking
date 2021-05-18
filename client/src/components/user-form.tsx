@@ -9,11 +9,11 @@ import {
 } from '@fluentui/react';
 import type { IDropdownOption } from '@fluentui/react';
 import { mergeStyles } from '@fluentui/merge-styles';
-import type { UserRole, GroupAttributes } from '@booking/types';
+import type { UserRole, UnitAttributes } from '@booking/types';
 
 import type { ResponseStatus } from '../api';
 import { useAuthenticatedFetch } from '../hooks/use-authenticated-fetch';
-import { getAllGroups } from '../api';
+import { getAllUnits } from '../api';
 import { Form } from './form';
 import { Feedback } from '../components/feedback';
 
@@ -23,7 +23,7 @@ export interface FormValues {
   lastName: string;
   email: string;
   role?: UserRole | undefined;
-  groupId?: string | undefined;
+  unitId?: string | undefined;
 }
 
 interface Props extends FormValues {
@@ -41,10 +41,10 @@ const feedbackStyles = mergeStyles({
 });
 
 const toDropDownOptions = (
-  groups: GroupAttributes[],
+  units: UnitAttributes[],
   current: string | undefined
 ): IDropdownOption[] =>
-  groups.map(({ id, name }) => ({
+  units.map(({ id, name }) => ({
     key: id,
     text: name,
     selected: id === current,
@@ -103,30 +103,27 @@ export const UserForm: FC<Props> = memo(
     feedback,
     firstName: initialFirstName,
     formLabel,
-    groupId: initialGroupId,
+    unitId: initialUnitId,
     lastName: initialLastName,
     role: initialRole,
     userId,
     onReset,
     onSubmit,
   }) => {
-    const [groupList] = useAuthenticatedFetch<GroupAttributes[]>(
-      getAllGroups,
-      []
-    );
+    const [unitList] = useAuthenticatedFetch<UnitAttributes[]>(getAllUnits, []);
     const [firstName, setFirstName] = useState<string>(initialFirstName);
     const [lastName, setLastName] = useState<string>(initialLastName);
     const [email, setEmail] = useState<string>(initialEmail);
     const [role, setRole] = useState<UserRole | undefined>(initialRole);
-    const [groupId, setGroupId] = useState<string | undefined>(initialGroupId);
+    const [unitId, setUnitId] = useState<string | undefined>(initialUnitId);
 
     const handleFirstNameChange = (_: unknown, value = ''): void =>
       setFirstName(value);
     const handleLastNameChange = (_: unknown, value = ''): void =>
       setLastName(value);
     const handleEmailChange = (_: unknown, value = ''): void => setEmail(value);
-    const handleGroupChange = (_: unknown, option?: IDropdownOption): void =>
-      setGroupId(option?.id);
+    const handleUnitChange = (_: unknown, option?: IDropdownOption): void =>
+      setUnitId(option?.id);
     const handleRoleChange = (_: unknown, option?: IDropdownOption): void =>
       setRole(option?.id as UserRole | undefined);
     const handleReset = (): void => {
@@ -134,7 +131,7 @@ export const UserForm: FC<Props> = memo(
       setLastName('');
       setEmail('');
       setRole(undefined);
-      setGroupId(undefined);
+      setUnitId(undefined);
       onReset();
     };
     const handleSubmit = (): void =>
@@ -144,10 +141,10 @@ export const UserForm: FC<Props> = memo(
         lastName,
         email,
         role,
-        groupId,
+        unitId,
       });
 
-    return groupList.length === 0 ? (
+    return unitList.length === 0 ? (
       <Spinner
         label="Lade Gruppen …"
         ariaLive="assertive"
@@ -185,12 +182,12 @@ export const UserForm: FC<Props> = memo(
             data-testid="role-select"
           />
           <Dropdown
-            options={toDropDownOptions(groupList, groupId)}
+            options={toDropDownOptions(unitList, unitId)}
             label="Gruppen"
             required={true}
-            onChange={handleGroupChange}
-            data-testid="group-select"
-            disabled={groupList.length === 0}
+            onChange={handleUnitChange}
+            data-testid="unit-select"
+            disabled={unitList.length === 0}
           />
         </Form>
       </>

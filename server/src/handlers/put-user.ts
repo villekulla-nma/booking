@@ -7,7 +7,7 @@ import type { AssignHandlerFunction } from './type';
 import type { Request } from './pre-verify-session';
 import { preVerifySessionHandler } from './pre-verify-session';
 import { preVerifyAuthorizationHandler } from './pre-verify-authorization';
-import { getGroupById } from '../controllers/group';
+import { getUnitById } from '../controllers/unit';
 import { createUser } from '../controllers/user';
 import { defaultResponseSchema } from '../utils/schema';
 
@@ -16,7 +16,7 @@ interface Body {
   email: string;
   firstName: string;
   lastName: string;
-  groupId: string;
+  unitId: string;
 }
 
 const bodySchema = S.object()
@@ -24,7 +24,7 @@ const bodySchema = S.object()
   .prop('email', S.string().format(S.FORMATS.EMAIL).required())
   .prop('firstName', S.string().required())
   .prop('lastName', S.string().required())
-  .prop('groupId', S.string().required())
+  .prop('unitId', S.string().required())
   .valueOf();
 
 const opts: RouteShorthandOptions = {
@@ -43,18 +43,18 @@ export const assignPutUserHandler: AssignHandlerFunction = (
   server.put(route, opts, async (request: Request, reply) => {
     let code = 200;
     const response = { status: STATUS.OK };
-    const { role, email, firstName, lastName, groupId } = request.body as Body;
-    const group = await getGroupById(db, groupId);
+    const { role, email, firstName, lastName, unitId } = request.body as Body;
+    const unit = await getUnitById(db, unitId);
 
     do {
-      if (group === null) {
+      if (unit === null) {
         code = 400;
         response.status = STATUS.INVALID;
         break;
       }
 
       try {
-        await createUser(db, role, email, firstName, lastName, groupId);
+        await createUser(db, role, email, firstName, lastName, unitId);
       } catch (error) {
         console.log(error);
         code = error.name === 'SequelizeValidationError' ? 400 : 500;

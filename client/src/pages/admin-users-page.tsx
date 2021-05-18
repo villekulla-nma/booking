@@ -52,19 +52,19 @@ export const AdminUsersPage: FC = () => {
     lastName,
     email,
     role,
-    groupId,
+    unitId,
     userId,
   }: FormValues): void => {
     if (
       typeof role === 'undefined' ||
-      typeof groupId === 'undefined' ||
+      typeof unitId === 'undefined' ||
       typeof userId === 'undefined'
     ) {
       setFeedback('invalid');
       return;
     }
 
-    updateUser(userId, firstName, lastName, email, role, groupId).then(
+    updateUser(userId, firstName, lastName, email, role, unitId).then(
       (status) => {
         setFeedback(status);
 
@@ -100,7 +100,7 @@ export const AdminUsersPage: FC = () => {
               lastName={user.lastName}
               email={user.email}
               role={user.role}
-              groupId={user.groupId}
+              unitId={user.unitId}
               onSubmit={handleSubmit}
               onReset={handleReset}
             />

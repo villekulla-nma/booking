@@ -5,18 +5,18 @@ import type { Db } from '../db';
 import { initDb } from '../db';
 import { initServer } from '../server';
 import { signJwt } from './helpers/sign-jwt';
-import { updateGroup } from '../controllers/group';
+import { updateUnit } from '../controllers/unit';
 import { getPort } from './helpers/get-port';
 
-jest.mock('../controllers/group');
+jest.mock('../controllers/unit');
 
-describe('Server [POST] /api/groups', () => {
-  const group = {
+describe('Server [POST] /api/units', () => {
+  const unit = {
     id: 'Uj5SAS740',
-    name: 'Super Group #1',
+    name: 'Super Unit #1',
   };
-  const newName = 'Awesome Group #1';
-  const updatedGroup = { name: newName, id: group.id };
+  const newName = 'Awesome Unit #1';
+  const updatedUnit = { name: newName, id: unit.id };
 
   let port: string;
   let cookieValue: string;
@@ -38,7 +38,7 @@ describe('Server [POST] /api/groups', () => {
       firstName: 'Person1',
       lastName: 'One',
       role: 'user',
-      groupId: 'YLBqxvCCm',
+      unitId: 'YLBqxvCCm',
     });
     await db.User.create({
       id: 'Ul2Zrv1BX',
@@ -46,9 +46,9 @@ describe('Server [POST] /api/groups', () => {
       firstName: 'Person2',
       lastName: 'Two',
       role: 'admin',
-      groupId: 'MTpZEtFhN',
+      unitId: 'MTpZEtFhN',
     });
-    await db.Group.create(group);
+    await db.Unit.create(unit);
   });
 
   afterAll(async () => {
@@ -71,13 +71,13 @@ describe('Server [POST] /api/groups', () => {
     });
 
     it('should respond with 401/invalid', async () => {
-      const response = await fetch(`http://localhost:${port}/api/groups`, {
+      const response = await fetch(`http://localhost:${port}/api/units`, {
         method: 'POST',
         headers: {
           cookie: `login=${cookieValue}`,
           'content-type': 'application/json',
         },
-        body: JSON.stringify(updatedGroup),
+        body: JSON.stringify(updatedUnit),
       });
       const data = await response.json();
 
@@ -99,15 +99,15 @@ describe('Server [POST] /api/groups', () => {
     });
 
     it('should respond with 400/error on failure', async () => {
-      (updateGroup as jest.Mock).mockResolvedValueOnce(false);
+      (updateUnit as jest.Mock).mockResolvedValueOnce(false);
 
-      const response = await fetch(`http://localhost:${port}/api/groups`, {
+      const response = await fetch(`http://localhost:${port}/api/units`, {
         method: 'POST',
         headers: {
           cookie: `login=${cookieValue}`,
           'content-type': 'application/json',
         },
-        body: JSON.stringify(updatedGroup),
+        body: JSON.stringify(updatedUnit),
       });
       const data = await response.json();
 
@@ -116,17 +116,17 @@ describe('Server [POST] /api/groups', () => {
     });
 
     it('should respond with 400/invalid on Sequel Validation Error', async () => {
-      (updateGroup as jest.Mock).mockRejectedValueOnce(
+      (updateUnit as jest.Mock).mockRejectedValueOnce(
         Object.assign(new Error('nope'), { name: 'SequelizeValidationError' })
       );
 
-      const response = await fetch(`http://localhost:${port}/api/groups`, {
+      const response = await fetch(`http://localhost:${port}/api/units`, {
         method: 'POST',
         headers: {
           cookie: `login=${cookieValue}`,
           'content-type': 'application/json',
         },
-        body: JSON.stringify(updatedGroup),
+        body: JSON.stringify(updatedUnit),
       });
       const data = await response.json();
 
@@ -135,15 +135,15 @@ describe('Server [POST] /api/groups', () => {
     });
 
     it('should respond with 500/error on general error', async () => {
-      (updateGroup as jest.Mock).mockRejectedValueOnce(new Error('nope'));
+      (updateUnit as jest.Mock).mockRejectedValueOnce(new Error('nope'));
 
-      const response = await fetch(`http://localhost:${port}/api/groups`, {
+      const response = await fetch(`http://localhost:${port}/api/units`, {
         method: 'POST',
         headers: {
           cookie: `login=${cookieValue}`,
           'content-type': 'application/json',
         },
-        body: JSON.stringify(updatedGroup),
+        body: JSON.stringify(updatedUnit),
       });
       const data = await response.json();
 
@@ -152,20 +152,20 @@ describe('Server [POST] /api/groups', () => {
     });
 
     it('should respond with 200/ok on success', async () => {
-      (updateGroup as jest.Mock).mockImplementationOnce(
-        jest.requireActual('../controllers/group').updateGroup
+      (updateUnit as jest.Mock).mockImplementationOnce(
+        jest.requireActual('../controllers/unit').updateUnit
       );
 
-      const response = await fetch(`http://localhost:${port}/api/groups`, {
+      const response = await fetch(`http://localhost:${port}/api/units`, {
         method: 'POST',
         headers: {
           cookie: `login=${cookieValue}`,
           'content-type': 'application/json',
         },
-        body: JSON.stringify(updatedGroup),
+        body: JSON.stringify(updatedUnit),
       });
       const data = await response.json();
-      const result = await db.Group.findByPk(group.id);
+      const result = await db.Unit.findByPk(unit.id);
 
       expect(response.status).toBe(200);
       expect(data.status).toBe('ok');

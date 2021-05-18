@@ -29,7 +29,7 @@ describe('Server [GET] /api/resources/:resourceId/events', () => {
       firstName: 'Person1',
       lastName: 'One',
       role: 'user',
-      groupId: 'YLBqxvCCm',
+      unitId: 'YLBqxvCCm',
     });
     await db.Resource.bulkCreate<ResourceInstance>([
       {

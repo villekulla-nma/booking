@@ -1,5 +1,5 @@
 import type {
-  GroupAttributes,
+  UnitAttributes,
   ResourceAttributes,
   UserAttributes,
   UserResponse,
@@ -9,4 +9,4 @@ export type UserResult = UserResponse & Pick<UserAttributes, 'password'>;
 
 export type ResourceResult = Pick<ResourceAttributes, 'id' | 'name'>;
 
-export type GroupResult = Pick<GroupAttributes, 'id' | 'name'>;
+export type UnitResult = Pick<UnitAttributes, 'id' | 'name'>;

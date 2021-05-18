@@ -22,7 +22,7 @@ describe('Server [POST] /api/password-reset', () => {
       firstName: 'Person1',
       lastName: 'One',
       role: 'user',
-      groupId: 'YLBqxvCCm',
+      unitId: 'YLBqxvCCm',
     });
   });
 

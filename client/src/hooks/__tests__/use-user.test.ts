@@ -15,7 +15,7 @@ describe('User-User', () => {
     lastName: 'One',
     fullName: 'Person1 One',
     role: 'user',
-    groupId: 'Uj5SAS740',
+    unitId: 'Uj5SAS740',
   };
 
   beforeAll(() => {

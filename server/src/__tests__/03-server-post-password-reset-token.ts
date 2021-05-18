@@ -34,7 +34,7 @@ describe('Server [POST] /api/password-reset/:token', () => {
       firstName: 'Person1',
       lastName: 'One',
       role: 'user',
-      groupId: 'YLBqxvCCm',
+      unitId: 'YLBqxvCCm',
       passwordReset: token,
     });
   });
