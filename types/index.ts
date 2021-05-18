@@ -1,4 +1,4 @@
-export interface GroupAttributes {
+export interface UnitAttributes {
   id: string;
   name: string;
 }
@@ -19,7 +19,7 @@ export interface UserAttributes {
   password?: string;
   passwordReset?: string;
   fullName: string;
-  groupId: string;
+  unitId: string;
 }
 
 export interface EventAttributes {
@@ -43,5 +43,5 @@ export type LoginResult = 'ok' | 'unverified' | 'invalid' | 'error';
 
 export type UserResponse = Pick<
   UserAttributes,
-  'id' | 'role' | 'firstName' | 'lastName' | 'fullName' | 'email' | 'groupId'
+  'id' | 'role' | 'firstName' | 'lastName' | 'fullName' | 'email' | 'unitId'
 >;

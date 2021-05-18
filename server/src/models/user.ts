@@ -55,7 +55,7 @@ const schema: Schema = {
     type: DataTypes.STRING,
     unique: true,
   },
-  groupId: {
+  unitId: {
     type: DataTypes.STRING,
     allowNull: false,
   },
@@ -79,7 +79,7 @@ const isUserCreationData = (r: any): r is UserCreationAttributes =>
   typeof r.lastName === 'string' &&
   Array.isArray((typeof r.password).match(/^(string|undefined)$/)) &&
   Array.isArray((typeof r.passwordReset).match(/^(string|undefined)$/)) &&
-  typeof r.groupId === 'string';
+  typeof r.unitId === 'string';
 
 export const scaffoldUsers = async (
   User: ModelCtor<UserInstance>,

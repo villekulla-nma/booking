@@ -44,7 +44,7 @@ export const rawUserSchema = S.object()
   .prop('lastName', S.string().required())
   .prop('fullName', S.string().required())
   .prop('email', S.string().format(S.FORMATS.EMAIL).required())
-  .prop('groupId', S.string().required());
+  .prop('unitId', S.string().required());
 
 export const rawBaseEventSchema = S.object()
   .id('#baseEvent')

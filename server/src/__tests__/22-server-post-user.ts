@@ -18,7 +18,7 @@ describe('Server [POST] /api/user', () => {
     firstName: 'Person1',
     lastName: 'One',
     role: 'user' as UserRole,
-    groupId: 'YLBqxvCCm',
+    unitId: 'YLBqxvCCm',
   };
 
   let port: string;
@@ -42,7 +42,7 @@ describe('Server [POST] /api/user', () => {
       firstName: 'Person2',
       lastName: 'Two',
       role: 'admin',
-      groupId: 'MTpZEtFhN',
+      unitId: 'MTpZEtFhN',
     });
   });
 

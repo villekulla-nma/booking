@@ -10,7 +10,7 @@ const toUserResult = (
   user: UserInstance,
   includePassword = false
 ): UserResult => {
-  const { id, role, firstName, lastName, fullName, email, groupId, password } =
+  const { id, role, firstName, lastName, fullName, email, unitId, password } =
     user;
 
   return {
@@ -20,7 +20,7 @@ const toUserResult = (
     lastName,
     fullName,
     email,
-    groupId,
+    unitId,
     ...(includePassword === true ? { password } : undefined),
   };
 };
@@ -68,7 +68,7 @@ export const createUser = async (
   email: string,
   firstName: string,
   lastName: string,
-  groupId: string
+  unitId: string
 ): Promise<string> => {
   const id = shortid();
 
@@ -78,7 +78,7 @@ export const createUser = async (
     email,
     firstName,
     lastName,
-    groupId,
+    unitId,
   });
 
   return id;

@@ -6,7 +6,7 @@ import type { AssignHandlerFunction } from './type';
 import type { Request } from './pre-verify-session';
 import { preVerifySessionHandler } from './pre-verify-session';
 import { preVerifyAuthorizationHandler } from './pre-verify-authorization';
-import { createGroup } from '../controllers/group';
+import { createUnit } from '../controllers/unit';
 import { defaultResponseSchema } from '../utils/schema';
 
 interface Body {
@@ -23,7 +23,7 @@ const opts: RouteShorthandOptions = {
   preHandler: [preVerifySessionHandler, preVerifyAuthorizationHandler],
 };
 
-export const assignPutGroupHandler: AssignHandlerFunction = (
+export const assignPutUnitHandler: AssignHandlerFunction = (
   route,
   server,
   db
@@ -34,7 +34,7 @@ export const assignPutGroupHandler: AssignHandlerFunction = (
     const { name } = request.body as Body;
 
     try {
-      await createGroup(db, name);
+      await createUnit(db, name);
     } catch (error) {
       console.log(error);
       code = error.name === 'SequelizeValidationError' ? 400 : 500;

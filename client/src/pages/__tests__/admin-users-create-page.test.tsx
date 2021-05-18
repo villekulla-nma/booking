@@ -22,14 +22,14 @@ jest.mock('../../components/admin-layout.tsx', () => {
 });
 
 describe('Admin Users Create Page', () => {
-  const groups = [
+  const units = [
     {
       id: 'Uj5SAS740',
-      name: 'Group #1',
+      name: 'Unit #1',
     },
     {
       id: 'gWH5T7Kdz',
-      name: 'Group #2',
+      name: 'Unit #2',
     },
   ];
   const user = {
@@ -39,7 +39,7 @@ describe('Admin Users Create Page', () => {
     lastName: 'Two',
     fullName: 'Person2 Two',
     role: 'admin',
-    groupId: 'gWH5T7Kdz',
+    unitId: 'gWH5T7Kdz',
   };
   const newUser = {
     email: 'person.three@example.com',
@@ -47,7 +47,7 @@ describe('Admin Users Create Page', () => {
     lastName: 'Three',
     fullName: 'Person3 Three',
     role: 'user',
-    groupId: 'Uj5SAS740',
+    unitId: 'Uj5SAS740',
   };
 
   initializeIcons();
@@ -66,8 +66,8 @@ describe('Admin Users Create Page', () => {
 
       let pathname = '';
       const scope = nock('http://localhost')
-        .get('/api/groups')
-        .reply(200, { status: 'ok', payload: groups });
+        .get('/api/units')
+        .reply(200, { status: 'ok', payload: units });
 
       render(
         <Router initialEntries={['/admin/users/create']}>
@@ -109,15 +109,15 @@ describe('Admin Users Create Page', () => {
 
       let pathname = '';
       const initialScope = nock('http://localhost')
-        .get('/api/groups')
-        .reply(200, { status: 'ok', payload: groups });
+        .get('/api/units')
+        .reply(200, { status: 'ok', payload: units });
       const creationScope = nock('http://localhost')
         .put('/api/user', {
           firstName: newUser.firstName,
           lastName: newUser.lastName,
           email: newUser.email,
           role: newUser.role,
-          groupId: 'Uj5SAS740',
+          unitId: 'Uj5SAS740',
         })
         .reply(200, { status: 'ok' });
 
@@ -168,10 +168,10 @@ describe('Admin Users Create Page', () => {
         })
       );
 
-      const groupSelect = screen.getByTestId('group-select');
-      fireEvent.click(groupSelect);
+      const unitSelect = screen.getByTestId('unit-select');
+      fireEvent.click(unitSelect);
       fireEvent.click(
-        screen.getByText('Group #1', {
+        screen.getByText('Unit #1', {
           selector: 'span',
         })
       );

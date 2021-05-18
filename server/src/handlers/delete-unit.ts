@@ -5,7 +5,7 @@ import type { AssignHandlerFunction } from './type';
 import type { Request } from './pre-verify-session';
 import { preVerifySessionHandler } from './pre-verify-session';
 import { preVerifyAuthorizationHandler } from './pre-verify-authorization';
-import { removeGroup } from '../controllers/group';
+import { removeUnit } from '../controllers/unit';
 
 interface Body {
   id: string;
@@ -20,17 +20,17 @@ const opts: RouteShorthandOptions = {
   preHandler: [preVerifySessionHandler, preVerifyAuthorizationHandler],
 };
 
-export const assignDeleteGroupHandler: AssignHandlerFunction = (
+export const assignDeleteUnitHandler: AssignHandlerFunction = (
   route,
   server,
   db
 ) => {
   server.delete(route, opts, async (request: Request, reply) => {
     let code = 200;
-    const { id: groupId } = request.body as Body;
+    const { id: unitId } = request.body as Body;
 
     try {
-      if (!(await removeGroup(db, groupId))) {
+      if (!(await removeUnit(db, unitId))) {
         code = 400;
       }
     } catch (error) {

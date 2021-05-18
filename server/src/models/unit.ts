@@ -7,15 +7,15 @@ import type {
   Sequelize,
   Transaction,
 } from 'sequelize';
-import type { GroupAttributes } from '@booking/types';
+import type { UnitAttributes } from '@booking/types';
 
-type GroupCreationAttributes = Optional<GroupAttributes, 'id'>;
+type UnitCreationAttributes = Optional<UnitAttributes, 'id'>;
 
-export interface GroupInstance
-  extends Model<GroupAttributes, GroupCreationAttributes>,
-    GroupAttributes {}
+export interface UnitInstance
+  extends Model<UnitAttributes, UnitCreationAttributes>,
+    UnitAttributes {}
 
-type Schema = ModelAttributes<GroupInstance, GroupAttributes>;
+type Schema = ModelAttributes<UnitInstance, UnitAttributes>;
 
 const schema: Schema = {
   id: {
@@ -31,24 +31,24 @@ const schema: Schema = {
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const isGroupData = (r: any): r is GroupAttributes =>
+const isUnitData = (r: any): r is UnitAttributes =>
   typeof r.id === 'string' && typeof r.name === 'string';
 
-export const scaffoldGroups = async (
-  Group: ModelCtor<GroupInstance>,
+export const scaffoldUnits = async (
+  Unit: ModelCtor<UnitInstance>,
   data: unknown,
   transaction: Transaction
 ): Promise<void> => {
   if (Array.isArray(data)) {
     await Promise.all(
       data
-        .filter((r) => isGroupData(r))
-        .map((group) =>
-          Group.findOrCreate({
+        .filter((r) => isUnitData(r))
+        .map((unit) =>
+          Unit.findOrCreate({
             where: {
-              id: { [Op.eq]: group.id },
+              id: { [Op.eq]: unit.id },
             },
-            defaults: group,
+            defaults: unit,
             transaction,
           })
         )
@@ -56,10 +56,10 @@ export const scaffoldGroups = async (
   }
 };
 
-export const createGroupInstance = (
+export const createUnitInstance = (
   sequelize: Sequelize
-): ModelCtor<GroupInstance> =>
-  sequelize.define<GroupInstance>('Group', schema, {
+): ModelCtor<UnitInstance> =>
+  sequelize.define<UnitInstance>('Unit', schema, {
     timestamps: false,
     createdAt: false,
   });

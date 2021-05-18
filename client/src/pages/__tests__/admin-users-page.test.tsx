@@ -30,14 +30,14 @@ jest.mock('../../components/admin-layout.tsx', () => {
 });
 
 describe('Admin Users Page', () => {
-  const groups = [
+  const units = [
     {
       id: 'Uj5SAS740',
-      name: 'Group #1',
+      name: 'Unit #1',
     },
     {
       id: 'gWH5T7Kdz',
-      name: 'Group #2',
+      name: 'Unit #2',
     },
   ];
   const userOne = {
@@ -47,7 +47,7 @@ describe('Admin Users Page', () => {
     lastName: 'One',
     fullName: 'Person1 One',
     role: 'user',
-    groupId: 'Uj5SAS740',
+    unitId: 'Uj5SAS740',
   };
   const userTwo = {
     id: 'Ul2Zrv1BX',
@@ -56,7 +56,7 @@ describe('Admin Users Page', () => {
     lastName: 'Two',
     fullName: 'Person2 Two',
     role: 'admin',
-    groupId: 'gWH5T7Kdz',
+    unitId: 'gWH5T7Kdz',
   };
   const userThree = {
     id: 'oibxhRu2L',
@@ -65,7 +65,7 @@ describe('Admin Users Page', () => {
     lastName: 'Three',
     fullName: 'Person3 Three',
     role: 'user',
-    groupId: 'Uj5SAS740',
+    unitId: 'Uj5SAS740',
   };
 
   initializeIcons();
@@ -110,8 +110,8 @@ describe('Admin Users Page', () => {
         .get('/api/users')
         .reply(200, { status: 'ok', payload: [userOne] });
       const overlayScope = nock('http://localhost')
-        .get('/api/groups')
-        .reply(200, { status: 'ok', payload: groups });
+        .get('/api/units')
+        .reply(200, { status: 'ok', payload: units });
       const updateScope = nock('http://localhost')
         .post('/api/user', {
           id: userOne.id,
@@ -119,7 +119,7 @@ describe('Admin Users Page', () => {
           lastName: userOne.lastName,
           email: userOne.email,
           role: userOne.role,
-          groupId: userOne.groupId,
+          unitId: userOne.unitId,
         })
         .reply(200, { status: 'ok' })
         .get('/api/users')

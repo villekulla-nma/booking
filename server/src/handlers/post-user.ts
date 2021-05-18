@@ -16,7 +16,7 @@ interface Body {
   lastName: string;
   email: string;
   role: UserRole;
-  groupId: string;
+  unitId: string;
 }
 
 const bodySchema = S.object()
@@ -25,7 +25,7 @@ const bodySchema = S.object()
   .prop('lastName', S.string().required())
   .prop('email', S.string().required())
   .prop('role', S.oneOf([S.const('user'), S.const('admin')]).required())
-  .prop('groupId', S.string().required())
+  .prop('unitId', S.string().required())
   .valueOf();
 
 const opts: RouteShorthandOptions = {

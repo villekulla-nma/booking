@@ -35,7 +35,7 @@ describe('Server [DELETE] /api/resources', () => {
       firstName: 'Person2',
       lastName: 'Two',
       role: 'admin',
-      groupId: 'MTpZEtFhN',
+      unitId: 'MTpZEtFhN',
     });
 
     cookieValue = await signJwt(

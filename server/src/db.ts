@@ -4,12 +4,12 @@ import type { ModelCtor } from 'sequelize';
 import { env } from './utils/env';
 import {
   createResourceInstance,
-  createGroupInstance,
+  createUnitInstance,
   createUserInstance,
   createEventInstance,
 } from './models';
 import type {
-  GroupInstance,
+  UnitInstance,
   ResourceInstance,
   UserInstance,
   EventInstance,
@@ -19,7 +19,7 @@ import { getAdminListFromEnv } from './utils/get-admin-list-from-env';
 
 export interface Db {
   Event: ModelCtor<EventInstance>;
-  Group: ModelCtor<GroupInstance>;
+  Unit: ModelCtor<UnitInstance>;
   Resource: ModelCtor<ResourceInstance>;
   User: ModelCtor<UserInstance>;
 
@@ -34,7 +34,7 @@ export const initDb = async (): Promise<Db> => {
   });
   const dataPromise = getScaffoldingData();
   const Resource = createResourceInstance(sequelize);
-  const Group = createGroupInstance(sequelize);
+  const Unit = createUnitInstance(sequelize);
   const User = createUserInstance(sequelize);
   const Event = createEventInstance(sequelize);
   const [data] = await Promise.all([dataPromise, sequelize.sync()]);
@@ -44,12 +44,12 @@ export const initDb = async (): Promise<Db> => {
     ...getAdminListFromEnv(),
   ];
 
-  User.belongsTo(Group, { foreignKey: 'groupId', as: 'group' });
+  User.belongsTo(Unit, { foreignKey: 'unitId', as: 'unit' });
   Event.belongsTo(User, { foreignKey: 'userId', as: 'user' });
   Event.belongsTo(Resource, { foreignKey: 'resourceId', as: 'resource' });
 
   try {
-    await writeScaffoldingData(sequelize, data, { Group, Resource, User });
+    await writeScaffoldingData(sequelize, data, { Unit, Resource, User });
   } catch (error) {
     console.error(error);
     throw error;
@@ -64,7 +64,7 @@ export const initDb = async (): Promise<Db> => {
 
   const db: Db = {
     Event,
-    Group,
+    Unit,
     Resource,
     User,
 

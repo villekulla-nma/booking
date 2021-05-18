@@ -24,7 +24,7 @@ describe('Server [GET] /api/user', () => {
       firstName: 'Person1',
       lastName: 'One',
       role: 'user',
-      groupId: 'YLBqxvCCm',
+      unitId: 'YLBqxvCCm',
     });
     cookieValue = await signJwt(
       { id: 'TD0sIeaoz', role: 'user' },
@@ -87,7 +87,7 @@ describe('Server [GET] /api/user', () => {
       lastName: 'One',
       fullName: 'Person1 One',
       role: 'user',
-      groupId: 'YLBqxvCCm',
+      unitId: 'YLBqxvCCm',
     });
   });
 });

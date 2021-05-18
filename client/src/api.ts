@@ -6,11 +6,11 @@ import type {
   LoginResult,
   UserResponse,
   UserRole,
-  GroupAttributes,
+  UnitAttributes,
 } from '@booking/types';
 
 import { isUser } from './helpers/is-user';
-import { isGroup } from './helpers/is-group';
+import { isUnit } from './helpers/is-unit';
 import { isEvent } from './helpers/is-event';
 
 export type EventByIdData = EventAttributes & {
@@ -137,14 +137,14 @@ export const createUser = async (
   lastName: string,
   email: string,
   role: UserRole,
-  groupId: string
+  unitId: string
 ): Promise<ResponseStatus> => {
   const response = await fetch('/api/user', {
     method: 'PUT',
     headers: {
       'content-type': 'application/json',
     },
-    body: JSON.stringify({ firstName, lastName, email, role, groupId }),
+    body: JSON.stringify({ firstName, lastName, email, role, unitId }),
   });
 
   if (response.status === 401) {
@@ -164,7 +164,7 @@ export const updateUser = async (
   lastName: string,
   email: string,
   role: UserRole,
-  groupId: string
+  unitId: string
 ): Promise<ResponseStatus> => {
   const response = await fetch('/api/user', {
     method: 'POST',
@@ -177,7 +177,7 @@ export const updateUser = async (
       lastName,
       email,
       role,
-      groupId,
+      unitId,
     }),
   });
 
@@ -204,22 +204,20 @@ export const deleteUser = async (userId: string): Promise<boolean> => {
   return response.status === 200;
 };
 
-export const getAllGroups = async (): Promise<GroupAttributes[]> => {
-  const response = await fetch('/api/groups');
+export const getAllUnits = async (): Promise<UnitAttributes[]> => {
+  const response = await fetch('/api/units');
 
   if (response.status === 401) {
     throw new UnauthenticatedError();
   }
 
-  const { payload: groups } = await response.json();
+  const { payload: units } = await response.json();
 
-  return groups.filter((group: unknown): group is GroupAttributes =>
-    isGroup(group)
-  );
+  return units.filter((unit: unknown): unit is UnitAttributes => isUnit(unit));
 };
 
-export const createGroup = async (name: string): Promise<ResponseStatus> => {
-  const response = await fetch('/api/groups', {
+export const createUnit = async (name: string): Promise<ResponseStatus> => {
+  const response = await fetch('/api/units', {
     method: 'PUT',
     headers: {
       'content-type': 'application/json',
@@ -233,21 +231,21 @@ export const createGroup = async (name: string): Promise<ResponseStatus> => {
 
   const { status } = await response.json();
 
-  assertResponseStatus(status, '/api/groups');
+  assertResponseStatus(status, '/api/units');
 
   return status;
 };
 
-export const updateGroup = async (
-  groupId: string,
+export const updateUnit = async (
+  unitId: string,
   name: string
 ): Promise<ResponseStatus> => {
-  const response = await fetch('/api/groups', {
+  const response = await fetch('/api/units', {
     method: 'POST',
     headers: {
       'content-type': 'application/json',
     },
-    body: JSON.stringify({ id: groupId, name }),
+    body: JSON.stringify({ id: unitId, name }),
   });
 
   if (response.status === 401) {
@@ -256,18 +254,18 @@ export const updateGroup = async (
 
   const { status } = await response.json();
 
-  assertResponseStatus(status, '/api/groups');
+  assertResponseStatus(status, '/api/units');
 
   return status;
 };
 
-export const deleteGroup = async (groupId: string): Promise<boolean> => {
-  const response = await fetch('/api/groups', {
+export const deleteUnit = async (unitId: string): Promise<boolean> => {
+  const response = await fetch('/api/units', {
     method: 'DELETE',
     headers: {
       'content-type': 'application/json',
     },
-    body: JSON.stringify({ id: groupId }),
+    body: JSON.stringify({ id: unitId }),
   });
 
   return response.status === 200;

@@ -8,7 +8,7 @@ import {
 } from '@fluentui/react';
 import type { IStackTokens } from '@fluentui/react';
 import { mergeStyles } from '@fluentui/merge-styles';
-import type { GroupAttributes } from '@booking/types';
+import type { UnitAttributes } from '@booking/types';
 
 import { Layout } from '../components/layout';
 import { AdminLayout } from '../components/admin-layout';
@@ -17,7 +17,7 @@ import { SimpleAdminList } from '../components/simple-admin-list';
 import { Overlay } from '../components/overlay';
 import { Form } from '../components/form';
 import { Feedback } from '../components/feedback';
-import { getAllGroups, createGroup, updateGroup, deleteGroup } from '../api';
+import { getAllUnits, createUnit, updateUnit, deleteUnit } from '../api';
 import type { ResponseStatus } from '../api';
 import { inquireConfirmation } from '../helpers/inquire-confirmation';
 
@@ -61,9 +61,9 @@ const UserFeedback: FC<FeedbackProps> = ({ feedback }) => {
   );
 };
 
-export const AdminGroupsPage: FC = () => {
-  const [groupList, reloadGroupList] = useAuthenticatedFetch<GroupAttributes[]>(
-    getAllGroups,
+export const AdminUnitsPage: FC = () => {
+  const [unitList, reloadUnitList] = useAuthenticatedFetch<UnitAttributes[]>(
+    getAllUnits,
     []
   );
   const [showForm, setShowForm] = useState<boolean>(false);
@@ -71,24 +71,23 @@ export const AdminGroupsPage: FC = () => {
   const [editName, setEditName] = useState<string>('');
   const [editId, setEditId] = useState<string>('');
   const [feedback, setFeedback] = useState<ResponseStatus | undefined>();
-  const handleDelete = (groupId: string) => {
+  const handleDelete = (unitId: string) => {
     if (inquireConfirmation('Are you sure?')) {
-      deleteGroup(groupId).then((success) => {
+      deleteUnit(unitId).then((success) => {
         if (!success) {
           alert('Something went wrong.');
           return;
         }
-        reloadGroupList();
+        reloadUnitList();
       });
     }
   };
-  const handleEdit = (groupId: string) => {
-    const { name: groupName } =
-      groupList.find(({ id }) => groupId === id) || {};
+  const handleEdit = (unitId: string) => {
+    const { name: unitName } = unitList.find(({ id }) => unitId === id) || {};
 
-    if (groupName) {
-      setEditId(groupId);
-      setEditName(groupName);
+    if (unitName) {
+      setEditId(unitId);
+      setEditName(unitName);
       setShowForm(true);
     }
   };
@@ -97,12 +96,12 @@ export const AdminGroupsPage: FC = () => {
     setShowForm(false);
   };
   const handleEditSubmit = () => {
-    updateGroup(editId, editName).then((status) => {
+    updateUnit(editId, editName).then((status) => {
       setFeedback(status);
 
       if (status === 'ok') {
         resetEditForm();
-        requestAnimationFrame(() => reloadGroupList());
+        requestAnimationFrame(() => reloadUnitList());
       }
     });
   };
@@ -113,10 +112,10 @@ export const AdminGroupsPage: FC = () => {
   const handleCreateSubmit = (event: FormEvent): void => {
     event.preventDefault();
 
-    createGroup(newName).then((status) => {
+    createUnit(newName).then((status) => {
       if (status === 'ok') {
         setNewName('');
-        reloadGroupList();
+        reloadUnitList();
       } else {
         alert('Something went wrong.');
       }
@@ -129,12 +128,12 @@ export const AdminGroupsPage: FC = () => {
         <Overlay visible={showForm}>
           <UserFeedback feedback={feedback} />
           <Form
-            label="Edit group…"
+            label="Edit unit…"
             onSubmit={handleEditSubmit}
             onReset={resetEditForm}
           >
             <TextField
-              label="Group name"
+              label="Unit name"
               required={true}
               value={editName}
               onChange={handleEditChange}
@@ -144,7 +143,7 @@ export const AdminGroupsPage: FC = () => {
         <form method="post" onSubmit={handleCreateSubmit}>
           <Stack horizontal={true} verticalAlign="end" tokens={formTokens}>
             <TextField
-              label="Create new group…"
+              label="Create new unit…"
               value={newName}
               required={true}
               onChange={handleCreateChange}
@@ -155,7 +154,7 @@ export const AdminGroupsPage: FC = () => {
           </Stack>
         </form>
         <SimpleAdminList
-          items={groupList}
+          items={unitList}
           onDelete={handleDelete}
           onEdit={handleEdit}
         />

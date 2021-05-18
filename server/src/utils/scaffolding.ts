@@ -2,11 +2,11 @@ import { promises as fs } from 'fs';
 import type { ModelCtor, Sequelize } from 'sequelize';
 
 import { env } from './env';
-import { scaffoldResources, scaffoldGroups, scaffoldUsers } from '../models';
-import type { GroupInstance, ResourceInstance, UserInstance } from '../models';
+import { scaffoldResources, scaffoldUnits, scaffoldUsers } from '../models';
+import type { UnitInstance, ResourceInstance, UserInstance } from '../models';
 
 interface ModelInstances {
-  Group: ModelCtor<GroupInstance>;
+  Unit: ModelCtor<UnitInstance>;
   Resource: ModelCtor<ResourceInstance>;
   User: ModelCtor<UserInstance>;
 }
@@ -47,8 +47,8 @@ export const writeScaffoldingData = async (
           case 'Resource': {
             return scaffoldResources(instances.Resource, data.Resource, t);
           }
-          case 'Group': {
-            return scaffoldGroups(instances.Group, data.Group, t);
+          case 'Unit': {
+            return scaffoldUnits(instances.Unit, data.Unit, t);
           }
           case 'User': {
             return scaffoldUsers(instances.User, data.User, t);
