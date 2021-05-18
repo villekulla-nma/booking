@@ -1,10 +1,8 @@
 import Fastify from 'fastify';
 import type { FastifyInstance } from 'fastify';
-import proxy from 'fastify-http-proxy';
 
 import { env } from './utils/env';
 import type { Db } from './db';
-import { CSP_DIRECTIVES } from './constants';
 import type { AssignHandlerFunction } from './handlers/type';
 import { assignGetResourcesHandler } from './handlers/get-resurces';
 import { assignPutEventHandler } from './handlers/put-event';
@@ -56,25 +54,6 @@ const routes: [string, AssignHandlerFunction][] = [
   ['/api/units', assignDeleteUnitHandler],
 ];
 
-const initProxy = (server: FastifyInstance): void => {
-  const clientUrl = env('CLIENT_URL', true);
-
-  if (typeof clientUrl === 'string') {
-    server.register(proxy, {
-      upstream: clientUrl,
-      base: '/app',
-      http2: false,
-      logLevel: 'error',
-      replyOptions: {
-        rewriteHeaders: (headers) => ({
-          ...headers,
-          'Content-Security-Policy-Report-Only': CSP_DIRECTIVES.join('; '),
-        }),
-      },
-    });
-  }
-};
-
 export const initServer = async (
   db: Db,
   port?: string
@@ -84,7 +63,6 @@ export const initServer = async (
 
   routes.forEach(([route, handler]) => handler(route, server, db));
 
-  await initProxy(server);
   await server.listen(port || env('PORT') || '3000');
 
   return server;
