@@ -11,6 +11,7 @@
     "test:watch": "react-scripts test",
     "test": "CI=true react-scripts test"
   },
+  "proxy": "http://localhost:8080",
   "eslintConfig": {
     "extends": [
       "react-app",
