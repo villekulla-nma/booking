@@ -159,12 +159,14 @@ export const UserForm: FC<Props> = memo(
             label="Vorname"
             required={true}
             value={firstName}
+            name="first_name"
             onChange={handleFirstNameChange}
           />
           <TextField
             label="Nachname"
             required={true}
             value={lastName}
+            name="last_name"
             onChange={handleLastNameChange}
           />
           <TextField
@@ -172,6 +174,7 @@ export const UserForm: FC<Props> = memo(
             type="email"
             required={true}
             value={email}
+            name="email"
             onChange={handleEmailChange}
           />
           <Dropdown

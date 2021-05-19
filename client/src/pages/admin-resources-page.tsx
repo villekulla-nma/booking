@@ -141,6 +141,7 @@ export const AdminResourcesPage: FC = () => {
               label="Resource name"
               required={true}
               value={editName}
+              name="resource"
               onChange={handleEditChange}
             />
           </Form>
@@ -151,6 +152,7 @@ export const AdminResourcesPage: FC = () => {
               label="Create new resource"
               value={newName}
               required={true}
+              name="resource"
               onChange={handleCreateChange}
             />
             <PrimaryButton disabled={newName === ''} type="submit">
