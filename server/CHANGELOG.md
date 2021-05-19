@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 0.1.0-alpha.60 (2021-05-19)
+
+
+### Bug Fixes
+
+* **client:** remove CSP header ([80ede04](https://github.com/villekulla-nma/booking/commit/80ede04608ccb945f68d2734b651eba3aa5d9fd0))
+
+
+
+
+
 # 0.1.0-alpha.59 (2021-05-18)
 
 **Note:** Version bump only for package @booking/server
