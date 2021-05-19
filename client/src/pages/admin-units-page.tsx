@@ -136,6 +136,7 @@ export const AdminUnitsPage: FC = () => {
               label="Unit name"
               required={true}
               value={editName}
+              name="unit"
               onChange={handleEditChange}
             />
           </Form>
@@ -146,6 +147,7 @@ export const AdminUnitsPage: FC = () => {
               label="Create new unit…"
               value={newName}
               required={true}
+              name="unit"
               onChange={handleCreateChange}
             />
             <PrimaryButton disabled={newName === ''} type="submit">
