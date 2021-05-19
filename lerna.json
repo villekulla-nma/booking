@@ -8,6 +8,7 @@
     "version": {
       "allowBranch": "KillYourMaster",
       "conventionalCommits": true,
+      "conventionalPrerelease": ["client", "server", "types"],
       "createRelease": "github",
       "exact": true,
       "message": "chore(release): %s :feelsgood:"
