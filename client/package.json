@@ -7,7 +7,7 @@
     "dev": "react-scripts start",
     "build": "react-scripts build",
     "prelint": "tsc --noEmit",
-    "lint": "eslint .",
+    "lint": "eslint --no-ignore src",
     "test:watch": "react-scripts test",
     "test": "CI=true react-scripts test"
   },
@@ -19,10 +19,7 @@
       "eslint:recommended",
       "plugin:@typescript-eslint/recommended",
       "plugin:prettier/recommended"
-    ],
-    "rules": {
-      "@typescript-eslint/no-unused-vars": "error"
-    }
+    ]
   },
   "browserslist": {
     "production": [
