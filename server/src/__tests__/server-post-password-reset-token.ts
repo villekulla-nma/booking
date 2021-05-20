@@ -1,4 +1,5 @@
 import type { FastifyInstance } from 'fastify';
+import type { AddressInfo } from 'net';
 import fetch from 'node-fetch';
 import { Op } from 'sequelize';
 
@@ -6,20 +7,19 @@ import type { Db } from '../db';
 import { initDb } from '../db';
 import { initServer } from '../server';
 import { updateUser, getUserByKey } from '../controllers/user';
-import { getPort } from './helpers/get-port';
 
 jest.mock('../controllers/user');
 
 describe('Server [POST] /api/password-reset/:token', () => {
-  let port: string;
+  let port: number;
   const token = 'c2c4a54d1f64ed8eca662783b013bf6e';
   let server: FastifyInstance;
   let db: Db;
 
   beforeAll(async () => {
-    port = getPort(__filename);
     db = await initDb();
-    server = await initServer(db, port);
+    server = await initServer(db, '0');
+    port = (server.server.address() as AddressInfo).port;
   });
 
   afterAll(async () => {

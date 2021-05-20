@@ -1,38 +1,36 @@
 import type { FastifyInstance } from 'fastify';
+import type { AddressInfo } from 'net';
 import fetch from 'node-fetch';
 
 import type { Db } from '../db';
 import { initDb } from '../db';
 import { initServer } from '../server';
 import { signJwt } from './helpers/sign-jwt';
-import { createResource, getAllResources } from '../controllers/resource';
-import { getPort } from './helpers/get-port';
+import { updateResource } from '../controllers/resource';
 
 jest.mock('../controllers/resource');
 
-describe('Server [PUT] /api/resources', () => {
-  let port: string;
+describe('Server [POST] /api/resources', () => {
+  const resource = {
+    id: 'Uj5SAS740',
+    name: 'Resource #1',
+  };
+  const newName = 'Resource #2';
+  const updatedResource = { name: newName, id: resource.id };
+
+  let port: number;
   let cookieValue: string;
   let server: FastifyInstance;
   let db: Db;
   let log: Console['log'];
 
-  const newResource = {
-    id: 'lP89aXdYL',
-    name: 'Resource #1',
-  };
-
   beforeAll(async () => {
-    port = getPort(__filename);
-    db = await initDb();
-    server = await initServer(db, port);
     log = console.log;
+    db = await initDb();
+    server = await initServer(db, '0');
+    port = (server.server.address() as AddressInfo).port;
 
     console.log = () => undefined;
-
-    (getAllResources as jest.Mock).mockImplementation(
-      jest.requireActual('../controllers/resource').getAllResources
-    );
 
     await db.User.create({
       id: 'TD0sIeaoz',
@@ -50,6 +48,7 @@ describe('Server [PUT] /api/resources', () => {
       role: 'admin',
       unitId: 'MTpZEtFhN',
     });
+    await db.Resource.create(resource);
   });
 
   afterAll(async () => {
@@ -60,25 +59,25 @@ describe('Server [PUT] /api/resources', () => {
   });
 
   describe('Unauthorized user', () => {
-    beforeAll(async () => {
+    beforeEach(async () => {
       cookieValue = await signJwt(
         { id: 'TD0sIeaoz', role: 'user' },
         process.env.JWT_SECRET
       );
     });
 
-    afterAll(() => {
+    afterEach(() => {
       cookieValue = undefined;
     });
 
     it('should respond with 401/invalid', async () => {
       const response = await fetch(`http://localhost:${port}/api/resources`, {
-        method: 'PUT',
+        method: 'POST',
         headers: {
           cookie: `login=${cookieValue}`,
           'content-type': 'application/json',
         },
-        body: JSON.stringify(newResource),
+        body: JSON.stringify(updatedResource),
       });
       const data = await response.json();
 
@@ -88,29 +87,46 @@ describe('Server [PUT] /api/resources', () => {
   });
 
   describe('Authorized user', () => {
-    beforeAll(async () => {
+    beforeEach(async () => {
       cookieValue = await signJwt(
         { id: 'Ul2Zrv1BX', role: 'admin' },
         process.env.JWT_SECRET
       );
     });
 
-    afterAll(() => {
+    afterEach(() => {
       cookieValue = undefined;
     });
 
-    it('should respond with 400/invalid on Sequelize Validation Error', async () => {
-      (createResource as jest.Mock).mockRejectedValue(
-        Object.assign(new Error('wrong'), { name: 'SequelizeValidationError' })
-      );
+    it('should respond with 400/error on failure', async () => {
+      (updateResource as jest.Mock).mockResolvedValueOnce(false);
 
       const response = await fetch(`http://localhost:${port}/api/resources`, {
-        method: 'PUT',
+        method: 'POST',
         headers: {
           cookie: `login=${cookieValue}`,
           'content-type': 'application/json',
         },
-        body: JSON.stringify(newResource),
+        body: JSON.stringify(updatedResource),
+      });
+      const data = await response.json();
+
+      expect(response.status).toBe(400);
+      expect(data.status).toBe('error');
+    });
+
+    it('should respond with 400/invalid on Sequel Validation Error', async () => {
+      (updateResource as jest.Mock).mockRejectedValueOnce(
+        Object.assign(new Error('nope'), { name: 'SequelizeValidationError' })
+      );
+
+      const response = await fetch(`http://localhost:${port}/api/resources`, {
+        method: 'POST',
+        headers: {
+          cookie: `login=${cookieValue}`,
+          'content-type': 'application/json',
+        },
+        body: JSON.stringify(updatedResource),
       });
       const data = await response.json();
 
@@ -118,16 +134,16 @@ describe('Server [PUT] /api/resources', () => {
       expect(data.status).toBe('invalid');
     });
 
-    it('should respond with 500/error on failure', async () => {
-      (createResource as jest.Mock).mockRejectedValue(new Error('nope'));
+    it('should respond with 500/error on general error', async () => {
+      (updateResource as jest.Mock).mockRejectedValueOnce(new Error('nope'));
 
       const response = await fetch(`http://localhost:${port}/api/resources`, {
-        method: 'PUT',
+        method: 'POST',
         headers: {
           cookie: `login=${cookieValue}`,
           'content-type': 'application/json',
         },
-        body: JSON.stringify(newResource),
+        body: JSON.stringify(updatedResource),
       });
       const data = await response.json();
 
@@ -135,27 +151,25 @@ describe('Server [PUT] /api/resources', () => {
       expect(data.status).toBe('error');
     });
 
-    it('should successfully ceate a user', async () => {
-      (createResource as jest.Mock).mockImplementation(
-        jest.requireActual('../controllers/resource').createResource
+    it('should respond with 200/ok on success', async () => {
+      (updateResource as jest.Mock).mockImplementationOnce(
+        jest.requireActual('../controllers/resource').updateResource
       );
 
       const response = await fetch(`http://localhost:${port}/api/resources`, {
-        method: 'PUT',
+        method: 'POST',
         headers: {
           cookie: `login=${cookieValue}`,
           'content-type': 'application/json',
         },
-        body: JSON.stringify(newResource),
+        body: JSON.stringify(updatedResource),
       });
       const data = await response.json();
-      const resource = (await getAllResources(db)).find(
-        ({ name }) => name === newResource.name
-      );
+      const result = await db.Resource.findByPk(resource.id);
 
       expect(response.status).toBe(200);
       expect(data.status).toBe('ok');
-      expect(resource).toBeDefined();
+      expect(result.name).toBe(newName);
     });
   });
 });

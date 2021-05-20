@@ -1,34 +1,34 @@
 import type { FastifyInstance } from 'fastify';
+import type { AddressInfo } from 'net';
 import fetch from 'node-fetch';
 
 import type { Db } from '../db';
 import { initDb } from '../db';
 import { initServer } from '../server';
 import { signJwt } from './helpers/sign-jwt';
-import { updateResource } from '../controllers/resource';
-import { getPort } from './helpers/get-port';
+import { updateUnit } from '../controllers/unit';
 
-jest.mock('../controllers/resource');
+jest.mock('../controllers/unit');
 
-describe('Server [POST] /api/resources', () => {
-  const resource = {
+describe('Server [POST] /api/units', () => {
+  const unit = {
     id: 'Uj5SAS740',
-    name: 'Resource #1',
+    name: 'Super Unit #1',
   };
-  const newName = 'Resource #2';
-  const updatedResource = { name: newName, id: resource.id };
+  const newName = 'Awesome Unit #1';
+  const updatedUnit = { name: newName, id: unit.id };
 
-  let port: string;
+  let port: number;
   let cookieValue: string;
   let server: FastifyInstance;
   let db: Db;
   let log: Console['log'];
 
   beforeAll(async () => {
-    port = getPort(__filename);
     log = console.log;
     db = await initDb();
-    server = await initServer(db, port);
+    server = await initServer(db, '0');
+    port = (server.server.address() as AddressInfo).port;
 
     console.log = () => undefined;
 
@@ -48,7 +48,7 @@ describe('Server [POST] /api/resources', () => {
       role: 'admin',
       unitId: 'MTpZEtFhN',
     });
-    await db.Resource.create(resource);
+    await db.Unit.create(unit);
   });
 
   afterAll(async () => {
@@ -71,13 +71,13 @@ describe('Server [POST] /api/resources', () => {
     });
 
     it('should respond with 401/invalid', async () => {
-      const response = await fetch(`http://localhost:${port}/api/resources`, {
+      const response = await fetch(`http://localhost:${port}/api/units`, {
         method: 'POST',
         headers: {
           cookie: `login=${cookieValue}`,
           'content-type': 'application/json',
         },
-        body: JSON.stringify(updatedResource),
+        body: JSON.stringify(updatedUnit),
       });
       const data = await response.json();
 
@@ -99,15 +99,15 @@ describe('Server [POST] /api/resources', () => {
     });
 
     it('should respond with 400/error on failure', async () => {
-      (updateResource as jest.Mock).mockResolvedValueOnce(false);
+      (updateUnit as jest.Mock).mockResolvedValueOnce(false);
 
-      const response = await fetch(`http://localhost:${port}/api/resources`, {
+      const response = await fetch(`http://localhost:${port}/api/units`, {
         method: 'POST',
         headers: {
           cookie: `login=${cookieValue}`,
           'content-type': 'application/json',
         },
-        body: JSON.stringify(updatedResource),
+        body: JSON.stringify(updatedUnit),
       });
       const data = await response.json();
 
@@ -116,17 +116,17 @@ describe('Server [POST] /api/resources', () => {
     });
 
     it('should respond with 400/invalid on Sequel Validation Error', async () => {
-      (updateResource as jest.Mock).mockRejectedValueOnce(
+      (updateUnit as jest.Mock).mockRejectedValueOnce(
         Object.assign(new Error('nope'), { name: 'SequelizeValidationError' })
       );
 
-      const response = await fetch(`http://localhost:${port}/api/resources`, {
+      const response = await fetch(`http://localhost:${port}/api/units`, {
         method: 'POST',
         headers: {
           cookie: `login=${cookieValue}`,
           'content-type': 'application/json',
         },
-        body: JSON.stringify(updatedResource),
+        body: JSON.stringify(updatedUnit),
       });
       const data = await response.json();
 
@@ -135,15 +135,15 @@ describe('Server [POST] /api/resources', () => {
     });
 
     it('should respond with 500/error on general error', async () => {
-      (updateResource as jest.Mock).mockRejectedValueOnce(new Error('nope'));
+      (updateUnit as jest.Mock).mockRejectedValueOnce(new Error('nope'));
 
-      const response = await fetch(`http://localhost:${port}/api/resources`, {
+      const response = await fetch(`http://localhost:${port}/api/units`, {
         method: 'POST',
         headers: {
           cookie: `login=${cookieValue}`,
           'content-type': 'application/json',
         },
-        body: JSON.stringify(updatedResource),
+        body: JSON.stringify(updatedUnit),
       });
       const data = await response.json();
 
@@ -152,20 +152,20 @@ describe('Server [POST] /api/resources', () => {
     });
 
     it('should respond with 200/ok on success', async () => {
-      (updateResource as jest.Mock).mockImplementationOnce(
-        jest.requireActual('../controllers/resource').updateResource
+      (updateUnit as jest.Mock).mockImplementationOnce(
+        jest.requireActual('../controllers/unit').updateUnit
       );
 
-      const response = await fetch(`http://localhost:${port}/api/resources`, {
+      const response = await fetch(`http://localhost:${port}/api/units`, {
         method: 'POST',
         headers: {
           cookie: `login=${cookieValue}`,
           'content-type': 'application/json',
         },
-        body: JSON.stringify(updatedResource),
+        body: JSON.stringify(updatedUnit),
       });
       const data = await response.json();
-      const result = await db.Resource.findByPk(resource.id);
+      const result = await db.Unit.findByPk(unit.id);
 
       expect(response.status).toBe(200);
       expect(data.status).toBe('ok');

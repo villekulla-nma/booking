@@ -1,23 +1,24 @@
 import type { FastifyInstance } from 'fastify';
+import type { AddressInfo } from 'net';
 import fetch from 'node-fetch';
 
 import type { Db } from '../db';
 import { initDb } from '../db';
 import { initServer } from '../server';
 import { signJwt } from './helpers/sign-jwt';
-import type { ResourceInstance } from '../models/resource';
-import { getPort } from './helpers/get-port';
+import type { UnitInstance } from '../models/unit';
 
-describe('Server [GET] /api/resources', () => {
-  let port: string;
+describe('Server [GET] /api/units', () => {
+  let port: number;
   let cookieValue: string;
   let server: FastifyInstance;
   let db: Db;
 
   beforeAll(async () => {
-    port = getPort(__filename);
     db = await initDb();
-    server = await initServer(db, port);
+    server = await initServer(db, '0');
+    port = (server.server.address() as AddressInfo).port;
+
     await db.User.create({
       id: 'TD0sIeaoz',
       email: 'person.one@example.com',
@@ -26,16 +27,17 @@ describe('Server [GET] /api/resources', () => {
       role: 'user',
       unitId: 'YLBqxvCCm',
     });
-    await db.Resource.bulkCreate<ResourceInstance>([
+    await db.Unit.bulkCreate<UnitInstance>([
       {
         id: 'Uj5SAS740',
-        name: 'Resource #1',
+        name: 'Unit #1',
       },
       {
         id: 'gWH5T7Kdz',
-        name: 'Resource #2',
+        name: 'Unit #2',
       },
     ]);
+
     cookieValue = await signJwt(
       { id: 'TD0sIeaoz', role: 'user' },
       process.env.JWT_SECRET
@@ -47,8 +49,8 @@ describe('Server [GET] /api/resources', () => {
     server.close();
   });
 
-  it('should respond with the resources', async () => {
-    const response = await fetch(`http://localhost:${port}/api/resources`, {
+  it('should respond with 200 & a list', async () => {
+    const response = await fetch(`http://localhost:${port}/api/units`, {
       headers: {
         cookie: `login=${cookieValue}`,
       },
@@ -57,15 +59,8 @@ describe('Server [GET] /api/resources', () => {
 
     expect(response.status).toBe(200);
     expect(data.status).toBe('ok');
-    expect(data.payload).toEqual([
-      {
-        id: 'Uj5SAS740',
-        name: 'Resource #1',
-      },
-      {
-        id: 'gWH5T7Kdz',
-        name: 'Resource #2',
-      },
-    ]);
+    expect(data.payload.length).toBe(2);
+    expect(data.payload[0].name).toBe('Unit #1');
+    expect(data.payload[1].name).toBe('Unit #2');
   });
 });

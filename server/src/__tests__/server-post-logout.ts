@@ -1,17 +1,17 @@
 import type { FastifyInstance } from 'fastify';
+import type { AddressInfo } from 'net';
 import fetch from 'node-fetch';
 
 import type { Db } from '../db';
 import { initServer } from '../server';
-import { getPort } from './helpers/get-port';
 
 describe('Server [POST] /api/logout', () => {
-  let port: string;
+  let port: number;
   let server: FastifyInstance;
 
   beforeAll(async () => {
-    port = getPort(__filename);
-    server = await initServer({} as Db, port);
+    server = await initServer({} as Db, '0');
+    port = (server.server.address() as AddressInfo).port;
   });
 
   afterAll(async () => {

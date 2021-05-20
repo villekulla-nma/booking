@@ -1,26 +1,23 @@
 import type { FastifyInstance } from 'fastify';
+import type { AddressInfo } from 'net';
 import fetch from 'node-fetch';
 
 import type { Db } from '../db';
 import { initDb } from '../db';
 import { initServer } from '../server';
 import { signJwt } from './helpers/sign-jwt';
-import { removeEvent } from '../controllers/event';
-import { getPort } from './helpers/get-port';
 
-jest.mock('../controllers/event');
-
-describe('Server [DELETE] /api/events/:eventId', () => {
+describe('Server [GET] /api/events/:eventId', () => {
   const [today] = new Date().toISOString().split('T');
-  let port: string;
+  let port: number;
   let cookieValue: string;
   let server: FastifyInstance;
   let db: Db;
 
   beforeAll(async () => {
-    port = getPort(__filename);
     db = await initDb();
-    server = await initServer(db, port);
+    server = await initServer(db, '0');
+    port = (server.server.address() as AddressInfo).port;
 
     await db.User.create({
       id: 'TD0sIeaoz',
@@ -57,56 +54,18 @@ describe('Server [DELETE] /api/events/:eventId', () => {
   });
 
   it('should respond with 200 on success', async () => {
-    (removeEvent as jest.Mock).mockImplementation(
-      jest.requireActual('../controllers/event').removeEvent
-    );
-
     const response = await fetch(
       `http://localhost:${port}/api/events/Zbfn4lu5t`,
       {
-        method: 'DELETE',
         headers: {
           cookie: `login=${cookieValue}`,
         },
       }
     );
-    const event = await db.Event.findByPk('Zbfn4lu5t');
+    const data = await response.json();
 
     expect(response.status).toBe(200);
-    expect(event).toBeNull();
-  });
-
-  it('should respond with 400 on failure', async () => {
-    (removeEvent as jest.Mock).mockImplementation(
-      jest.requireActual('../controllers/event').removeEvent
-    );
-
-    const response = await fetch(
-      `http://localhost:${port}/api/events/GjcSASl40`,
-      {
-        method: 'DELETE',
-        headers: {
-          cookie: `login=${cookieValue}`,
-        },
-      }
-    );
-
-    expect(response.status).toBe(400);
-  });
-
-  it('should respond with 500 on error', async () => {
-    (removeEvent as jest.Mock).mockRejectedValue(new Error('nope'));
-
-    const response = await fetch(
-      `http://localhost:${port}/api/events/Zbfn4lu5t`,
-      {
-        method: 'DELETE',
-        headers: {
-          cookie: `login=${cookieValue}`,
-        },
-      }
-    );
-
-    expect(response.status).toBe(500);
+    expect(data.status).toBe('ok');
+    expect(data.payload.description).toBe('A nice event');
   });
 });

@@ -1,4 +1,5 @@
 import type { FastifyInstance } from 'fastify';
+import type { AddressInfo } from 'net';
 import fetch from 'node-fetch';
 import { Op } from 'sequelize';
 
@@ -11,7 +12,6 @@ import type { ResourceInstance } from '../models/resource';
 import { createEvent, getOverlappingEvents } from '../controllers/event';
 import type { EventInstance } from '../models/event';
 import { getNow } from '../utils/date';
-import { getPort } from './helpers/get-port';
 
 jest.mock('../controllers/event');
 
@@ -19,16 +19,16 @@ jest.mock('../utils/date');
 
 describe('Server [PUT] /api/resources/:resourceId/events', () => {
   const { today, tomorrow, dayAfterTomorrow } = getDates();
-  let port: string;
+  let port: number;
   let cookieValue: string;
   let server: FastifyInstance;
   let db: Db;
   let log: Console['log'];
 
   beforeAll(async () => {
-    port = getPort(__filename);
     db = await initDb();
-    server = await initServer(db, port);
+    server = await initServer(db, '0');
+    port = (server.server.address() as AddressInfo).port;
     log = console.log;
 
     console.log = () => undefined;

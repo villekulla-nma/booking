@@ -1,4 +1,5 @@
 import type { FastifyInstance } from 'fastify';
+import type { AddressInfo } from 'net';
 import fetch from 'node-fetch';
 
 import type { Db } from '../db';
@@ -6,12 +7,11 @@ import { initDb } from '../db';
 import { initServer } from '../server';
 import { signJwt } from './helpers/sign-jwt';
 import { createUser, getUserByKey } from '../controllers/user';
-import { getPort } from './helpers/get-port';
 
 jest.mock('../controllers/user');
 
 describe('Server [PUT] /api/user', () => {
-  let port: string;
+  let port: number;
   let cookieValue: string;
   let server: FastifyInstance;
   let db: Db;
@@ -26,9 +26,9 @@ describe('Server [PUT] /api/user', () => {
   };
 
   beforeAll(async () => {
-    port = getPort(__filename);
     db = await initDb();
-    server = await initServer(db, port);
+    server = await initServer(db, '0');
+    port = (server.server.address() as AddressInfo).port;
     log = console.log;
 
     console.log = () => undefined;

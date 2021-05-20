@@ -1,23 +1,24 @@
 import type { FastifyInstance } from 'fastify';
+import type { AddressInfo } from 'net';
 import fetch from 'node-fetch';
 
 import type { Db } from '../db';
 import { initDb } from '../db';
 import { initServer } from '../server';
 import { signJwt } from './helpers/sign-jwt';
-import { getPort } from './helpers/get-port';
 
 describe('Server [GET] /api/user', () => {
-  let port: string;
+  let port: number;
   let cookieValue: string;
   let invalidCookieValue: string;
   let server: FastifyInstance;
   let db: Db;
 
   beforeAll(async () => {
-    port = getPort(__filename);
     db = await initDb();
-    server = await initServer(db, port);
+    server = await initServer(db, '0');
+    port = (server.server.address() as AddressInfo).port;
+
     await db.User.create({
       id: 'TD0sIeaoz',
       email: 'person.one@example.com',

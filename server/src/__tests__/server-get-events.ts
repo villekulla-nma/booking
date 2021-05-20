@@ -1,4 +1,5 @@
 import type { FastifyInstance } from 'fastify';
+import type { AddressInfo } from 'net';
 import fetch from 'node-fetch';
 import { URLSearchParams } from 'url';
 
@@ -9,19 +10,18 @@ import { signJwt } from './helpers/sign-jwt';
 import { getDates } from './helpers/get-dates';
 import type { ResourceInstance } from '../models/resource';
 import type { EventInstance } from '../models/event';
-import { getPort } from './helpers/get-port';
 
 describe('Server [GET] /api/resources/:resourceId/events', () => {
   const { today, tomorrow, dayAfterTomorrow, threeDaysAhead } = getDates();
-  let port: string;
+  let port: number;
   let cookieValue: string;
   let server: FastifyInstance;
   let db: Db;
 
   beforeAll(async () => {
-    port = getPort(__filename);
     db = await initDb();
-    server = await initServer(db, port);
+    server = await initServer(db, '0');
+    port = (server.server.address() as AddressInfo).port;
 
     await db.User.create({
       id: 'TD0sIeaoz',
