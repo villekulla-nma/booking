@@ -1,5 +1,5 @@
 import type { FC } from 'react';
-import { useState, memo } from 'react';
+import { memo } from 'react';
 import { Dropdown, Stack, memoizeFunction } from '@fluentui/react';
 import type {
   IDropdownOption,
@@ -9,6 +9,7 @@ import type {
 import { mergeStyles } from '@fluentui/merge-styles';
 import { format, parse, eachHourOfInterval } from 'date-fns';
 
+import { FORMAT_DATE } from '../helpers/date';
 import { DatePicker } from './date-picker';
 
 interface Props {
@@ -72,7 +73,7 @@ const getTimePickerOptions = memoizeFunction(
 );
 
 const getDateStringFromValue = (date: Date): string =>
-  format(date, 'yyyy-MM-dd');
+  format(date, FORMAT_DATE);
 
 // TODO: remove as soon as <DatePicker /> isn't enigmatically 5px
 // higher than its content determines
@@ -82,17 +83,14 @@ const timepicker = mergeStyles({
 
 export const DateTimePicker: FC<Props> = memo(
   ({ label, value, minDate, hideTime, id, onChange }) => {
-    const [date, setDate] = useState<string>(value.date);
-    const [time, setTime] = useState<string>(value.time);
     const handleDateChange = (d: Date | null | undefined): void => {
-      const newDate = d instanceof Date ? getDateStringFromValue(d) : date;
-      setDate(newDate);
-      onChange(newDate, time);
+      const newDate =
+        d instanceof Date ? getDateStringFromValue(d) : value.date;
+      onChange(newDate, value.time);
     };
     const handleTimeChange = (_: unknown, option?: IDropdownOption): void => {
-      const newTime = option?.id || time;
-      setTime(newTime);
-      onChange(date, newTime);
+      const newTime = option?.id || value.time;
+      onChange(value.date, newTime);
     };
 
     return (
@@ -105,7 +103,7 @@ export const DateTimePicker: FC<Props> = memo(
         <DatePicker
           minDate={minDate}
           label={label}
-          value={parse(date, 'yyyy-MM-dd', new Date())}
+          value={parse(value.date, FORMAT_DATE, new Date())}
           onSelectDate={handleDateChange}
           required={true}
         />
@@ -113,7 +111,7 @@ export const DateTimePicker: FC<Props> = memo(
           <Dropdown
             placeholder="Wähle eine Uhrzeit aus…"
             ariaLabel={`${label} (Uhrzeit)`}
-            options={getTimePickerOptions(getHoursOfDay(minDate), time)}
+            options={getTimePickerOptions(getHoursOfDay(minDate), value.time)}
             onChange={handleTimeChange}
             className={timepicker}
             required={true}

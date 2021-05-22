@@ -7,10 +7,13 @@ import { mergeStyles } from '@fluentui/merge-styles';
 
 import { Layout } from '../components/layout';
 import {
+  FORMAT_DATE,
   getDateTimeToday,
   createRoundedDateString,
   normalizeCalendarDate,
   denormalizeCalendarDate,
+  ensureMinimumDateIntervalFromStart,
+  ensureMinimumDateIntervalFromEnd,
 } from '../helpers/date';
 import { createEvent } from '../api';
 import { Form } from '../components/form';
@@ -48,14 +51,14 @@ const getStateValues = (state: LocationState = {}): InitalValues => {
     state.start || createRoundedDateString()
   );
   const startDateTime = {
-    date: format(start, 'yyyy-MM-dd'),
+    date: format(start, FORMAT_DATE),
     time: format(start, 'HH:mm'),
   };
   const end = denormalizeCalendarDate(
     state.end || normalizeCalendarDate(addMinutes(start, 30))
   );
   const endDateTime = {
-    date: format(end, 'yyyy-MM-dd'),
+    date: format(end, FORMAT_DATE),
     time: format(end, 'HH:mm'),
   };
   const allDay = state.allDay ?? false;
@@ -70,7 +73,6 @@ const getBackUrl = (resourceId: string, search: URLSearchParams): string => {
   return `/resources/${resourceId}${viewParam}${nowParam}`;
 };
 
-// TODO: update end-date on change of start-date to always be after start-date
 export const ReservationPage: FC = () => {
   const redirect = useRedirectUnauthenticatedUser();
   const [submitted, setSubmitted] = useState<boolean>(false);
@@ -90,10 +92,24 @@ export const ReservationPage: FC = () => {
   const params = useParams<Params>();
   const search = new URLSearchParams(location.search);
 
-  const handleStartDateTimeChange = (date: string, time: string): void =>
+  const handleStartDateTimeChange = (date: string, time: string): void => {
+    const validEnd = {
+      ...end,
+      date: ensureMinimumDateIntervalFromStart(date, end.date),
+    };
+
     setStart({ date, time });
-  const handleEndDateTimeChange = (date: string, time: string): void =>
+    setEnd(validEnd);
+  };
+  const handleEndDateTimeChange = (date: string, time: string): void => {
+    const validStart = {
+      ...start,
+      date: ensureMinimumDateIntervalFromEnd(start.date, date),
+    };
+
     setEnd({ date, time });
+    setStart(validStart);
+  };
   const handleAllDayChange = (_: unknown, checked: boolean | undefined): void =>
     setAllDay(typeof checked === 'boolean' ? checked : !allDay);
   const handleDecriptionChange = (
