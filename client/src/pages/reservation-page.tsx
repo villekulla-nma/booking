@@ -12,6 +12,8 @@ import {
   createRoundedDateString,
   normalizeCalendarDate,
   denormalizeCalendarDate,
+  ensureMinimumDateIntervalFromStart,
+  ensureMinimumDateIntervalFromEnd,
 } from '../helpers/date';
 import { createEvent } from '../api';
 import { Form } from '../components/form';
@@ -71,7 +73,6 @@ const getBackUrl = (resourceId: string, search: URLSearchParams): string => {
   return `/resources/${resourceId}${viewParam}${nowParam}`;
 };
 
-// TODO: update end-date on change of start-date to always be after start-date
 export const ReservationPage: FC = () => {
   const redirect = useRedirectUnauthenticatedUser();
   const [submitted, setSubmitted] = useState<boolean>(false);
@@ -91,10 +92,24 @@ export const ReservationPage: FC = () => {
   const params = useParams<Params>();
   const search = new URLSearchParams(location.search);
 
-  const handleStartDateTimeChange = (date: string, time: string): void =>
+  const handleStartDateTimeChange = (date: string, time: string): void => {
+    const validEnd = {
+      ...end,
+      date: ensureMinimumDateIntervalFromStart(date, end.date),
+    };
+
     setStart({ date, time });
-  const handleEndDateTimeChange = (date: string, time: string): void =>
+    setEnd(validEnd);
+  };
+  const handleEndDateTimeChange = (date: string, time: string): void => {
+    const validStart = {
+      ...start,
+      date: ensureMinimumDateIntervalFromEnd(start.date, date),
+    };
+
     setEnd({ date, time });
+    setStart(validStart);
+  };
   const handleAllDayChange = (_: unknown, checked: boolean | undefined): void =>
     setAllDay(typeof checked === 'boolean' ? checked : !allDay);
   const handleDecriptionChange = (
