@@ -42,7 +42,7 @@ import {
 } from '../api';
 import { useRedirectUnauthenticatedUser } from '../hooks/use-redirect-unauthenticated-user';
 import { useAuthenticatedFetch } from '../hooks/use-authenticated-fetch';
-import { normalizeCalendarDate } from '../helpers/date';
+import { FORMAT_DATE, normalizeCalendarDate } from '../helpers/date';
 
 interface Params {
   resourceId: string;
@@ -206,7 +206,7 @@ export const ResourcePage: FC = () => {
       const api = calendar.current.getApi();
       api.prev();
       const date = new Date(api.getDate());
-      const lastWeek = format(date, 'yyyy-MM-dd');
+      const lastWeek = format(date, FORMAT_DATE);
 
       replaceNow(lastWeek);
     }
@@ -216,13 +216,13 @@ export const ResourcePage: FC = () => {
       const api = calendar.current.getApi();
       api.next();
       const date = new Date(api.getDate());
-      const nextWeek = format(date, 'yyyy-MM-dd');
+      const nextWeek = format(date, FORMAT_DATE);
 
       replaceNow(nextWeek);
     }
   };
   const handleToday = () => {
-    const now = format(new Date(), 'yyyy-MM-dd');
+    const now = format(new Date(), FORMAT_DATE);
 
     if (calendar.current) {
       calendar.current.getApi().today();

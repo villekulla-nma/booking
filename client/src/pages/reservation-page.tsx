@@ -7,6 +7,7 @@ import { mergeStyles } from '@fluentui/merge-styles';
 
 import { Layout } from '../components/layout';
 import {
+  FORMAT_DATE,
   getDateTimeToday,
   createRoundedDateString,
   normalizeCalendarDate,
@@ -48,14 +49,14 @@ const getStateValues = (state: LocationState = {}): InitalValues => {
     state.start || createRoundedDateString()
   );
   const startDateTime = {
-    date: format(start, 'yyyy-MM-dd'),
+    date: format(start, FORMAT_DATE),
     time: format(start, 'HH:mm'),
   };
   const end = denormalizeCalendarDate(
     state.end || normalizeCalendarDate(addMinutes(start, 30))
   );
   const endDateTime = {
-    date: format(end, 'yyyy-MM-dd'),
+    date: format(end, FORMAT_DATE),
     time: format(end, 'HH:mm'),
   };
   const allDay = state.allDay ?? false;

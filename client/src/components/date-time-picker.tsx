@@ -9,6 +9,7 @@ import type {
 import { mergeStyles } from '@fluentui/merge-styles';
 import { format, parse, eachHourOfInterval } from 'date-fns';
 
+import { FORMAT_DATE } from '../helpers/date';
 import { DatePicker } from './date-picker';
 
 interface Props {
@@ -72,7 +73,7 @@ const getTimePickerOptions = memoizeFunction(
 );
 
 const getDateStringFromValue = (date: Date): string =>
-  format(date, 'yyyy-MM-dd');
+  format(date, FORMAT_DATE);
 
 // TODO: remove as soon as <DatePicker /> isn't enigmatically 5px
 // higher than its content determines
@@ -105,7 +106,7 @@ export const DateTimePicker: FC<Props> = memo(
         <DatePicker
           minDate={minDate}
           label={label}
-          value={parse(date, 'yyyy-MM-dd', new Date())}
+          value={parse(date, FORMAT_DATE, new Date())}
           onSelectDate={handleDateChange}
           required={true}
         />

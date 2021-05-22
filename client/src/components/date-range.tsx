@@ -10,7 +10,7 @@ import classNames from 'classnames';
 import {
   denormalizeCalendarDate,
   FORMAT_DATE_TIME,
-  FORMAT_DATE,
+  FORMAT_DATE_NICE,
 } from '../helpers/date';
 
 interface Props {
@@ -49,7 +49,7 @@ const definitionValue = mergeStyles({
 });
 
 const formatDate = (date: string) =>
-  format(denormalizeCalendarDate(date), FORMAT_DATE, { locale: de });
+  format(denormalizeCalendarDate(date), FORMAT_DATE_NICE, { locale: de });
 
 const formatDateTime = (date: string) =>
   format(denormalizeCalendarDate(date), FORMAT_DATE_TIME, {

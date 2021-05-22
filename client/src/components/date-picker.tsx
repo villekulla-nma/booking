@@ -5,7 +5,7 @@ import type { IDatePickerStrings, IDateFormatting } from '@fluentui/react';
 import { format } from 'date-fns';
 import { de } from 'date-fns/locale';
 
-import { FORMAT_DATE } from '../helpers/date';
+import { FORMAT_DATE_NICE } from '../helpers/date';
 
 interface Props {
   label: string;
@@ -68,7 +68,7 @@ const datePickerStrings: IDatePickerStrings = {
 
 const dateTimeFormatter: IDateFormatting = {
   formatMonthDayYear: (date) =>
-    format(date, FORMAT_DATE, {
+    format(date, FORMAT_DATE_NICE, {
       locale: de,
     }),
   formatMonthYear: (date) =>
@@ -81,7 +81,7 @@ const dateTimeFormatter: IDateFormatting = {
 };
 
 const formatDate = (date?: Date): string =>
-  date ? format(date, `eeeeee, ${FORMAT_DATE}`, { locale: de }) : '';
+  date ? format(date, `eeeeee, ${FORMAT_DATE_NICE}`, { locale: de }) : '';
 
 export const DatePicker: FC<Props> = memo(
   ({ label, minDate, value, onSelectDate }) => {
