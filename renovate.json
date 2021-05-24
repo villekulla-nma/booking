@@ -8,6 +8,10 @@
     {
       "groupName": "Fluent UI",
       "matchPackagePatterns": ["^@fluentui/"]
+    },
+    {
+      "matchUpdateTypes": "lockFileMaintenance",
+      "commitBody": "[skip release]"
     }
   ]
 }
