@@ -156,8 +156,11 @@ describe('Reservation Page', () => {
         const elemEndTime = screen.getByLabelText(
           'Ende (Uhrzeit)'
         ) as HTMLElement;
-        const allDayCheckbox = screen.getByLabelText(
-          'ganztägig'
+        const allDayCheckboxLabel = screen
+          .getByText('ganztägig')
+          .closest('label') as HTMLLabelElement;
+        const allDayCheckbox = document.getElementById(
+          allDayCheckboxLabel.getAttribute('for') ?? ''
         ) as HTMLInputElement;
         const textarea = screen.getByLabelText('Beschreibung');
         const submit = screen
@@ -217,8 +220,11 @@ describe('Reservation Page', () => {
         const elemEndTime = screen
           .getByTestId('end')
           .querySelector('[aria-selected]');
-        const allDayCheckbox = screen.getByLabelText(
-          'ganztägig'
+        const allDayCheckboxLabel = screen
+          .getByText('ganztägig')
+          .closest('label') as HTMLLabelElement;
+        const allDayCheckbox = document.getElementById(
+          allDayCheckboxLabel.getAttribute('for') ?? ''
         ) as HTMLInputElement;
         const submit = screen
           .getByText('Speichern')
@@ -505,7 +511,12 @@ describe('Reservation Page', () => {
         </Router>
       );
 
-      const checkbox = screen.getByLabelText('ganztägig');
+      const checkboxLabel = screen
+        .getByText('ganztägig')
+        .closest('label') as HTMLLabelElement;
+      const checkbox = document.getElementById(
+        checkboxLabel.getAttribute('for') ?? ''
+      ) as HTMLInputElement;
 
       screen.getByLabelText('Beginn (Uhrzeit)');
       screen.getByLabelText('Ende (Uhrzeit)');
