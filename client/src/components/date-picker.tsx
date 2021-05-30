@@ -1,7 +1,11 @@
 import type { FC } from 'react';
 import { memo } from 'react';
 import { DatePicker as FluentUiDatePicker, DayOfWeek } from '@fluentui/react';
-import type { IDatePickerStrings, IDateFormatting } from '@fluentui/react';
+import type {
+  IDatePickerStrings,
+  IDatePickerStyles,
+  IDateFormatting,
+} from '@fluentui/react';
 import { format } from 'date-fns';
 import { de } from 'date-fns/locale';
 
@@ -66,6 +70,14 @@ const datePickerStrings: IDatePickerStrings = {
   yearPickerHeaderAriaLabel: '{0}, wählen um den Monat zu ändern',
 };
 
+const styles: Pick<IDatePickerStyles, 'statusMessage'> = {
+  statusMessage: {
+    '&:empty': {
+      display: 'none',
+    },
+  },
+};
+
 const dateTimeFormatter: IDateFormatting = {
   formatMonthDayYear: (date) =>
     format(date, FORMAT_DATE_NICE, {
@@ -97,6 +109,7 @@ export const DatePicker: FC<Props> = memo(
         dateTimeFormatter={dateTimeFormatter}
         formatDate={formatDate}
         isRequired={true}
+        styles={styles}
       />
     );
   }
