@@ -164,8 +164,24 @@ describe('Main-Header', () => {
         .reply(200, { status: 'ok', payload: [] })
         .post('/api/logout')
         .reply(200);
+      let pathname = '';
+      let state: unknown;
 
-      render(<MainHeader />, { wrapper: Router });
+      render(
+        <Router initialEntries={['/some/page']}>
+          <Switch>
+            <Route path="/some/page" exact={true} component={MainHeader} />
+            <Route
+              path="*"
+              render={({ location }) => {
+                pathname = location.pathname;
+                state = location.state;
+                return null;
+              }}
+            />
+          </Switch>
+        </Router>
+      );
 
       const logoutButton = await waitFor(
         () =>
@@ -178,6 +194,8 @@ describe('Main-Header', () => {
         await expect(scopeIsDone(scope)).resolves.toBe(true);
       });
 
+      expect(pathname).toBe('/');
+      expect(state).toStrictEqual({});
       expect(reload).toHaveBeenCalled();
     });
   });
