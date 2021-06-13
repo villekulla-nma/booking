@@ -12,6 +12,14 @@
     {
       "matchUpdateTypes": "lockFileMaintenance",
       "commitBody": "[skip release]"
+    },
+    {
+      "matchPackageNames": ["jest"],
+      "allowedVersions": "26.6.0"
+    },
+    {
+      "matchPackageNames": ["ts-jest"],
+      "allowedVersions": "26.5.6"
     }
   ]
 }
