@@ -8,12 +8,16 @@
     "version": {
       "allowBranch": "KillYourMaster",
       "conventionalCommits": true,
-      "conventionalPrerelease": ["client", "server", "types"],
+      "conventionalPrerelease": [
+        "client",
+        "server",
+        "types"
+      ],
       "createRelease": "github",
       "exact": true,
       "message": "chore(release): %s :feelsgood:"
     }
   },
   "useWorkspaces": true,
-  "version": "0.1.0-alpha.60"
+  "version": "0.1.0-alpha.61"
 }
