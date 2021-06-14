@@ -14,6 +14,7 @@ import { Layout } from '../components/layout';
 import { AdminLayout } from '../components/admin-layout';
 import { useAuthenticatedFetch } from '../hooks/use-authenticated-fetch';
 import { SimpleAdminList } from '../components/simple-admin-list';
+import type { SimplAdminListItem } from '../components/simple-admin-list';
 import { Overlay } from '../components/overlay';
 import { Form } from '../components/form';
 import { Feedback } from '../components/feedback';
@@ -156,7 +157,7 @@ export const AdminUnitsPage: FC = () => {
           </Stack>
         </form>
         <SimpleAdminList
-          items={unitList}
+          items={unitList as SimplAdminListItem[]}
           onDelete={handleDelete}
           onEdit={handleEdit}
         />
