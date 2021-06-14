@@ -16,8 +16,8 @@ export interface UserAttributes {
   email: string;
   firstName: string;
   lastName: string;
-  password?: string;
-  passwordReset?: string;
+  password?: string | null;
+  passwordReset?: string | null;
   fullName: string;
   unitId: string;
 }
@@ -44,4 +44,5 @@ export type LoginResult = 'ok' | 'unverified' | 'invalid' | 'error';
 export type UserResponse = Pick<
   UserAttributes,
   'id' | 'role' | 'firstName' | 'lastName' | 'fullName' | 'email' | 'unitId'
->;
+> &
+  Partial<Pick<UserAttributes, 'passwordReset'>>;
