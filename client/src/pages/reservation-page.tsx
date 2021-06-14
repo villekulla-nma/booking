@@ -93,22 +93,24 @@ export const ReservationPage: FC = () => {
   const search = new URLSearchParams(location.search);
 
   const handleStartDateTimeChange = (date: string, time: string): void => {
-    const validEnd = {
-      ...end,
-      date: ensureMinimumDateIntervalFromStart(date, end.date),
-    };
-
     setStart({ date, time });
-    setEnd(validEnd);
+
+    if (allDay) {
+      setEnd({
+        ...end,
+        date: ensureMinimumDateIntervalFromStart(date, end.date),
+      });
+    }
   };
   const handleEndDateTimeChange = (date: string, time: string): void => {
-    const validStart = {
-      ...start,
-      date: ensureMinimumDateIntervalFromEnd(start.date, date),
-    };
-
     setEnd({ date, time });
-    setStart(validStart);
+
+    if (allDay) {
+      setStart({
+        ...start,
+        date: ensureMinimumDateIntervalFromEnd(start.date, date),
+      });
+    }
   };
   const handleAllDayChange = (_: unknown, checked: boolean | undefined): void =>
     setAllDay(typeof checked === 'boolean' ? checked : !allDay);
