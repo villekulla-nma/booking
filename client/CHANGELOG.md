@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 0.1.0-alpha.62 (2021-06-14)
+
+
+### Features
+
+* **client:** add role & password reset token ([09bccd9](https://github.com/villekulla-nma/booking/commit/09bccd9682c6ca49c831367da398ea5e0fd6898b))
+
+
+
+
+
 # 0.1.0-alpha.61 (2021-06-13)
 
 **Note:** Version bump only for package @booking/client
