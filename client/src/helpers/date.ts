@@ -73,7 +73,7 @@ export const ensureMinimumDateIntervalFromEnd = (
   const end = parse(endString, FORMAT_DATE, today);
 
   if (isBefore(start, end)) {
-    return endString;
+    return startString;
   }
 
   let decreasedStartDate = subDays(end, interval);

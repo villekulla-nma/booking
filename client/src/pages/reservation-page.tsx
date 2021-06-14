@@ -73,6 +73,12 @@ const getBackUrl = (resourceId: string, search: URLSearchParams): string => {
   return `/resources/${resourceId}${viewParam}${nowParam}`;
 };
 
+const dateTimeToISOString = (d: DateTime, allDay: boolean): string => {
+  const time = allDay ? '00:00' : d.time;
+
+  return `${d.date}T${time}:00.000Z`;
+};
+
 export const ReservationPage: FC = () => {
   const redirect = useRedirectUnauthenticatedUser();
   const [submitted, setSubmitted] = useState<boolean>(false);
@@ -93,22 +99,24 @@ export const ReservationPage: FC = () => {
   const search = new URLSearchParams(location.search);
 
   const handleStartDateTimeChange = (date: string, time: string): void => {
-    const validEnd = {
-      ...end,
-      date: ensureMinimumDateIntervalFromStart(date, end.date),
-    };
-
     setStart({ date, time });
-    setEnd(validEnd);
+
+    if (allDay) {
+      setEnd({
+        ...end,
+        date: ensureMinimumDateIntervalFromStart(date, end.date),
+      });
+    }
   };
   const handleEndDateTimeChange = (date: string, time: string): void => {
-    const validStart = {
-      ...start,
-      date: ensureMinimumDateIntervalFromEnd(start.date, date),
-    };
-
     setEnd({ date, time });
-    setStart(validStart);
+
+    if (allDay) {
+      setStart({
+        ...start,
+        date: ensureMinimumDateIntervalFromEnd(start.date, date),
+      });
+    }
   };
   const handleAllDayChange = (_: unknown, checked: boolean | undefined): void =>
     setAllDay(typeof checked === 'boolean' ? checked : !allDay);
@@ -123,12 +131,9 @@ export const ReservationPage: FC = () => {
   const handleSubmit = () => {
     setSubmitted(true);
 
-    const startTime = allDay ? '00:00' : start.time;
-    const endTime = allDay ? '00:00' : end.time;
-
     createEvent(
-      `${start.date}T${startTime}:00.000Z`,
-      `${end.date}T${endTime}:00.000Z`,
+      dateTimeToISOString(start, allDay),
+      dateTimeToISOString(end, allDay),
       description.trim(),
       allDay,
       params.resourceId
