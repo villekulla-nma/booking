@@ -96,8 +96,8 @@ describe('Admin Users Page', () => {
         await expect(scopeIsDone(scope)).resolves.toBe(true);
       });
 
-      await waitFor(() => screen.getByText('Person1 One [user]'));
-      screen.getByText('Person2 Two [admin]');
+      await waitFor(() => screen.getByText('Person1 One'));
+      screen.getByText('Person2 Two');
     });
   });
 
@@ -174,7 +174,7 @@ describe('Admin Users Page', () => {
 
       expect(screen.queryByTestId('overlay')).toBeNull();
 
-      screen.getByText(`${newFirstName} ${userOne.lastName} [${userOne.role}]`);
+      screen.getByText(`${newFirstName} ${userOne.lastName}`);
     });
   });
 
@@ -183,7 +183,7 @@ describe('Admin Users Page', () => {
       (useUserContext as jest.Mock).mockReturnValue(userTwo);
       (inquireConfirmation as jest.Mock).mockReturnValue(true);
 
-      const fullName = `${userThree.firstName} ${userThree.lastName} [${userThree.role}]`;
+      const fullName = `${userThree.firstName} ${userThree.lastName}`;
       const initialScope = nock('http://localhost')
         .get('/api/users')
         .reply(200, { status: 'ok', payload: [userOne, userTwo, userThree] });

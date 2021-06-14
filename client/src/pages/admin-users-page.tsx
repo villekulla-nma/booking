@@ -2,7 +2,7 @@ import type { FC } from 'react';
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { ActionButton } from '@fluentui/react';
-import type { IIconProps } from '@fluentui/react';
+import type { IIconProps, IColumn } from '@fluentui/react';
 import { UserResponse } from '@booking/types';
 
 import { Layout } from '../components/layout';
@@ -20,8 +20,10 @@ import { inquireConfirmation } from '../helpers/inquire-confirmation';
 const actionButtonIcon: IIconProps = { iconName: 'AddFriend' };
 
 const toListItems = (users: UserResponse[]): SimplAdminListItem[] =>
-  users.map(({ id, fullName, role }) => ({
-    name: `${fullName} [${role}]`,
+  users.map(({ id, fullName, role, passwordReset }) => ({
+    name: fullName,
+    passwordReset: passwordReset ?? '',
+    role,
     id,
   }));
 
@@ -33,6 +35,20 @@ export const AdminUsersPage: FC = () => {
     []
   );
   const [feedback, setFeedback] = useState<ResponseStatus | undefined>();
+  const additionalColumns: IColumn[] = [
+    {
+      key: 'role',
+      name: 'Role',
+      fieldName: 'role',
+      minWidth: 80,
+    },
+    {
+      key: 'passwordReset',
+      name: 'Password Reset',
+      fieldName: 'passwordReset',
+      minWidth: 120,
+    },
+  ];
   const handleCreateNewUser = (): void => history.push('/admin/users/create');
   const showEditFormHandler = (userId: string): void => {
     const user = (users || []).find(({ id }) => id === userId);
@@ -114,6 +130,7 @@ export const AdminUsersPage: FC = () => {
         </ActionButton>
         <SimpleAdminList
           items={toListItems(users || [])}
+          additionalColumns={additionalColumns}
           onEdit={showEditFormHandler}
           onDelete={handleUserDeletion}
         />
