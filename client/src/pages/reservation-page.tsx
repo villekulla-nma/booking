@@ -73,6 +73,12 @@ const getBackUrl = (resourceId: string, search: URLSearchParams): string => {
   return `/resources/${resourceId}${viewParam}${nowParam}`;
 };
 
+const dateTimeToISOString = (d: DateTime, allDay: boolean): string => {
+  const time = allDay ? '00:00' : d.time;
+
+  return `${d.date}T${time}:00.000Z`;
+};
+
 export const ReservationPage: FC = () => {
   const redirect = useRedirectUnauthenticatedUser();
   const [submitted, setSubmitted] = useState<boolean>(false);
@@ -125,12 +131,9 @@ export const ReservationPage: FC = () => {
   const handleSubmit = () => {
     setSubmitted(true);
 
-    const startTime = allDay ? '00:00' : start.time;
-    const endTime = allDay ? '00:00' : end.time;
-
     createEvent(
-      `${start.date}T${startTime}:00.000Z`,
-      `${end.date}T${endTime}:00.000Z`,
+      dateTimeToISOString(start, allDay),
+      dateTimeToISOString(end, allDay),
       description.trim(),
       allDay,
       params.resourceId
