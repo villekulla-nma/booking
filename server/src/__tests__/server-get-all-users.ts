@@ -33,6 +33,7 @@ describe('Server [GET] /api/users', () => {
       lastName: 'Two',
       role: 'admin',
       unitId: 'MTpZEtFhN',
+      passwordReset: 'stfhdbrtzer6bzw4tw45zvesge',
     });
   });
 
@@ -90,7 +91,9 @@ describe('Server [GET] /api/users', () => {
       expect(data.status).toBe('ok');
       expect(data.payload.length).toBe(2);
       expect(data.payload[0].fullName).toBe('Person1 One');
+      expect(data.payload[0].passwordReset).toBe(null);
       expect(data.payload[1].fullName).toBe('Person2 Two');
+      expect(data.payload[1].passwordReset).toBe('stfhdbrtzer6bzw4tw45zvesge');
     });
   });
 });

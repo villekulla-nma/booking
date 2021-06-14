@@ -8,10 +8,20 @@ import type { UserInstance } from '../models/user';
 
 const toUserResult = (
   user: UserInstance,
-  includePassword = false
+  includePassword = false,
+  includePasswordReset = false
 ): UserResult => {
-  const { id, role, firstName, lastName, fullName, email, unitId, password } =
-    user;
+  const {
+    id,
+    role,
+    firstName,
+    lastName,
+    fullName,
+    email,
+    unitId,
+    password,
+    passwordReset,
+  } = user;
 
   return {
     id,
@@ -22,13 +32,14 @@ const toUserResult = (
     email,
     unitId,
     ...(includePassword === true ? { password } : undefined),
+    ...(includePasswordReset === true ? { passwordReset } : undefined),
   };
 };
 
 export const getAllUsers = async ({ User }: Db): Promise<UserResult[]> => {
   const users = await User.findAll();
 
-  return users.map((user) => toUserResult(user));
+  return users.map((user) => toUserResult(user, false, true));
 };
 
 export const getUserById = async (

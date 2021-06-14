@@ -5,7 +5,8 @@ import type {
   UserResponse,
 } from '@booking/types';
 
-export type UserResult = UserResponse & Pick<UserAttributes, 'password'>;
+export type UserResult = UserResponse &
+  Pick<UserAttributes, 'password' | 'passwordReset'>;
 
 export type ResourceResult = Pick<ResourceAttributes, 'id' | 'name'>;
 

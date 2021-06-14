@@ -8,8 +8,13 @@ import { STATUS } from '../constants';
 import { preVerifyAuthorizationHandler } from './pre-verify-authorization';
 import { rawUserSchema } from '../utils/schema';
 
+const userSchema = S.object()
+  .additionalProperties(false)
+  .prop('passwordReset', S.anyOf([S.string(), S.null()]).required())
+  .extend(rawUserSchema);
+
 const responseSchema200 = S.object()
-  .prop('payload', S.array().items(rawUserSchema).required())
+  .prop('payload', S.array().items(userSchema).required())
   .prop('status', S.const(STATUS.OK).required())
   .valueOf();
 
