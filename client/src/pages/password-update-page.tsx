@@ -105,10 +105,12 @@ export const PasswordUpdatePage: FC = () => {
             label="Passwort"
             id="password"
             name="password"
+            placeholder="Dein neues Passwort &hellip;"
             value={password}
             onChange={handlePasswordChange}
             minLength={8}
             required={true}
+            canRevealPassword={true}
             description="Mindestens 8 Zeichen"
           />
           <TextField
@@ -116,10 +118,12 @@ export const PasswordUpdatePage: FC = () => {
             label="Passwort wiederholen"
             id="password_confirm"
             name="password_confirm"
+            placeholder="Bestätige das Passwort &hellip;"
             value={passwordConfirm}
             onChange={handlePasswordConfirmChange}
             minLength={8}
             required={true}
+            canRevealPassword={true}
           />
         </Stack>
       </Form>
