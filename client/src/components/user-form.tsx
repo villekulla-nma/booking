@@ -146,7 +146,7 @@ export const UserForm: FC<Props> = memo(
 
     return unitList.length === 0 ? (
       <Spinner
-        label="Lade Gruppen …"
+        label="Lade Daten …"
         ariaLive="assertive"
         labelPosition="right"
         size={SpinnerSize.large}
