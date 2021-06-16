@@ -19,8 +19,6 @@
     "lint": "lerna run lint --no-bail",
     "test": "lerna run test --no-bail --stream",
     "prebuild": "rm -rf ./dist",
-    "__postbuild_comment__": "Whyever this file is put there by ncc anyways...",
-    "postbuild": "rm ./dist/api/package.json",
     "build": "lerna run build --parallel",
     "version": "npm install --no-fund --no-audit && git add package-lock.json",
     "fmt": "prettier --config ./.prettierrc --ignore-path ./.prettierignore .",
