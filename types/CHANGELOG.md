@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 0.1.0-alpha.63 (2021-06-16)
+
+
+### Bug Fixes
+
+* **client:** make placeholder text more comprehensive ([beef046](https://github.com/villekulla-nma/booking/commit/beef0466528bf8c95c38876fdca42803ad23ce9d))
+
+
+
+
+
 # 0.1.0-alpha.62 (2021-06-14)
 
 
