@@ -93,7 +93,7 @@ describe('Admin Users Create Page', () => {
       });
       await sleep(50);
 
-      expect(screen.queryByText(/Lade Gruppen/)).toBeNull();
+      expect(screen.queryByText(/Lade Daten/)).toBeNull();
 
       act(() => {
         fireEvent.click(screen.getByText('Abbrechen'));
@@ -148,7 +148,7 @@ describe('Admin Users Create Page', () => {
         await sleep(50);
       });
 
-      expect(screen.queryByText(/Lade Gruppen/)).toBeNull();
+      expect(screen.queryByText(/Lade Daten/)).toBeNull();
 
       fireEvent.change(screen.getByLabelText('Vorname'), {
         target: { value: newUser.firstName },
