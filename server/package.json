@@ -1,6 +1,6 @@
 {
   "name": "@booking/server",
-  "version": "0.1.0-alpha.64",
+  "version": "0.1.0",
   "author": "Emanuel Kluge (https://emanuel-kluge.de/)",
   "license": "MIT",
   "scripts": {
