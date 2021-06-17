@@ -126,6 +126,6 @@ jobs:
         run: |
           git config user.email "520258+herschel666@users.noreply.github.com"
           git config user.name "Emanuel Kluge"
-          npx lerna version prerelease --yes
+          npx lerna version --yes
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
