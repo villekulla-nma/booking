@@ -18,6 +18,7 @@ interface Props {
   hideTime?: boolean;
   id?: string;
   required?: boolean;
+  disabled?: boolean;
   onChange: (date: string, time: string) => void;
 }
 
@@ -75,7 +76,7 @@ const getDateStringFromValue = (date: Date): string =>
   format(date, FORMAT_DATE);
 
 export const DateTimePicker: FC<Props> = memo(
-  ({ label, value, minDate, hideTime, id, onChange }) => {
+  ({ label, value, minDate, hideTime, id, disabled, onChange }) => {
     const handleDateChange = (d: Date | null | undefined): void => {
       const newDate =
         d instanceof Date ? getDateStringFromValue(d) : value.date;
@@ -99,6 +100,7 @@ export const DateTimePicker: FC<Props> = memo(
           value={parse(value.date, FORMAT_DATE, new Date())}
           onSelectDate={handleDateChange}
           required={true}
+          disabled={disabled}
         />
         {Boolean(hideTime) === false && (
           <Dropdown
@@ -107,6 +109,7 @@ export const DateTimePicker: FC<Props> = memo(
             options={getTimePickerOptions(getHoursOfDay(minDate), value.time)}
             onChange={handleTimeChange}
             required={true}
+            disabled={disabled}
           />
         )}
       </Stack>

@@ -29,6 +29,7 @@ const toListItems = (users: UserResponse[]): SimplAdminListItem[] =>
 
 export const AdminUsersPage: FC = () => {
   const history = useHistory();
+  const [loading, setLoading] = useState<boolean>(false);
   const [user, setUser] = useState<UserResponse | undefined>();
   const [users, reloadUsers] = useAuthenticatedFetch<UserResponse[]>(
     getAllUsers,
@@ -80,16 +81,23 @@ export const AdminUsersPage: FC = () => {
       return;
     }
 
-    updateUser(userId, firstName, lastName, email, role, unitId).then(
-      (status) => {
-        setFeedback(status);
+    setLoading(true);
 
-        if (status === 'ok') {
-          setUser(undefined);
-          reloadUsers();
-        }
-      }
-    );
+    updateUser(userId, firstName, lastName, email, role, unitId)
+      .then(
+        (status) => {
+          setFeedback(status);
+
+          if (status === 'ok') {
+            setUser(undefined);
+            reloadUsers();
+          }
+        },
+        () => alert('Da ist leider etwas schief gelaufen.')
+      )
+      .finally(() => {
+        setLoading(false);
+      });
   };
   const handleUserDeletion = (userId: string): void => {
     if (inquireConfirmation('Soll das Nutzerkonto wirklich gelöscht werden?')) {
@@ -119,6 +127,7 @@ export const AdminUsersPage: FC = () => {
               unitId={user.unitId}
               onSubmit={handleSubmit}
               onReset={handleReset}
+              loading={loading}
             />
           </Overlay>
         )}

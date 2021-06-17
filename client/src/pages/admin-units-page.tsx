@@ -67,6 +67,8 @@ export const AdminUnitsPage: FC = () => {
     getAllUnits,
     []
   );
+  const [editLoading, setEditLoading] = useState<boolean>(false);
+  const [createLoading, setCreateLoading] = useState<boolean>(false);
   const [showForm, setShowForm] = useState<boolean>(false);
   const [newName, setNewName] = useState<string>('');
   const [editName, setEditName] = useState<string>('');
@@ -97,14 +99,23 @@ export const AdminUnitsPage: FC = () => {
     setShowForm(false);
   };
   const handleEditSubmit = () => {
-    updateUnit(editId, editName).then((status) => {
-      setFeedback(status);
+    setEditLoading(true);
 
-      if (status === 'ok') {
-        resetEditForm();
-        requestAnimationFrame(() => reloadUnitList());
-      }
-    });
+    updateUnit(editId, editName)
+      .then(
+        (status) => {
+          setFeedback(status);
+
+          if (status === 'ok') {
+            resetEditForm();
+            requestAnimationFrame(() => reloadUnitList());
+          }
+        },
+        () => alert('Da ist leider etwas schief gelaufen.')
+      )
+      .finally(() => {
+        setEditLoading(false);
+      });
   };
   const handleEditChange = (_: unknown, value?: string) =>
     setEditName(value || '');
@@ -112,15 +123,23 @@ export const AdminUnitsPage: FC = () => {
     setNewName(value || '');
   const handleCreateSubmit = (event: FormEvent): void => {
     event.preventDefault();
+    setCreateLoading(true);
 
-    createUnit(newName).then((status) => {
-      if (status === 'ok') {
-        setNewName('');
-        reloadUnitList();
-      } else {
-        alert('Something went wrong.');
-      }
-    });
+    createUnit(newName)
+      .then(
+        (status) => {
+          if (status === 'ok') {
+            setNewName('');
+            reloadUnitList();
+          } else {
+            alert('Something went wrong.');
+          }
+        },
+        () => alert('Da ist leider etwas schief gelaufen.')
+      )
+      .finally(() => {
+        setCreateLoading(false);
+      });
   };
 
   return (
@@ -132,12 +151,14 @@ export const AdminUnitsPage: FC = () => {
             label="Edit unit…"
             onSubmit={handleEditSubmit}
             onReset={resetEditForm}
+            loading={editLoading}
           >
             <TextField
               label="Unit name"
               required={true}
               value={editName}
               name="unit"
+              disabled={editLoading}
               onChange={handleEditChange}
             />
           </Form>
@@ -149,9 +170,13 @@ export const AdminUnitsPage: FC = () => {
               value={newName}
               required={true}
               name="unit"
+              disabled={createLoading}
               onChange={handleCreateChange}
             />
-            <PrimaryButton disabled={newName === ''} type="submit">
+            <PrimaryButton
+              disabled={newName === '' || createLoading}
+              type="submit"
+            >
               Create
             </PrimaryButton>
           </Stack>

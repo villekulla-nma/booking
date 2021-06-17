@@ -66,6 +66,7 @@ const UserFeedback: FC<FeedbackProps> = ({ feedback }) => {
 export const PasswordUpdatePage: FC = () => {
   const redirect = useRedirectUnauthenticatedUser();
   const { token } = useParams<Params>();
+  const [loading, setLoading] = useState<boolean>(false);
   const [feedback, setFeedback] = useState<ResponseStatus | undefined>();
   const [password, setPassword] = useState<string>('');
   const [passwordConfirm, setPasswordConfirm] = useState<string>('');
@@ -82,22 +83,32 @@ export const PasswordUpdatePage: FC = () => {
     setPasswordConfirm(event.currentTarget.value);
   };
   const handleSubmit = (): void => {
-    updatePassword(token, password, passwordConfirm).then(
-      (status) => {
-        setFeedback(status);
+    setLoading(true);
 
-        if (status === 'ok') {
-          setPassword('');
-          setPasswordConfirm('');
-        }
-      },
-      (error) => redirect(error)
-    );
+    updatePassword(token, password, passwordConfirm)
+      .then(
+        (status) => {
+          setFeedback(status);
+
+          if (status === 'ok') {
+            setPassword('');
+            setPasswordConfirm('');
+          }
+        },
+        (error) => redirect(error)
+      )
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   return (
     <Layout>
-      <Form label="Passwort neu setzen" onSubmit={handleSubmit}>
+      <Form
+        label="Passwort neu setzen"
+        loading={loading}
+        onSubmit={handleSubmit}
+      >
         <Stack tokens={tokens}>
           <UserFeedback feedback={feedback} />
           <TextField
@@ -112,6 +123,7 @@ export const PasswordUpdatePage: FC = () => {
             required={true}
             canRevealPassword={true}
             description="Mindestens 8 Zeichen"
+            disabled={loading}
           />
           <TextField
             type="password"
@@ -124,6 +136,7 @@ export const PasswordUpdatePage: FC = () => {
             minLength={8}
             required={true}
             canRevealPassword={true}
+            disabled={loading}
           />
         </Stack>
       </Form>

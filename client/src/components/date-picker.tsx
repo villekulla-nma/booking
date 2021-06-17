@@ -16,6 +16,7 @@ interface Props {
   minDate: Date;
   value: Date;
   required?: boolean;
+  disabled?: boolean;
   onSelectDate: (date: Date | null | undefined) => void;
 }
 
@@ -96,7 +97,7 @@ const formatDate = (date?: Date): string =>
   date ? format(date, `eeeeee, ${FORMAT_DATE_NICE}`, { locale: de }) : '';
 
 export const DatePicker: FC<Props> = memo(
-  ({ label, minDate, value, onSelectDate }) => {
+  ({ label, minDate, value, disabled, onSelectDate }) => {
     return (
       <FluentUiDatePicker
         firstDayOfWeek={DayOfWeek.Monday}
@@ -110,6 +111,7 @@ export const DatePicker: FC<Props> = memo(
         formatDate={formatDate}
         isRequired={true}
         styles={styles}
+        disabled={disabled}
       />
     );
   }
