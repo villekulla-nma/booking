@@ -182,6 +182,7 @@ export const ReservationPage: FC = () => {
         onReset={handleReset}
         onSubmit={handleSubmit}
         label="Reservieren"
+        loading={submitted}
         buttonLabel="Speichern"
       >
         {feedback === '' || (
@@ -194,6 +195,7 @@ export const ReservationPage: FC = () => {
           hideTime={allDay}
           onChange={handleStartDateTimeChange}
           required={true}
+          disabled={submitted}
           id="start"
         />
         <DateTimePicker
@@ -202,6 +204,7 @@ export const ReservationPage: FC = () => {
           minDate={today.current}
           hideTime={allDay}
           onChange={handleEndDateTimeChange}
+          disabled={submitted}
           id="end"
         />
         <div>
@@ -210,6 +213,7 @@ export const ReservationPage: FC = () => {
             className={checkbox}
             onChange={handleAllDayChange}
             checked={allDay}
+            disabled={submitted}
           />
         </div>
         <TextField
@@ -222,6 +226,7 @@ export const ReservationPage: FC = () => {
           multiline={true}
           autoAdjustHeight={true}
           autoFocus={true}
+          disabled={submitted}
         />
       </Form>
     </Layout>

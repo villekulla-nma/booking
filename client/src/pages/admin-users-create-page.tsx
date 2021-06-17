@@ -11,6 +11,7 @@ import type { FormValues } from '../components/user-form';
 
 export const AdminUsersCreatePage: FC = () => {
   const history = useHistory();
+  const [loading, setLoading] = useState<boolean>(false);
   const [feedback, setFeedback] = useState<ResponseStatus | undefined>();
   const goToUsersPage = (): void => history.push('/admin/users');
   const handleSubmit = ({
@@ -25,13 +26,20 @@ export const AdminUsersCreatePage: FC = () => {
       return;
     }
 
-    createUser(firstName, lastName, email, role, unitId).then((status) => {
-      setFeedback(status);
+    setLoading(true);
 
-      if (status === 'ok') {
-        goToUsersPage();
-      }
-    });
+    createUser(firstName, lastName, email, role, unitId).then(
+      (status) => {
+        setFeedback(status);
+
+        if (status === 'ok') {
+          goToUsersPage();
+        } else {
+          setLoading(false);
+        }
+      },
+      () => alert('Da ist leider etwas schief gelaufen.')
+    );
   };
 
   return (
@@ -45,6 +53,7 @@ export const AdminUsersCreatePage: FC = () => {
           email=""
           onSubmit={handleSubmit}
           onReset={goToUsersPage}
+          loading={loading}
         />
       </AdminLayout>
     </Layout>

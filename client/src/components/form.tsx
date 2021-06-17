@@ -14,6 +14,7 @@ interface Props {
   onSubmit: () => void;
   onReset?: () => void;
   label: string;
+  loading: boolean;
   buttonLabel?: string;
 }
 
@@ -37,7 +38,14 @@ const buttonGroupTokens: IStackTokens = {
 };
 
 export const Form: FC<Props> = memo(
-  ({ children, onSubmit, onReset, label, buttonLabel = 'Absenden' }) => {
+  ({
+    children,
+    onSubmit,
+    onReset,
+    label,
+    loading,
+    buttonLabel = 'Absenden',
+  }) => {
     const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
       event.preventDefault();
       onSubmit();
@@ -62,9 +70,13 @@ export const Form: FC<Props> = memo(
           horizontalAlign="end"
         >
           {typeof onReset === 'function' && (
-            <DefaultButton type="reset">Abbrechen</DefaultButton>
+            <DefaultButton type="reset" disabled={loading}>
+              Abbrechen
+            </DefaultButton>
           )}
-          <PrimaryButton type="submit">{buttonLabel}</PrimaryButton>
+          <PrimaryButton type="submit" disabled={loading}>
+            {buttonLabel}
+          </PrimaryButton>
         </Stack>
       </form>
     );

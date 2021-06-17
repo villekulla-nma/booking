@@ -210,7 +210,9 @@ describe('Admin Units Page', () => {
 
       await waitFor(() => screen.getByText('Unit #2'));
 
-      fireEvent.click(screen.getByTestId(`delete-element-${units[1].id}`));
+      act(() => {
+        fireEvent.click(screen.getByTestId(`delete-element-${units[1].id}`));
+      });
 
       await act(async () => {
         await expect(scopeIsDone(deletionScope)).resolves.toBe(true);

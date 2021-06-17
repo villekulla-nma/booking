@@ -71,6 +71,8 @@ export const AdminResourcesPage: FC = () => {
   const [resourceList, reloadResourceList] = useAuthenticatedFetch<
     ResourceAttributes[]
   >(getAllResources, []);
+  const [editLoading, setEditLoading] = useState<boolean>(false);
+  const [createLoading, setCreateLoading] = useState<boolean>(false);
   const [showForm, setShowForm] = useState<boolean>(false);
   const [newName, setNewName] = useState<string>('');
   const [editName, setEditName] = useState<string>('');
@@ -102,14 +104,23 @@ export const AdminResourcesPage: FC = () => {
     setShowForm(false);
   };
   const handleEditSubmit = () => {
-    updateResource(editId, editName).then((status) => {
-      setFeedback(status);
+    setEditLoading(true);
 
-      if (status === 'ok') {
-        resetEditForm();
-        requestAnimationFrame(() => reloadResourceList());
-      }
-    });
+    updateResource(editId, editName)
+      .then(
+        (status) => {
+          setFeedback(status);
+
+          if (status === 'ok') {
+            resetEditForm();
+            requestAnimationFrame(() => reloadResourceList());
+          }
+        },
+        () => alert('Da ist leider etwas schief gelaufen.')
+      )
+      .finally(() => {
+        setEditLoading(false);
+      });
   };
   const handleEditChange = (_: unknown, value?: string) =>
     setEditName(value || '');
@@ -117,15 +128,23 @@ export const AdminResourcesPage: FC = () => {
     setNewName(value || '');
   const handleCreateSubmit = (event: FormEvent): void => {
     event.preventDefault();
+    setCreateLoading(true);
 
-    createResource(newName).then((status) => {
-      if (status === 'ok') {
-        setNewName('');
-        reloadResourceList();
-      } else {
-        alert('Something went wrong.');
-      }
-    });
+    createResource(newName)
+      .then(
+        (status) => {
+          if (status === 'ok') {
+            setNewName('');
+            reloadResourceList();
+          } else {
+            alert('Something went wrong.');
+          }
+        },
+        () => alert('Da ist leider etwas schief gelaufen.')
+      )
+      .finally(() => {
+        setCreateLoading(false);
+      });
   };
 
   return (
@@ -137,12 +156,14 @@ export const AdminResourcesPage: FC = () => {
             label="Edit resource"
             onSubmit={handleEditSubmit}
             onReset={resetEditForm}
+            loading={editLoading}
           >
             <TextField
               label="Resource name"
               required={true}
               value={editName}
               name="resource"
+              disabled={editLoading}
               onChange={handleEditChange}
             />
           </Form>
@@ -154,9 +175,13 @@ export const AdminResourcesPage: FC = () => {
               value={newName}
               required={true}
               name="resource"
+              disabled={createLoading}
               onChange={handleCreateChange}
             />
-            <PrimaryButton disabled={newName === ''} type="submit">
+            <PrimaryButton
+              disabled={newName === '' || createLoading}
+              type="submit"
+            >
               Create
             </PrimaryButton>
           </Stack>

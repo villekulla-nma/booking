@@ -11,6 +11,7 @@ import { Feedback } from '../components/feedback';
 
 export const LoginPage: FC = () => {
   const location = useLocation<{ from: string }>();
+  const [loading, setLoading] = useState<boolean>(false);
   const [feedback, setFeedback] = useState<string>();
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
@@ -27,33 +28,41 @@ export const LoginPage: FC = () => {
     setPassword(event.currentTarget.value);
   };
   const handleSubmit = (): void => {
-    login(email.trim(), password.trim()).then((result) => {
-      switch (result) {
-        case 'ok':
-          redirect(from);
-          break;
-        case 'unverified':
-          setFeedback('Bitte verfifiziere deinen Nutzer.');
-          setPassword('');
-          break;
-        case 'invalid':
-          setFeedback('Nutzername oder Passwort sind nicht korrekt.');
-          setPassword('');
-          break;
-        case 'error':
-        default:
-          setFeedback(
-            'Etwas ist schief gelaufen. Bitte versuche es noch einmal.'
-          );
-          setPassword('');
-          break;
-      }
-    });
+    setLoading(true);
+
+    login(email.trim(), password.trim()).then(
+      (result) => {
+        switch (result) {
+          case 'ok':
+            redirect(from);
+            break;
+          case 'unverified':
+            setFeedback('Bitte verfifiziere deinen Nutzer.');
+            setPassword('');
+            setLoading(false);
+            break;
+          case 'invalid':
+            setFeedback('Nutzername oder Passwort sind nicht korrekt.');
+            setPassword('');
+            setLoading(false);
+            break;
+          case 'error':
+          default:
+            setFeedback(
+              'Etwas ist schief gelaufen. Bitte versuche es noch einmal.'
+            );
+            setPassword('');
+            setLoading(false);
+            break;
+        }
+      },
+      () => alert('Da ist leider etwas schief gelaufen.')
+    );
   };
 
   return (
     <Layout>
-      <Form label="Anmeldung" onSubmit={handleSubmit}>
+      <Form label="Anmeldung" loading={loading} onSubmit={handleSubmit}>
         {feedback && (
           <Feedback type={MessageBarType.error}>{feedback}</Feedback>
         )}
@@ -67,6 +76,7 @@ export const LoginPage: FC = () => {
             placeholder="Dein Email-Adresse &hellip;"
             onChange={handleEmailChange}
             required={true}
+            disabled={loading}
           />
         </div>
         <div>
@@ -80,6 +90,7 @@ export const LoginPage: FC = () => {
             canRevealPassword={true}
             onChange={handlePasswordChange}
             required={true}
+            disabled={loading}
           />
         </div>
         <p>

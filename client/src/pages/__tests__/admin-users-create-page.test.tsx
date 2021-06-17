@@ -1,6 +1,12 @@
 import type { FC } from 'react';
 import { MemoryRouter as Router, Switch, Route } from 'react-router-dom';
-import { render, screen, act, fireEvent } from '@testing-library/react';
+import {
+  render,
+  screen,
+  act,
+  fireEvent,
+  waitFor,
+} from '@testing-library/react';
 import nock from 'nock';
 import { initializeIcons } from '@uifabric/icons';
 
@@ -184,7 +190,9 @@ describe('Admin Users Create Page', () => {
         await expect(scopeIsDone(creationScope)).resolves.toBe(true);
       });
 
-      expect(pathname).toBe('/admin/users');
+      await waitFor(() => {
+        expect(pathname).toBe('/admin/users');
+      });
     });
   });
 });

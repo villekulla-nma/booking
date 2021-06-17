@@ -25,6 +25,7 @@ const SuccessFeedback: FC<{ display: boolean }> = ({ display }) => {
 };
 
 export const PasswordResetPage: FC = () => {
+  const [loading, setLoading] = useState<boolean>(false);
   const [email, setEmail] = useState<string>('');
   const [formSubmitted, setFormSubmitted] = useState<boolean>(false);
   const handleChange = (
@@ -36,15 +37,28 @@ export const PasswordResetPage: FC = () => {
     setFormSubmitted(false);
   };
   const handleSubmit = (): void => {
-    requestPasswordReset(email.trim()).then(() => {
-      setEmail('');
-      setFormSubmitted(true);
-    });
+    setLoading(true);
+
+    requestPasswordReset(email.trim())
+      .then(
+        () => {
+          setEmail('');
+          setFormSubmitted(true);
+        },
+        () => alert('Da ist leider etwas schief gelaufen.')
+      )
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   return (
     <Layout>
-      <Form label="Passwort-Reset anfordern" onSubmit={handleSubmit}>
+      <Form
+        label="Passwort-Reset anfordern"
+        loading={loading}
+        onSubmit={handleSubmit}
+      >
         <SuccessFeedback display={formSubmitted} />
         <TextField
           label="Email"
@@ -55,6 +69,7 @@ export const PasswordResetPage: FC = () => {
           onChange={handleChange}
           placeholder="Deine Email-Adresse &hellip;"
           required={true}
+          disabled={loading}
         />
       </Form>
     </Layout>

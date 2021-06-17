@@ -29,6 +29,7 @@ export interface FormValues {
 interface Props extends FormValues {
   feedback: ResponseStatus | undefined;
   formLabel: string;
+  loading: boolean;
   onSubmit: (values: FormValues) => void;
   onReset: () => void;
 }
@@ -107,6 +108,7 @@ export const UserForm: FC<Props> = memo(
     lastName: initialLastName,
     role: initialRole,
     userId,
+    loading,
     onReset,
     onSubmit,
   }) => {
@@ -154,12 +156,18 @@ export const UserForm: FC<Props> = memo(
     ) : (
       <>
         <UserFeedback feedback={feedback} />
-        <Form label={formLabel} onSubmit={handleSubmit} onReset={handleReset}>
+        <Form
+          label={formLabel}
+          loading={loading}
+          onSubmit={handleSubmit}
+          onReset={handleReset}
+        >
           <TextField
             label="Vorname"
             required={true}
             value={firstName}
             name="first_name"
+            disabled={loading}
             onChange={handleFirstNameChange}
           />
           <TextField
@@ -167,6 +175,7 @@ export const UserForm: FC<Props> = memo(
             required={true}
             value={lastName}
             name="last_name"
+            disabled={loading}
             onChange={handleLastNameChange}
           />
           <TextField
@@ -175,12 +184,14 @@ export const UserForm: FC<Props> = memo(
             required={true}
             value={email}
             name="email"
+            disabled={loading}
             onChange={handleEmailChange}
           />
           <Dropdown
             options={getRoleOptions(role)}
             label="Rolle"
             required={true}
+            disabled={loading}
             onChange={handleRoleChange}
             data-testid="role-select"
           />
@@ -190,7 +201,7 @@ export const UserForm: FC<Props> = memo(
             required={true}
             onChange={handleUnitChange}
             data-testid="unit-select"
-            disabled={unitList.length === 0}
+            disabled={unitList.length === 0 || loading}
           />
         </Form>
       </>
