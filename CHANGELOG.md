@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 0.1.0-alpha.64 (2021-06-17)
+
+
+### Features
+
+* **client:** disable forms while they are loading ([6119773](https://github.com/villekulla-nma/booking/commit/61197731d2a2106d47b9ad990788db78db23b575))
+
+
+
+
+
 # 0.1.0-alpha.63 (2021-06-16)
 
 
