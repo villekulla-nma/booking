@@ -36,7 +36,7 @@
     "@booking/types": "*",
     "@types/bcryptjs": "2.4.2",
     "@types/jest": "26.0.23",
-    "@types/jsonwebtoken": "8.5.1",
+    "@types/jsonwebtoken": "8.5.2",
     "@types/node": "14.17.3",
     "@types/node-fetch": "2.5.10",
     "@types/shortid": "0.0.29",
