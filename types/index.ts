@@ -1,7 +1,7 @@
 export interface UnitAttributes {
   id: string;
   name: string;
-  color?: string | null;
+  color: string;
 }
 
 export interface ResourceAttributes {
