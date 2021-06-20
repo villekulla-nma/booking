@@ -28,6 +28,7 @@ describe('Server [DELETE] /api/units', () => {
     await db.Unit.create({
       id: 'Uj5SAS740',
       name: 'Super Unit #1',
+      color: '#ff0000',
     });
     await db.User.create({
       id: 'Ul2Zrv1BX',

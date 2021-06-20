@@ -48,7 +48,8 @@ export const initDb = async (): Promise<Db> => {
   User.belongsTo(Unit, { foreignKey: 'unitId', as: 'unit' });
   Event.belongsTo(User, { foreignKey: 'userId', as: 'user' });
   Event.belongsTo(Resource, { foreignKey: 'resourceId', as: 'resource' });
-  applyMigrations(sequelize);
+
+  await applyMigrations(sequelize);
 
   try {
     await writeScaffoldingData(sequelize, data, { Unit, Resource, User });

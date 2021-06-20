@@ -40,6 +40,7 @@ describe('Server [PUT] /api/user', () => {
     await db.Unit.create({
       id: 'Uj5SAS740',
       name: 'Super Unit #1',
+      color: '#ff0000',
     });
   });
 
