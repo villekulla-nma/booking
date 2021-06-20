@@ -238,14 +238,15 @@ export const createUnit = async (name: string): Promise<ResponseStatus> => {
 
 export const updateUnit = async (
   unitId: string,
-  name: string
+  name: string,
+  color: string
 ): Promise<ResponseStatus> => {
   const response = await fetch('/api/units', {
     method: 'POST',
     headers: {
       'content-type': 'application/json',
     },
-    body: JSON.stringify({ id: unitId, name }),
+    body: JSON.stringify({ id: unitId, name, color }),
   });
 
   if (response.status === 401) {
