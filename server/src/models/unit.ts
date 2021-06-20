@@ -9,6 +9,8 @@ import type {
 } from 'sequelize';
 import type { UnitAttributes } from '@booking/types';
 
+import { DEFAULT_UNIT_COLOR, RE_COLOR } from '../constants';
+
 type UnitCreationAttributes = Optional<UnitAttributes, 'id'>;
 
 export interface UnitInstance
@@ -28,11 +30,21 @@ const schema: Schema = {
     allowNull: false,
     unique: true,
   },
+  color: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    defaultValue: DEFAULT_UNIT_COLOR,
+    validate: {
+      is: RE_COLOR,
+    },
+  },
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const isUnitData = (r: any): r is UnitAttributes =>
-  typeof r.id === 'string' && typeof r.name === 'string';
+  typeof r.id === 'string' &&
+  typeof r.name === 'string' &&
+  typeof r.color === 'string';
 
 export const scaffoldUnits = async (
   Unit: ModelCtor<UnitInstance>,
