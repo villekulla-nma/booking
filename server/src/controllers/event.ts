@@ -5,7 +5,6 @@ import type { EventResult } from '@booking/types';
 import type { Db } from '../db';
 import type { ResourceResult, UserResult } from './types';
 import { getNow, getToday } from '../utils/date';
-import type { EventInstance } from '../models';
 
 type SingleEventResult = EventResult & {
   user: UserResult;
@@ -25,39 +24,48 @@ const pick = <Input, Key extends keyof Input>(
     return acc;
   }, {} as Pick<Input, Key>);
 
-const toEventResult = (events: EventInstance[]): EventResult[] =>
-  events.map(({ id, start, end, description, allDay, createdAt }) => ({
-    id,
-    start,
-    end,
-    description,
-    allDay,
-    createdAt,
-  }));
-
 export const getScopedEvents = async (
-  { Event }: Db,
+  { Event, User }: Db,
   resourceId: string,
   start: string,
   end: string
-): Promise<EventResult[]> => {
+): Promise<(EventResult & { color: string })[]> => {
   const events = await Event.findAll({
     where: {
       resourceId: { [Op.eq]: resourceId },
       start: { [Op.gte]: start },
       end: { [Op.lte]: end },
     },
+    include: [
+      {
+        model: User,
+        as: 'user',
+        include: [User.associations.unit],
+      },
+    ],
   });
 
-  return toEventResult(events);
+  return events.map(
+    ({ id, start, end, description, allDay, createdAt, user }) => ({
+      color: user.unit.color,
+      id,
+      start,
+      end,
+      description,
+      allDay,
+      createdAt,
+    })
+  );
 };
 
+// TODO: rename to `issOverlapping` & adjust
+//       implementation accordingly
 export const getOverlappingEvents = async (
   { Event }: Db,
   resourceId: string,
   startString: string,
   endString: string
-): Promise<EventResult[]> => {
+): Promise<string[]> => {
   // Allow events to have overlapping start- & endpoints,
   // because this is how Fullcalendar deals with
   // subsequent events.
@@ -98,7 +106,7 @@ export const getOverlappingEvents = async (
     },
   });
 
-  return toEventResult(overlappingEvents);
+  return overlappingEvents.map(({ id }) => id);
 };
 
 export const getEventById = async (
