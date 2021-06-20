@@ -165,12 +165,20 @@ export const ResourcePage: FC = () => {
         (events) => {
           successCallback(
             events.map(
-              ({ id, start, end, allDay, description: title }): EventInput => ({
+              ({
+                id,
+                start,
+                end,
+                allDay,
+                description: title,
+                color,
+              }): EventInput => ({
                 id,
                 start,
                 end,
                 allDay,
                 title,
+                color,
               })
             )
           );

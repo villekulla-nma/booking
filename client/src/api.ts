@@ -339,6 +339,10 @@ export const deleteResource = async (resourceId: string): Promise<boolean> => {
   return response.status === 200;
 };
 
+interface CalendarEventResult extends EventResult {
+  color: string;
+}
+
 export const getEventsByResourceId = async ({
   resourceId,
   start,
@@ -349,7 +353,7 @@ export const getEventsByResourceId = async ({
   start: string;
   end: string;
   timeZone: string;
-}): Promise<EventResult[]> => {
+}): Promise<CalendarEventResult[]> => {
   const query = new URLSearchParams({ start, end, timeZone }).toString();
   const response = await fetch(`/api/resources/${resourceId}/events?${query}`);
 
@@ -360,7 +364,11 @@ export const getEventsByResourceId = async ({
   const { payload: events } = await response.json();
 
   return Array.isArray(events)
-    ? events.filter((event: unknown): event is EventResult => isEvent(event))
+    ? events.filter(
+        (event: unknown): event is CalendarEventResult =>
+          isEvent(event) &&
+          typeof (event as CalendarEventResult).color === 'string'
+      )
     : [];
 };
 
