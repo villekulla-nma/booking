@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.2.0](https://github.com/villekulla-nma/booking/compare/v0.1.0...v0.2.0) (2021-06-20)
+
+
+### Bug Fixes
+
+* **deps:** update dependency @fluentui/react to v8.20.0 ([cfc9a2d](https://github.com/villekulla-nma/booking/commit/cfc9a2d00c652b6fb1b1bdf3d9d4b6fc1331a54f))
+* **server:** apply db migration correctly ([eaf1346](https://github.com/villekulla-nma/booking/commit/eaf134615f99d3fd445b06f4e1d9a8904b6bb510))
+* **types:** make color property non-optional ([0ee943e](https://github.com/villekulla-nma/booking/commit/0ee943e88104ee45742bfbcb325ab69a75fff1fd))
+
+
+### Features
+
+* **client:** apply unit color to events on calendar ([60a5fb8](https://github.com/villekulla-nma/booking/commit/60a5fb8c9022f6993547dcf7c604b8287601ca62))
+* **clint:** make unit color editable ([763c038](https://github.com/villekulla-nma/booking/commit/763c0387d8ea0752e8195363719806bbcfeb9a4c))
+* **server:** add new column "color" to units table ([5f0cf0f](https://github.com/villekulla-nma/booking/commit/5f0cf0fb99123e821bbb2875b10b1d98cb4ddde6)), closes [#270](https://github.com/villekulla-nma/booking/issues/270)
+* **server:** add unit color to API ([d98cc10](https://github.com/villekulla-nma/booking/commit/d98cc10b211c4d85797a8e2284874164ea02a38e))
+* **server:** send unit color alongside events ([5a03cdf](https://github.com/villekulla-nma/booking/commit/5a03cdf9558af568a280b301ff491feae0d5ba6c))
+
+
+
+
+
 # [0.1.0](https://github.com/villekulla-nma/booking/compare/v0.1.0-alpha.64...v0.1.0) (2021-06-17)
 
 **Note:** Version bump only for package booking

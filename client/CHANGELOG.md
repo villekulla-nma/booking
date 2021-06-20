@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.2.0](https://github.com/villekulla-nma/booking/compare/v0.1.0...v0.2.0) (2021-06-20)
+
+
+### Bug Fixes
+
+* **deps:** update dependency @fluentui/react to v8.20.0 ([cfc9a2d](https://github.com/villekulla-nma/booking/commit/cfc9a2d00c652b6fb1b1bdf3d9d4b6fc1331a54f))
+
+
+### Features
+
+* **client:** apply unit color to events on calendar ([60a5fb8](https://github.com/villekulla-nma/booking/commit/60a5fb8c9022f6993547dcf7c604b8287601ca62))
+* **clint:** make unit color editable ([763c038](https://github.com/villekulla-nma/booking/commit/763c0387d8ea0752e8195363719806bbcfeb9a4c))
+
+
+
+
+
 # [0.1.0](https://github.com/villekulla-nma/booking/compare/v0.1.0-alpha.64...v0.1.0) (2021-06-17)
 
 **Note:** Version bump only for package @booking/client

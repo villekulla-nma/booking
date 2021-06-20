@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.2.0](https://github.com/villekulla-nma/booking/compare/v0.1.0...v0.2.0) (2021-06-20)
+
+
+### Bug Fixes
+
+* **server:** apply db migration correctly ([eaf1346](https://github.com/villekulla-nma/booking/commit/eaf134615f99d3fd445b06f4e1d9a8904b6bb510))
+
+
+### Features
+
+* **server:** add new column "color" to units table ([5f0cf0f](https://github.com/villekulla-nma/booking/commit/5f0cf0fb99123e821bbb2875b10b1d98cb4ddde6)), closes [#270](https://github.com/villekulla-nma/booking/issues/270)
+* **server:** add unit color to API ([d98cc10](https://github.com/villekulla-nma/booking/commit/d98cc10b211c4d85797a8e2284874164ea02a38e))
+* **server:** send unit color alongside events ([5a03cdf](https://github.com/villekulla-nma/booking/commit/5a03cdf9558af568a280b301ff491feae0d5ba6c))
+
+
+
+
+
 # [0.1.0](https://github.com/villekulla-nma/booking/compare/v0.1.0-alpha.64...v0.1.0) (2021-06-17)
 
 **Note:** Version bump only for package @booking/server

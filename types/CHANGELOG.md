@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.2.0](https://github.com/villekulla-nma/booking/compare/v0.1.0...v0.2.0) (2021-06-20)
+
+
+### Bug Fixes
+
+* **types:** make color property non-optional ([0ee943e](https://github.com/villekulla-nma/booking/commit/0ee943e88104ee45742bfbcb325ab69a75fff1fd))
+
+
+### Features
+
+* **server:** add new column "color" to units table ([5f0cf0f](https://github.com/villekulla-nma/booking/commit/5f0cf0fb99123e821bbb2875b10b1d98cb4ddde6)), closes [#270](https://github.com/villekulla-nma/booking/issues/270)
+
+
+
+
+
 # [0.1.0](https://github.com/villekulla-nma/booking/compare/v0.1.0-alpha.64...v0.1.0) (2021-06-17)
 
 **Note:** Version bump only for package @booking/types
