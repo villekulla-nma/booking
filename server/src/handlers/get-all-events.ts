@@ -30,6 +30,7 @@ const paramsSchema = S.object()
 const eventSchema = S.object()
   .additionalProperties(false)
   .prop('id', S.string().required())
+  .prop('color', S.string().required())
   .prop('createdAt', S.string().format(S.FORMATS.DATE_TIME).required())
   .extend(rawBaseEventSchema);
 

@@ -9,6 +9,8 @@ import type {
 } from 'sequelize';
 import type { UserAttributes } from '@booking/types';
 
+import type { UnitInstance } from './unit';
+
 export type UserCreationAttributes = Optional<
   Optional<UserAttributes, 'id'>,
   'fullName'
@@ -16,7 +18,9 @@ export type UserCreationAttributes = Optional<
 
 export interface UserInstance
   extends Model<UserAttributes, UserCreationAttributes>,
-    UserAttributes {}
+    UserAttributes {
+  unit?: UnitInstance;
+}
 
 type Schema = ModelAttributes<UserInstance, UserAttributes>;
 
