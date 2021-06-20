@@ -72,6 +72,7 @@ export const AdminUnitsPage: FC = () => {
   const [showForm, setShowForm] = useState<boolean>(false);
   const [newName, setNewName] = useState<string>('');
   const [editName, setEditName] = useState<string>('');
+  const [editColor, setEditColor] = useState<string>('');
   const [editId, setEditId] = useState<string>('');
   const [feedback, setFeedback] = useState<ResponseStatus | undefined>();
   const handleDelete = (unitId: string) => {
@@ -86,11 +87,13 @@ export const AdminUnitsPage: FC = () => {
     }
   };
   const handleEdit = (unitId: string) => {
-    const { name: unitName } = unitList.find(({ id }) => unitId === id) || {};
+    const { name: unitName, color: unitColor } =
+      unitList.find(({ id }) => unitId === id) || {};
 
-    if (unitName) {
+    if (unitName && unitColor) {
       setEditId(unitId);
       setEditName(unitName);
+      setEditColor(unitColor);
       setShowForm(true);
     }
   };
@@ -101,7 +104,7 @@ export const AdminUnitsPage: FC = () => {
   const handleEditSubmit = () => {
     setEditLoading(true);
 
-    updateUnit(editId, editName)
+    updateUnit(editId, editName, editColor)
       .then(
         (status) => {
           setFeedback(status);
@@ -117,8 +120,10 @@ export const AdminUnitsPage: FC = () => {
         setEditLoading(false);
       });
   };
-  const handleEditChange = (_: unknown, value?: string) =>
+  const handleEditNameChange = (_: unknown, value?: string) =>
     setEditName(value || '');
+  const handleEditColorChange = (_: unknown, value?: string) =>
+    setEditColor(value || '');
   const handleCreateChange = (_: unknown, value?: string) =>
     setNewName(value || '');
   const handleCreateSubmit = (event: FormEvent): void => {
@@ -159,7 +164,16 @@ export const AdminUnitsPage: FC = () => {
               value={editName}
               name="unit"
               disabled={editLoading}
-              onChange={handleEditChange}
+              onChange={handleEditNameChange}
+            />
+            <TextField
+              label="Unit color"
+              required={true}
+              value={editColor}
+              name="unit"
+              disabled={editLoading}
+              pattern="^#[a-f0-9]{6}$"
+              onChange={handleEditColorChange}
             />
           </Form>
         </Overlay>
@@ -182,7 +196,9 @@ export const AdminUnitsPage: FC = () => {
           </Stack>
         </form>
         <SimpleAdminList
-          items={unitList as SimplAdminListItem[]}
+          items={unitList.map(
+            ({ id, name }): SimplAdminListItem => ({ id, name })
+          )}
           onDelete={handleDelete}
           onEdit={handleEdit}
         />

@@ -7,6 +7,7 @@ export const isUnit = (unit: any): unit is UnitAttributes => {
     typeof unit === 'object' &&
     unit !== null &&
     typeof unit.id === 'string' &&
-    typeof unit.name === 'string'
+    typeof unit.name === 'string' &&
+    typeof unit.color === 'string'
   );
 };

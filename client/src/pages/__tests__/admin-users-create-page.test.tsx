@@ -6,6 +6,7 @@ import {
   act,
   fireEvent,
   waitFor,
+  waitForElementToBeRemoved,
 } from '@testing-library/react';
 import nock from 'nock';
 import { initializeIcons } from '@uifabric/icons';
@@ -32,10 +33,12 @@ describe('Admin Users Create Page', () => {
     {
       id: 'Uj5SAS740',
       name: 'Unit #1',
+      color: '#ff0000',
     },
     {
       id: 'gWH5T7Kdz',
       name: 'Unit #2',
+      color: '#00ff00',
     },
   ];
   const user = {
@@ -94,12 +97,8 @@ describe('Admin Users Create Page', () => {
         </Router>
       );
 
-      await act(async () => {
-        await expect(scopeIsDone(scope)).resolves.toBe(true);
-      });
-      await sleep(50);
-
-      expect(screen.queryByText(/Lade Daten/)).toBeNull();
+      await waitForElementToBeRemoved(() => screen.queryByText(/Lade Daten/));
+      expect(scope.isDone()).toBe(true);
 
       act(() => {
         fireEvent.click(screen.getByText('Abbrechen'));
@@ -146,15 +145,8 @@ describe('Admin Users Create Page', () => {
         </Router>
       );
 
-      await act(async () => {
-        await expect(scopeIsDone(initialScope)).resolves.toBe(true);
-      });
-
-      await act(async () => {
-        await sleep(50);
-      });
-
-      expect(screen.queryByText(/Lade Daten/)).toBeNull();
+      await waitForElementToBeRemoved(() => screen.queryByText(/Lade Daten/));
+      expect(initialScope.isDone()).toBe(true);
 
       fireEvent.change(screen.getByLabelText('Vorname'), {
         target: { value: newUser.firstName },

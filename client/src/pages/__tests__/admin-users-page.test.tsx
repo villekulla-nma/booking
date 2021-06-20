@@ -34,10 +34,12 @@ describe('Admin Users Page', () => {
     {
       id: 'Uj5SAS740',
       name: 'Unit #1',
+      color: '#ff0000',
     },
     {
       id: 'gWH5T7Kdz',
       name: 'Unit #2',
+      color: '#00ff00',
     },
   ];
   const userOne = {

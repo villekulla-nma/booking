@@ -33,15 +33,18 @@ describe('Admin Units Page', () => {
     {
       id: 'Uj5SAS740',
       name: 'Unit #1',
+      color: '#ff0000',
     },
     {
       id: 'gWH5T7Kdz',
       name: 'Unit #2',
+      color: '#00ff00',
     },
   ];
   const newUnit = {
     id: 'Qij7dg39u',
     name: 'Unit #3',
+    color: '#0000ff',
   };
   const user = {
     id: 'TD0sIeaoz',
@@ -135,6 +138,7 @@ describe('Admin Units Page', () => {
       (useUserContext as jest.Mock).mockReturnValue(user);
 
       const newName = 'Awesome Unit #2';
+      const newColor = '#ffff00';
       const initialScope = nock('http://localhost')
         .get('/api/units')
         .reply(200, { status: 'ok', payload: units });
@@ -142,12 +146,16 @@ describe('Admin Units Page', () => {
         .post('/api/units', {
           id: units[1].id,
           name: newName,
+          color: newColor,
         })
         .reply(200, { status: 'ok' })
         .get('/api/units')
         .reply(200, {
           status: 'ok',
-          payload: [units[0], { id: units[1].id, name: newName }],
+          payload: [
+            units[0],
+            { id: units[1].id, name: newName, color: newColor },
+          ],
         });
 
       render(
@@ -171,6 +179,9 @@ describe('Admin Units Page', () => {
       fireEvent.change(screen.getByLabelText('Unit name'), {
         target: { value: newName },
       });
+      fireEvent.change(screen.getByLabelText('Unit color'), {
+        target: { value: newColor },
+      });
 
       fireEvent.click(screen.getByText('Absenden'));
 
@@ -179,6 +190,16 @@ describe('Admin Units Page', () => {
       });
 
       await waitFor(() => screen.getByText(newName));
+
+      fireEvent.click(screen.getByTestId(`edit-element-${units[1].id}`));
+
+      await waitFor(() => screen.getByTestId('overlay'));
+
+      const colorInput = screen.getByLabelText(
+        'Unit color'
+      ) as HTMLInputElement;
+
+      expect(colorInput.value).toBe(newColor);
     });
   });
 
@@ -217,6 +238,8 @@ describe('Admin Units Page', () => {
       await act(async () => {
         await expect(scopeIsDone(deletionScope)).resolves.toBe(true);
       });
+
+      await waitFor(() => screen.getByText('Unit #1'));
 
       expect(screen.queryByText('Unit #2')).toBeNull();
     });
