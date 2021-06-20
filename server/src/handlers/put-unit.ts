@@ -1,5 +1,6 @@
 import type { RouteShorthandOptions } from 'fastify';
 import S from 'fluent-json-schema';
+import color from 'randomcolor';
 
 import { STATUS } from '../constants';
 import type { AssignHandlerFunction } from './type';
@@ -34,7 +35,7 @@ export const assignPutUnitHandler: AssignHandlerFunction = (
     const { name } = request.body as Body;
 
     try {
-      await createUnit(db, name);
+      await createUnit(db, name, color({ luminosity: 'light' }));
     } catch (error) {
       console.log(error);
       code = error.name === 'SequelizeValidationError' ? 400 : 500;

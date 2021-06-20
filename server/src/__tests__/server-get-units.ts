@@ -31,10 +31,12 @@ describe('Server [GET] /api/units', () => {
       {
         id: 'Uj5SAS740',
         name: 'Unit #1',
+        color: '#ff0000',
       },
       {
         id: 'gWH5T7Kdz',
         name: 'Unit #2',
+        color: '#00ff00',
       },
     ]);
 
@@ -61,6 +63,8 @@ describe('Server [GET] /api/units', () => {
     expect(data.status).toBe('ok');
     expect(data.payload.length).toBe(2);
     expect(data.payload[0].name).toBe('Unit #1');
+    expect(data.payload[0].color).toBe('#ff0000');
     expect(data.payload[1].name).toBe('Unit #2');
+    expect(data.payload[1].color).toBe('#00ff00');
   });
 });

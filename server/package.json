@@ -28,6 +28,7 @@
     "fastify": "3.18.0",
     "fluent-json-schema": "3.0.0",
     "jsonwebtoken": "8.5.1",
+    "randomcolor": "0.6.2",
     "sequelize": "6.6.2",
     "shortid": "2.2.16",
     "sqlite3": "5.0.2"
@@ -39,6 +40,7 @@
     "@types/jsonwebtoken": "8.5.2",
     "@types/node": "14.17.3",
     "@types/node-fetch": "2.5.10",
+    "@types/randomcolor": "0.5.5",
     "@types/shortid": "0.0.29",
     "@typescript-eslint/eslint-plugin": "4.27.0",
     "@typescript-eslint/parser": "4.27.0",
