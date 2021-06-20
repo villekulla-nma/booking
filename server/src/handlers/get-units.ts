@@ -10,7 +10,8 @@ const paramsSchema = S.object().prop('userId', S.string()).valueOf();
 
 const unitSchema = S.object()
   .prop('id', S.string().required())
-  .prop('name', S.string().required());
+  .prop('name', S.string().required())
+  .prop('color', S.string().required());
 
 const responseSchema200 = S.object()
   .prop('payload', S.array().items(unitSchema).required())

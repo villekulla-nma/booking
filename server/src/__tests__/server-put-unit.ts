@@ -7,6 +7,7 @@ import { initDb } from '../db';
 import { initServer } from '../server';
 import { signJwt } from './helpers/sign-jwt';
 import { createUnit, getAllUnits } from '../controllers/unit';
+import { RE_COLOR } from '../constants';
 
 jest.mock('../controllers/unit');
 
@@ -156,6 +157,7 @@ describe('Server [PUT] /api/units', () => {
       expect(response.status).toBe(200);
       expect(data.status).toBe('ok');
       expect(unit).toBeDefined();
+      expect(unit.color).toMatch(RE_COLOR);
     });
   });
 });

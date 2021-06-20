@@ -14,9 +14,11 @@ describe('Server [POST] /api/units', () => {
   const unit = {
     id: 'Uj5SAS740',
     name: 'Super Unit #1',
+    color: '#ff0000',
   };
   const newName = 'Awesome Unit #1';
-  const updatedUnit = { name: newName, id: unit.id };
+  const newColor = '#00ff00';
+  const updatedUnit = { name: newName, color: newColor, id: unit.id };
 
   let port: number;
   let cookieValue: string;
@@ -98,6 +100,28 @@ describe('Server [POST] /api/units', () => {
       cookieValue = undefined;
     });
 
+    it('should respond with 400/invalid on invalid color value', async () => {
+      (updateUnit as jest.Mock).mockImplementationOnce(
+        jest.requireActual('../controllers/unit').updateUnit
+      );
+
+      const response = await fetch(`http://localhost:${port}/api/units`, {
+        method: 'POST',
+        headers: {
+          cookie: `login=${cookieValue}`,
+          'content-type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...updatedUnit,
+          color: 'non-hexadecimal value',
+        }),
+      });
+      const data = await response.json();
+
+      expect(response.status).toBe(400);
+      expect(data.status).toBe('invalid');
+    });
+
     it('should respond with 400/error on failure', async () => {
       (updateUnit as jest.Mock).mockResolvedValueOnce(false);
 
@@ -170,6 +194,7 @@ describe('Server [POST] /api/units', () => {
       expect(response.status).toBe(200);
       expect(data.status).toBe('ok');
       expect(result.name).toBe(newName);
+      expect(result.color).toBe(newColor);
     });
   });
 });

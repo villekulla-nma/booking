@@ -7,7 +7,11 @@ import type { Db } from '../db';
 export const getAllUnits = async ({ Unit }: Db): Promise<UnitResult[]> => {
   const units = await Unit.findAll();
 
-  return units.map(({ id, name }) => ({ id, name }));
+  return units.map(({ id, name, color }) => ({
+    id,
+    name,
+    color,
+  }));
 };
 
 export const getUnitById = async (
@@ -20,17 +24,19 @@ export const getUnitById = async (
     unit && {
       id: unitId,
       name: unit.name,
+      color: unit.color,
     }
   );
 };
 
 export const createUnit = async (
   { Unit }: Db,
-  name: string
+  name: string,
+  color: string
 ): Promise<string> => {
   const id = shortid();
 
-  await Unit.create({ id, name });
+  await Unit.create({ id, name, color });
 
   return id;
 };
@@ -38,10 +44,11 @@ export const createUnit = async (
 export const updateUnit = async (
   { Unit }: Db,
   unitId: string,
-  name: string
+  name: string,
+  color: string
 ): Promise<boolean> => {
   const [result] = await Unit.update(
-    { name },
+    { name, color },
     {
       where: {
         id: { [Op.eq]: unitId },

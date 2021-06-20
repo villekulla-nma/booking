@@ -12,11 +12,13 @@ import { defaultResponseSchema } from '../utils/schema';
 interface Body {
   id: string;
   name: string;
+  color: string;
 }
 
 const bodySchema = S.object()
   .prop('id', S.string().required())
   .prop('name', S.string().required())
+  .prop('color', S.string().required())
   .valueOf();
 
 const opts: RouteShorthandOptions = {
@@ -35,10 +37,10 @@ export const assignPostUnitHandler: AssignHandlerFunction = (
   server.post(route, opts, async (request: Request, reply) => {
     let code = 200;
     const response = { status: STATUS.OK };
-    const { id: unitId, name } = request.body as Body;
+    const { id: unitId, name, color } = request.body as Body;
 
     try {
-      const succeeded = await updateUnit(db, unitId, name);
+      const succeeded = await updateUnit(db, unitId, name, color);
 
       if (!succeeded) {
         code = 400;
