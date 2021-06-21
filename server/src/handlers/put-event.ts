@@ -12,7 +12,6 @@ import { preVerifySessionHandler } from './pre-verify-session';
 import { createEvent, getOverlappingEvents } from '../controllers/event';
 import type { Db } from '../db';
 import { defaultResponseSchema, rawBaseEventSchema } from '../utils/schema';
-import { getNow } from '../utils/date';
 
 interface Params {
   resourceId: string;
@@ -51,12 +50,8 @@ const checkChronologicalValidity = async (
   const { start: startString, end: endString } = request.body;
   const start = new Date(startString).getTime();
   const end = new Date(endString).getTime();
-  const now = getNow().getTime();
-  const startTooEarly = start < now;
-  const endTooEarly = end < now;
-  const rangeInverted = end <= start;
 
-  if (startTooEarly || endTooEarly || rangeInverted) {
+  if (end <= start) {
     reply.status(400).send({ status: STATUS.INVALID });
   }
 };

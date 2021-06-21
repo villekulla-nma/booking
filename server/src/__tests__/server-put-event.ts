@@ -11,11 +11,8 @@ import { getDates } from './helpers/get-dates';
 import type { ResourceInstance } from '../models/resource';
 import { createEvent, getOverlappingEvents } from '../controllers/event';
 import type { EventInstance } from '../models/event';
-import { getNow } from '../utils/date';
 
 jest.mock('../controllers/event');
-
-jest.mock('../utils/date');
 
 describe('Server [PUT] /api/resources/:resourceId/events', () => {
   const { today, tomorrow, dayAfterTomorrow } = getDates();
@@ -106,9 +103,6 @@ describe('Server [PUT] /api/resources/:resourceId/events', () => {
       (getOverlappingEvents as jest.Mock).mockImplementation(
         jest.requireActual('../controllers/event').getOverlappingEvents
       );
-      (getNow as jest.Mock).mockImplementation(
-        jest.requireActual('../utils/date').getNow
-      );
 
       const response = await fetch(
         `http://localhost:${port}/api/resources/Uj5SAS740/events`,
@@ -133,15 +127,9 @@ describe('Server [PUT] /api/resources/:resourceId/events', () => {
     }
   );
 
-  it.each([
-    ['start too early', `${today}T12:30:00.000Z`, `${today}T16:00:00.000Z`],
-    ['end too early', `${today}T09:00:00.000Z`, `${today}T11:00:00.000Z`],
-    ['range inverted', `${today}T13:30:00.000Z`, `${today}T11:00:00.000Z`],
-  ])('should respond with 400/invalid (%s)', async (_, start, end) => {
-    (getNow as jest.Mock).mockImplementation(
-      () => new Date(`${today}T13:30:00.000Z`)
-    );
-
+  it('should respond with 400/invalid', async () => {
+    const start = `${today}T13:30:00.000Z`;
+    const end = `${today}T11:00:00.000Z`;
     const response = await fetch(
       `http://localhost:${port}/api/resources/Uj5SAS740/events`,
       {
@@ -167,9 +155,6 @@ describe('Server [PUT] /api/resources/:resourceId/events', () => {
   it('should respond with 400/invalid on Sequelize Validation Error', async () => {
     (getOverlappingEvents as jest.Mock).mockImplementation(
       jest.requireActual('../controllers/event').getOverlappingEvents
-    );
-    (getNow as jest.Mock).mockImplementation(
-      jest.requireActual('../utils/date').getNow
     );
     (createEvent as jest.Mock).mockRejectedValue(
       Object.assign(new Error('wrong'), { name: 'SequelizeValidationError' })
@@ -201,9 +186,6 @@ describe('Server [PUT] /api/resources/:resourceId/events', () => {
   it('should respond with 500/error on failure', async () => {
     (getOverlappingEvents as jest.Mock).mockImplementation(
       jest.requireActual('../controllers/event').getOverlappingEvents
-    );
-    (getNow as jest.Mock).mockImplementation(
-      () => new Date('2021-03-25T13:15:56.000Z')
     );
     (createEvent as jest.Mock).mockRejectedValue(new Error('nope'));
 
@@ -250,9 +232,6 @@ describe('Server [PUT] /api/resources/:resourceId/events', () => {
       async (description, resourceId, start, end, allDay) => {
         (getOverlappingEvents as jest.Mock).mockImplementation(
           jest.requireActual('../controllers/event').getOverlappingEvents
-        );
-        (getNow as jest.Mock).mockImplementation(
-          jest.requireActual('../utils/date').getNow
         );
         (createEvent as jest.Mock).mockImplementation(
           jest.requireActual('../controllers/event').createEvent
