@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.3.0](https://github.com/villekulla-nma/booking/compare/v0.2.0...v0.3.0) (2021-06-21)
+
+
+### Features
+
+* **server:** enable creating events in the past ([137f5b9](https://github.com/villekulla-nma/booking/commit/137f5b9ea986de4180970d1935c1fc97072f6563)), closes [#281](https://github.com/villekulla-nma/booking/issues/281)
+
+
+
+
+
 # [0.2.0](https://github.com/villekulla-nma/booking/compare/v0.1.0...v0.2.0) (2021-06-20)
 
 

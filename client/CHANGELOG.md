@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.3.0](https://github.com/villekulla-nma/booking/compare/v0.2.0...v0.3.0) (2021-06-21)
+
+
+### Bug Fixes
+
+* **deps:** update dependency @fluentui/react to v8.20.1 ([d946a94](https://github.com/villekulla-nma/booking/commit/d946a945b920b461a8c7841274922a6adee413ec))
+
+
+### Features
+
+* **client:** enable selecting dates in the past ([3c0d30b](https://github.com/villekulla-nma/booking/commit/3c0d30b2b99075e4c60cf199a2c0421ada0a3d95)), closes [#281](https://github.com/villekulla-nma/booking/issues/281)
+
+
+
+
+
 # [0.2.0](https://github.com/villekulla-nma/booking/compare/v0.1.0...v0.2.0) (2021-06-20)
 
 
