@@ -8,13 +8,12 @@ import type {
 } from '@fluentui/react';
 import { format, parse, eachHourOfInterval } from 'date-fns';
 
-import { FORMAT_DATE } from '../helpers/date';
+import { FORMAT_DATE, getDateTimeToday } from '../helpers/date';
 import { DatePicker } from './date-picker';
 
 interface Props {
   label: string;
   value: { date: string; time: string };
-  minDate: Date;
   hideTime?: boolean;
   id?: string;
   required?: boolean;
@@ -76,7 +75,7 @@ const getDateStringFromValue = (date: Date): string =>
   format(date, FORMAT_DATE);
 
 export const DateTimePicker: FC<Props> = memo(
-  ({ label, value, minDate, hideTime, id, disabled, onChange }) => {
+  ({ label, value, hideTime, id, disabled, onChange }) => {
     const handleDateChange = (d: Date | null | undefined): void => {
       const newDate =
         d instanceof Date ? getDateStringFromValue(d) : value.date;
@@ -95,7 +94,6 @@ export const DateTimePicker: FC<Props> = memo(
         data-testid={id}
       >
         <DatePicker
-          minDate={minDate}
           label={label}
           value={parse(value.date, FORMAT_DATE, new Date())}
           onSelectDate={handleDateChange}
@@ -106,7 +104,10 @@ export const DateTimePicker: FC<Props> = memo(
           <Dropdown
             placeholder="Wähle eine Uhrzeit aus…"
             ariaLabel={`${label} (Uhrzeit)`}
-            options={getTimePickerOptions(getHoursOfDay(minDate), value.time)}
+            options={getTimePickerOptions(
+              getHoursOfDay(getDateTimeToday()),
+              value.time
+            )}
             onChange={handleTimeChange}
             required={true}
             disabled={disabled}

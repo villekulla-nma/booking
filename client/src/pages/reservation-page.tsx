@@ -1,5 +1,5 @@
 import type { FC, FormEvent } from 'react';
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import { Prompt, useLocation, useParams, useHistory } from 'react-router-dom';
 import { addMinutes, format } from 'date-fns';
 import { TextField, MessageBarType, Checkbox } from '@fluentui/react';
@@ -8,7 +8,6 @@ import { mergeStyles } from '@fluentui/merge-styles';
 import { Layout } from '../components/layout';
 import {
   FORMAT_DATE,
-  getDateTimeToday,
   createRoundedDateString,
   normalizeCalendarDate,
   denormalizeCalendarDate,
@@ -94,7 +93,6 @@ export const ReservationPage: FC = () => {
   const [start, setStart] = useState<DateTime>(initialStart);
   const [end, setEnd] = useState<DateTime>(initialEnd);
   const [allDay, setAllDay] = useState<boolean>(initialAllDay);
-  const today = useRef<Date>(getDateTimeToday());
   const params = useParams<Params>();
   const search = new URLSearchParams(location.search);
 
@@ -191,7 +189,6 @@ export const ReservationPage: FC = () => {
         <DateTimePicker
           label="Beginn"
           value={start}
-          minDate={today.current}
           hideTime={allDay}
           onChange={handleStartDateTimeChange}
           required={true}
@@ -201,7 +198,6 @@ export const ReservationPage: FC = () => {
         <DateTimePicker
           label="Ende"
           value={end}
-          minDate={today.current}
           hideTime={allDay}
           onChange={handleEndDateTimeChange}
           disabled={submitted}

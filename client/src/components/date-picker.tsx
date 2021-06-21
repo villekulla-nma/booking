@@ -13,7 +13,6 @@ import { FORMAT_DATE_NICE } from '../helpers/date';
 
 interface Props {
   label: string;
-  minDate: Date;
   value: Date;
   required?: boolean;
   disabled?: boolean;
@@ -97,12 +96,11 @@ const formatDate = (date?: Date): string =>
   date ? format(date, `eeeeee, ${FORMAT_DATE_NICE}`, { locale: de }) : '';
 
 export const DatePicker: FC<Props> = memo(
-  ({ label, minDate, value, disabled, onSelectDate }) => {
+  ({ label, value, disabled, onSelectDate }) => {
     return (
       <FluentUiDatePicker
         firstDayOfWeek={DayOfWeek.Monday}
         strings={datePickerStrings}
-        minDate={minDate}
         label={label}
         placeholder="Wähle ein Datum aus…"
         value={value}
