@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.4.0](https://github.com/villekulla-nma/booking/compare/v0.3.0...v0.4.0) (2021-07-03)
+
+
+### Bug Fixes
+
+* **deps:** update dependency fastify to v3.18.1 ([28f64d8](https://github.com/villekulla-nma/booking/commit/28f64d82630d3bcf6f9fa9e494796562c65b78cd))
+* **deps:** update dependency sequelize to v6.6.4 ([30d56ac](https://github.com/villekulla-nma/booking/commit/30d56acdc6c92c35b412d1a9fd071d1abd2d9609))
+
+
+### Features
+
+* **server:** prevent deletion of past events ([558195a](https://github.com/villekulla-nma/booking/commit/558195a325be9f77429d41ada5e94dd837dfc6f0)), closes [#282](https://github.com/villekulla-nma/booking/issues/282)
+
+
+
+
+
 # [0.3.0](https://github.com/villekulla-nma/booking/compare/v0.2.0...v0.3.0) (2021-06-21)
 
 

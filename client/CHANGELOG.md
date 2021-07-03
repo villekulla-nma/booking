@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.4.0](https://github.com/villekulla-nma/booking/compare/v0.3.0...v0.4.0) (2021-07-03)
+
+
+### Bug Fixes
+
+* **deps:** update dependency @fluentui/react to v8.20.2 ([cbfadfe](https://github.com/villekulla-nma/booking/commit/cbfadfe4ec12f33a05458036fffd12c630a2d980))
+* **deps:** update dependency @fluentui/react to v8.22.0 ([fee2f8f](https://github.com/villekulla-nma/booking/commit/fee2f8f493fb861e430aee412b557f42aec9d6d8))
+* **deps:** update fluent ui ([0e2914a](https://github.com/villekulla-nma/booking/commit/0e2914a1d9ccc3d7c7d3805cd22f8c167e48ed42))
+
+
+### Features
+
+* **client:** prevent deletion of past events ([47aa68b](https://github.com/villekulla-nma/booking/commit/47aa68b502f6a1a18bf9adb5f6e6a7a7c06321ca)), closes [#282](https://github.com/villekulla-nma/booking/issues/282)
+
+
+
+
+
 # [0.3.0](https://github.com/villekulla-nma/booking/compare/v0.2.0...v0.3.0) (2021-06-21)
 
 
