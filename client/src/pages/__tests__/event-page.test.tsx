@@ -28,6 +28,12 @@ jest.mock('../../hooks/use-media-query', () => ({
   useMediaQuery: jest.fn(),
 }));
 
+const getDateAhead = (days = 1): string | undefined =>
+  new Date(Date.now() + days * 24 * 3600 * 1000)
+    .toISOString()
+    .split('T')
+    .shift();
+
 describe('Event Page', () => {
   const user = {
     id: 'TD0sIeaoz',
@@ -35,6 +41,13 @@ describe('Event Page', () => {
     firstName: 'Person1',
     lastName: 'One',
     role: 'user',
+  };
+  const admin = {
+    id: 'Ul2Zrv1BX',
+    email: 'person.two@example.com',
+    firstName: 'Person2',
+    lastName: 'Two',
+    role: 'admin',
   };
 
   initializeIcons();
@@ -140,12 +153,14 @@ describe('Event Page', () => {
       (useMediaQuery as jest.Mock).mockReturnValue(true);
       (useUserContext as jest.Mock).mockReturnValue(user);
 
+      const startDate = getDateAhead();
+      const endDate = getDateAhead(3);
       const eventId = 'dsgw46hrds';
       let pathname = `/events/${eventId}`;
       const event = {
         id: eventId,
-        start: '2021-03-28T00:00:00.000Z',
-        end: '2021-03-30T00:00:00.000Z',
+        start: `${startDate}T00:00:00.000Z`,
+        end: `${endDate}T00:00:00.000Z`,
         description: 'thingies',
         allDay: true,
         resource: { name: 'Resource #2' },
@@ -189,6 +204,103 @@ describe('Event Page', () => {
       await sleep(50);
       expect(window.alert).not.toHaveBeenCalled();
       expect(pathname).toBe('/');
+    });
+  });
+
+  describe('Deletion restrictions', () => {
+    it('should not enable deletion of past events', async () => {
+      (useMediaQuery as jest.Mock).mockReturnValue(true);
+      (useUserContext as jest.Mock).mockReturnValue(user);
+
+      const eventId = 'dsgw46hrds';
+      const event = {
+        id: eventId,
+        start: '2021-03-28T00:00:00.000Z',
+        end: '2021-03-30T00:00:00.000Z',
+        description: 'past event',
+        allDay: true,
+        resource: { name: 'Resource #2' },
+        user: { id: user.id, firstName: user.firstName },
+        createdAt: '2021-03-25T10:15:56.000Z',
+      };
+      const scope = nock('http://localhost')
+        .get(`/api/events/${eventId}`)
+        .reply(200, { status: 'ok', payload: event });
+
+      render(
+        <Router initialEntries={[`/events/${eventId}`]}>
+          <Route path="/events/:eventId" component={EventPage} />
+        </Router>
+      );
+
+      await waitFor(() => screen.getByText('Resource #2 gebucht für 2 Tage'));
+
+      expect(screen.queryByText('Eintrag löschen')).toBeNull();
+      expect(scope.isDone()).toBe(true);
+    });
+
+    it('should not enable deletion of other users events', async () => {
+      (useMediaQuery as jest.Mock).mockReturnValue(true);
+      (useUserContext as jest.Mock).mockReturnValue(user);
+
+      const startDate = getDateAhead();
+      const endDate = getDateAhead(3);
+      const eventId = 'dsgw46hrds';
+      const event = {
+        id: eventId,
+        start: `${startDate}T00:00:00.000Z`,
+        end: `${endDate}T00:00:00.000Z`,
+        description: 'future event',
+        allDay: true,
+        resource: { name: 'Resource #2' },
+        user: { id: 'jZNDP7oxU', firstName: 'whatever' },
+        createdAt: '2021-03-25T10:15:56.000Z',
+      };
+      const scope = nock('http://localhost')
+        .get(`/api/events/${eventId}`)
+        .reply(200, { status: 'ok', payload: event });
+
+      render(
+        <Router initialEntries={[`/events/${eventId}`]}>
+          <Route path="/events/:eventId" component={EventPage} />
+        </Router>
+      );
+
+      await waitFor(() => screen.getByText('Resource #2 gebucht für 2 Tage'));
+
+      expect(screen.queryByText('Eintrag löschen')).toBeNull();
+      expect(scope.isDone()).toBe(true);
+    });
+
+    it('should allow deletion by admin', async () => {
+      (useMediaQuery as jest.Mock).mockReturnValue(true);
+      (useUserContext as jest.Mock).mockReturnValue(admin);
+
+      const eventId = 'dsgw46hrds';
+      const event = {
+        id: eventId,
+        start: '2021-03-28T00:00:00.000Z',
+        end: '2021-03-30T00:00:00.000Z',
+        description: 'past event',
+        allDay: true,
+        resource: { name: 'Resource #2' },
+        user: { id: user.id, firstName: user.firstName },
+        createdAt: '2021-03-25T10:15:56.000Z',
+      };
+      const scope = nock('http://localhost')
+        .get(`/api/events/${eventId}`)
+        .reply(200, { status: 'ok', payload: event });
+
+      render(
+        <Router initialEntries={[`/events/${eventId}`]}>
+          <Route path="/events/:eventId" component={EventPage} />
+        </Router>
+      );
+
+      await waitFor(() => screen.getByText('Resource #2 gebucht für 2 Tage'));
+
+      expect(screen.queryByText('Eintrag löschen')).not.toBeNull();
+      expect(scope.isDone()).toBe(true);
     });
   });
 });
