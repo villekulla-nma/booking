@@ -6,12 +6,14 @@ import type { Db } from '../db';
 import { initDb } from '../db';
 import { initServer } from '../server';
 import { signJwt } from './helpers/sign-jwt';
+import { getDates } from './helpers/get-dates';
 import { removeEvent } from '../controllers/event';
+import type { EventInstance } from '../models/event';
 
 jest.mock('../controllers/event');
 
 describe('Server [DELETE] /api/events/:eventId', () => {
-  const [today] = new Date().toISOString().split('T');
+  const { yesterday, tomorrow } = getDates();
   let port: number;
   let cookieValue: string;
   let server: FastifyInstance;
@@ -34,16 +36,28 @@ describe('Server [DELETE] /api/events/:eventId', () => {
       id: 'Uj5SAS740',
       name: 'Resource #1',
     });
-    await db.Event.create({
-      id: 'Zbfn4lu5t',
-      start: `${today}T08:30:00.000Z`,
-      end: `${today}T12:00:00.000Z`,
-      allDay: false,
-      resourceId: 'Uj5SAS740',
-      description: 'A nice event',
-      userId: 'TD0sIeaoz',
-      createdAt: '2021-03-25T10:15:56.000Z',
-    });
+    await db.Event.bulkCreate<EventInstance>([
+      {
+        id: 'Zbfn4lu5t',
+        start: `${tomorrow}T08:30:00.000Z`,
+        end: `${tomorrow}T12:00:00.000Z`,
+        allDay: false,
+        resourceId: 'Uj5SAS740',
+        description: 'A nice event',
+        userId: 'TD0sIeaoz',
+        createdAt: '2021-03-25T10:15:56.000Z',
+      },
+      {
+        id: 'ctigHisJr',
+        start: `${yesterday}T07:00:00.000Z`,
+        end: `${yesterday}T13:00:00.000Z`,
+        allDay: false,
+        resourceId: 'gWH5T7Kdz',
+        description: 'Thingies',
+        userId: 'TD0sIeaoz',
+        createdAt: '2021-03-25T10:15:56.000Z',
+      },
+    ]);
 
     cookieValue = await signJwt(
       { id: 'TD0sIeaoz', role: 'user' },
@@ -76,13 +90,16 @@ describe('Server [DELETE] /api/events/:eventId', () => {
     expect(event).toBeNull();
   });
 
-  it('should respond with 400 on failure', async () => {
+  it.each([
+    ['event in the past', 'ctigHisJr'],
+    ['non-existing event', 'GjcSASl40'],
+  ])('should respond with 400 on %s', async (_, eventId) => {
     (removeEvent as jest.Mock).mockImplementation(
       jest.requireActual('../controllers/event').removeEvent
     );
 
     const response = await fetch(
-      `http://localhost:${port}/api/events/GjcSASl40`,
+      `http://localhost:${port}/api/events/${eventId}`,
       {
         method: 'DELETE',
         headers: {

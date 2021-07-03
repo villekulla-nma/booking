@@ -207,10 +207,12 @@ export const removeEvent = async (
   eventId: string,
   userId: string
 ): Promise<boolean> => {
+  const now = getNow().toISOString();
   const result = await Event.destroy({
     where: {
       id: { [Op.eq]: eventId },
       userId: { [Op.eq]: userId },
+      start: { [Op.gt]: now },
     },
   });
 
