@@ -3,7 +3,7 @@ import {
   format,
   parseISO,
   parse,
-  compareDesc,
+  isBefore,
   addDays,
   subDays,
 } from 'date-fns';
@@ -38,8 +38,6 @@ export const getDateTimeToday = (): Date => {
 
   return parseISO(`${date}T00:00:00`);
 };
-
-const isBefore = (a: Date, b: Date): boolean => compareDesc(a, b) === 1;
 
 export const ensureMinimumDateIntervalFromStart = (
   startString: string,

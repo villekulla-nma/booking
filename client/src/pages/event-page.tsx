@@ -13,7 +13,7 @@ import type { IStackTokens, IButtonStyles } from '@fluentui/react';
 import { mergeStyleSets, mergeStyles } from '@fluentui/merge-styles';
 import { SharedColors } from '@fluentui/theme';
 import { memoizeFunction } from '@fluentui/utilities';
-import { format, formatDistance } from 'date-fns';
+import { format, formatDistance, isAfter } from 'date-fns';
 import { de } from 'date-fns/locale';
 
 import { deleteEvent } from '../api';
@@ -126,6 +126,10 @@ export const EventPage: FC = () => {
   );
   const footerHorizontalAlign = isMedium ? 'space-between' : 'start';
   const headingSize = isMedium ? 'xxLarge' : 'xLarge';
+  const canDeleteEvent =
+    (isAfter(denormalizeCalendarDate(event.start), new Date()) &&
+      user.id === event.user.id) ||
+    user.role === 'admin';
   const handleDelete = () => {
     if (inquireConfirmation('Soll der Eintrag wirklich geköscht werden?')) {
       deleteEvent(eventId).then(
@@ -167,7 +171,7 @@ export const EventPage: FC = () => {
           <Text as="em" variant="medium" className={username}>
             {event.user.firstName}; {createdAt}
           </Text>
-          {user.id === event.user.id && (
+          {canDeleteEvent && (
             <CommandBarButton
               onClick={handleDelete}
               iconProps={{ iconName: 'RemoveEvent' }}
