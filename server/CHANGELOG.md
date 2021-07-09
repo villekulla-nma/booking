@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.5.0](https://github.com/villekulla-nma/booking/compare/v0.4.0...v0.5.0) (2021-07-09)
+
+
+### Bug Fixes
+
+* **deps:** update dependency sequelize to v6.6.5 ([ed51e50](https://github.com/villekulla-nma/booking/commit/ed51e50018339268dfe006d4f0b9e20b633c1e5a))
+
+
+### Features
+
+* **server:** send mail on password reset ([10a8142](https://github.com/villekulla-nma/booking/commit/10a8142c5281d8414b63e148fdd2ebe533923899))
+
+
+
+
+
 # [0.4.0](https://github.com/villekulla-nma/booking/compare/v0.3.0...v0.4.0) (2021-07-03)
 
 
