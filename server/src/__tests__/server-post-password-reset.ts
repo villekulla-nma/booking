@@ -5,6 +5,9 @@ import fetch from 'node-fetch';
 import type { Db } from '../db';
 import { initDb } from '../db';
 import { initServer } from '../server';
+import { sendMail } from '../utils/send-mail';
+
+jest.mock('../utils/send-mail');
 
 describe('Server [POST] /api/password-reset', () => {
   let port: number;
@@ -65,5 +68,23 @@ describe('Server [POST] /api/password-reset', () => {
     expect(response.status).toBe(200);
     expect(data.status).toBe('ok');
     expect(user.passwordReset).toMatch(/^[0-9a-f]+$/);
+  });
+
+  it('should send an email to the user', async () => {
+    await fetch(`http://localhost:${port}/api/password-reset`, {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify({ email: 'person.one@example.com' }),
+    });
+
+    expect(sendMail).toHaveBeenCalledWith(
+      expect.objectContaining({
+        subject: 'Passwort-Reset',
+        text: expect.stringMatching(/^Moin Person1,/),
+        to: 'person.one@example.com',
+      })
+    );
   });
 });
