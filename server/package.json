@@ -40,7 +40,7 @@
     "@types/jest": "26.0.24",
     "@types/jsonwebtoken": "8.5.4",
     "@types/node": "14.17.5",
-    "@types/node-fetch": "2.5.11",
+    "@types/node-fetch": "2.5.12",
     "@types/randomcolor": "0.5.6",
     "@types/shortid": "0.0.29",
     "@typescript-eslint/eslint-plugin": "4.28.4",
