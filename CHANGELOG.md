@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.5.1](https://github.com/villekulla-nma/booking/compare/v0.5.0...v0.5.1) (2021-07-28)
+
+
+### Bug Fixes
+
+* **deps:** update dependency @fluentui/react to v8.23.10 ([4483e95](https://github.com/villekulla-nma/booking/commit/4483e952211ca42059b57c968486a82618e11661))
+* **deps:** update dependency @fluentui/react to v8.23.9 ([5ebe1c0](https://github.com/villekulla-nma/booking/commit/5ebe1c0acde800997456fcf0749d5330da3ebada))
+* **deps:** update dependency @fluentui/react to v8.24.0 ([b958447](https://github.com/villekulla-nma/booking/commit/b95844705cd1899bd0858a3aef0132c6f33e5216))
+* **deps:** update dependency date-fns to v2.23.0 ([8622a9e](https://github.com/villekulla-nma/booking/commit/8622a9e1eb4bf415a4ae3e1c1f231c61c7e6a88b))
+* **deps:** update dependency fastify to v3.19.0 ([47b4262](https://github.com/villekulla-nma/booking/commit/47b4262e9f9feba4bc1b8d932e6d25e8aeae6df8))
+* **deps:** update dependency fastify to v3.19.2 ([640b29c](https://github.com/villekulla-nma/booking/commit/640b29ccacb7572750ea603503b1085c2b6af793))
+* **deps:** update dependency fluent-json-schema to v3.0.1 ([bf80da2](https://github.com/villekulla-nma/booking/commit/bf80da20df9688352f8637903b4ef426cc0b7f99))
+* **deps:** update fluent ui ([58195d8](https://github.com/villekulla-nma/booking/commit/58195d8c7eaee7f6f9284467856aefba43cf3c31))
+* **server:** adjust query for scoped events ([5c446c9](https://github.com/villekulla-nma/booking/commit/5c446c938c90ac1d0c03ead2338b391951ea54d0))
+
+
+
+
+
 # [0.5.0](https://github.com/villekulla-nma/booking/compare/v0.4.0...v0.5.0) (2021-07-09)
 
 
