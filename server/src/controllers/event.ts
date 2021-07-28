@@ -33,8 +33,22 @@ export const getScopedEvents = async (
   const events = await Event.findAll({
     where: {
       resourceId: { [Op.eq]: resourceId },
-      start: { [Op.gte]: start },
-      end: { [Op.lte]: end },
+      [Op.or]: [
+        {
+          start: {
+            [Op.between]: [start, end],
+          },
+        },
+        {
+          end: {
+            [Op.between]: [start, end],
+          },
+        },
+        {
+          start: { [Op.lte]: start },
+          end: { [Op.gte]: end },
+        },
+      ],
     },
     include: [
       {
