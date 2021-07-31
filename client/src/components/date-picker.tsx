@@ -50,15 +50,15 @@ const datePickerStrings: IDatePickerStrings = {
   ],
 
   days: [
+    'Sonntag',
     'Montag',
     'Dienstag',
     'Mittwoch',
     'Donnerstag',
     'Freitag',
     'Samstag',
-    'Sonntag',
   ],
-  shortDays: ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'],
+  shortDays: ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'],
 
   goToToday: 'Heute',
   prevMonthAriaLabel: 'vorheriger Monat',
