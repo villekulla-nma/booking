@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.5.2](https://github.com/villekulla-nma/booking/compare/v0.5.1...v0.5.2) (2021-07-31)
+
+
+### Bug Fixes
+
+* **client:** fix order of days ([836e72b](https://github.com/villekulla-nma/booking/commit/836e72bf7334c47d39b5f173e2593299cd3d9024))
+* **deps:** update dependency @fluentui/react to v8.26.0 ([22fef4d](https://github.com/villekulla-nma/booking/commit/22fef4dbaaa5c5891334983b6b5b6125fbfd345a))
+* **deps:** update fluent ui ([567cca7](https://github.com/villekulla-nma/booking/commit/567cca726ab92fce1cd907f66c15922a4e6dddd9))
+* **deps:** update fullcalendar monorepo to v5.9.0 ([059e797](https://github.com/villekulla-nma/booking/commit/059e797aaf5bb44a3ba30294cc83d36a0e5e5a29))
+
+
+
+
+
 ## [0.5.1](https://github.com/villekulla-nma/booking/compare/v0.5.0...v0.5.1) (2021-07-28)
 
 
