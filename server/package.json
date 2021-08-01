@@ -39,7 +39,7 @@
     "@types/bcryptjs": "2.4.2",
     "@types/jest": "26.0.24",
     "@types/jsonwebtoken": "8.5.4",
-    "@types/node": "14.17.6",
+    "@types/node": "14.17.7",
     "@types/node-fetch": "2.5.12",
     "@types/randomcolor": "0.5.6",
     "@types/shortid": "0.0.29",
