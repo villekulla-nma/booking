@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.5.3](https://github.com/villekulla-nma/booking/compare/v0.5.2...v0.5.3) (2021-09-06)
+
+
+### Bug Fixes
+
+* **deps:** update dependency fastify to v3.20.1 ([775a67b](https://github.com/villekulla-nma/booking/commit/775a67b80568e8444634b8604c24a129ec819218))
+* move .env file ([7fa4e36](https://github.com/villekulla-nma/booking/commit/7fa4e365efedaeb04fc58889ddc8c4b3f4330e65))
+
+
+
+
+
 ## [0.5.2](https://github.com/villekulla-nma/booking/compare/v0.5.1...v0.5.2) (2021-07-31)
 
 **Note:** Version bump only for package @booking/server
