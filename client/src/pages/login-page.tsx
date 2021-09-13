@@ -30,7 +30,7 @@ export const LoginPage: FC = () => {
   const handleSubmit = (): void => {
     setLoading(true);
 
-    login(email.trim(), password.trim()).then(
+    login(email.trim(), password).then(
       (result) => {
         switch (result) {
           case 'ok':
