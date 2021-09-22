@@ -51,7 +51,7 @@
     "eslint-plugin-prettier": "4.0.0",
     "eslint-plugin-react": "7.26.0",
     "jest": "26.6.0",
-    "node-fetch": "2.6.4",
+    "node-fetch": "2.6.5",
     "nodemon": "2.0.12",
     "ts-jest": "26.5.6",
     "ts-node": "10.2.1",
