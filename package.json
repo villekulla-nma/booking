@@ -4,7 +4,7 @@
   "author": "Emanuel Kluge (https://emanuel-kluge.de/)",
   "license": "MIT",
   "engines": {
-    "npm": "^7"
+    "npm": "^8.0.0"
   },
   "workspaces": [
     "client",
