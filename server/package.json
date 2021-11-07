@@ -8,7 +8,10 @@
     "lint": "eslint .",
     "test:watch": "jest --watch",
     "test": "jest",
-    "build": "ncc build src/index.ts -o ../dist/api --target es2020"
+    "build": "ncc build src/index.ts -o ../dist/api --target es2020",
+    "gen-salt": "node -e \"console.log(require('bcryptjs').genSaltSync())\"",
+    "create-id": "node -e \"console.log(require('shortid').generate())\"",
+    "create-default-password": "node -e \"process.env.SALT ? console.log(require('bcryptjs').hashSync('change-me!', process.env.SALT.trim())) : console.error('Please set SALT!')\""
   },
   "jest": {
     "preset": "ts-jest",
