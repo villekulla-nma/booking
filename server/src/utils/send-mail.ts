@@ -20,12 +20,17 @@ const setApiKey = (apiKey: string): void => {
 
 export const sendMail = async (mail: Mail): Promise<void> => {
   const senderEmailAddress = env('SENDER_EMAIL_ADDRESS');
-  const sendgridApiKey = env('SENDGRID_API_KEY');
+  const sendgridApiKey = env(
+    'SENDGRID_API_KEY',
+    process.env.NODE_ENV === 'development'
+  );
 
-  setApiKey(sendgridApiKey);
+  if (typeof sendgridApiKey === 'string') {
+    setApiKey(sendgridApiKey);
 
-  await sgMail.send({
-    ...mail,
-    from: senderEmailAddress,
-  });
+    await sgMail.send({
+      ...mail,
+      from: senderEmailAddress,
+    });
+  }
 };

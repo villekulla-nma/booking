@@ -67,6 +67,12 @@ export const assignPostPasswordResetHandler: AssignHandlerFunction = (
         });
 
         await Promise.all([sendEmailPromise, updateUserPromise]);
+
+        console.log(
+          'Password reset token "%s" for user "%s"',
+          token,
+          user.email
+        );
       } catch (err) {
         console.debug(err);
       }
