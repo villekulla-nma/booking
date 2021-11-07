@@ -23,7 +23,10 @@
     "version": "npm install --no-fund --no-audit && git add package-lock.json",
     "fmt": "prettier --config ./.prettierrc --ignore-path ./.prettierignore .",
     "fmt:write": "npm run fmt -- --write",
-    "fmt:check": "npm run fmt -- --check"
+    "fmt:check": "npm run fmt -- --check",
+    "gen-salt": "cd server && npm run gen-salt",
+    "create-id": "cd server && npm run create-id",
+    "create-default-password": "cd server && npm run create-default-password"
   },
   "devDependencies": {
     "lerna": "4.0.0",
