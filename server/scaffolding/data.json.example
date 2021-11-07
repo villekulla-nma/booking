@@ -1,0 +1,26 @@
+{
+  "Resource": [
+    {
+      "id": "…",
+      "name": "…"
+    }
+  ],
+  "Unit": [
+    {
+      "id": "…",
+      "name": "…",
+      "color": "<hexadecimal color value>"
+    }
+  ],
+  "User": [
+    {
+      "id": "…",
+      "role": "…",
+      "email": "…",
+      "firstName": "…",
+      "lastName": "…",
+      "password": "…",
+      "unitId": "…"
+    }
+  ]
+}
