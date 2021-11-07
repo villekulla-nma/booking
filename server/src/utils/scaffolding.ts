@@ -1,3 +1,4 @@
+import { resolve as pathResolve } from 'path';
 import { promises as fs } from 'fs';
 import type { ModelCtor, Sequelize } from 'sequelize';
 
@@ -27,7 +28,9 @@ export const getScaffoldingData = async (): Promise<
   Record<string, unknown>
 > => {
   try {
-    const data = await readFile(env('SCAFFOLDING_DATA'));
+    const data = await readFile(
+      pathResolve(__dirname, '..', '..', '..', env('SCAFFOLDING_DATA'))
+    );
 
     return data;
   } catch {
