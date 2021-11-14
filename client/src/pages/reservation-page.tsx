@@ -1,8 +1,15 @@
 import type { FC, FormEvent } from 'react';
 import { useState } from 'react';
 import { Prompt, useLocation, useParams, useHistory } from 'react-router-dom';
-import { addMinutes, format } from 'date-fns';
-import { TextField, MessageBarType, Checkbox } from '@fluentui/react';
+import { addMinutes, format, differenceInDays, addDays } from 'date-fns';
+import {
+  TextField,
+  MessageBarType,
+  Checkbox,
+  Dropdown,
+  Stack,
+} from '@fluentui/react';
+import type { IDropdownOption } from '@fluentui/react';
 import { mergeStyles } from '@fluentui/merge-styles';
 
 import { Layout } from '../components/layout';
@@ -11,8 +18,7 @@ import {
   createRoundedDateString,
   normalizeCalendarDate,
   denormalizeCalendarDate,
-  ensureMinimumDateIntervalFromStart,
-  ensureMinimumDateIntervalFromEnd,
+  getDateStringFromValue,
 } from '../helpers/date';
 import { createEvent } from '../api';
 import { Form } from '../components/form';
@@ -41,9 +47,31 @@ interface InitalValues {
   allDay: boolean;
 }
 
+const MAX_INTERVAL_IN_DAYS = 7;
+
+const durationDropdownValues: Array<IDropdownOption> = Array.from(
+  { length: MAX_INTERVAL_IN_DAYS },
+  (_, i) => ({
+    key: i + 1,
+    text: `${i + 1} ${i === 0 ? 'Tag' : 'Tage'}`,
+  })
+);
+
 const checkbox = mergeStyles({
   margin: '16px 0 8px 0',
 });
+
+const dropdownStyles = mergeStyles({
+  minWidth: '100px',
+});
+
+const getDurationInDays = (start: string, end: string): number => {
+  const startDate = denormalizeCalendarDate(start);
+  const endDate = denormalizeCalendarDate(end);
+  const difference = differenceInDays(endDate, startDate);
+
+  return difference;
+};
 
 const getStateValues = (state: LocationState = {}): InitalValues => {
   const start = denormalizeCalendarDate(
@@ -61,6 +89,16 @@ const getStateValues = (state: LocationState = {}): InitalValues => {
     time: format(end, 'HH:mm'),
   };
   const allDay = state.allDay ?? false;
+
+  if (
+    getDurationInDays(startDateTime.date, endDateTime.date) >
+    MAX_INTERVAL_IN_DAYS
+  ) {
+    endDateTime.date = format(
+      addDays(start, MAX_INTERVAL_IN_DAYS),
+      FORMAT_DATE
+    );
+  }
 
   return { start: startDateTime, end: endDateTime, allDay };
 };
@@ -92,29 +130,26 @@ export const ReservationPage: FC = () => {
   } = getStateValues(location.state);
   const [start, setStart] = useState<DateTime>(initialStart);
   const [end, setEnd] = useState<DateTime>(initialEnd);
+  const [duration, setDuration] = useState<number>(() =>
+    getDurationInDays(start.date, end.date)
+  );
   const [allDay, setAllDay] = useState<boolean>(initialAllDay);
   const params = useParams<Params>();
   const search = new URLSearchParams(location.search);
 
-  const handleStartDateTimeChange = (date: string, time: string): void => {
+  const handleStartDateTimeChange = (date: string, time: string): void =>
     setStart({ date, time });
-
-    if (allDay) {
-      setEnd({
-        ...end,
-        date: ensureMinimumDateIntervalFromStart(date, end.date),
-      });
-    }
-  };
-  const handleEndDateTimeChange = (date: string, time: string): void => {
+  const handleEndDateTimeChange = (date: string, time: string): void =>
     setEnd({ date, time });
+  const handleDurationChange = (_: unknown, option?: IDropdownOption) => {
+    const newDuration = Number(option?.key) ?? 0;
+    const endDate = addDays(new Date(start.date), newDuration);
 
-    if (allDay) {
-      setStart({
-        ...start,
-        date: ensureMinimumDateIntervalFromEnd(start.date, date),
-      });
-    }
+    setDuration(newDuration);
+    setEnd({
+      date: getDateStringFromValue(endDate),
+      time: end.time,
+    });
   };
   const handleAllDayChange = (_: unknown, checked: boolean | undefined): void =>
     setAllDay(typeof checked === 'boolean' ? checked : !allDay);
@@ -195,14 +230,28 @@ export const ReservationPage: FC = () => {
           disabled={submitted}
           id="start"
         />
-        <DateTimePicker
-          label="Ende"
-          value={end}
-          hideTime={allDay}
-          onChange={handleEndDateTimeChange}
-          disabled={submitted}
-          id="end"
-        />
+        {allDay === false && (
+          <DateTimePicker
+            label="Ende"
+            value={end}
+            onChange={handleEndDateTimeChange}
+            disabled={submitted}
+            id="end"
+          />
+        )}
+        {allDay === true && (
+          <Stack horizontal={true} verticalAlign="end" data-testid="duration">
+            <Dropdown
+              label="Dauer"
+              selectedKey={duration}
+              options={durationDropdownValues}
+              onChange={handleDurationChange}
+              disabled={submitted}
+              className={dropdownStyles}
+              id="duration"
+            />
+          </Stack>
+        )}
         <div>
           <Checkbox
             label="ganztägig"
