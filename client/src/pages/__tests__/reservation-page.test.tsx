@@ -186,13 +186,17 @@ describe('Reservation Page', () => {
         expect(getUserConfirmation).not.toHaveBeenCalled();
       });
 
-      it('should display the time for an all-day events & submit correctly', async () => {
+      it('should display the time for an all-day event & submit correctly', async () => {
         const resourceId = 'Uj5SAS740';
-        const date = new Date(Date.now() + 24 * 3600 * 1000);
-        const [tomorrow] = date.toISOString().split('T');
+        const [tomorrow] = new Date(Date.now() + 24 * 3600 * 1000)
+          .toISOString()
+          .split('T');
+        const [twoDaysAfterTomorrow] = new Date(Date.now() + 72 * 3600 * 1000)
+          .toISOString()
+          .split('T');
         const pathname = `/resources/${resourceId}/create`;
         const start = `${tomorrow}T09:00:00.000Z`;
-        const end = `${tomorrow}T13:30:00.000Z`;
+        const end = `${twoDaysAfterTomorrow}T13:30:00.000Z`;
         const state = { allDay: true, start, end };
         const scope = nock('http://localhost')
           .put(
@@ -217,9 +221,7 @@ describe('Reservation Page', () => {
         const elemStartTime = screen
           .getByTestId('start')
           .querySelector('[aria-selected]');
-        const elemEndTime = screen
-          .getByTestId('end')
-          .querySelector('[aria-selected]');
+        const elemDuration = screen.getByLabelText('Dauer');
         const allDayCheckboxLabel = screen
           .getByText('ganztägig')
           .closest('label') as HTMLLabelElement;
@@ -231,7 +233,7 @@ describe('Reservation Page', () => {
           .closest('button') as HTMLButtonElement;
 
         expect(elemStartTime).toBeNull();
-        expect(elemEndTime).toBeNull();
+        expect(elemDuration.textContent).toMatch(/^2 Tage/);
         expect(allDayCheckbox.checked).toBe(true);
 
         expect(fireEvent.click(submit)).toBe(true);
