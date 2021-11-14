@@ -45,6 +45,9 @@ jobs:
         with:
           node-version: '16.x'
 
+      # See https://github.com/npm/cli/issues/3637
+      - run: npm i -g npm@7.20.2
+
       - name: Cache Node dependencies
         uses: actions/cache@v2
         id: npm-cache
@@ -75,6 +78,9 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: '16.x'
+
+      # See https://github.com/npm/cli/issues/3637
+      - run: npm i -g npm@7.20.2
 
       - name: Cache Node dependencies
         uses: actions/cache@v2
@@ -107,6 +113,9 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: '16.x'
+
+      # See https://github.com/npm/cli/issues/3637
+      - run: npm i -g npm@7.20.2
 
       - name: Cache Node dependencies
         uses: actions/cache@v2
