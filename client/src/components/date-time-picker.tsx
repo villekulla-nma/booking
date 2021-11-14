@@ -8,7 +8,11 @@ import type {
 } from '@fluentui/react';
 import { format, parse, eachHourOfInterval } from 'date-fns';
 
-import { FORMAT_DATE, getDateTimeToday } from '../helpers/date';
+import {
+  FORMAT_DATE,
+  getDateTimeToday,
+  getDateStringFromValue,
+} from '../helpers/date';
 import { DatePicker } from './date-picker';
 
 interface Props {
@@ -70,9 +74,6 @@ const getTimePickerOptions = memoizeFunction(
       )
       .flat()
 );
-
-const getDateStringFromValue = (date: Date): string =>
-  format(date, FORMAT_DATE);
 
 export const DateTimePicker: FC<Props> = memo(
   ({ label, value, hideTime, id, disabled, onChange }) => {
