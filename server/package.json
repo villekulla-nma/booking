@@ -1,6 +1,6 @@
 {
   "name": "@booking/server",
-  "version": "0.5.4",
+  "version": "0.6.0",
   "author": "Emanuel Kluge (https://emanuel-kluge.de/)",
   "license": "MIT",
   "scripts": {
@@ -38,7 +38,7 @@
     "sqlite3": "5.0.2"
   },
   "devDependencies": {
-    "@booking/types": "0.5.0",
+    "@booking/types": "0.6.0",
     "@types/bcryptjs": "2.4.2",
     "@types/jest": "27.0.2",
     "@types/jsonwebtoken": "8.5.5",

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 0.6.0 (2021-11-14)
+
+
+### Features
+
+* **client:** improve usability of all-day event selection on reservation page ([8e5d78d](https://github.com/villekulla-nma/booking/commit/8e5d78d4f95187ed0b2d2e21fc16aba974dd52f3))
+
+
+
+
+
 ## [0.5.4](https://github.com/villekulla-nma/booking/compare/v0.5.3...v0.5.4) (2021-09-13)
 
 
