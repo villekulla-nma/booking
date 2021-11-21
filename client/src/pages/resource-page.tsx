@@ -11,7 +11,7 @@ import locale from '@fullcalendar/core/locales/de';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
-import { useHistory, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { format } from 'date-fns';
 import {
   ActionButton,
@@ -145,8 +145,9 @@ export const ResourcePage: FC = () => {
     getAllResources,
     []
   );
-  const history = useHistory();
-  const params = useParams<Params>();
+  const navigate = useNavigate();
+  // TODO: use generic parameter as soon as this is possible again
+  const params = useParams() as Params;
   const currentViewType = getViewTypeOption(params.view);
   const nowProp = getNowFromString(params.now);
   const calendar = useRef<FullCalendar>();
@@ -206,9 +207,13 @@ export const ResourcePage: FC = () => {
   const plugins = [dayGridPlugin, timeGridPlugin, interactionPlugin];
   const headerToolbar = { left: '', center: 'title', right: '' };
   const replaceView = (view: ViewTypeParam): void =>
-    history.replace(`/resources/${params.resourceId}/${view}/${params.now}`);
+    navigate(`/resources/${params.resourceId}/${view}/${params.now}`, {
+      replace: true,
+    });
   const replaceNow = (now: string): void =>
-    history.replace(`/resources/${params.resourceId}/${params.view}/${now}`);
+    navigate(`/resources/${params.resourceId}/${params.view}/${now}`, {
+      replace: true,
+    });
   const handlePrev = () => {
     if (calendar.current) {
       const api = calendar.current.getApi();
@@ -259,7 +264,7 @@ export const ResourcePage: FC = () => {
     const searchParams = new URLSearchParams(search);
 
     searchParams.append('resourceId', params.resourceId);
-    history.push(`/events/${args.event.id}?${searchParams}`);
+    navigate(`/events/${args.event.id}?${searchParams}`);
   };
   const handleSelect = (args: DateSelectArg): void =>
     setDateSelection({
@@ -269,10 +274,9 @@ export const ResourcePage: FC = () => {
     });
   const handleUnselect = () => setDateSelection(undefined);
   const handleReservation = (): void => {
-    history.push(
-      `/resources/${params.resourceId}/create?${search}`,
-      dateSelection
-    );
+    navigate(`/resources/${params.resourceId}/create?${search}`, {
+      state: dateSelection,
+    });
   };
   const buttonStyles: IButtonStyles = { root: { marginLeft: '32px' } };
   const navigationMenuItems: ICommandBarItemProps[] = [

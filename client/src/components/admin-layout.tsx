@@ -1,6 +1,6 @@
 import type { FC, ReactNode } from 'react';
 import { memo } from 'react';
-import { Link, useRouteMatch } from 'react-router-dom';
+import { Link, useMatch } from 'react-router-dom';
 import { Stack, Text, Link as A, NeutralColors } from '@fluentui/react';
 import type { IStackTokens, IStyle } from '@fluentui/react';
 import { mergeStyles } from '@fluentui/merge-styles';
@@ -62,7 +62,7 @@ const renderLink = (
 );
 
 export const AdminLayout: FC = memo(({ children }) => {
-  const match = useRouteMatch<Section>({
+  const match = useMatch<'section'>({
     path: '/admin/:section',
   });
 

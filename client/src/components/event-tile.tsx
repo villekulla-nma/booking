@@ -4,7 +4,7 @@ import type { IStackTokens } from '@fluentui/react';
 import { Stack, Text, NeutralColors } from '@fluentui/react';
 import { mergeStyles } from '@fluentui/merge-styles';
 import { SharedColors, FluentTheme } from '@fluentui/theme';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import classNames from 'classnames';
 
 import type { UserEvent } from '../api';
@@ -41,9 +41,9 @@ const descriptionText = mergeStyles({
 
 export const EventTile: FC<UserEvent & Props> = memo(
   ({ id, resource, start, end, allDay, description, className }) => {
-    const history = useHistory();
+    const navigate = useNavigate();
     const eventUrl = `/events/${id}`;
-    const handleClick = () => history.push(eventUrl);
+    const handleClick = () => navigate(eventUrl);
 
     return (
       <Stack

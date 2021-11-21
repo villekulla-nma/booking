@@ -1,5 +1,5 @@
 import { useRef, useEffect, useCallback } from 'react';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import type { Location } from 'history';
 
 import { UnauthenticatedError } from '../api';
@@ -12,7 +12,7 @@ type RedirectFn = (
 ) => IsRedirecting;
 
 export const useRedirectUnauthenticatedUser = (): RedirectFn => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const initialLocation = useLocation();
   const location = useRef<Location>(initialLocation);
   const redirectFn = useCallback<RedirectFn>(
@@ -20,7 +20,10 @@ export const useRedirectUnauthenticatedUser = (): RedirectFn => {
       if (error instanceof UnauthenticatedError) {
         const from = `${location.current.pathname}${location.current.search}`;
 
-        history.replace('/login', location.current.state || { from });
+        navigate('/login', {
+          replace: true,
+          state: location.current.state || { from },
+        });
         return true;
       } else {
         if (typeof fn === 'function') {
@@ -31,17 +34,13 @@ export const useRedirectUnauthenticatedUser = (): RedirectFn => {
         }
       }
     },
-    [location, history]
+    [location, navigate]
   );
   const redirect = useRef<RedirectFn>(redirectFn);
 
-  useEffect(
-    () =>
-      history.listen((newLocation) => {
-        location.current = newLocation;
-      }),
-    [history]
-  );
+  useEffect(() => {
+    location.current = initialLocation;
+  }, [initialLocation]);
 
   return redirect.current;
 };

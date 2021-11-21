@@ -1,6 +1,6 @@
 import type { FC } from 'react';
 import { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { Layout } from '../components/layout';
 import { AdminLayout } from '../components/admin-layout';
@@ -10,10 +10,10 @@ import { UserForm } from '../components/user-form';
 import type { FormValues } from '../components/user-form';
 
 export const AdminUsersCreatePage: FC = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [loading, setLoading] = useState<boolean>(false);
   const [feedback, setFeedback] = useState<ResponseStatus | undefined>();
-  const goToUsersPage = (): void => history.push('/admin/users');
+  const goToUsersPage = (): void => navigate('/admin/users');
   const handleSubmit = ({
     firstName,
     lastName,

@@ -1,6 +1,6 @@
 import { StrictMode } from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import type { RouteProps } from 'react-router-dom';
 import { initializeIcons } from '@uifabric/icons';
 import { FabricBase, loadTheme } from '@fluentui/react';
@@ -28,87 +28,61 @@ import { ROLE } from './constants';
 const authenticatedRoutes: RouteProps[] = [
   {
     path: '/',
-    component: StartPage,
-    strict: true,
-    exact: true,
+    children: () => StartPage,
   },
   {
     path: '/resources/:resourceId/create',
-    component: ReservationPage,
-    strict: true,
-    exact: true,
+    children: () => ReservationPage,
   },
-  {
-    path: ['/resources/:resourceId', '/resources/:resourceId/:view'],
-    component: RedirectToResourcePage,
-    strict: true,
-    exact: true,
-  },
+  ...['/resources/:resourceId', '/resources/:resourceId/:view'].map((path) => ({
+    children: () => RedirectToResourcePage,
+    path,
+  })),
   {
     path: '/resources/:resourceId/:view/:now',
-    component: ResourcePage,
-    strict: true,
-    exact: true,
+    children: () => ResourcePage,
   },
   {
     path: '/events/:eventId',
-    component: EventPage,
-    strict: true,
-    exact: true,
+    children: () => EventPage,
   },
 ];
 
 const adminRoutes: RouteProps[] = [
   {
     path: '/admin',
-    component: AdminStartPage,
-    strict: true,
-    exact: true,
+    children: () => AdminStartPage,
   },
   {
     path: '/admin/users',
-    component: AdminUsersPage,
-    strict: true,
-    exact: true,
+    children: () => AdminUsersPage,
   },
   {
     path: '/admin/users/create',
-    component: AdminUsersCreatePage,
-    strict: true,
-    exact: true,
+    children: () => AdminUsersCreatePage,
   },
   {
     path: '/admin/units',
-    component: AdminUnitsPage,
-    strict: true,
-    exact: true,
+    children: () => AdminUnitsPage,
   },
   {
     path: '/admin/resources',
-    component: AdminResourcesPage,
-    strict: true,
-    exact: true,
+    children: () => AdminResourcesPage,
   },
 ];
 
 const publicRoutes: RouteProps[] = [
   {
     path: '/login',
-    component: LoginPage,
-    strict: true,
-    exact: true,
+    children: () => LoginPage,
   },
   {
     path: '/password-reset',
-    component: PasswordResetPage,
-    strict: true,
-    exact: true,
+    children: () => PasswordResetPage,
   },
   {
     path: '/password-reset/:token',
-    component: PasswordUpdatePage,
-    strict: true,
-    exact: true,
+    children: () => PasswordUpdatePage,
   },
 ];
 
@@ -132,7 +106,7 @@ ReactDOM.render(
       <ErrorBoundary>
         <UserProvider>
           <FabricBase theme={theme}>
-            <Switch>
+            <Routes>
               {authenticatedRoutes.map((route, i) => (
                 <PrivateRoute key={i} {...route} />
               ))}
@@ -142,8 +116,8 @@ ReactDOM.render(
               {publicRoutes.map((route, i) => (
                 <Route key={i} {...route} />
               ))}
-              <Route path="*" component={NotFoundPage} />
-            </Switch>
+              <Route path="*" children={NotFoundPage} />
+            </Routes>
           </FabricBase>
         </UserProvider>
       </ErrorBoundary>

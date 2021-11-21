@@ -1,6 +1,6 @@
 import type { FC } from 'react';
 import { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { ActionButton } from '@fluentui/react';
 import type { IIconProps, IColumn } from '@fluentui/react';
 import { UserResponse } from '@booking/types';
@@ -28,7 +28,7 @@ const toListItems = (users: UserResponse[]): SimplAdminListItem[] =>
   }));
 
 export const AdminUsersPage: FC = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [loading, setLoading] = useState<boolean>(false);
   const [user, setUser] = useState<UserResponse | undefined>();
   const [users, reloadUsers] = useAuthenticatedFetch<UserResponse[]>(
@@ -50,7 +50,8 @@ export const AdminUsersPage: FC = () => {
       minWidth: 120,
     },
   ];
-  const handleCreateNewUser = (): void => history.push('/admin/users/create');
+  // TODO: consider using new `useHref` and `useLinkClickHandler` here
+  const handleCreateNewUser = (): void => navigate('/admin/users/create');
   const showEditFormHandler = (userId: string): void => {
     const user = (users || []).find(({ id }) => id === userId);
 

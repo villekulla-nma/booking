@@ -65,7 +65,8 @@ const UserFeedback: FC<FeedbackProps> = ({ feedback }) => {
 
 export const PasswordUpdatePage: FC = () => {
   const redirect = useRedirectUnauthenticatedUser();
-  const { token } = useParams<Params>();
+  // TODO: use generic parameter as soon as this is possible again
+  const { token } = useParams() as Params;
   const [loading, setLoading] = useState<boolean>(false);
   const [feedback, setFeedback] = useState<ResponseStatus | undefined>();
   const [password, setPassword] = useState<string>('');

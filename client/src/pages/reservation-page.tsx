@@ -1,6 +1,6 @@
 import type { FC, FormEvent } from 'react';
 import { useState } from 'react';
-import { Prompt, useLocation, useParams, useHistory } from 'react-router-dom';
+import { useLocation, useParams, useNavigate } from 'react-router-dom';
 import { addMinutes, format, differenceInDays, addDays } from 'date-fns';
 import {
   TextField,
@@ -121,8 +121,11 @@ export const ReservationPage: FC = () => {
   const [submitted, setSubmitted] = useState<boolean>(false);
   const [feedback, setFeedback] = useState<string>('');
   const [description, setDescription] = useState<string>('');
-  const history = useHistory();
-  const location = useLocation<LocationState>();
+  const navigate = useNavigate();
+  // TODO: use generic parameter as soon as this is possible again
+  const location = useLocation() as ReturnType<typeof useLocation> & {
+    state: LocationState;
+  };
   const {
     start: initialStart,
     end: initialEnd,
@@ -134,7 +137,8 @@ export const ReservationPage: FC = () => {
     getDurationInDays(start.date, end.date)
   );
   const [allDay, setAllDay] = useState<boolean>(initialAllDay);
-  const params = useParams<Params>();
+  // TODO: use generic parameter as soon as this is possible again
+  const params = useParams() as Params;
   const search = new URLSearchParams(location.search);
 
   const handleStartDateTimeChange = (date: string, time: string): void =>
@@ -159,7 +163,7 @@ export const ReservationPage: FC = () => {
     setDescription(event.currentTarget.value);
   };
   const handleReset = (): void => {
-    history.push(getBackUrl(params.resourceId, search));
+    navigate(getBackUrl(params.resourceId, search));
   };
   const handleSubmit = () => {
     setSubmitted(true);
@@ -174,7 +178,7 @@ export const ReservationPage: FC = () => {
       (status) => {
         switch (status) {
           case 'ok':
-            history.push(getBackUrl(params.resourceId, search));
+            navigate(getBackUrl(params.resourceId, search));
             break;
           case 'overlapping':
             setFeedback(
@@ -207,10 +211,11 @@ export const ReservationPage: FC = () => {
 
   return (
     <Layout>
-      <Prompt
+      {/* TODO: bring back as soon as React-Router has a Prompt again */}
+      {/* <Prompt
         when={description.trim() !== '' && submitted === false}
         message="Buchungsvorgang wirklich abbrechen"
-      />
+      /> */}
       <Form
         onReset={handleReset}
         onSubmit={handleSubmit}

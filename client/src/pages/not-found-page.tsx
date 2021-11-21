@@ -1,6 +1,6 @@
 import type { FC } from 'react';
 import { Text, Link as A } from '@fluentui/react';
-import { Redirect, useLocation, Link } from 'react-router-dom';
+import { Navigate, useLocation, Link } from 'react-router-dom';
 
 import { Layout } from '../components/layout';
 
@@ -8,12 +8,7 @@ export const NotFoundPage: FC = () => {
   const location = useLocation();
 
   if (location.pathname.endsWith('/')) {
-    return (
-      <Redirect
-        from={location.pathname}
-        to={location.pathname.replace(/\/+$/, '')}
-      />
-    );
+    return <Navigate to={location.pathname.replace(/\/+$/, '')} />;
   }
 
   return (

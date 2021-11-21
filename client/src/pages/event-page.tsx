@@ -1,5 +1,5 @@
 import type { FC } from 'react';
-import { Link, useParams, useHistory, useLocation } from 'react-router-dom';
+import { Link, useParams, useNavigate, useLocation } from 'react-router-dom';
 import {
   Icon,
   Link as A,
@@ -95,9 +95,10 @@ const getCalendarParamsFromSearch = (search: string): string | undefined => {
 
 export const EventPage: FC = () => {
   const redirect = useRedirectUnauthenticatedUser();
-  const history = useHistory();
+  const navigate = useNavigate();
   const location = useLocation();
-  const { eventId } = useParams<Params>();
+  // TODO: use generic parameter as soon as this is possible again
+  const { eventId } = useParams() as Params;
   const event = useEventDetail(eventId);
   const user = useUserContext();
   const isMedium = useMediaQuery(MQ_IS_MEDIUM);
@@ -133,7 +134,7 @@ export const EventPage: FC = () => {
   const handleDelete = () => {
     if (inquireConfirmation('Soll der Eintrag wirklich geköscht werden?')) {
       deleteEvent(eventId).then(
-        () => history.push(backLinkUrl),
+        () => navigate(backLinkUrl),
         (error) =>
           redirect(error, () =>
             alert('Der Eintrag konnte nicht gelöscht werden.')

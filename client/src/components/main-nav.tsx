@@ -1,6 +1,6 @@
 import type { FC } from 'react';
 import { useState, memo } from 'react';
-import { Link, useRouteMatch, useHistory } from 'react-router-dom';
+import { Link, useMatch, useNavigate } from 'react-router-dom';
 import {
   Stack,
   NeutralColors,
@@ -47,7 +47,7 @@ const nav = mergeStyles({
 const iconProps: IIconProps = { iconName: 'GlobalNavButton' };
 
 const MobileNav: FC<Props & ResourceId> = memo(({ resources, resourceId }) => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [open, setOpen] = useState<boolean>(false);
 
   if (resources.length === 0) {
@@ -59,7 +59,7 @@ const MobileNav: FC<Props & ResourceId> = memo(({ resources, resourceId }) => {
   const links = resources.map(({ id, name }): INavLink => {
     const handleClick: INavLink['onClick'] = (event, item) => {
       event?.preventDefault();
-      history.push(item?.url || '');
+      navigate(item?.url || '');
     };
 
     return {
@@ -89,7 +89,7 @@ const MobileNav: FC<Props & ResourceId> = memo(({ resources, resourceId }) => {
 
 export const MainNav: FC<Props> = memo(({ resources }) => {
   const isDesktop = useMediaQuery(MQ_IS_DESKTOP);
-  const match = useRouteMatch<ResourceId>({
+  const match = useMatch<'resourceId'>({
     path: '/resources/:resourceId',
   });
 

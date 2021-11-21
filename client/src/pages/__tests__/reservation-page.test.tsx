@@ -358,7 +358,7 @@ describe('Reservation Page', () => {
         );
       });
 
-      it('should prevent navigation when description is entered', async () => {
+      xit('should prevent navigation when description is entered', async () => {
         const resourceId = 'Uj5SAS740';
         const date = new Date(Date.now() + 24 * 3600 * 1000);
         const [tomorrow] = date.toISOString().split('T');

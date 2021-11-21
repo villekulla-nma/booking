@@ -10,7 +10,7 @@ import { Form } from '../components/form';
 import { Feedback } from '../components/feedback';
 
 export const LoginPage: FC = () => {
-  const location = useLocation<{ from: string }>();
+  const location = useLocation();
   const [loading, setLoading] = useState<boolean>(false);
   const [feedback, setFeedback] = useState<string>();
   const [email, setEmail] = useState<string>('');

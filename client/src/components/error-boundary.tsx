@@ -3,7 +3,7 @@ import { ErrorBoundary as ErrorBoundaryComp } from 'react-error-boundary';
 import type { FallbackProps } from 'react-error-boundary';
 import { Text, Link as A, Stack } from '@fluentui/react';
 import type { IStackTokens } from '@fluentui/react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { Layout } from './layout';
 
@@ -38,10 +38,10 @@ const mailTo = (errorMessage?: string, errorStack?: string): string => {
 };
 
 const Fallback: FC<FallbackProps> = ({ error, resetErrorBoundary }) => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const resetErrorAndNavigateToStartPage = () => {
     resetErrorBoundary();
-    history.replace('/');
+    navigate('/', { replace: true });
   };
 
   return (
