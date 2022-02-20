@@ -3,9 +3,6 @@
   "private": true,
   "author": "Emanuel Kluge (https://emanuel-kluge.de/)",
   "license": "MIT",
-  "engines": {
-    "npm": "^7"
-  },
   "workspaces": [
     "client",
     "server",
