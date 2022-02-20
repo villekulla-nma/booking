@@ -14,7 +14,6 @@ import { initializeIcons } from '@uifabric/icons';
 import { scopeIsDone } from '../../helpers/nock';
 import { useUserContext } from '../../hooks/use-user-context';
 import { AdminUsersCreatePage } from '../admin-users-create-page';
-import { sleep } from '../../helpers/sleep';
 
 jest.mock('../../hooks/use-user-context');
 

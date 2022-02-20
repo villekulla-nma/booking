@@ -167,9 +167,9 @@ describe('Reservation Page', () => {
           .getByText('Speichern')
           .closest('button') as HTMLButtonElement;
 
-        expect(elemStartDate.value).toMatch(DATE_REGEXP);
+        expect(elemStartDate.textContent).toMatch(DATE_REGEXP);
         expect(elemStartTime.textContent).toMatch(/^09:00 Uhr/);
-        expect(elemEndDate.value).toMatch(DATE_REGEXP);
+        expect(elemEndDate.textContent).toMatch(DATE_REGEXP);
         expect(elemEndTime.textContent).toMatch(/^13:30 Uhr/);
         expect(allDayCheckbox.checked).toBe(false);
 
@@ -489,9 +489,9 @@ describe('Reservation Page', () => {
         'Ende (Uhrzeit)'
       ) as HTMLElement;
 
-      expect(elemStartDate.value).toBe('So, 18. April 2021');
+      expect(elemStartDate.textContent).toBe('So, 18. April 2021');
       expect(elemStartTime.textContent).toMatch(/^10:00 Uhr/);
-      expect(elemEndDate.value).toBe('So, 18. April 2021');
+      expect(elemEndDate.textContent).toBe('So, 18. April 2021');
       expect(elemEndTime.textContent).toMatch(/^10:30 Uhr/);
     });
 
