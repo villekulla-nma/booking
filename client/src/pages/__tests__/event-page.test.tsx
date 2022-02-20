@@ -105,8 +105,8 @@ describe('Event Page', () => {
         '2021-03-29T12:30:00.000Z',
         'etwa 22 Stunden',
       ],
-      ['2021-03-28T15:00:00.000Z', '2021-03-29T15:00:00.000Z', 'ein Tag'],
-      ['2021-03-28T15:00:00.000Z', '2021-03-29T16:30:00.000Z', 'ein Tag'],
+      ['2021-03-28T15:00:00.000Z', '2021-03-29T15:00:00.000Z', '1 Tag'],
+      ['2021-03-28T15:00:00.000Z', '2021-03-29T16:30:00.000Z', '1 Tag'],
     ])('should display the event details', async (start, end, duration) => {
       (useMediaQuery as jest.Mock).mockReturnValue(true);
       (useUserContext as jest.Mock).mockReturnValue(user);
