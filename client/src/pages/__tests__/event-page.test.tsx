@@ -96,51 +96,54 @@ describe('Event Page', () => {
   describe(`some other person's event`, () => {
     it.each([
       [
+        'etwa 2 Stunden',
         '2021-03-28T15:00:00.000Z',
         '2021-03-28T17:00:00.000Z',
-        'etwa 2 Stunden',
       ],
       [
+        'etwa 22 Stunden',
         '2021-03-28T15:00:00.000Z',
         '2021-03-29T12:30:00.000Z',
-        'etwa 22 Stunden',
       ],
-      ['2021-03-28T15:00:00.000Z', '2021-03-29T15:00:00.000Z', 'ein Tag'],
-      ['2021-03-28T15:00:00.000Z', '2021-03-29T16:30:00.000Z', 'ein Tag'],
-    ])('should display the event details', async (start, end, duration) => {
-      (useMediaQuery as jest.Mock).mockReturnValue(true);
-      (useUserContext as jest.Mock).mockReturnValue(user);
+      ['1 Tag', '2021-03-28T15:00:00.000Z', '2021-03-29T15:00:00.000Z'],
+      ['1 Tag', '2021-03-28T15:00:00.000Z', '2021-03-29T16:30:00.000Z'],
+    ])(
+      'should display the event details (%s)',
+      async (duration, start, end) => {
+        (useMediaQuery as jest.Mock).mockReturnValue(true);
+        (useUserContext as jest.Mock).mockReturnValue(user);
 
-      const eventId = 'dsgw46hrds';
-      const event = {
-        id: eventId,
-        description: 'stuff',
-        allDay: false,
-        resource: { name: 'Resource #1' },
-        user: { id: 'vgjt8i8kuz', firstName: 'Person2' },
-        createdAt: '2021-03-25T10:15:56.000Z',
-        start,
-        end,
-      };
-      const scope = nock('http://localhost')
-        .get(`/api/events/${eventId}`)
-        .reply(200, { status: 'ok', payload: event });
+        const eventId = 'dsgw46hrds';
+        const event = {
+          id: eventId,
+          description: 'stuff',
+          allDay: false,
+          resource: { name: 'Resource #1' },
+          user: { id: 'vgjt8i8kuz', firstName: 'Person2' },
+          createdAt: '2021-03-25T10:15:56.000Z',
+          start,
+          end,
+        };
+        const scope = nock('http://localhost')
+          .get(`/api/events/${eventId}`)
+          .reply(200, { status: 'ok', payload: event });
 
-      render(
-        <Router initialEntries={[`/events/${eventId}`]}>
-          <Route path="/events/:eventId" component={EventPage} />
-        </Router>
-      );
+        render(
+          <Router initialEntries={[`/events/${eventId}`]}>
+            <Route path="/events/:eventId" component={EventPage} />
+          </Router>
+        );
 
-      await waitFor(() =>
-        screen.getByText(`Resource #1 gebucht für ${duration}`)
-      );
-      screen.getByText('stuff');
-      screen.getByText('Person2; 25. März 2021, 10:15');
+        await waitFor(() =>
+          screen.getByText(`Resource #1 gebucht für ${duration}`)
+        );
+        screen.getByText('stuff');
+        screen.getByText('Person2; 25. März 2021, 10:15');
 
-      expect(screen.queryByText('Eintrag löschen')).toBeNull();
-      expect(scope.isDone()).toBe(true);
-    });
+        expect(screen.queryByText('Eintrag löschen')).toBeNull();
+        expect(scope.isDone()).toBe(true);
+      }
+    );
   });
 
   describe(`user's own event`, () => {
