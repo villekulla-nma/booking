@@ -108,7 +108,9 @@ describe('Main-Header', () => {
           ],
         });
 
-      render(<MainHeader />, { wrapper: Router });
+      render(<MainHeader />, {
+        wrapper: ({ children: c }) => <Router>{c}</Router>,
+      });
 
       await waitFor(() => screen.getByText('Resource #1'));
       screen.getByText('Resource #2');
@@ -137,7 +139,9 @@ describe('Main-Header', () => {
           ],
         });
 
-      render(<MainHeader />, { wrapper: Router });
+      render(<MainHeader />, {
+        wrapper: ({ children: c }) => <Router>{c}</Router>,
+      });
 
       await act(async () => {
         await expect(scopeIsDone(scope)).resolves.toBe(true);
@@ -210,7 +214,9 @@ describe('Main-Header', () => {
         payload: [],
       });
 
-      render(<MainHeader />, { wrapper: Router });
+      render(<MainHeader />, {
+        wrapper: ({ children: c }) => <Router>{c}</Router>,
+      });
 
       const link = await waitFor(
         () => screen.getByTestId('admin-link') as HTMLAnchorElement | null
@@ -228,7 +234,9 @@ describe('Main-Header', () => {
       (useMediaQuery as jest.Mock).mockReturnValue(true);
       (useUserContext as jest.Mock).mockReturnValue(null);
 
-      render(<MainHeader />, { wrapper: Router });
+      render(<MainHeader />, {
+        wrapper: ({ children: c }) => <Router>{c}</Router>,
+      });
 
       await act(async () => {
         await sleep(50);
@@ -241,7 +249,9 @@ describe('Main-Header', () => {
       (useMediaQuery as jest.Mock).mockReturnValue(false);
       (useUserContext as jest.Mock).mockReturnValue(null);
 
-      render(<MainHeader />, { wrapper: Router });
+      render(<MainHeader />, {
+        wrapper: ({ children: c }) => <Router>{c}</Router>,
+      });
 
       await act(async () => {
         await sleep(50);
