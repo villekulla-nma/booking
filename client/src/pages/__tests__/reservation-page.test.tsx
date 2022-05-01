@@ -1,12 +1,6 @@
 import type { FC } from 'react';
 import nock from 'nock';
-import {
-  render,
-  screen,
-  fireEvent,
-  waitFor,
-  act,
-} from '@testing-library/react';
+import { render, screen, fireEvent, act } from '@testing-library/react';
 import { MemoryRouter as Router, Route, Switch } from 'react-router-dom';
 import type { Location } from 'history';
 import { initializeIcons } from '@uifabric/icons';
@@ -273,10 +267,8 @@ describe('Reservation Page', () => {
           await expect(scopeIsDone(scope)).resolves.toBe(true);
         });
 
-        await waitFor(() =>
-          screen.getByText(
-            'Die Buchung überschneidet sich mit einer existierenden Buchung.'
-          )
+        await screen.findByText(
+          'Die Buchung überschneidet sich mit einer existierenden Buchung.'
         );
       });
 
@@ -313,9 +305,7 @@ describe('Reservation Page', () => {
           await expect(scopeIsDone(scope)).resolves.toBe(true);
         });
 
-        await waitFor(() =>
-          screen.getByText('Eine oder mehrere Angaben sind ungültig.')
-        );
+        await screen.findByText('Eine oder mehrere Angaben sind ungültig.');
       });
 
       it('should display an error message', async () => {
@@ -351,10 +341,8 @@ describe('Reservation Page', () => {
           await expect(scopeIsDone(scope)).resolves.toBe(true);
         });
 
-        await waitFor(() =>
-          screen.getByText(
-            'Beim speichern der Buchung ist ein Fehler aufgetreten.'
-          )
+        await screen.findByText(
+          'Beim speichern der Buchung ist ein Fehler aufgetreten.'
         );
       });
 

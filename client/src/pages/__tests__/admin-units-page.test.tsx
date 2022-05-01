@@ -83,7 +83,7 @@ describe('Admin Units Page', () => {
         await expect(scopeIsDone(scope)).resolves.toBe(true);
       });
 
-      await waitFor(() => screen.getByText('Unit #1'));
+      await screen.findByText('Unit #1');
       screen.getByText('Unit #2');
     });
   });
@@ -129,7 +129,7 @@ describe('Admin Units Page', () => {
         await expect(scopeIsDone(creationScope)).resolves.toBe(true);
       });
 
-      await waitFor(() => screen.getByText('Unit #3'));
+      await screen.findByText('Unit #3');
     });
   });
 
@@ -174,7 +174,7 @@ describe('Admin Units Page', () => {
 
       fireEvent.click(editButton);
 
-      await waitFor(() => screen.getByTestId('overlay'));
+      await screen.findByText('overlay');
 
       fireEvent.change(screen.getByLabelText('Unit name'), {
         target: { value: newName },
@@ -189,11 +189,11 @@ describe('Admin Units Page', () => {
         await expect(scopeIsDone(updateScope)).resolves.toBe(true);
       });
 
-      await waitFor(() => screen.getByText(newName));
+      await screen.findByText(newName);
 
       fireEvent.click(screen.getByTestId(`edit-element-${units[1].id}`));
 
-      await waitFor(() => screen.getByTestId('overlay'));
+      await screen.findByText('overlay');
 
       const colorInput = screen.getByLabelText(
         'Unit color'
@@ -229,17 +229,15 @@ describe('Admin Units Page', () => {
         await expect(scopeIsDone(initialScope)).resolves.toBe(true);
       });
 
-      await waitFor(() => screen.getByText('Unit #2'));
+      await screen.findByText('Unit #2');
 
-      act(() => {
-        fireEvent.click(screen.getByTestId(`delete-element-${units[1].id}`));
-      });
+      fireEvent.click(screen.getByTestId(`delete-element-${units[1].id}`));
 
       await act(async () => {
         await expect(scopeIsDone(deletionScope)).resolves.toBe(true);
       });
 
-      await waitFor(() => screen.getByText('Unit #1'));
+      await screen.findByText('Unit #1');
 
       expect(screen.queryByText('Unit #2')).toBeNull();
     });

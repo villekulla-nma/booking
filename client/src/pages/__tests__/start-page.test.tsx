@@ -1,6 +1,6 @@
 import type { FC } from 'react';
 import nock from 'nock';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { MemoryRouter as Router, Route, Switch } from 'react-router-dom';
 import type { Location } from 'history';
 import { initializeIcons } from '@uifabric/icons';
@@ -86,7 +86,7 @@ describe('Start Page', () => {
         </Router>
       );
 
-      await waitFor(() => screen.getByText('Es stehen keine Buchungen an.'));
+      await screen.findByText('findByTextstehen keine Buchungen an.');
 
       expect(scope.isDone()).toBe(true);
     });
@@ -119,7 +119,7 @@ describe('Start Page', () => {
         </Router>
       );
 
-      const link = await waitFor(() => screen.getByText('Resource #1'));
+      const link = await screen.findByText('Resource #1');
 
       screen.getByText('Thingies...');
 

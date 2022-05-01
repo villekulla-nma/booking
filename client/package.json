@@ -19,7 +19,10 @@
       "eslint:recommended",
       "plugin:@typescript-eslint/recommended",
       "plugin:prettier/recommended"
-    ]
+    ],
+    "rules": {
+      "testing-library/no-node-access": "off"
+    }
   },
   "browserslist": {
     "production": [
