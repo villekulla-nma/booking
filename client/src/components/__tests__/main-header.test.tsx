@@ -112,7 +112,7 @@ describe('Main-Header', () => {
         wrapper: ({ children: c }) => <Router>{c}</Router>,
       });
 
-      await waitFor(() => screen.getByText('Resource #1'));
+      await screen.findByText('Resource #1');
       screen.getByText('Resource #2');
 
       expect(screen.queryByTestId('admin-link')).toBeNull();
@@ -187,16 +187,14 @@ describe('Main-Header', () => {
         </Router>
       );
 
-      const logoutButton = await waitFor(
-        () =>
-          screen.getByText('Abmelden').closest('button') as HTMLButtonElement
-      );
+      const logoutButtonInner = await screen.findByText('Abmelden');
+      const logoutButton = logoutButtonInner.closest(
+        'button'
+      ) as HTMLButtonElement;
 
       fireEvent.click(logoutButton);
 
-      await act(async () => {
-        await expect(scopeIsDone(scope)).resolves.toBe(true);
-      });
+      await expect(scopeIsDone(scope)).resolves.toBe(true);
 
       expect(pathname).toBe('/');
       expect(state).toStrictEqual({});

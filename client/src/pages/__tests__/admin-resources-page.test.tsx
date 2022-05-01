@@ -80,7 +80,7 @@ describe('Admin Resources Page', () => {
         await expect(scopeIsDone(scope)).resolves.toBe(true);
       });
 
-      await waitFor(() => screen.getByText('Resource #1'));
+      await screen.findByText('Resource #1');
       screen.getByText('Resource #2');
     });
   });
@@ -129,7 +129,7 @@ describe('Admin Resources Page', () => {
         await expect(scopeIsDone(creationScope)).resolves.toBe(true);
       });
 
-      await waitFor(() => screen.getByText('Resource #3'));
+      await screen.findByText('Resource #3');
     });
   });
 
@@ -169,7 +169,7 @@ describe('Admin Resources Page', () => {
 
       fireEvent.click(editButton);
 
-      await waitFor(() => screen.getByTestId('overlay'));
+      await screen.findByTestId('overlay');
 
       fireEvent.change(screen.getByLabelText('Resource name'), {
         target: { value: newName },
@@ -181,7 +181,7 @@ describe('Admin Resources Page', () => {
         await expect(scopeIsDone(updateScope)).resolves.toBe(true);
       });
 
-      await waitFor(() => screen.getByText(newName));
+      await screen.findByText(newName);
     });
   });
 
@@ -211,13 +211,9 @@ describe('Admin Resources Page', () => {
         await expect(scopeIsDone(initialScope)).resolves.toBe(true);
       });
 
-      await waitFor(() => screen.getByText('Resource #2'));
+      await screen.findByText('Resource #2');
 
-      act(() => {
-        fireEvent.click(
-          screen.getByTestId(`delete-element-${resources[1].id}`)
-        );
-      });
+      fireEvent.click(screen.getByTestId(`delete-element-${resources[1].id}`));
 
       await act(async () => {
         await expect(scopeIsDone(deletionScope)).resolves.toBe(true);
