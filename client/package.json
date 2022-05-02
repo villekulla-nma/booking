@@ -34,10 +34,10 @@
     ]
   },
   "dependencies": {
-    "@fluentui/merge-styles": "8.3.0",
-    "@fluentui/react": "8.55.3",
-    "@fluentui/theme": "2.4.10",
-    "@fluentui/utilities": "8.4.2",
+    "@fluentui/merge-styles": "8.5.1",
+    "@fluentui/react": "8.67.2",
+    "@fluentui/theme": "2.6.5",
+    "@fluentui/utilities": "8.8.2",
     "@fullcalendar/core": "5.10.1",
     "@fullcalendar/daygrid": "5.10.1",
     "@fullcalendar/interaction": "5.10.1",
