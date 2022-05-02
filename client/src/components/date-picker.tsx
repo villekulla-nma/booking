@@ -70,10 +70,16 @@ const datePickerStrings: IDatePickerStrings = {
   yearPickerHeaderAriaLabel: '{0}, wählen um den Monat zu ändern',
 };
 
-const styles: Pick<IDatePickerStyles, 'statusMessage'> = {
+const styles: Pick<IDatePickerStyles, 'statusMessage' | 'readOnlyTextField'> = {
   statusMessage: {
     '&:empty': {
       display: 'none',
+    },
+  },
+  readOnlyTextField: {
+    // Boost specificity...
+    '&[class]': {
+      paddingRight: '32px',
     },
   },
 };
