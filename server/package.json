@@ -35,7 +35,7 @@
     "randomcolor": "0.6.2",
     "sequelize": "6.19.0",
     "shortid": "2.2.16",
-    "sqlite3": "5.0.2"
+    "sqlite3": "5.0.8"
   },
   "devDependencies": {
     "@booking/types": "0.6.0",
