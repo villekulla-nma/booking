@@ -27,6 +27,8 @@ jobs:
             ${{ runner.os }}-node-
 
       - name: Build the application
+        env:
+          NODE_OPTIONS: --openssl-legacy-provider
         run: |
           npm ci
           npm run build
