@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 0.6.1 (2022-05-26)
+
+
+### Bug Fixes
+
+* **deps:** update dependency @sendgrid/mail to v7.6.1 ([d61581e](https://github.com/villekulla-nma/booking/commit/d61581e3394f15844e00e56b0d7139dce5d3de26))
+* **deps:** update dependency @sendgrid/mail to v7.7.0 ([b5b1df2](https://github.com/villekulla-nma/booking/commit/b5b1df27519f6cb371649c83ccbb09a857bd3bee))
+* **deps:** update dependency dotenv to v12 ([9e0aee5](https://github.com/villekulla-nma/booking/commit/9e0aee5d68e1262fa7283176ee29124cd5c2bb25))
+* **deps:** update dependency dotenv to v16 ([01f3d38](https://github.com/villekulla-nma/booking/commit/01f3d38140069774b82abad28358f68a676599f5))
+* **deps:** update dependency fastify to v3.27.2 ([ea82a30](https://github.com/villekulla-nma/booking/commit/ea82a3018e27dbe32a37dcfa93ff8fdef7f4ed7e))
+* **deps:** update dependency fastify to v3.29.0 ([6c6ad18](https://github.com/villekulla-nma/booking/commit/6c6ad18c5a8f126919d2f247f3dbc8d17a50c308))
+* **deps:** update dependency fluent-json-schema to v3.1.0 ([93b7ebe](https://github.com/villekulla-nma/booking/commit/93b7ebebf0db189b544e25e77dd9b4c48df1ee65))
+* **deps:** update dependency sequelize to v6.13.0 ([51c25db](https://github.com/villekulla-nma/booking/commit/51c25db5392619d9507a1ca3cd4f73ffce3ed960))
+* **deps:** update dependency sequelize to v6.16.2 ([7a655fd](https://github.com/villekulla-nma/booking/commit/7a655fdd05f7185db95f823b2471985d71f8ad98))
+* **deps:** update dependency sequelize to v6.19.0 ([64f119b](https://github.com/villekulla-nma/booking/commit/64f119bb4ba497e4544fae2865d809b9f608e3c9))
+* **deps:** update dependency sqlite3 to v5.0.8 ([2b566c4](https://github.com/villekulla-nma/booking/commit/2b566c469ae937ba8933a65984dcbe2aac585cb3))
+
+
+
+
+
 # 0.6.0 (2021-11-14)
 
 **Note:** Version bump only for package @booking/server
