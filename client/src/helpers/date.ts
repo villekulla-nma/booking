@@ -33,3 +33,18 @@ export const getDateTimeToday = (): Date => {
 
   return parseISO(`${date}T00:00:00`);
 };
+
+// Sanitize end date so the range spans over the
+// actually selected amount of days and doesn't end
+// with the following day at `00:00:00.000`
+export const sanitizeEndDateTimeIfRequired = (end: string): string => {
+  if (end.includes('T00:00:00.000') === false) {
+    return end;
+  }
+
+  const date = new Date(end);
+
+  date.setSeconds(date.getSeconds() - 1);
+
+  return date.toISOString();
+};

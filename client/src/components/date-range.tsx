@@ -3,7 +3,7 @@ import { memo } from 'react';
 import { Stack, Text, NeutralColors } from '@fluentui/react';
 import type { IStackTokens } from '@fluentui/react';
 import { mergeStyles } from '@fluentui/merge-styles';
-import { format, differenceInDays } from 'date-fns';
+import { format, intervalToDuration } from 'date-fns';
 import { de } from 'date-fns/locale';
 import classNames from 'classnames';
 
@@ -11,12 +11,13 @@ import {
   denormalizeCalendarDate,
   FORMAT_DATE_TIME,
   FORMAT_DATE_NICE,
+  sanitizeEndDateTimeIfRequired,
 } from '../helpers/date';
 
 interface Props {
   start: string;
   end: string;
-  allDay?: boolean;
+  allDay: boolean;
 }
 
 const allDayHint = mergeStyles({
@@ -56,11 +57,15 @@ const formatDateTime = (date: string) =>
     locale: de,
   });
 
-export const DateRange: FC<Props> = memo(({ start, end }) => {
-  const difference = differenceInDays(new Date(end), new Date(start));
-  const formatFn = difference === 0 ? formatDateTime : formatDate;
+export const DateRange: FC<Props> = memo(({ start, end, allDay }) => {
+  const endDate = new Date(end);
+  const duration = intervalToDuration({
+    start: new Date(start),
+    end: endDate,
+  });
+  const formatFn = allDay ? formatDate : formatDateTime;
 
-  if (difference === 1) {
+  if (duration.days === 1 && allDay) {
     return (
       <Text variant="medium" className={dateDisplay}>
         {formatFn(start)}
@@ -88,7 +93,7 @@ export const DateRange: FC<Props> = memo(({ start, end }) => {
           Ende
         </Text>
         <Text variant="medium" as="dd" className={definitionValue}>
-          {formatFn(end)}
+          {formatFn(sanitizeEndDateTimeIfRequired(end))}
         </Text>
       </Stack>
     </dl>
