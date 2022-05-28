@@ -22,5 +22,16 @@
       "password": "…",
       "unitId": "…"
     }
+  ],
+  "Event": [
+    {
+      "id": "…",
+      "start": "…",
+      "end": "…",
+      "description": "…",
+      "allDay": <true|false>,
+      "resourceId": "…",
+      "userId": "…"
+    }
   ]
 }

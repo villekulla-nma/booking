@@ -1,15 +1,22 @@
 import { resolve as pathResolve } from 'path';
 import { promises as fs } from 'fs';
-import type { ModelCtor, Sequelize } from 'sequelize';
+import type { ModelCtor, ModelStatic, Sequelize } from 'sequelize';
 
 import { env } from './env';
 import { scaffoldResources, scaffoldUnits, scaffoldUsers } from '../models';
-import type { UnitInstance, ResourceInstance, UserInstance } from '../models';
+import type {
+  UnitInstance,
+  ResourceInstance,
+  UserInstance,
+  EventInstance,
+} from '../models';
+import { scaffoldEvents } from '../models/event';
 
 interface ModelInstances {
   Unit: ModelCtor<UnitInstance>;
   Resource: ModelCtor<ResourceInstance>;
   User: ModelCtor<UserInstance>;
+  Event: ModelStatic<EventInstance>;
 }
 
 const readFile = async (filename: string): Promise<Record<string, unknown>> => {
@@ -55,6 +62,9 @@ export const writeScaffoldingData = async (
           }
           case 'User': {
             return scaffoldUsers(instances.User, data.User, t);
+          }
+          case 'Event': {
+            return scaffoldEvents(instances.Event, data.Event, t);
           }
           default:
             return Promise.resolve();

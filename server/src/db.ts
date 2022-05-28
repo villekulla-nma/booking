@@ -52,7 +52,12 @@ export const initDb = async (): Promise<Db> => {
   await applyMigrations(sequelize);
 
   try {
-    await writeScaffoldingData(sequelize, data, { Unit, Resource, User });
+    await writeScaffoldingData(sequelize, data, {
+      Unit,
+      Resource,
+      User,
+      Event,
+    });
   } catch (error) {
     console.error(error);
     throw error;

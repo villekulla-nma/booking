@@ -1,10 +1,11 @@
-import { DataTypes } from 'sequelize';
+import { DataTypes, Op } from 'sequelize';
 import type {
   Model,
   ModelAttributes,
   ModelCtor,
   Optional,
   Sequelize,
+  Transaction,
 } from 'sequelize';
 import type { EventAttributes } from '@booking/types';
 import type { ResourceInstance } from './resource';
@@ -59,6 +60,51 @@ const schema: Schema = {
     type: DataTypes.DATE,
     allowNull: true,
   },
+};
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function isEvent(o: any): o is EventAttributes {
+  try {
+    return (
+      typeof o === 'object' &&
+      o !== null &&
+      typeof o.id === 'string' &&
+      o.id.length &&
+      typeof o.start === 'string' &&
+      Number.isNaN(new Date(o.start).valueOf()) === false &&
+      typeof o.end === 'string' &&
+      Number.isNaN(new Date(o.end).valueOf()) === false &&
+      typeof o.allDay === 'boolean' &&
+      typeof o.resourceId === 'string' &&
+      o.resourceId.length &&
+      typeof o.userId === 'string' &&
+      o.userId.length
+    );
+  } catch {
+    return false;
+  }
+}
+
+export const scaffoldEvents = async (
+  Event: ModelCtor<EventInstance>,
+  data: unknown,
+  transaction: Transaction
+): Promise<void> => {
+  if (Array.isArray(data)) {
+    await Promise.all(
+      data
+        .filter((e) => isEvent(e))
+        .map((event) =>
+          Event.findOrCreate({
+            where: {
+              id: { [Op.eq]: event.id },
+            },
+            defaults: event,
+            transaction,
+          })
+        )
+    );
+  }
 };
 
 export const createEventInstance = (
