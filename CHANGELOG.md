@@ -3,6 +3,21 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.6.2](https://github.com/villekulla-nma/booking/compare/v0.6.1...v0.6.2) (2022-05-28)
+
+
+### Bug Fixes
+
+* **client:** show correct date range for short multi-day events ([1117f19](https://github.com/villekulla-nma/booking/commit/1117f199987831961a50c51eea4fb9d10febe8c6))
+* **deps:** update dependency @fluentui/react to v8.71.0 ([1d3ad14](https://github.com/villekulla-nma/booking/commit/1d3ad14760bbb180778b313c9e3dd5f9816fa0ba))
+* **deps:** update dependency dotenv to v16.0.1 ([1b83417](https://github.com/villekulla-nma/booking/commit/1b83417cb0f2b6706388c477fe6e3f97630cb60f))
+* **deps:** update dependency sequelize to v6.20.1 ([c3241c0](https://github.com/villekulla-nma/booking/commit/c3241c0c741687b7211f6ad88b7d0c84a526d059))
+* **deps:** update fluent ui ([fcbc2c4](https://github.com/villekulla-nma/booking/commit/fcbc2c4d28e32f3a996c58929b5c63ed52846049))
+
+
+
+
+
 ## 0.6.1 (2022-05-26)
 
 
