@@ -1,7 +1,8 @@
 import { render } from '@testing-library/react';
-import { MemoryRouter as Router, Route } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 
 import { RedirectToResourcePage } from '../redirect-to-resource-page';
+import { MemoryRouterShim as Router } from '../../components/router-shim';
 
 describe('Redirect-toResource Page', () => {
   it('should redirect to the default view', async () => {

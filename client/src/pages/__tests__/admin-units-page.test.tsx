@@ -1,5 +1,4 @@
 import type { FC, PropsWithChildren } from 'react';
-import { MemoryRouter as Router } from 'react-router-dom';
 import {
   render,
   screen,
@@ -14,6 +13,7 @@ import { scopeIsDone } from '../../helpers/nock';
 import { useUserContext } from '../../hooks/use-user-context';
 import { AdminUnitsPage } from '../admin-units-page';
 import { inquireConfirmation } from '../../helpers/inquire-confirmation';
+import { MemoryRouterShim as Router } from '../../components/router-shim';
 
 jest.mock('../../hooks/use-user-context');
 jest.mock('../../helpers/inquire-confirmation');

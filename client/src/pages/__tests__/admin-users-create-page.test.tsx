@@ -1,5 +1,5 @@
 import type { FC, PropsWithChildren } from 'react';
-import { MemoryRouter as Router, Switch, Route } from 'react-router-dom';
+import { Switch, Route } from 'react-router-dom';
 import {
   render,
   screen,
@@ -14,6 +14,7 @@ import { initializeIcons } from '@uifabric/icons';
 import { scopeIsDone } from '../../helpers/nock';
 import { useUserContext } from '../../hooks/use-user-context';
 import { AdminUsersCreatePage } from '../admin-users-create-page';
+import { MemoryRouterShim as Router } from '../../components/router-shim';
 
 jest.mock('../../hooks/use-user-context');
 

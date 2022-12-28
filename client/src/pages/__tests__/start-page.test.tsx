@@ -1,7 +1,7 @@
 import type { FC, PropsWithChildren } from 'react';
 import nock from 'nock';
 import { render, screen, waitFor } from '@testing-library/react';
-import { MemoryRouter as Router, Route, Switch } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import type { Location } from 'history';
 import { initializeIcons } from '@uifabric/icons';
 
@@ -9,6 +9,7 @@ import { StartPage } from '../start-page';
 import { useUserContext } from '../../hooks/use-user-context';
 import { scopeIsDone } from '../../helpers/nock';
 import { waitFor as customWaitFor } from '../../helpers/wait-for';
+import { MemoryRouterShim as Router } from '../../components/router-shim';
 
 jest.mock('../../hooks/use-user-context');
 

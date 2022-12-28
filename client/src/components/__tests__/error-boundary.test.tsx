@@ -1,5 +1,4 @@
 import type { FC, PropsWithChildren } from 'react';
-import { Router } from 'react-router-dom';
 import type { History } from 'history';
 import {
   render,
@@ -11,6 +10,7 @@ import {
 import { initializeIcons } from '@uifabric/icons';
 
 import { ErrorBoundary } from '../error-boundary';
+import { RouterShim as Router } from '../router-shim';
 
 jest.mock('../layout.tsx', () => {
   const Layout: FC<PropsWithChildren> = ({ children }) => <>{children}</>;
