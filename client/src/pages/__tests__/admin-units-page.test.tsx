@@ -126,7 +126,7 @@ describe('Admin Units Page', () => {
       fireEvent.click(screen.getByText('Create').closest('button') as Element);
 
       await act(async () => {
-        await expect(scopeIsDone(creationScope)).resolves.toBe(true);
+        await scopeIsDone(creationScope);
       });
 
       await waitFor(() => screen.getByText('Unit #3'));
@@ -186,7 +186,7 @@ describe('Admin Units Page', () => {
       fireEvent.click(screen.getByText('Absenden'));
 
       await act(async () => {
-        await expect(scopeIsDone(updateScope, 300)).resolves.toBe(true);
+        await scopeIsDone(updateScope);
       });
 
       await waitFor(() => screen.getByText(newName));
@@ -236,7 +236,7 @@ describe('Admin Units Page', () => {
       });
 
       await act(async () => {
-        await expect(scopeIsDone(deletionScope)).resolves.toBe(true);
+        await scopeIsDone(deletionScope);
       });
 
       await waitFor(() => screen.getByText('Unit #1'));
