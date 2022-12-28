@@ -167,7 +167,7 @@ describe('Admin Users Page', () => {
       );
 
       await act(async () => {
-        await expect(scopeIsDone(updateScope)).resolves.toBe(true);
+        await scopeIsDone(updateScope);
       });
 
       await act(async () => {
@@ -212,7 +212,7 @@ describe('Admin Users Page', () => {
       fireEvent.click(screen.getByTestId(`delete-element-${userThree.id}`));
 
       await act(async () => {
-        await expect(scopeIsDone(deletionScope)).resolves.toBe(true);
+        await scopeIsDone(deletionScope);
       });
 
       await act(async () => {

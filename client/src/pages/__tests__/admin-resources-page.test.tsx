@@ -126,7 +126,7 @@ describe('Admin Resources Page', () => {
       fireEvent.click(screen.getByText('Create').closest('button') as Element);
 
       await act(async () => {
-        await expect(scopeIsDone(creationScope)).resolves.toBe(true);
+        await scopeIsDone(creationScope);
       });
 
       await waitFor(() => screen.getByText('Resource #3'));
@@ -178,7 +178,7 @@ describe('Admin Resources Page', () => {
       fireEvent.click(screen.getByText('Absenden'));
 
       await act(async () => {
-        await expect(scopeIsDone(updateScope, 300)).resolves.toBe(true);
+        await scopeIsDone(updateScope);
       });
 
       await waitFor(() => screen.getByText(newName));
@@ -220,7 +220,7 @@ describe('Admin Resources Page', () => {
       });
 
       await act(async () => {
-        await expect(scopeIsDone(deletionScope)).resolves.toBe(true);
+        await scopeIsDone(deletionScope);
       });
 
       expect(screen.queryByText('Resource #2')).toBeNull();
