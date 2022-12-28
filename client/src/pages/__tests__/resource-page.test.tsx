@@ -1,7 +1,7 @@
 import type { FC, PropsWithChildren } from 'react';
 import nock from 'nock';
 import { render, screen, act } from '@testing-library/react';
-import { MemoryRouter as Router, Route, Switch } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import type { Location } from 'history';
 import { initializeIcons } from '@uifabric/icons';
 
@@ -9,6 +9,7 @@ import { ResourcePage } from '../resource-page';
 import { useMediaQuery } from '../../hooks/use-media-query';
 import { scopeIsDone } from '../../helpers/nock';
 import { waitFor as customWaitFor } from '../../helpers/wait-for';
+import { MemoryRouterShim as Router } from '../../components/router-shim';
 
 jest.mock('../../components/layout.tsx', () => {
   const Layout: FC<PropsWithChildren> = ({ children }) => <>{children}</>;

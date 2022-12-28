@@ -1,5 +1,5 @@
 import nock from 'nock';
-import { MemoryRouter as Router, Route, Switch } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import type { Location } from 'history';
 import {
   render,
@@ -17,6 +17,7 @@ import { useMediaQuery } from '../../hooks/use-media-query';
 import { useUserContext } from '../../hooks/use-user-context';
 import { scopeIsDone } from '../../helpers/nock';
 import { waitFor as customWaitFor } from '../../helpers/wait-for';
+import { MemoryRouterShim as Router } from '../router-shim';
 
 jest.mock('../../hooks/use-user-context');
 

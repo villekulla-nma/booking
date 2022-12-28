@@ -7,7 +7,7 @@ import {
   waitFor,
   act,
 } from '@testing-library/react';
-import { MemoryRouter as Router, Route, Switch } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import type { Location } from 'history';
 import { initializeIcons } from '@uifabric/icons';
 
@@ -21,6 +21,7 @@ import {
   denormalizeCalendarDate,
 } from '../../helpers/date';
 import { waitFor as customWaitFor } from '../../helpers/wait-for';
+import { MemoryRouterShim as Router } from '../../components/router-shim';
 
 const DATE_REGEXP =
   /^(?:Mo|Di|Mi|Do|Fr|Sa|So),\s\d+\.\s(?:Januar|Februar|März|April|Mai|Juni|Juli|August|September|Oktober|November|Dezember)\s\d{4}$/;

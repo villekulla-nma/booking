@@ -1,10 +1,11 @@
 import type { FC, PropsWithChildren } from 'react';
 import nock from 'nock';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { MemoryRouter as Router, Route } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 import { initializeIcons } from '@uifabric/icons';
 
 import { PasswordUpdatePage } from '../password-update-page';
+import { MemoryRouterShim as Router } from '../../components/router-shim';
 
 jest.mock('../../components/layout.tsx', () => {
   const Layout: FC<PropsWithChildren> = ({ children }) => <>{children}</>;
