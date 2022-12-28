@@ -100,9 +100,7 @@ describe('Admin Users Create Page', () => {
       await waitForElementToBeRemoved(() => screen.queryByText(/Lade Daten/));
       expect(scope.isDone()).toBe(true);
 
-      act(() => {
-        fireEvent.click(screen.getByText('Abbrechen'));
-      });
+      fireEvent.click(screen.getByText('Abbrechen'));
 
       expect(pathname).toBe('/admin/users');
     });
@@ -175,6 +173,7 @@ describe('Admin Users Create Page', () => {
       );
 
       fireEvent.click(
+        // eslint-disable-next-line testing-library/no-node-access
         screen.getByText('Absenden').closest('button') as Element
       );
 

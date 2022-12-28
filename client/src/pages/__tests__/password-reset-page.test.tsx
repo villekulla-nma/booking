@@ -1,6 +1,6 @@
 import type { FC, PropsWithChildren } from 'react';
 import nock from 'nock';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { Route } from 'react-router-dom';
 import { initializeIcons } from '@uifabric/icons';
 
@@ -40,13 +40,12 @@ describe('Resource Page', () => {
       target: { value: 'person.one@example.com' },
     });
     fireEvent.click(
+      // eslint-disable-next-line testing-library/no-node-access
       screen.getByText('Absenden').closest('button') as HTMLButtonElement
     );
 
-    await waitFor(() =>
-      screen.getByText(
-        /Dein Passwort wurde erfolgreich zurück gesetzt. Bitte wende dich an/
-      )
+    await screen.findByText(
+      /Dein Passwort wurde erfolgreich zurück gesetzt. Bitte wende dich an/
     );
 
     expect(scope.isDone()).toBe(true);
@@ -64,13 +63,12 @@ describe('Resource Page', () => {
     );
 
     fireEvent.click(
+      // eslint-disable-next-line testing-library/no-node-access
       screen.getByText('Absenden').closest('button') as HTMLButtonElement
     );
 
-    await waitFor(() =>
-      screen.getByText(
-        /Dein Passwort wurde erfolgreich zurück gesetzt. Bitte wende dich an/
-      )
+    await screen.findByText(
+      /Dein Passwort wurde erfolgreich zurück gesetzt. Bitte wende dich an/
     );
 
     expect(scope.isDone()).toBe(true);

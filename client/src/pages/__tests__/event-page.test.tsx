@@ -1,6 +1,6 @@
 import type { FC, PropsWithChildren } from 'react';
 import nock from 'nock';
-import { render, screen, waitFor, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { Route, Switch } from 'react-router-dom';
 import type { Location } from 'history';
 import { initializeIcons } from '@uifabric/icons';
@@ -135,9 +135,7 @@ describe('Event Page', () => {
           </Router>
         );
 
-        await waitFor(() =>
-          screen.getByText(`Resource #1 gebucht für ${duration}`)
-        );
+        await screen.findByText(`Resource #1 gebucht für ${duration}`);
         screen.getByText('stuff');
         screen.getByText('Person2; 25. März 2021, 10:15');
 
@@ -190,12 +188,13 @@ describe('Event Page', () => {
         </Router>
       );
 
-      await waitFor(() => screen.getByText('Resource #2 gebucht für 2 Tage'));
+      await screen.findByText('Resource #2 gebucht für 2 Tage');
       screen.getByText('thingies');
       screen.getByText('Person1; 25. März 2021, 10:15');
 
       const deleteButton = screen
         .getByText('Eintrag löschen')
+        // eslint-disable-next-line testing-library/no-node-access
         .closest('button') as HTMLButtonElement;
 
       fireEvent.click(deleteButton);
@@ -237,7 +236,7 @@ describe('Event Page', () => {
         </Router>
       );
 
-      await waitFor(() => screen.getByText('Resource #2 gebucht für 2 Tage'));
+      await screen.findByText('Resource #2 gebucht für 2 Tage');
 
       expect(screen.queryByText('Eintrag löschen')).toBeNull();
       expect(scope.isDone()).toBe(true);
@@ -270,7 +269,7 @@ describe('Event Page', () => {
         </Router>
       );
 
-      await waitFor(() => screen.getByText('Resource #2 gebucht für 2 Tage'));
+      await screen.findByText('Resource #2 gebucht für 2 Tage');
 
       expect(screen.queryByText('Eintrag löschen')).toBeNull();
       expect(scope.isDone()).toBe(true);
@@ -301,9 +300,9 @@ describe('Event Page', () => {
         </Router>
       );
 
-      await waitFor(() => screen.getByText('Resource #2 gebucht für 2 Tage'));
+      await screen.findByText('Resource #2 gebucht für 2 Tage');
 
-      expect(screen.queryByText('Eintrag löschen')).not.toBeNull();
+      screen.getByText('Eintrag löschen');
       expect(scope.isDone()).toBe(true);
     });
   });

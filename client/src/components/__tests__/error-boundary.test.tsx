@@ -1,12 +1,6 @@
 import type { FC, PropsWithChildren } from 'react';
 import type { History } from 'history';
-import {
-  render,
-  screen,
-  waitFor,
-  act,
-  fireEvent,
-} from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { initializeIcons } from '@uifabric/icons';
 
 import { ErrorBoundary } from '../error-boundary';
@@ -43,7 +37,7 @@ describe('Error-Boundary', () => {
       </ErrorBoundary>
     );
 
-    await waitFor(() => screen.getByText(/Da ist wohl etwas schief gelaufen/));
+    await screen.findByText(/Da ist wohl etwas schief gelaufen/);
 
     const emailLink = screen.getByText(
       /wende dich bitte an den Webmaster/
@@ -75,11 +69,9 @@ describe('Error-Boundary', () => {
       </Router>
     );
 
-    const link = await waitFor(() => screen.getByText(/Zur Startseite/));
+    const link = await screen.findByText(/Zur Startseite/);
 
-    act(() => {
-      fireEvent.click(link);
-    });
+    fireEvent.click(link);
 
     expect(history.replace).toHaveBeenCalledWith('/');
   });

@@ -1,6 +1,6 @@
 import type { FC, PropsWithChildren } from 'react';
 import nock from 'nock';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { Route } from 'react-router-dom';
 import { initializeIcons } from '@uifabric/icons';
 
@@ -54,6 +54,7 @@ describe('Resource Page', () => {
       target: { value: '1234' },
     });
     fireEvent.click(
+      // eslint-disable-next-line testing-library/no-node-access
       screen.getByText('Absenden').closest('button') as HTMLButtonElement
     );
 
@@ -87,10 +88,11 @@ describe('Resource Page', () => {
       target: { value: '1234' },
     });
     fireEvent.click(
+      // eslint-disable-next-line testing-library/no-node-access
       screen.getByText('Absenden').closest('button') as HTMLButtonElement
     );
 
-    await waitFor(() => screen.getByText('Bitte verfifiziere deinen Nutzer.'));
+    await screen.findByText('Bitte verfifiziere deinen Nutzer.');
 
     expect(passwordField.value).toBe('');
     expect(scope.isDone()).toBe(true);
@@ -121,12 +123,11 @@ describe('Resource Page', () => {
       target: { value: '5678' },
     });
     fireEvent.click(
+      // eslint-disable-next-line testing-library/no-node-access
       screen.getByText('Absenden').closest('button') as HTMLButtonElement
     );
 
-    await waitFor(() =>
-      screen.getByText('Nutzername oder Passwort sind nicht korrekt.')
-    );
+    await screen.findByText('Nutzername oder Passwort sind nicht korrekt.');
 
     expect(passwordField.value).toBe('');
     expect(scope.isDone()).toBe(true);
@@ -157,13 +158,12 @@ describe('Resource Page', () => {
       target: { value: '5678' },
     });
     fireEvent.click(
+      // eslint-disable-next-line testing-library/no-node-access
       screen.getByText('Absenden').closest('button') as HTMLButtonElement
     );
 
-    await waitFor(() =>
-      screen.getByText(
-        'Etwas ist schief gelaufen. Bitte versuche es noch einmal.'
-      )
+    await screen.findByText(
+      'Etwas ist schief gelaufen. Bitte versuche es noch einmal.'
     );
 
     expect(passwordField.value).toBe('');
