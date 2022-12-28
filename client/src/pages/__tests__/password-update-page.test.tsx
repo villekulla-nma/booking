@@ -1,6 +1,6 @@
 import type { FC, PropsWithChildren } from 'react';
 import nock from 'nock';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { Route } from 'react-router-dom';
 import { initializeIcons } from '@uifabric/icons';
 
@@ -45,12 +45,11 @@ describe('Resource Page', () => {
       target: { value: '12345' },
     });
     fireEvent.click(
+      // eslint-disable-next-line testing-library/no-node-access
       screen.getByText('Absenden').closest('button') as HTMLButtonElement
     );
 
-    await waitFor(() =>
-      screen.getByText('Passwort erfolgreich zurück gesetzt.')
-    );
+    await screen.findByText('Passwort erfolgreich zurück gesetzt.');
 
     expect(scope.isDone()).toBe(true);
   });
@@ -77,12 +76,11 @@ describe('Resource Page', () => {
       target: { value: '67890' },
     });
     fireEvent.click(
+      // eslint-disable-next-line testing-library/no-node-access
       screen.getByText('Absenden').closest('button') as HTMLButtonElement
     );
 
-    await waitFor(() =>
-      screen.getByText('Die Passwörter stimmen leider nicht überein.')
-    );
+    await screen.findByText('Die Passwörter stimmen leider nicht überein.');
 
     expect(scope.isDone()).toBe(true);
   });
@@ -100,13 +98,12 @@ describe('Resource Page', () => {
     );
 
     fireEvent.click(
+      // eslint-disable-next-line testing-library/no-node-access
       screen.getByText('Absenden').closest('button') as HTMLButtonElement
     );
 
-    await waitFor(() =>
-      screen.getByText(
-        'Ein Fehler ist aufgetreten. Bitte versuch es noch einmal.'
-      )
+    await screen.findByText(
+      'Ein Fehler ist aufgetreten. Bitte versuch es noch einmal.'
     );
 
     expect(scope.isDone()).toBe(true);

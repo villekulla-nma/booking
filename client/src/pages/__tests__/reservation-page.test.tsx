@@ -1,12 +1,6 @@
 import type { FC, PropsWithChildren } from 'react';
 import nock from 'nock';
-import {
-  render,
-  screen,
-  fireEvent,
-  waitFor,
-  act,
-} from '@testing-library/react';
+import { render, screen, fireEvent, act } from '@testing-library/react';
 import { Route, Switch } from 'react-router-dom';
 import type { Location } from 'history';
 import { initializeIcons } from '@uifabric/icons';
@@ -96,6 +90,7 @@ describe('Reservation Page', () => {
 
         const submit = screen
           .getByText('Speichern')
+          // eslint-disable-next-line testing-library/no-node-access
           .closest('button') as HTMLButtonElement;
 
         expect(fireEvent.click(submit)).toBe(true);
@@ -159,13 +154,16 @@ describe('Reservation Page', () => {
         ) as HTMLElement;
         const allDayCheckboxLabel = screen
           .getByText('ganztägig')
+          // eslint-disable-next-line testing-library/no-node-access
           .closest('label') as HTMLLabelElement;
+        // eslint-disable-next-line testing-library/no-node-access
         const allDayCheckbox = document.getElementById(
           allDayCheckboxLabel.getAttribute('for') ?? ''
         ) as HTMLInputElement;
         const textarea = screen.getByLabelText('Beschreibung');
         const submit = screen
           .getByText('Speichern')
+          // eslint-disable-next-line testing-library/no-node-access
           .closest('button') as HTMLButtonElement;
 
         expect(elemStartDate.textContent).toMatch(DATE_REGEXP);
@@ -221,16 +219,20 @@ describe('Reservation Page', () => {
 
         const elemStartTime = screen
           .getByTestId('start')
+          // eslint-disable-next-line testing-library/no-node-access
           .querySelector('[aria-selected]');
         const elemDuration = screen.getByLabelText('Dauer');
         const allDayCheckboxLabel = screen
           .getByText('ganztägig')
+          // eslint-disable-next-line testing-library/no-node-access
           .closest('label') as HTMLLabelElement;
+        // eslint-disable-next-line testing-library/no-node-access
         const allDayCheckbox = document.getElementById(
           allDayCheckboxLabel.getAttribute('for') ?? ''
         ) as HTMLInputElement;
         const submit = screen
           .getByText('Speichern')
+          // eslint-disable-next-line testing-library/no-node-access
           .closest('button') as HTMLButtonElement;
 
         expect(elemStartTime).toBeNull();
@@ -267,6 +269,7 @@ describe('Reservation Page', () => {
 
         const submit = screen
           .getByText('Speichern')
+          // eslint-disable-next-line testing-library/no-node-access
           .closest('button') as HTMLButtonElement;
 
         await act(async () => {
@@ -274,10 +277,8 @@ describe('Reservation Page', () => {
           await expect(scopeIsDone(scope)).resolves.toBe(true);
         });
 
-        await waitFor(() =>
-          screen.getByText(
-            'Die Buchung überschneidet sich mit einer existierenden Buchung.'
-          )
+        await screen.findByText(
+          'Die Buchung überschneidet sich mit einer existierenden Buchung.'
         );
       });
 
@@ -304,6 +305,7 @@ describe('Reservation Page', () => {
 
         const submit = screen
           .getByText('Speichern')
+          // eslint-disable-next-line testing-library/no-node-access
           .closest('button') as HTMLButtonElement;
 
         act(() => {
@@ -314,9 +316,7 @@ describe('Reservation Page', () => {
           await expect(scopeIsDone(scope)).resolves.toBe(true);
         });
 
-        await waitFor(() =>
-          screen.getByText('Eine oder mehrere Angaben sind ungültig.')
-        );
+        await screen.findByText('Eine oder mehrere Angaben sind ungültig.');
       });
 
       it('should display an error message', async () => {
@@ -342,6 +342,7 @@ describe('Reservation Page', () => {
 
         const submit = screen
           .getByText('Speichern')
+          // eslint-disable-next-line testing-library/no-node-access
           .closest('button') as HTMLButtonElement;
 
         act(() => {
@@ -352,10 +353,8 @@ describe('Reservation Page', () => {
           await expect(scopeIsDone(scope)).resolves.toBe(true);
         });
 
-        await waitFor(() =>
-          screen.getByText(
-            'Beim speichern der Buchung ist ein Fehler aufgetreten.'
-          )
+        await screen.findByText(
+          'Beim speichern der Buchung ist ein Fehler aufgetreten.'
         );
       });
 
@@ -516,7 +515,9 @@ describe('Reservation Page', () => {
 
       const checkboxLabel = screen
         .getByText('ganztägig')
+        // eslint-disable-next-line testing-library/no-node-access
         .closest('label') as HTMLLabelElement;
+      // eslint-disable-next-line testing-library/no-node-access
       const checkbox = document.getElementById(
         checkboxLabel.getAttribute('for') ?? ''
       ) as HTMLInputElement;

@@ -83,7 +83,7 @@ describe('Admin Units Page', () => {
         await expect(scopeIsDone(scope)).resolves.toBe(true);
       });
 
-      await waitFor(() => screen.getByText('Unit #1'));
+      await screen.findByText('Unit #1');
       screen.getByText('Unit #2');
     });
   });
@@ -123,13 +123,14 @@ describe('Admin Units Page', () => {
         target: { value: newUnit.name },
       });
 
+      // eslint-disable-next-line testing-library/no-node-access
       fireEvent.click(screen.getByText('Create').closest('button') as Element);
 
       await act(async () => {
         await scopeIsDone(creationScope);
       });
 
-      await waitFor(() => screen.getByText('Unit #3'));
+      await screen.findByText('Unit #3');
     });
   });
 
@@ -174,7 +175,7 @@ describe('Admin Units Page', () => {
 
       fireEvent.click(editButton);
 
-      await waitFor(() => screen.getByTestId('overlay'));
+      await screen.findByTestId('overlay');
 
       fireEvent.change(screen.getByLabelText('Unit name'), {
         target: { value: newName },
@@ -189,11 +190,11 @@ describe('Admin Units Page', () => {
         await scopeIsDone(updateScope);
       });
 
-      await waitFor(() => screen.getByText(newName));
+      await screen.findByText(newName);
 
       fireEvent.click(screen.getByTestId(`edit-element-${units[1].id}`));
 
-      await waitFor(() => screen.getByTestId('overlay'));
+      await screen.findByTestId('overlay');
 
       const colorInput = screen.getByLabelText(
         'Unit color'
@@ -229,17 +230,15 @@ describe('Admin Units Page', () => {
         await expect(scopeIsDone(initialScope)).resolves.toBe(true);
       });
 
-      await waitFor(() => screen.getByText('Unit #2'));
+      await screen.findByText('Unit #2');
 
-      act(() => {
-        fireEvent.click(screen.getByTestId(`delete-element-${units[1].id}`));
-      });
+      fireEvent.click(screen.getByTestId(`delete-element-${units[1].id}`));
 
       await act(async () => {
         await scopeIsDone(deletionScope);
       });
 
-      await waitFor(() => screen.getByText('Unit #1'));
+      await screen.findByText('Unit #1');
 
       expect(screen.queryByText('Unit #2')).toBeNull();
     });

@@ -1,4 +1,4 @@
-import { renderHook, act } from '@testing-library/react-hooks/dom';
+import { renderHook } from '@testing-library/react-hooks/dom';
 import nock from 'nock';
 import { UserResponse } from '@booking/types';
 
@@ -50,14 +50,12 @@ describe('User-User', () => {
         .get('/api/user')
         .reply(401, { status: 'error' });
 
-      await act(async () => {
-        const hook = renderHook(() => useUser());
+      const view = renderHook(() => useUser());
 
-        await hook.waitForNextUpdate();
+      await view.waitForNextUpdate();
 
-        expect(scope.isDone()).toBe(true);
-        expect(hook.result.current).toBeNull();
-      });
+      expect(scope.isDone()).toBe(true);
+      expect(view.result.current).toBeNull();
     });
   });
 
@@ -71,14 +69,12 @@ describe('User-User', () => {
         .get('/api/user')
         .reply(200, { status: 'ok', payload: user });
 
-      await act(async () => {
-        const hook = renderHook(() => useUser());
+      const view = renderHook(() => useUser());
 
-        await hook.waitForNextUpdate();
+      await view.waitForNextUpdate();
 
-        expect(scope.isDone()).toBe(true);
-        expect(hook.result.current).toEqual(user);
-      });
+      expect(scope.isDone()).toBe(true);
+      expect(view.result.current).toEqual(user);
     });
   });
 });

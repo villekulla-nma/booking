@@ -98,7 +98,7 @@ describe('Admin Users Page', () => {
         await expect(scopeIsDone(scope)).resolves.toBe(true);
       });
 
-      await waitFor(() => screen.getByText('Person1 One'));
+      await screen.findByText('Person1 One');
       screen.getByText('Person2 Two');
     });
   });
@@ -163,6 +163,7 @@ describe('Admin Users Page', () => {
       });
 
       fireEvent.click(
+        // eslint-disable-next-line testing-library/no-node-access
         screen.getByText('Absenden').closest('button') as Element
       );
 
@@ -207,7 +208,7 @@ describe('Admin Users Page', () => {
         await expect(scopeIsDone(initialScope)).resolves.toBe(true);
       });
 
-      await waitFor(() => screen.getByText(fullName));
+      await screen.findByText(fullName);
 
       fireEvent.click(screen.getByTestId(`delete-element-${userThree.id}`));
 
