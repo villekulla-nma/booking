@@ -1,4 +1,4 @@
-import type { FC } from 'react';
+import type { FC, PropsWithChildren } from 'react';
 import { Router } from 'react-router-dom';
 import type { History } from 'history';
 import {
@@ -13,7 +13,7 @@ import { initializeIcons } from '@uifabric/icons';
 import { ErrorBoundary } from '../error-boundary';
 
 jest.mock('../layout.tsx', () => {
-  const Layout: FC = ({ children }) => <>{children}</>;
+  const Layout: FC<PropsWithChildren> = ({ children }) => <>{children}</>;
   return { Layout };
 });
 

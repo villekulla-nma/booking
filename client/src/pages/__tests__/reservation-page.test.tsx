@@ -1,4 +1,4 @@
-import type { FC } from 'react';
+import type { FC, PropsWithChildren } from 'react';
 import nock from 'nock';
 import {
   render,
@@ -26,7 +26,7 @@ const DATE_REGEXP =
   /^(?:Mo|Di|Mi|Do|Fr|Sa|So),\s\d+\.\s(?:Januar|Februar|März|April|Mai|Juni|Juli|August|September|Oktober|November|Dezember)\s\d{4}$/;
 
 jest.mock('../../components/layout.tsx', () => {
-  const Layout: FC = ({ children }) => <>{children}</>;
+  const Layout: FC<PropsWithChildren> = ({ children }) => <>{children}</>;
   return { Layout };
 });
 

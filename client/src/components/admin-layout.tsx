@@ -1,4 +1,4 @@
-import type { FC, ReactNode } from 'react';
+import type { FC, PropsWithChildren, HTMLAttributes, ReactNode } from 'react';
 import { memo } from 'react';
 import { Link, useRouteMatch } from 'react-router-dom';
 import { Stack, Text, Link as A, NeutralColors } from '@fluentui/react';
@@ -61,7 +61,12 @@ const renderLink = (
   </Text>
 );
 
-export const AdminLayout: FC = memo(({ children }) => {
+const StackRoot: FC<PropsWithChildren<HTMLAttributes<HTMLElement>>> = ({
+  children,
+  ...props
+}) => <nav {...props}>{children}</nav>;
+
+export const AdminLayout: FC<PropsWithChildren> = memo(({ children }) => {
   const match = useRouteMatch<Section>({
     path: '/admin/:section',
   });
@@ -70,7 +75,10 @@ export const AdminLayout: FC = memo(({ children }) => {
     <Stack>
       <Stack
         horizontal={true}
-        as="nav"
+        // TODO: remove ignore-directive as soon as all React typings are on version 18
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        as={StackRoot}
         tokens={navTokens}
         className={navStyles}
       >

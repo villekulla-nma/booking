@@ -1,4 +1,4 @@
-import type { FC } from 'react';
+import type { FC, PropsWithChildren } from 'react';
 import { ErrorBoundary as ErrorBoundaryComp } from 'react-error-boundary';
 import type { FallbackProps } from 'react-error-boundary';
 import { Text, Link as A, Stack } from '@fluentui/react';
@@ -65,7 +65,7 @@ const Fallback: FC<FallbackProps> = ({ error, resetErrorBoundary }) => {
   );
 };
 
-export const ErrorBoundary: FC = ({ children }) => {
+export const ErrorBoundary: FC<PropsWithChildren> = ({ children }) => {
   return (
     <ErrorBoundaryComp FallbackComponent={Fallback}>
       {children}

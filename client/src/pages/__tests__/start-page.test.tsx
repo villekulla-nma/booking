@@ -1,4 +1,4 @@
-import type { FC } from 'react';
+import type { FC, PropsWithChildren } from 'react';
 import nock from 'nock';
 import { render, screen, waitFor } from '@testing-library/react';
 import { MemoryRouter as Router, Route, Switch } from 'react-router-dom';
@@ -13,7 +13,7 @@ import { waitFor as customWaitFor } from '../../helpers/wait-for';
 jest.mock('../../hooks/use-user-context');
 
 jest.mock('../../components/layout.tsx', () => {
-  const Layout: FC = ({ children }) => <>{children}</>;
+  const Layout: FC<PropsWithChildren> = ({ children }) => <>{children}</>;
   return { Layout };
 });
 
