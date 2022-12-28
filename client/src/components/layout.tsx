@@ -1,4 +1,4 @@
-import type { FC } from 'react';
+import type { FC, PropsWithChildren } from 'react';
 import { memo } from 'react';
 import { Stack, NeutralColors, Text, Link } from '@fluentui/react';
 import type { IStackTokens } from '@fluentui/react';
@@ -30,33 +30,35 @@ const footer = mergeStyles({
   fontSize: '14px',
 });
 
-export const Layout: FC<Props> = memo(({ children, onHomeClick }) => (
-  <Stack className={styles}>
-    <MainHeader onHomeClick={onHomeClick} />
-    <Stack as="main" grow={1}>
-      {children}
-    </Stack>
-    <Stack.Item>
-      <Stack
-        as="footer"
-        horizontal={true}
-        tokens={footerTokens}
-        className={footer}
-      >
-        <Text variant="medium">{new Date().getFullYear()}</Text>
-        <Text variant="medium">&middot;</Text>
-        <Text variant="medium">Emanuel Kluge</Text>
-        <Text variant="medium">&middot;</Text>
-        <Text variant="medium">
-          <Link
-            href="https://github.com/villekulla-nma/booking"
-            target="_blank"
-            rel="noreferrer"
-          >
-            Source
-          </Link>
-        </Text>
+export const Layout: FC<PropsWithChildren<Props>> = memo(
+  ({ children, onHomeClick }) => (
+    <Stack className={styles}>
+      <MainHeader onHomeClick={onHomeClick} />
+      <Stack as="main" grow={1}>
+        {children}
       </Stack>
-    </Stack.Item>
-  </Stack>
-));
+      <Stack.Item>
+        <Stack
+          as="footer"
+          horizontal={true}
+          tokens={footerTokens}
+          className={footer}
+        >
+          <Text variant="medium">{new Date().getFullYear()}</Text>
+          <Text variant="medium">&middot;</Text>
+          <Text variant="medium">Emanuel Kluge</Text>
+          <Text variant="medium">&middot;</Text>
+          <Text variant="medium">
+            <Link
+              href="https://github.com/villekulla-nma/booking"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Source
+            </Link>
+          </Text>
+        </Stack>
+      </Stack.Item>
+    </Stack>
+  )
+);

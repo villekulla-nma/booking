@@ -1,4 +1,4 @@
-import type { FC, FormEvent } from 'react';
+import type { FC, PropsWithChildren, FormEvent } from 'react';
 import { memo } from 'react';
 import {
   Stack,
@@ -37,7 +37,7 @@ const buttonGroupTokens: IStackTokens = {
   childrenGap: 16,
 };
 
-export const Form: FC<Props> = memo(
+export const Form: FC<PropsWithChildren<Props>> = memo(
   ({
     children,
     onSubmit,

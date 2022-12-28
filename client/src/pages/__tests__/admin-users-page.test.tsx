@@ -1,4 +1,4 @@
-import type { FC } from 'react';
+import type { FC, PropsWithChildren } from 'react';
 import { MemoryRouter as Router } from 'react-router-dom';
 import {
   render,
@@ -20,12 +20,12 @@ jest.mock('../../hooks/use-user-context');
 jest.mock('../../helpers/inquire-confirmation');
 
 jest.mock('../../components/layout.tsx', () => {
-  const Layout: FC = ({ children }) => <>{children}</>;
+  const Layout: FC<PropsWithChildren> = ({ children }) => <>{children}</>;
   return { Layout };
 });
 
 jest.mock('../../components/admin-layout.tsx', () => {
-  const AdminLayout: FC = ({ children }) => <>{children}</>;
+  const AdminLayout: FC<PropsWithChildren> = ({ children }) => <>{children}</>;
   return { AdminLayout };
 });
 

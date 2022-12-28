@@ -1,5 +1,5 @@
 import { StrictMode } from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import type { RouteProps } from 'react-router-dom';
 import { initializeIcons } from '@uifabric/icons';
@@ -126,7 +126,10 @@ const theme = loadTheme({
   },
 });
 
-ReactDOM.render(
+// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+const root = createRoot(document.getElementById('root')!);
+
+root.render(
   <StrictMode>
     <Router basename="app">
       <ErrorBoundary>
@@ -148,6 +151,5 @@ ReactDOM.render(
         </UserProvider>
       </ErrorBoundary>
     </Router>
-  </StrictMode>,
-  document.getElementById('root')
+  </StrictMode>
 );

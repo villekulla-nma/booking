@@ -1,4 +1,4 @@
-import type { FC } from 'react';
+import type { FC, PropsWithChildren } from 'react';
 import { render, screen } from '@testing-library/react';
 import { MemoryRouter as Router, Switch, Route } from 'react-router-dom';
 import { initializeIcons } from '@uifabric/icons';
@@ -6,7 +6,7 @@ import { initializeIcons } from '@uifabric/icons';
 import { NotFoundPage } from '../not-found-page';
 
 jest.mock('../../components/layout.tsx', () => {
-  const Layout: FC = ({ children }) => <>{children}</>;
+  const Layout: FC<PropsWithChildren> = ({ children }) => <>{children}</>;
   return { Layout };
 });
 
