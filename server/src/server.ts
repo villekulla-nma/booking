@@ -63,7 +63,7 @@ export const initServer = async (
 
   routes.forEach(([route, handler]) => handler(route, server, db));
 
-  await server.listen(port || env('PORT') || '3000');
+  await server.listen({ port: Number(port || env('PORT') || '3000') });
 
   return server;
 };
