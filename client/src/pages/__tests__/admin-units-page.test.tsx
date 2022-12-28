@@ -165,7 +165,7 @@ describe('Admin Units Page', () => {
       );
 
       await act(async () => {
-        await expect(scopeIsDone(initialScope)).resolves.toBe(true);
+        await expect(scopeIsDone(initialScope, 300)).resolves.toBe(true);
       });
 
       const editButton = await waitFor(
@@ -186,7 +186,7 @@ describe('Admin Units Page', () => {
       fireEvent.click(screen.getByText('Absenden'));
 
       await act(async () => {
-        await expect(scopeIsDone(updateScope)).resolves.toBe(true);
+        await expect(scopeIsDone(updateScope, 300)).resolves.toBe(true);
       });
 
       await waitFor(() => screen.getByText(newName));
