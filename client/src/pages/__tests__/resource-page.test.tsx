@@ -94,6 +94,8 @@ describe('Resource Page', () => {
     const date = new Date(Date.now() + 24 * 3600 * 1000);
     const [tomorrow] = date.toISOString().split('T');
     const [year] = date.toISOString().split('-');
+    // Get a valid result in the last week of the year, too...
+    const partialEndYear = year.substring(0, 3);
     let scope: nock.Scope;
 
     beforeEach(() => {
@@ -102,7 +104,7 @@ describe('Resource Page', () => {
         .query(
           ({ start, end, timeZone, ...rest }) =>
             (start as string).startsWith(year) &&
-            (end as string).startsWith(year) &&
+            (end as string).startsWith(partialEndYear) &&
             (timeZone as string).length > 0 &&
             Object.keys(rest).length === 0
         )
