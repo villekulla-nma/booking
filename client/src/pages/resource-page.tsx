@@ -1,12 +1,13 @@
 import { useState, useRef } from 'react';
 import type { FC, RefObject } from 'react';
-import FullCalendar, { BASE_OPTION_DEFAULTS } from '@fullcalendar/react';
 import type {
   DateSelectArg,
   EventSourceInput,
   EventClickArg,
   EventInput,
-} from '@fullcalendar/react';
+} from '@fullcalendar/core';
+import { BASE_OPTION_DEFAULTS } from '@fullcalendar/core/internal';
+import FullCalendar from '@fullcalendar/react';
 import locale from '@fullcalendar/core/locales/de';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
