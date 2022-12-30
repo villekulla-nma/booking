@@ -1,3 +1,4 @@
+import { vi, type Mock } from 'vitest';
 import type { FC, PropsWithChildren } from 'react';
 import {
   render,
@@ -15,15 +16,15 @@ import { AdminUnitsPage } from '../admin-units-page';
 import { inquireConfirmation } from '../../helpers/inquire-confirmation';
 import { MemoryRouterShim as Router } from '../../components/router-shim';
 
-jest.mock('../../hooks/use-user-context');
-jest.mock('../../helpers/inquire-confirmation');
+vi.mock('../../hooks/use-user-context');
+vi.mock('../../helpers/inquire-confirmation');
 
-jest.mock('../../components/layout.tsx', () => {
+vi.mock('../../components/layout.tsx', () => {
   const Layout: FC<PropsWithChildren> = ({ children }) => <>{children}</>;
   return { Layout };
 });
 
-jest.mock('../../components/admin-layout.tsx', () => {
+vi.mock('../../components/admin-layout.tsx', () => {
   const AdminLayout: FC<PropsWithChildren> = ({ children }) => <>{children}</>;
   return { AdminLayout };
 });
@@ -67,7 +68,7 @@ describe('Admin Units Page', () => {
 
   describe('basic behaviour', () => {
     it('should render list of units', async () => {
-      (useUserContext as jest.Mock).mockReturnValue(user);
+      (useUserContext as Mock).mockReturnValue(user);
 
       const scope = nock('http://localhost')
         .get('/api/units')
@@ -90,7 +91,7 @@ describe('Admin Units Page', () => {
 
   describe('adding a unit', () => {
     it('should create a new unit', async () => {
-      (useUserContext as jest.Mock).mockReturnValue(user);
+      (useUserContext as Mock).mockReturnValue(user);
 
       const initialScope = nock('http://localhost')
         .get('/api/units')
@@ -136,7 +137,7 @@ describe('Admin Units Page', () => {
 
   describe('editing a unit', () => {
     it('should update unit #2', async () => {
-      (useUserContext as jest.Mock).mockReturnValue(user);
+      (useUserContext as Mock).mockReturnValue(user);
 
       const newName = 'Awesome Unit #2';
       const newColor = '#ffff00';
@@ -206,8 +207,8 @@ describe('Admin Units Page', () => {
 
   describe('deleting a unit', () => {
     it('should delete unit #2', async () => {
-      (useUserContext as jest.Mock).mockReturnValue(user);
-      (inquireConfirmation as jest.Mock).mockReturnValue(true);
+      (useUserContext as Mock).mockReturnValue(user);
+      (inquireConfirmation as Mock).mockReturnValue(true);
 
       const initialScope = nock('http://localhost')
         .get('/api/units')

@@ -1,3 +1,4 @@
+import { vi, type Mock } from 'vitest';
 import type { FC, PropsWithChildren } from 'react';
 import { Switch, Route } from 'react-router-dom';
 import {
@@ -16,14 +17,14 @@ import { useUserContext } from '../../hooks/use-user-context';
 import { AdminUsersCreatePage } from '../admin-users-create-page';
 import { MemoryRouterShim as Router } from '../../components/router-shim';
 
-jest.mock('../../hooks/use-user-context');
+vi.mock('../../hooks/use-user-context');
 
-jest.mock('../../components/layout.tsx', () => {
+vi.mock('../../components/layout.tsx', () => {
   const Layout: FC<PropsWithChildren> = ({ children }) => <>{children}</>;
   return { Layout };
 });
 
-jest.mock('../../components/admin-layout.tsx', () => {
+vi.mock('../../components/admin-layout.tsx', () => {
   const AdminLayout: FC<PropsWithChildren> = ({ children }) => <>{children}</>;
   return { AdminLayout };
 });
@@ -71,7 +72,7 @@ describe('Admin Users Create Page', () => {
 
   describe('aborting creation', () => {
     it('should navigate back to users page', async () => {
-      (useUserContext as jest.Mock).mockReturnValue(user);
+      (useUserContext as Mock).mockReturnValue(user);
 
       let pathname = '';
       const scope = nock('http://localhost')
@@ -108,7 +109,7 @@ describe('Admin Users Create Page', () => {
 
   describe('adding a user', () => {
     it('should create a new user', async () => {
-      (useUserContext as jest.Mock).mockReturnValue(user);
+      (useUserContext as Mock).mockReturnValue(user);
 
       let pathname = '';
       const initialScope = nock('http://localhost')

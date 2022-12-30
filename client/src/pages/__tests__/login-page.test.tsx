@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import type { FC, PropsWithChildren } from 'react';
 import nock from 'nock';
 import { render, screen, fireEvent } from '@testing-library/react';
@@ -10,13 +11,13 @@ import { scopeIsDone } from '../../helpers/nock';
 import { sleep } from '../../helpers/sleep';
 import { MemoryRouterShim as Router } from '../../components/router-shim';
 
-jest.mock('../../components/layout.tsx', () => {
+vi.mock('../../components/layout.tsx', () => {
   const Layout: FC<PropsWithChildren> = ({ children }) => <>{children}</>;
   return { Layout };
 });
 
-jest.mock('../../helpers/location', () => ({
-  redirect: jest.fn(),
+vi.mock('../../helpers/location', () => ({
+  redirect: vi.fn(),
 }));
 
 describe('Resource Page', () => {

@@ -1,4 +1,5 @@
 import nock from 'nock';
+import { vi, type Mock } from 'vitest';
 import { Route, Switch } from 'react-router-dom';
 import type { Location } from 'history';
 import {
@@ -19,14 +20,14 @@ import { scopeIsDone } from '../../helpers/nock';
 import { waitFor as customWaitFor } from '../../helpers/wait-for';
 import { MemoryRouterShim as Router } from '../router-shim';
 
-jest.mock('../../hooks/use-user-context');
+vi.mock('../../hooks/use-user-context');
 
-jest.mock('../../helpers/location', () => ({
-  reload: jest.fn(),
+vi.mock('../../helpers/location', () => ({
+  reload: vi.fn(),
 }));
 
-jest.mock('../../hooks/use-media-query', () => ({
-  useMediaQuery: jest.fn(),
+vi.mock('../../hooks/use-media-query', () => ({
+  useMediaQuery: vi.fn(),
 }));
 
 describe('Main-Header', () => {
@@ -50,7 +51,7 @@ describe('Main-Header', () => {
 
   describe('invalid session', () => {
     it('should redirect to the login page', async () => {
-      (useUserContext as jest.Mock).mockReturnValue(user);
+      (useUserContext as Mock).mockReturnValue(user);
 
       const currentPagePath = '/';
       const scope = nock('http://localhost')
@@ -89,9 +90,9 @@ describe('Main-Header', () => {
   });
 
   describe('logged-in', () => {
-    it('should display resource (Desktop)', async () => {
-      (useMediaQuery as jest.Mock).mockReturnValue(true);
-      (useUserContext as jest.Mock).mockReturnValue(user);
+    it('should display resources (Desktop)', async () => {
+      (useMediaQuery as Mock).mockReturnValue(true);
+      (useUserContext as Mock).mockReturnValue(user);
 
       const scope = nock('http://localhost')
         .get('/api/resources')
@@ -120,9 +121,9 @@ describe('Main-Header', () => {
       expect(scope.isDone()).toBe(true);
     });
 
-    it('should display resource (Mobile)', async () => {
-      (useMediaQuery as jest.Mock).mockReturnValue(false);
-      (useUserContext as jest.Mock).mockReturnValue(user);
+    it('should display resources (Mobile)', async () => {
+      (useMediaQuery as Mock).mockReturnValue(false);
+      (useUserContext as Mock).mockReturnValue(user);
 
       const scope = nock('http://localhost')
         .get('/api/resources')
@@ -161,8 +162,8 @@ describe('Main-Header', () => {
     });
 
     it('should log out the user', async () => {
-      (useMediaQuery as jest.Mock).mockReturnValue(true);
-      (useUserContext as jest.Mock).mockReturnValue(user);
+      (useMediaQuery as Mock).mockReturnValue(true);
+      (useUserContext as Mock).mockReturnValue(user);
 
       const scope = nock('http://localhost')
         .get('/api/resources')
@@ -208,8 +209,8 @@ describe('Main-Header', () => {
 
   describe('admin user', () => {
     it('should display a link to the admin area', async () => {
-      (useMediaQuery as jest.Mock).mockReturnValue(false);
-      (useUserContext as jest.Mock).mockReturnValue({ ...user, role: 'admin' });
+      (useMediaQuery as Mock).mockReturnValue(false);
+      (useUserContext as Mock).mockReturnValue({ ...user, role: 'admin' });
 
       const scope = nock('http://localhost').get('/api/resources').reply(200, {
         status: 'ok',
@@ -233,8 +234,8 @@ describe('Main-Header', () => {
 
   describe('logged-out', () => {
     it('should not display the logout button', async () => {
-      (useMediaQuery as jest.Mock).mockReturnValue(true);
-      (useUserContext as jest.Mock).mockReturnValue(null);
+      (useMediaQuery as Mock).mockReturnValue(true);
+      (useUserContext as Mock).mockReturnValue(null);
 
       render(<MainHeader />, {
         wrapper: ({ children: c }) => <Router>{c}</Router>,
@@ -248,8 +249,8 @@ describe('Main-Header', () => {
     });
 
     it('should not display the hamburger when there are no resources', async () => {
-      (useMediaQuery as jest.Mock).mockReturnValue(false);
-      (useUserContext as jest.Mock).mockReturnValue(null);
+      (useMediaQuery as Mock).mockReturnValue(false);
+      (useUserContext as Mock).mockReturnValue(null);
 
       render(<MainHeader />, {
         wrapper: ({ children: c }) => <Router>{c}</Router>,

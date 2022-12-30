@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import type { FC, PropsWithChildren } from 'react';
 import nock from 'nock';
 import { render, screen, fireEvent } from '@testing-library/react';
@@ -7,7 +8,7 @@ import { initializeIcons } from '@uifabric/icons';
 import { PasswordResetPage } from '../password-reset-page';
 import { MemoryRouterShim as Router } from '../../components/router-shim';
 
-jest.mock('../../components/layout.tsx', () => {
+vi.mock('../../components/layout.tsx', () => {
   const Layout: FC<PropsWithChildren> = ({ children }) => <>{children}</>;
   return { Layout };
 });

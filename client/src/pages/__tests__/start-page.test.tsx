@@ -1,3 +1,4 @@
+import { vi, type Mock } from 'vitest';
 import type { FC, PropsWithChildren } from 'react';
 import nock from 'nock';
 import { render, screen } from '@testing-library/react';
@@ -11,9 +12,9 @@ import { scopeIsDone } from '../../helpers/nock';
 import { waitFor as customWaitFor } from '../../helpers/wait-for';
 import { MemoryRouterShim as Router } from '../../components/router-shim';
 
-jest.mock('../../hooks/use-user-context');
+vi.mock('../../hooks/use-user-context');
 
-jest.mock('../../components/layout.tsx', () => {
+vi.mock('../../components/layout.tsx', () => {
   const Layout: FC<PropsWithChildren> = ({ children }) => <>{children}</>;
   return { Layout };
 });
@@ -39,7 +40,7 @@ describe('Start Page', () => {
 
   describe('invalid session', () => {
     it('should redirect to the login page', async () => {
-      (useUserContext as jest.Mock).mockReturnValue(user);
+      (useUserContext as Mock).mockReturnValue(user);
 
       let pathname = '';
       let from: string | undefined;
@@ -74,7 +75,7 @@ describe('Start Page', () => {
 
   describe('No upcoming events', () => {
     it('should not display any events', async () => {
-      (useUserContext as jest.Mock).mockReturnValue(user);
+      (useUserContext as Mock).mockReturnValue(user);
 
       const scope = nock('http://localhost')
         .get('/api/user/events')
@@ -95,7 +96,7 @@ describe('Start Page', () => {
 
   describe('Some upcoming events', () => {
     it('should display events', async () => {
-      (useUserContext as jest.Mock).mockReturnValue(user);
+      (useUserContext as Mock).mockReturnValue(user);
 
       const [today] = new Date().toISOString().split('T');
       const scope = nock('http://localhost')
