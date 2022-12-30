@@ -1,6 +1,6 @@
 {
   "name": "@booking/client",
-  "version": "0.6.2",
+  "version": "0.6.3",
   "author": "Emanuel Kluge (https://emanuel-kluge.de/)",
   "license": "MIT",
   "type": "module",
@@ -19,7 +19,11 @@
       "plugin:prettier/recommended"
     ],
     "parser": "@typescript-eslint/parser",
-    "plugins": ["react", "jsx-a11y", "react-hooks"],
+    "plugins": [
+      "react",
+      "jsx-a11y",
+      "react-hooks"
+    ],
     "env": {
       "browser": true,
       "es6": true,
@@ -33,10 +37,16 @@
         "version": "detect"
       }
     },
-    "overrides": [{
-      "files": ["src/**/__tests__/*.ts?(x)"],
-      "plugins": ["testing-library"]
-    }],
+    "overrides": [
+      {
+        "files": [
+          "src/**/__tests__/*.ts?(x)"
+        ],
+        "plugins": [
+          "testing-library"
+        ]
+      }
+    ],
     "rules": {
       "@typescript-eslint/no-unused-vars": [
         "error",
@@ -67,7 +77,7 @@
     "react-router-dom": "5.3.4"
   },
   "devDependencies": {
-    "@booking/types": "0.6.1",
+    "@booking/types": "0.6.3",
     "@testing-library/jest-dom": "5.16.5",
     "@testing-library/react": "13.4.0",
     "@testing-library/react-hooks": "8.0.1",
@@ -82,8 +92,8 @@
     "cross-fetch": "3.1.5",
     "eslint": "8.30.0",
     "eslint-config-prettier": "8.5.0",
-    "eslint-plugin-prettier": "4.2.1",
     "eslint-plugin-jsx-a11y": "6.6.1",
+    "eslint-plugin-prettier": "4.2.1",
     "eslint-plugin-react": "7.31.11",
     "eslint-plugin-react-hooks": "4.6.0",
     "eslint-plugin-testing-library": "5.9.1",
