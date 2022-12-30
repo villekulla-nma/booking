@@ -1,3 +1,4 @@
+import { vi, type Mock } from 'vitest';
 import type { FC, PropsWithChildren } from 'react';
 import {
   render,
@@ -16,15 +17,15 @@ import { inquireConfirmation } from '../../helpers/inquire-confirmation';
 import { sleep } from '../../helpers/sleep';
 import { MemoryRouterShim as Router } from '../../components/router-shim';
 
-jest.mock('../../hooks/use-user-context');
-jest.mock('../../helpers/inquire-confirmation');
+vi.mock('../../hooks/use-user-context');
+vi.mock('../../helpers/inquire-confirmation');
 
-jest.mock('../../components/layout.tsx', () => {
+vi.mock('../../components/layout.tsx', () => {
   const Layout: FC<PropsWithChildren> = ({ children }) => <>{children}</>;
   return { Layout };
 });
 
-jest.mock('../../components/admin-layout.tsx', () => {
+vi.mock('../../components/admin-layout.tsx', () => {
   const AdminLayout: FC<PropsWithChildren> = ({ children }) => <>{children}</>;
   return { AdminLayout };
 });
@@ -82,7 +83,7 @@ describe('Admin Users Page', () => {
 
   describe('basic behaviour', () => {
     it('should render list of users', async () => {
-      (useUserContext as jest.Mock).mockReturnValue(userTwo);
+      (useUserContext as Mock).mockReturnValue(userTwo);
 
       const scope = nock('http://localhost')
         .get('/api/users')
@@ -105,7 +106,7 @@ describe('Admin Users Page', () => {
 
   describe('updating a user', () => {
     it('should update an existing user', async () => {
-      (useUserContext as jest.Mock).mockReturnValue(userTwo);
+      (useUserContext as Mock).mockReturnValue(userTwo);
 
       const newFirstName = 'Persona Uno';
       const initialScope = nock('http://localhost')
@@ -183,8 +184,8 @@ describe('Admin Users Page', () => {
 
   describe('deleting a user', () => {
     it('should delete user three', async () => {
-      (useUserContext as jest.Mock).mockReturnValue(userTwo);
-      (inquireConfirmation as jest.Mock).mockReturnValue(true);
+      (useUserContext as Mock).mockReturnValue(userTwo);
+      (inquireConfirmation as Mock).mockReturnValue(true);
 
       const fullName = `${userThree.firstName} ${userThree.lastName}`;
       const initialScope = nock('http://localhost')

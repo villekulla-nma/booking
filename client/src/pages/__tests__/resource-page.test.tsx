@@ -1,4 +1,10 @@
-import type { FC, PropsWithChildren } from 'react';
+import { vi, type Mock } from 'vitest';
+import {
+  createElement,
+  useEffect,
+  type FC,
+  type PropsWithChildren,
+} from 'react';
 import nock from 'nock';
 import { render, screen, act } from '@testing-library/react';
 import { Route, Switch } from 'react-router-dom';
@@ -12,9 +18,8 @@ import { waitFor as customWaitFor } from '../../helpers/wait-for';
 import { MemoryRouterShim as Router } from '../../components/router-shim';
 
 // TODO: remove @fullcalendar mocks as soon as the test runner natively supports ESM
-jest.mock('@fullcalendar/react', () => {
-  const { createElement, useEffect } = jest.requireActual('react');
-  return (
+vi.mock('@fullcalendar/react', () => {
+  const FullCalendarMock = (
     props: Record<string, unknown> & {
       eventSources: Array<{ events: (info: Record<string, unknown>) => void }>;
     }
@@ -29,22 +34,24 @@ jest.mock('@fullcalendar/react', () => {
     }, [props.events]);
     return createElement('div', props);
   };
+
+  return { default: FullCalendarMock };
 });
-jest.mock('@fullcalendar/core/internal', () => ({
+vi.mock('@fullcalendar/core/internal', () => ({
   BASE_OPTION_DEFAULTS: { aspectRatio: 1 },
 }));
-jest.mock('@fullcalendar/core/locales/de', () => ({ default: { de: '' } }));
-jest.mock('@fullcalendar/daygrid');
-jest.mock('@fullcalendar/timegrid');
-jest.mock('@fullcalendar/interaction');
+vi.mock('@fullcalendar/core/locales/de', () => ({ default: { de: '' } }));
+vi.mock('@fullcalendar/daygrid');
+vi.mock('@fullcalendar/timegrid');
+vi.mock('@fullcalendar/interaction');
 
-jest.mock('../../components/layout.tsx', () => {
+vi.mock('../../components/layout.tsx', () => {
   const Layout: FC<PropsWithChildren> = ({ children }) => <>{children}</>;
   return { Layout };
 });
 
-jest.mock('../../hooks/use-media-query', () => ({
-  useMediaQuery: jest.fn(),
+vi.mock('../../hooks/use-media-query', () => ({
+  useMediaQuery: vi.fn(),
 }));
 
 describe('Resource Page', () => {
@@ -140,8 +147,8 @@ describe('Resource Page', () => {
     });
 
     // TODO: enable again as soon as @fullcalendar isn't mocked anymore
-    xit('should show a caption on small screens', async () => {
-      (useMediaQuery as jest.Mock).mockReturnValue(false);
+    it.skip('should show a caption on small screens', async () => {
+      (useMediaQuery as Mock).mockReturnValue(false);
 
       render(
         <Router initialEntries={[`/resources/${resourceId}/week/${tomorrow}`]}>
@@ -159,8 +166,8 @@ describe('Resource Page', () => {
     });
 
     // TODO: enable again as soon as @fullcalendar isn't mocked anymore
-    xit('should not show a caption on small screens', async () => {
-      (useMediaQuery as jest.Mock).mockReturnValue(true);
+    it.skip('should not show a caption on small screens', async () => {
+      (useMediaQuery as Mock).mockReturnValue(true);
 
       render(
         <Router initialEntries={[`/resources/${resourceId}/week/${tomorrow}`]}>

@@ -1,3 +1,4 @@
+import { vi, type Mock } from 'vitest';
 import type { FC, PropsWithChildren } from 'react';
 import nock from 'nock';
 import { render, screen, fireEvent } from '@testing-library/react';
@@ -14,19 +15,19 @@ import { waitFor as customWaitFor } from '../../helpers/wait-for';
 import { sleep } from '../../helpers/sleep';
 import { MemoryRouterShim as Router } from '../../components/router-shim';
 
-jest.mock('../../hooks/use-user-context');
+vi.mock('../../hooks/use-user-context');
 
-jest.mock('../../components/layout.tsx', () => {
+vi.mock('../../components/layout.tsx', () => {
   const Layout: FC<PropsWithChildren> = ({ children }) => <>{children}</>;
   return { Layout };
 });
 
-jest.mock('../../helpers/inquire-confirmation', () => ({
-  inquireConfirmation: jest.fn(),
+vi.mock('../../helpers/inquire-confirmation', () => ({
+  inquireConfirmation: vi.fn(),
 }));
 
-jest.mock('../../hooks/use-media-query', () => ({
-  useMediaQuery: jest.fn(),
+vi.mock('../../hooks/use-media-query', () => ({
+  useMediaQuery: vi.fn(),
 }));
 
 const getDateAhead = (days = 1): string | undefined =>
@@ -111,8 +112,8 @@ describe('Event Page', () => {
     ])(
       'should display the event details (%s)',
       async (duration, start, end) => {
-        (useMediaQuery as jest.Mock).mockReturnValue(true);
-        (useUserContext as jest.Mock).mockReturnValue(user);
+        (useMediaQuery as Mock).mockReturnValue(true);
+        (useUserContext as Mock).mockReturnValue(user);
 
         const eventId = 'dsgw46hrds';
         const event = {
@@ -147,13 +148,13 @@ describe('Event Page', () => {
 
   describe(`user's own event`, () => {
     beforeAll(() => {
-      jest.spyOn(window, 'alert');
+      vi.spyOn(window, 'alert');
     });
 
     it('should display the event & delete it', async () => {
-      (inquireConfirmation as jest.Mock).mockReturnValue(true);
-      (useMediaQuery as jest.Mock).mockReturnValue(true);
-      (useUserContext as jest.Mock).mockReturnValue(user);
+      (inquireConfirmation as Mock).mockReturnValue(true);
+      (useMediaQuery as Mock).mockReturnValue(true);
+      (useUserContext as Mock).mockReturnValue(user);
 
       const startDate = getDateAhead();
       const endDate = getDateAhead(3);
@@ -212,8 +213,8 @@ describe('Event Page', () => {
 
   describe('Deletion restrictions', () => {
     it('should not enable deletion of past events', async () => {
-      (useMediaQuery as jest.Mock).mockReturnValue(true);
-      (useUserContext as jest.Mock).mockReturnValue(user);
+      (useMediaQuery as Mock).mockReturnValue(true);
+      (useUserContext as Mock).mockReturnValue(user);
 
       const eventId = 'dsgw46hrds';
       const event = {
@@ -243,8 +244,8 @@ describe('Event Page', () => {
     });
 
     it('should not enable deletion of other users events', async () => {
-      (useMediaQuery as jest.Mock).mockReturnValue(true);
-      (useUserContext as jest.Mock).mockReturnValue(user);
+      (useMediaQuery as Mock).mockReturnValue(true);
+      (useUserContext as Mock).mockReturnValue(user);
 
       const startDate = getDateAhead();
       const endDate = getDateAhead(3);
@@ -276,8 +277,8 @@ describe('Event Page', () => {
     });
 
     it('should allow deletion by admin', async () => {
-      (useMediaQuery as jest.Mock).mockReturnValue(true);
-      (useUserContext as jest.Mock).mockReturnValue(admin);
+      (useMediaQuery as Mock).mockReturnValue(true);
+      (useUserContext as Mock).mockReturnValue(admin);
 
       const eventId = 'dsgw46hrds';
       const event = {

@@ -1,3 +1,4 @@
+import { vi, type Mock } from 'vitest';
 import type { FC, PropsWithChildren } from 'react';
 import {
   render,
@@ -15,15 +16,15 @@ import { AdminResourcesPage } from '../admin-resources-page';
 import { inquireConfirmation } from '../../helpers/inquire-confirmation';
 import { MemoryRouterShim as Router } from '../../components/router-shim';
 
-jest.mock('../../hooks/use-user-context');
-jest.mock('../../helpers/inquire-confirmation');
+vi.mock('../../hooks/use-user-context');
+vi.mock('../../helpers/inquire-confirmation');
 
-jest.mock('../../components/layout.tsx', () => {
+vi.mock('../../components/layout.tsx', () => {
   const Layout: FC<PropsWithChildren> = ({ children }) => <>{children}</>;
   return { Layout };
 });
 
-jest.mock('../../components/admin-layout.tsx', () => {
+vi.mock('../../components/admin-layout.tsx', () => {
   const AdminLayout: FC<PropsWithChildren> = ({ children }) => <>{children}</>;
   return { AdminLayout };
 });
@@ -64,7 +65,7 @@ describe('Admin Resources Page', () => {
 
   describe('basic behaviour', () => {
     it('should render list of resources', async () => {
-      (useUserContext as jest.Mock).mockReturnValue(user);
+      (useUserContext as Mock).mockReturnValue(user);
 
       const scope = nock('http://localhost')
         .get('/api/resources')
@@ -87,7 +88,7 @@ describe('Admin Resources Page', () => {
 
   describe('adding a resource', () => {
     it('should create a new resource', async () => {
-      (useUserContext as jest.Mock).mockReturnValue(user);
+      (useUserContext as Mock).mockReturnValue(user);
 
       const initialScope = nock('http://localhost')
         .get('/api/resources')
@@ -110,11 +111,11 @@ describe('Admin Resources Page', () => {
       );
 
       await act(async () => {
-        await expect(scopeIsDone(initialScope)).resolves.toBe(true);
+        await scopeIsDone(initialScope);
       });
 
       const createButton = await waitFor(
-        () => screen.getByLabelText(/Create new resource/) as Element
+        () => screen.getByLabelText(/Create new resource/) as HTMLInputElement
       );
 
       expect(screen.queryByText('Resource #3')).toBeNull();
@@ -127,6 +128,7 @@ describe('Admin Resources Page', () => {
       fireEvent.click(screen.getByText('Create').closest('button') as Element);
 
       await act(async () => {
+        expect(creationScope.isDone()).toBe(false);
         await scopeIsDone(creationScope);
       });
 
@@ -136,7 +138,7 @@ describe('Admin Resources Page', () => {
 
   describe('Editing a resource', () => {
     it('should update resource #2', async () => {
-      (useUserContext as jest.Mock).mockReturnValue(user);
+      (useUserContext as Mock).mockReturnValue(user);
 
       const newName = 'Awesome Resource #2';
       const initialScope = nock('http://localhost')
@@ -188,8 +190,8 @@ describe('Admin Resources Page', () => {
 
   describe('deleting a resource', () => {
     it('should delete resource #2', async () => {
-      (useUserContext as jest.Mock).mockReturnValue(user);
-      (inquireConfirmation as jest.Mock).mockReturnValue(true);
+      (useUserContext as Mock).mockReturnValue(user);
+      (inquireConfirmation as Mock).mockReturnValue(true);
 
       const initialScope = nock('http://localhost')
         .get('/api/resources')

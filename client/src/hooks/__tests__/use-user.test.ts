@@ -1,3 +1,4 @@
+import { vi, type Mock } from 'vitest';
 import { renderHook } from '@testing-library/react-hooks/dom';
 import nock from 'nock';
 import { UserResponse } from '@booking/types';
@@ -5,7 +6,7 @@ import { UserResponse } from '@booking/types';
 import { useUser } from '../use-user';
 import { getUser } from '../../api';
 
-jest.mock('../../api');
+vi.mock('../../api');
 
 describe('User-User', () => {
   const user: UserResponse = {
@@ -28,7 +29,7 @@ describe('User-User', () => {
 
   describe('indeterminate', () => {
     it('should return undefined', () => {
-      (getUser as jest.Mock).mockImplementation(() => ({
+      (getUser as Mock).mockImplementation(() => ({
         then: () => undefined,
       }));
 
@@ -42,9 +43,10 @@ describe('User-User', () => {
 
   describe('logged-out', () => {
     it('should return null eventually', async () => {
-      (getUser as jest.Mock).mockImplementation(
-        jest.requireActual('../../api').getUser
-      );
+      const { getUser: mock } = await vi.importActual<{
+        getUser: typeof getUser;
+      }>('../../api');
+      (getUser as Mock).mockImplementation(mock);
 
       const scope = nock('http://localhost')
         .get('/api/user')
@@ -61,9 +63,10 @@ describe('User-User', () => {
 
   describe('logged-in', () => {
     it('should return the user eventually', async () => {
-      (getUser as jest.Mock).mockImplementation(
-        jest.requireActual('../../api').getUser
-      );
+      const { getUser: mock } = await vi.importActual<{
+        getUser: typeof getUser;
+      }>('../../api');
+      (getUser as Mock).mockImplementation(mock);
 
       const scope = nock('http://localhost')
         .get('/api/user')

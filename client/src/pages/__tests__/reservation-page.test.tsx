@@ -1,3 +1,4 @@
+import { vi, type Mock } from 'vitest';
 import type { FC, PropsWithChildren } from 'react';
 import nock from 'nock';
 import { render, screen, fireEvent, act } from '@testing-library/react';
@@ -20,12 +21,12 @@ import { MemoryRouterShim as Router } from '../../components/router-shim';
 const DATE_REGEXP =
   /^(?:Mo|Di|Mi|Do|Fr|Sa|So),\s\d+\.\s(?:Januar|Februar|März|April|Mai|Juni|Juli|August|September|Oktober|November|Dezember)\s\d{4}$/;
 
-jest.mock('../../components/layout.tsx', () => {
+vi.mock('../../components/layout.tsx', () => {
   const Layout: FC<PropsWithChildren> = ({ children }) => <>{children}</>;
   return { Layout };
 });
 
-jest.mock('../../helpers/date');
+vi.mock('../../helpers/date');
 
 describe('Reservation Page', () => {
   initializeIcons();
@@ -35,18 +36,34 @@ describe('Reservation Page', () => {
       nock.disableNetConnect();
     });
 
-    beforeEach(() => {
-      (getDateTimeToday as jest.Mock).mockImplementation(
-        jest.requireActual('../../helpers/date').getDateTimeToday
+    beforeEach(async () => {
+      const { getDateTimeToday: getDateTimeTodayMock } = await vi.importActual<{
+        getDateTimeToday: typeof getDateTimeToday;
+      }>('../../helpers/date');
+      (getDateTimeToday as Mock).mockImplementation(getDateTimeTodayMock);
+
+      const { createRoundedDateString: createRoundedDateStringMock } =
+        await vi.importActual<{
+          createRoundedDateString: typeof createRoundedDateString;
+        }>('../../helpers/date');
+      (createRoundedDateString as Mock).mockImplementation(
+        createRoundedDateStringMock
       );
-      (createRoundedDateString as jest.Mock).mockImplementation(
-        jest.requireActual('../../helpers/date').createRoundedDateString
+
+      const { normalizeCalendarDate: normalizeCalendarDateMock } =
+        await vi.importActual<{
+          normalizeCalendarDate: typeof normalizeCalendarDate;
+        }>('../../helpers/date');
+      (normalizeCalendarDate as Mock).mockImplementation(
+        normalizeCalendarDateMock
       );
-      (normalizeCalendarDate as jest.Mock).mockImplementation(
-        jest.requireActual('../../helpers/date').normalizeCalendarDate
-      );
-      (denormalizeCalendarDate as jest.Mock).mockImplementation(
-        jest.requireActual('../../helpers/date').denormalizeCalendarDate
+
+      const { denormalizeCalendarDate: denormalizeCalendarDateMock } =
+        await vi.importActual<{
+          denormalizeCalendarDate: typeof denormalizeCalendarDate;
+        }>('../../helpers/date');
+      (denormalizeCalendarDate as Mock).mockImplementation(
+        denormalizeCalendarDateMock
       );
     });
 
@@ -58,7 +75,7 @@ describe('Reservation Page', () => {
       it('should redirect to the login page', async () => {
         const resourceId = 'Uj5SAS740';
         const reservationPagePath = `/resources/${resourceId}/create`;
-        const getUserConfirmation = jest.fn();
+        const getUserConfirmation = vi.fn();
         const scope = nock('http://localhost')
           .put(`/api/resources/${resourceId}/events`, () => true)
           .reply(401, { status: 'error' });
@@ -111,7 +128,7 @@ describe('Reservation Page', () => {
         const end = `${tomorrow}T13:30:00.000Z`;
         const state = { allDay: false, start, end };
         const description = 'Some nice event!';
-        const getUserConfirmation = jest.fn();
+        const getUserConfirmation = vi.fn();
         const scope = nock('http://localhost')
           .put(
             `/api/resources/${resourceId}/events`,
@@ -367,7 +384,7 @@ describe('Reservation Page', () => {
         const end = `${tomorrow}T13:30:00.000Z`;
         const state = { allDay: false, start, end };
         const description = 'Some nice event!';
-        const getUserConfirmation = jest.fn().mockReturnValue(false);
+        const getUserConfirmation = vi.fn().mockReturnValue(false);
         let navigatedAway = false;
 
         render(
@@ -411,7 +428,7 @@ describe('Reservation Page', () => {
         const start = `${tomorrow}T09:00:00.000Z`;
         const end = `${tomorrow}T13:30:00.000Z`;
         const state = { allDay: false, start, end };
-        const getUserConfirmation = jest.fn();
+        const getUserConfirmation = vi.fn();
         let newPathname = '';
 
         render(
@@ -446,24 +463,35 @@ describe('Reservation Page', () => {
   });
 
   describe('without given date values', () => {
-    beforeEach(() => {
-      (createRoundedDateString as jest.Mock).mockImplementation(
+    beforeEach(async () => {
+      (createRoundedDateString as Mock).mockImplementation(
         () => '2021-04-18T10:00:00.000Z'
       );
 
-      (getDateTimeToday as jest.Mock).mockImplementation(
-        jest.requireActual('../../helpers/date').getDateTimeToday
+      const { getDateTimeToday: getDateTimeTodayMock } = await vi.importActual<{
+        getDateTimeToday: typeof getDateTimeToday;
+      }>('../../helpers/date');
+      (getDateTimeToday as Mock).mockImplementation(getDateTimeTodayMock);
+
+      const { normalizeCalendarDate: normalizeCalendarDateMock } =
+        await vi.importActual<{
+          normalizeCalendarDate: typeof normalizeCalendarDate;
+        }>('../../helpers/date');
+      (normalizeCalendarDate as Mock).mockImplementation(
+        normalizeCalendarDateMock
       );
-      (normalizeCalendarDate as jest.Mock).mockImplementation(
-        jest.requireActual('../../helpers/date').normalizeCalendarDate
-      );
-      (denormalizeCalendarDate as jest.Mock).mockImplementation(
-        jest.requireActual('../../helpers/date').denormalizeCalendarDate
+
+      const { denormalizeCalendarDate: denormalizeCalendarDateMock } =
+        await vi.importActual<{
+          denormalizeCalendarDate: typeof denormalizeCalendarDate;
+        }>('../../helpers/date');
+      (denormalizeCalendarDate as Mock).mockImplementation(
+        denormalizeCalendarDateMock
       );
     });
 
     it('should initialize the form with sensible values', () => {
-      const getUserConfirmation = jest.fn();
+      const getUserConfirmation = vi.fn();
       const pathname = '/resources/Uj5SAS740/create';
 
       render(
@@ -496,7 +524,7 @@ describe('Reservation Page', () => {
     });
 
     it('should allow to switch between all-day & hour-based events', () => {
-      const getUserConfirmation = jest.fn();
+      const getUserConfirmation = vi.fn();
       const pathname = '/resources/Uj5SAS740/create';
 
       render(

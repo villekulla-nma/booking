@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import type { FC, PropsWithChildren } from 'react';
 import type { History } from 'history';
 import { render, screen, fireEvent } from '@testing-library/react';
@@ -6,7 +7,7 @@ import { initializeIcons } from '@uifabric/icons';
 import { ErrorBoundary } from '../error-boundary';
 import { RouterShim as Router } from '../router-shim';
 
-jest.mock('../layout.tsx', () => {
+vi.mock('../layout.tsx', () => {
   const Layout: FC<PropsWithChildren> = ({ children }) => <>{children}</>;
   return { Layout };
 });
@@ -56,8 +57,8 @@ describe('Error-Boundary', () => {
 
   it('should reset the error & navigate to the start page', async () => {
     const history = {
-      replace: jest.fn(),
-      listen: jest.fn(),
+      replace: vi.fn(),
+      listen: vi.fn(),
       location: {},
     } as unknown as History;
 

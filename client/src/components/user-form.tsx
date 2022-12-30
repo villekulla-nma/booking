@@ -15,7 +15,7 @@ import type { ResponseStatus } from '../api';
 import { useAuthenticatedFetch } from '../hooks/use-authenticated-fetch';
 import { getAllUnits } from '../api';
 import { Form } from './form';
-import { Feedback } from '../components/feedback';
+import { Feedback } from './feedback';
 
 export interface FormValues {
   userId?: string | undefined;
