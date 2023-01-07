@@ -60,7 +60,7 @@
   },
   "dependencies": {
     "@fluentui/merge-styles": "8.5.4",
-    "@fluentui/react": "8.104.1",
+    "@fluentui/react": "8.104.2",
     "@fluentui/theme": "2.6.20",
     "@fluentui/utilities": "8.13.4",
     "@fullcalendar/core": "6.0.2",
