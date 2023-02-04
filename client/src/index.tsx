@@ -23,7 +23,7 @@ import { AdminUsersPage } from './pages/admin-users-page';
 import { AdminUnitsPage } from './pages/admin-units-page';
 import { AdminResourcesPage } from './pages/admin-resources-page';
 import { AdminUsersCreatePage } from './pages/admin-users-create-page';
-import { ROLE } from './constants';
+import { BASENAME, ROLE } from './constants';
 
 const authenticatedRoutes: RouteProps[] = [
   {
@@ -131,7 +131,7 @@ const root = createRoot(document.getElementById('root')!);
 
 root.render(
   <StrictMode>
-    <Router basename="app">
+    <Router basename={BASENAME}>
       <ErrorBoundary>
         <UserProvider>
           <FabricBase theme={theme}>
