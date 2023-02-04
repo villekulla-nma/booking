@@ -4,7 +4,7 @@ import { Route, Redirect, useLocation } from 'react-router-dom';
 
 import { useUserContext } from '../hooks/use-user-context';
 import { isAuthorized } from '../helpers/is-authorized';
-import { ROLE } from '../constants';
+import { BASENAME, ROLE } from '../constants';
 
 type Props = RouteProps & {
   role?: ROLE;
@@ -18,7 +18,7 @@ export const PrivateRoute: FC<Props> = ({
 }) => {
   const user = useUserContext();
   const location = useLocation();
-  const from = `${location.pathname}${location.search}`;
+  const from = `/${BASENAME}${location.pathname}${location.search}`;
   const Comp = component as ComponentType<unknown>;
   const userIsAuthorized = isAuthorized(role, user?.role as ROLE | undefined);
 
