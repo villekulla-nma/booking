@@ -1,5 +1,9 @@
 {
-  "packages": ["client", "server", "types"],
+  "packages": [
+    "client",
+    "server",
+    "types"
+  ],
   "command": {
     "version": {
       "allowBranch": "KillYourMaster",
@@ -10,5 +14,5 @@
     }
   },
   "useWorkspaces": true,
-  "version": "0.6.3"
+  "version": "0.6.4"
 }

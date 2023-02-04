@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.6.4](https://github.com/villekulla-nma/booking/compare/v0.6.3...v0.6.4) (2023-02-04)
+
+
+### Bug Fixes
+
+* **client:** redirect to correct previous page after authentication ([670d19a](https://github.com/villekulla-nma/booking/commit/670d19ae0b88626b0086def875bf24aac50973c8))
+* **deps:** update dependency @fluentui/react to v8.104.2 ([0c8e67b](https://github.com/villekulla-nma/booking/commit/0c8e67b313db2079abaed70495bb419fad04da97))
+
+
+
+
+
 ## 0.6.3 (2022-12-30)
 
 ### Bug Fixes
