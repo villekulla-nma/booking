@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.6.5](https://github.com/villekulla-nma/booking/compare/v0.6.4...v0.6.5) (2023-02-05)
+
+
+### Bug Fixes
+
+* **deps:** lock file maintenance ([8b6984d](https://github.com/villekulla-nma/booking/commit/8b6984d5f435f09f2faa9b921317cd18d3dc25e3))
+* **deps:** update dependency fastify to v4.12.0 ([a2595d8](https://github.com/villekulla-nma/booking/commit/a2595d8958d763f1901a99d109c08c30e37a047b))
+* **deps:** update fluent ui ([e057d77](https://github.com/villekulla-nma/booking/commit/e057d77de790ca0087a7fb69ca117e0a548d28e3))
+* **deps:** update fullcalendar monorepo ([fdf1b90](https://github.com/villekulla-nma/booking/commit/fdf1b9062bc9c8d59a995813debf2aff57711547))
+
+
+
+
+
 ## [0.6.4](https://github.com/villekulla-nma/booking/compare/v0.6.3...v0.6.4) (2023-02-04)
 
 
