@@ -11,7 +11,8 @@
     "build": "ncc build src/index.ts -o ../dist/api --target es2020",
     "gen-salt": "node -e \"console.log(require('bcryptjs').genSaltSync())\"",
     "create-id": "node -e \"console.log(require('shortid').generate())\"",
-    "create-default-password": "node -e \"process.env.SALT ? console.log(require('bcryptjs').hashSync('change-me!', process.env.SALT.trim())) : console.error('Please set SALT!')\""
+    "precreate-default-password": "node -e \"process.env.SALT?.charAt(0) === '$' || (!console.error('Set the SALT env var & wrap it into single quotes!\\n') && process.exit(1))\"",
+    "create-default-password": "node -e \"process.env.SALT ? console.log(require('bcryptjs').hashSync('test', process.env.SALT.trim())) : console.error('Please set SALT!')\""
   },
   "jest": {
     "preset": "ts-jest",
@@ -28,6 +29,7 @@
   "dependencies": {
     "@sendgrid/mail": "7.7.0",
     "bcryptjs": "2.4.3",
+    "date-fns": "2.30.0",
     "dotenv": "16.0.3",
     "fastify": "4.23.2",
     "fluent-json-schema": "4.1.2",

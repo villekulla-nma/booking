@@ -27,6 +27,7 @@ import { assignGetAllUsersHandler } from './handlers/get-all-users';
 import { assignPostUnitHandler } from './handlers/post-unit';
 import { assignPostResourceHandler } from './handlers/post-resource';
 import { assignPostUserHandler } from './handlers/post-user';
+import { assignGetResourceCurrentSvgHandler } from './handlers/get-resource-current-svg';
 
 const routes: [string, AssignHandlerFunction][] = [
   ['/api/_health', assignGetHealthHandler],
@@ -52,6 +53,7 @@ const routes: [string, AssignHandlerFunction][] = [
   ['/api/units', assignPutUnitHandler],
   ['/api/units', assignPostUnitHandler],
   ['/api/units', assignDeleteUnitHandler],
+  ['/api/img/:resourceId/current.svg', assignGetResourceCurrentSvgHandler],
 ];
 
 export const initServer = async (

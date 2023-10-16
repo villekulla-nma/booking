@@ -4,7 +4,7 @@ import type { EventResult } from '@booking/types';
 
 import type { Db } from '../db';
 import type { ResourceResult, UserResult } from './types';
-import { getNow, getToday } from '../utils/date';
+import { getFauxUTCDate, getToday } from '../utils/date';
 
 type SingleEventResult = EventResult & {
   user: UserResult;
@@ -29,7 +29,7 @@ export const getScopedEvents = async (
   resourceId: string,
   start: string,
   end: string
-): Promise<(EventResult & { color: string })[]> => {
+): Promise<(EventResult & { color: string; unit: string })[]> => {
   const events = await Event.findAll({
     where: {
       resourceId: { [Op.eq]: resourceId },
@@ -57,11 +57,13 @@ export const getScopedEvents = async (
         include: [User.associations.unit],
       },
     ],
+    order: [['start', 'ASC']],
   });
 
   return events.map(
     ({ id, start, end, description, allDay, createdAt, user }) => ({
       color: user.unit.color,
+      unit: user.unit.name,
       id,
       start,
       end,
@@ -200,7 +202,7 @@ export const createEvent = async (
   userId: string
 ): Promise<string> => {
   const id = shortid();
-  const createdAt = getNow().toISOString();
+  const createdAt = getFauxUTCDate().toISOString();
 
   await Event.create({
     id,
@@ -221,7 +223,7 @@ export const removeEvent = async (
   eventId: string,
   userId: string
 ): Promise<boolean> => {
-  const now = getNow().toISOString();
+  const now = getFauxUTCDate().toISOString();
   const result = await Event.destroy({
     where: {
       id: { [Op.eq]: eventId },
