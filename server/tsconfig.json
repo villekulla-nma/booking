@@ -13,7 +13,6 @@
     "allowSyntheticDefaultImports": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "importsNotUsedAsValues": "error",
     "inlineSources": true,
     "pretty": true,
     "skipLibCheck": true,
