@@ -5,6 +5,7 @@
     "automerge": true,
     "commitBody": "[skip release]"
   },
+  "dependencyDashboard": true,
   "packageRules": [
     {
       "groupName": "Fluent UI",
