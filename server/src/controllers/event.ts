@@ -19,10 +19,13 @@ const pick = <Input, Key extends keyof Input>(
   input: Input,
   ...properties: Key[]
 ): Pick<Input, Key> =>
-  properties.reduce((acc: Pick<Input, Key>, key: Key) => {
-    acc[key] = input[key];
-    return acc;
-  }, {} as Pick<Input, Key>);
+  properties.reduce(
+    (acc: Pick<Input, Key>, key: Key) => {
+      acc[key] = input[key];
+      return acc;
+    },
+    {} as Pick<Input, Key>
+  );
 
 export const getScopedEvents = async (
   { Event, User }: Db,
