@@ -10,6 +10,7 @@
     "sourceMap": true,
     "inlineSourceMap": false,
     "esModuleInterop": true,
+    "allowJs": true,
     "allowSyntheticDefaultImports": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
