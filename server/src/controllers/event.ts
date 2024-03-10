@@ -5,6 +5,7 @@ import type { EventResult } from '@booking/types';
 import type { Db } from '../db';
 import type { ResourceResult, UserResult } from './types';
 import { getNow, getToday } from '../utils/date';
+import { DEFAULT_UNIT_COLOR } from '../constants';
 
 type SingleEventResult = EventResult & {
   user: UserResult;
@@ -64,7 +65,8 @@ export const getScopedEvents = async (
 
   return events.map(
     ({ id, start, end, description, allDay, createdAt, user }) => ({
-      color: user.unit.color,
+      // TODO: remove fallback as soon as seeding works...
+      color: user.unit?.color || DEFAULT_UNIT_COLOR,
       id,
       start,
       end,
