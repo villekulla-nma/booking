@@ -4,6 +4,7 @@
   "author": "Emanuel Kluge (https://emanuel-kluge.de/)",
   "license": "MIT",
   "scripts": {
+    "predev": "sequelize-cli db:migrate",
     "dev": "nodemon",
     "lint": "eslint .",
     "test:watch": "jest --watch",
@@ -56,6 +57,7 @@
     "jest-environment-node": "29.7.0",
     "node-fetch": "2.7.0",
     "nodemon": "3.1.0",
+    "sequelize-cli": "6.6.2",
     "ts-jest": "29.1.1",
     "ts-node": "10.9.2",
     "typescript": "5.4.4"
