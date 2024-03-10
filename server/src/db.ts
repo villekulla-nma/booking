@@ -1,13 +1,7 @@
-import { Sequelize } from 'sequelize';
+import { DataTypes, Sequelize } from 'sequelize';
 import type { ModelCtor } from 'sequelize';
 
 import { env } from './utils/env';
-import {
-  createResourceInstance,
-  createUnitInstance,
-  createUserInstance,
-  createEventInstance,
-} from './models';
 import type {
   UnitInstance,
   ResourceInstance,
@@ -16,7 +10,10 @@ import type {
 } from './models';
 import { getScaffoldingData, writeScaffoldingData } from './utils/scaffolding';
 import { getAdminListFromEnv } from './utils/get-admin-list-from-env';
-import { applyMigrations } from './migrations';
+import { createEvent } from '../models/event';
+import { createUnit } from '../models/unit';
+import { createResource } from '../models/resource';
+import { createUser } from '../models/user';
 
 export interface Db {
   Event: ModelCtor<EventInstance>;
@@ -34,10 +31,10 @@ export const initDb = async (): Promise<Db> => {
     logging: process.env.NODE_ENV === 'test' ? false : console.log,
   });
   const dataPromise = getScaffoldingData();
-  const Resource = createResourceInstance(sequelize);
-  const Unit = createUnitInstance(sequelize);
-  const User = createUserInstance(sequelize);
-  const Event = createEventInstance(sequelize);
+  const Resource = createResource(sequelize, DataTypes);
+  const Unit = createUnit(sequelize, DataTypes);
+  const User = createUser(sequelize, DataTypes);
+  const Event = createEvent(sequelize, DataTypes);
   const [data] = await Promise.all([dataPromise, sequelize.sync()]);
 
   data.User = [
@@ -48,8 +45,6 @@ export const initDb = async (): Promise<Db> => {
   User.belongsTo(Unit, { foreignKey: 'unitId', as: 'unit' });
   Event.belongsTo(User, { foreignKey: 'userId', as: 'user' });
   Event.belongsTo(Resource, { foreignKey: 'resourceId', as: 'resource' });
-
-  await applyMigrations(sequelize);
 
   try {
     await writeScaffoldingData(sequelize, data, {
