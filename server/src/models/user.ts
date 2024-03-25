@@ -1,12 +1,5 @@
-import { DataTypes, Op } from 'sequelize';
-import type {
-  Model,
-  ModelAttributes,
-  ModelCtor,
-  Optional,
-  Sequelize,
-  Transaction,
-} from 'sequelize';
+import { Op } from 'sequelize';
+import type { Model, ModelCtor, Optional, Transaction } from 'sequelize';
 import type { UserAttributes } from '@booking/types';
 
 import type { UnitInstance } from './unit';
@@ -22,57 +15,7 @@ export interface UserInstance
   unit?: UnitInstance;
 }
 
-type Schema = ModelAttributes<UserInstance, UserAttributes>;
-
 const roles = ['user', 'admin'];
-
-const schema: Schema = {
-  id: {
-    primaryKey: true,
-    type: DataTypes.STRING,
-    unique: true,
-  },
-  role: {
-    type: DataTypes.ENUM(...roles),
-    allowNull: false,
-  },
-  email: {
-    type: DataTypes.STRING,
-    allowNull: false,
-    unique: true,
-    validate: {
-      isEmail: true,
-    },
-  },
-  firstName: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  lastName: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  password: {
-    type: DataTypes.STRING,
-  },
-  passwordReset: {
-    type: DataTypes.STRING,
-    unique: true,
-  },
-  unitId: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  fullName: {
-    type: DataTypes.VIRTUAL,
-    get() {
-      return `${this.firstName} ${this.lastName}`;
-    },
-    set() {
-      throw new Error('Do not try to set the `fullName` value!');
-    },
-  },
-};
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const isUserCreationData = (r: any): r is UserCreationAttributes =>
@@ -106,11 +49,3 @@ export const scaffoldUsers = async (
     );
   }
 };
-
-export const createUserInstance = (
-  sequelize: Sequelize
-): ModelCtor<UserInstance> =>
-  sequelize.define<UserInstance>('User', schema, {
-    timestamps: false,
-    createdAt: false,
-  });
