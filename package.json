@@ -27,7 +27,7 @@
   },
   "devDependencies": {
     "@types/react": "18.2.73",
-    "@types/react-dom": "18.2.22",
+    "@types/react-dom": "18.2.23",
     "lerna": "8.1.2",
     "npm-run-all2": "6.1.2",
     "postcss": "8.4.38",
