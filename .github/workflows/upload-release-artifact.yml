@@ -36,6 +36,7 @@ jobs:
       - name: Prepare Release Artifact
         run: |
           jq .version lerna.json > dist/version.txt
+          cp -r server/migrations dist
           cd dist/
           zip -r ../app.zip .
           cd ..
