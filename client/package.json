@@ -97,7 +97,7 @@
     "eslint-plugin-react": "7.34.1",
     "eslint-plugin-react-hooks": "4.6.0",
     "eslint-plugin-testing-library": "6.2.0",
-    "jsdom": "17.0.0",
+    "jsdom": "24.0.0",
     "nock": "13.5.4",
     "typescript": "5.4.4",
     "vite": "5.2.8",
