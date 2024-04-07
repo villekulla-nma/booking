@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.7.0](https://github.com/villekulla-nma/booking/compare/v0.6.7...v0.7.0) (2024-04-07)
+
+
+### Features
+
+* **server:** use Sequelize migrations ([143b22e](https://github.com/villekulla-nma/booking/commit/143b22ec24808ed7413e91ae70270d987f4ea9fd))
+
+
+
+
+
 ## 0.6.7 (2024-04-07)
 
 

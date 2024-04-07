@@ -1,6 +1,6 @@
 {
   "name": "@booking/client",
-  "version": "0.6.7",
+  "version": "0.7.0",
   "author": "Emanuel Kluge (https://emanuel-kluge.de/)",
   "license": "MIT",
   "type": "module",
@@ -77,7 +77,7 @@
     "react-router-dom": "5.3.4"
   },
   "devDependencies": {
-    "@booking/types": "0.6.7",
+    "@booking/types": "0.7.0",
     "@testing-library/jest-dom": "6.4.2",
     "@testing-library/react": "14.2.2",
     "@testing-library/react-hooks": "8.0.1",
