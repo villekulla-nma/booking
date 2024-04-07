@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 0.6.7 (2024-04-07)
+
+
+### Bug Fixes
+
+* **deps:** update dependency @sendgrid/mail to v8.1.3 ([e92ef3c](https://github.com/villekulla-nma/booking/commit/e92ef3c2ee67611ae77017e5163314a80c7683ce))
+* **deps:** update dependency sequelize to v6.37.2 ([e10012f](https://github.com/villekulla-nma/booking/commit/e10012f3ec79508bf9beed2ca1f90b9909fe0d97))
+
+
+
+
+
 ## [0.6.6](https://github.com/villekulla-nma/booking/compare/v0.6.5...v0.6.6) (2023-02-12)
 
 

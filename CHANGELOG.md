@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 0.6.7 (2024-04-07)
+
+
+### Bug Fixes
+
+* **client:** redirect authenticated users from login to start page ([d08e8ca](https://github.com/villekulla-nma/booking/commit/d08e8caa60bd5ddbc45182f2a3924d8f363d2b76))
+* **deps:** update dependency @fluentui/react to v8.117.1 ([280246d](https://github.com/villekulla-nma/booking/commit/280246d14e1a95a69f749f4d49d0032f5d6cd62f))
+* **deps:** update dependency @sendgrid/mail to v8.1.3 ([e92ef3c](https://github.com/villekulla-nma/booking/commit/e92ef3c2ee67611ae77017e5163314a80c7683ce))
+* **deps:** update dependency date-fns to v3.4.0 ([9b12468](https://github.com/villekulla-nma/booking/commit/9b124680c4cf3199ac48145df3fe7e709457793b))
+* **deps:** update dependency date-fns to v3.6.0 ([f11bb93](https://github.com/villekulla-nma/booking/commit/f11bb93d2e739458f0492182321d0c928228d8c5))
+* **deps:** update dependency sequelize to v6.37.2 ([e10012f](https://github.com/villekulla-nma/booking/commit/e10012f3ec79508bf9beed2ca1f90b9909fe0d97))
+* **deps:** update fluent ui ([a51af5e](https://github.com/villekulla-nma/booking/commit/a51af5e72cb91f3e7b6577602c39173b3a011e91))
+* **deps:** update fluent ui ([dff24cf](https://github.com/villekulla-nma/booking/commit/dff24cf7195fad2f760a5ccfc37cb80ab88ceb20))
+* **deps:** update fluent ui ([38088b2](https://github.com/villekulla-nma/booking/commit/38088b27e6cfd8d1d70cf65d2cc8b1a3ffe3507b))
+
+
+
+
+
 ## [0.6.6](https://github.com/villekulla-nma/booking/compare/v0.6.5...v0.6.6) (2023-02-12)
 
 
