@@ -1,6 +1,6 @@
 import type { FC, FormEvent } from 'react';
 import { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, Redirect, useLocation } from 'react-router-dom';
 import { Link as A, TextField, MessageBarType } from '@fluentui/react';
 
 import { redirect } from '../helpers/location';
@@ -8,8 +8,10 @@ import { login } from '../api';
 import { Layout } from '../components/layout';
 import { Form } from '../components/form';
 import { Feedback } from '../components/feedback';
+import { useUserContext } from '../hooks/use-user-context';
 
 export const LoginPage: FC = () => {
+  const user = useUserContext();
   const location = useLocation<{ from: string }>();
   const [loading, setLoading] = useState<boolean>(false);
   const [feedback, setFeedback] = useState<string>();
@@ -59,6 +61,10 @@ export const LoginPage: FC = () => {
       () => alert('Da ist leider etwas schief gelaufen.')
     );
   };
+
+  if (user) {
+    return <Redirect to="/" push={false} />;
+  }
 
   return (
     <Layout>
