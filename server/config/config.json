@@ -1,6 +1,6 @@
 {
   "development": {
-    "storage": ":memory:",
+    "storage": "db_dev.sqlite",
     "dialect": "sqlite"
   },
   "test": {

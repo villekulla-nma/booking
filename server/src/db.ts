@@ -8,8 +8,6 @@ import type {
   UserInstance,
   EventInstance,
 } from './models';
-import { getScaffoldingData, writeScaffoldingData } from './utils/scaffolding';
-import { getAdminListFromEnv } from './utils/get-admin-list-from-env';
 import { createEvent } from '../models/event';
 import { createUnit } from '../models/unit';
 import { createResource } from '../models/resource';
@@ -30,33 +28,16 @@ export const initDb = async (): Promise<Db> => {
     storage: env('SQLITE3_PATH'),
     logging: process.env.NODE_ENV === 'test' ? false : console.log,
   });
-  const dataPromise = getScaffoldingData();
   const Resource = createResource(sequelize, DataTypes);
   const Unit = createUnit(sequelize, DataTypes);
   const User = createUser(sequelize, DataTypes);
   const Event = createEvent(sequelize, DataTypes);
-  const [data] = await Promise.all([dataPromise, sequelize.sync()]);
 
-  data.User = [
-    ...((data.User as unknown[] | undefined) || []),
-    ...getAdminListFromEnv(),
-  ];
+  await sequelize.sync();
 
   User.belongsTo(Unit, { foreignKey: 'unitId', as: 'unit' });
   Event.belongsTo(User, { foreignKey: 'userId', as: 'user' });
   Event.belongsTo(Resource, { foreignKey: 'resourceId', as: 'resource' });
-
-  try {
-    await writeScaffoldingData(sequelize, data, {
-      Unit,
-      Resource,
-      User,
-      Event,
-    });
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
 
   try {
     await sequelize.authenticate();
