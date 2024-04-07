@@ -9,7 +9,7 @@ import type { UserAttributes } from '@booking/types';
 
 import type { UnitInstance } from './user';
 
-type UserCreationAttributes = Optional<
+export type UserCreationAttributes = Optional<
   Optional<UserAttributes, 'id'>,
   'fullName'
 >;

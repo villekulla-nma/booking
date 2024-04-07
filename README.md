@@ -83,43 +83,16 @@ command:
 npm run create-id
 ```
 
-To create a default password run the following command:
-
-```sh
-SALT='<previously generated salt>' npm run create-default-password
-```
-
-You have to pass in the previously generated salt via the env variable `SALT`. Put this value into
-single quotes. Since the salt contains `$`-signs your Shell might interpret parts of the salt as
-variables otherwise.
-
-This generates the password `change-me!`. You can use the password reset feature to change it —
-later when the development server is up and running.
+To set the value of `VILLEKULLA_ADMIN_*_UNIT_ID`, check the file
+`server/seeders/20240331122315-units.js` and select one of the IDs of the initial units. However,
+this is only relevant in the `development` environment. In `production`, the seeder won't run so
+those initial units won't exist.
 
 ### Additional admins
 
 If you need additional admin users add additional blocks of `VILLEKULLA_ADMIN_<counter>_*`-values
 and increase the `<counter>`-value accordingly — `1` for the second admin, `2` for the third one, …
 you get the drill.
-
-## Define scaffolding data
-
-In order to have some data to work with during development, define scaffolding data. These data will
-be used to populate the SQLite database in non-production environments. Since the DB runs
-in-memory during development, its data is pretty ephemeral. After each restart of the NodeJS server
-it's gone.
-
-So, it makes sense to define some basic `Resources`, `Units`, and `Users`. Therefor rename
-`server/scaffolding/data.json.example` to `server/scaffolding/data.json` and add data to it.
-
-```sh
-mv server/scaffolding/data.json.example server/scaffolding/data.json
-```
-
-This should be pretty straight-forward. All the `id`-values are supposed to be alphnumeric
-9-character values. Feel free to re-use the `npm run create-id`-command here.
-
-The values of `Unit.color` should be a hexadecimal color value, like e.g. `#FF00FF`.
 
 ## Run the development server
 
@@ -140,6 +113,10 @@ version of the server.
 
 When the server is running, head over to your browser and visit
 [localhost:3000/app](http://localhost:3000/app).
+
+## Deployment
+
+TODO…
 
 ## Contributing
 
