@@ -1,15 +1,19 @@
-import { vi } from 'vitest';
+import { vi, type Mock } from 'vitest';
 import type { FC, PropsWithChildren } from 'react';
 import nock from 'nock';
 import { render, screen, fireEvent } from '@testing-library/react';
-import { Route } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import { initializeIcons } from '@uifabric/icons';
 
 import { LoginPage } from '../login-page';
 import { redirect } from '../../helpers/location';
 import { scopeIsDone } from '../../helpers/nock';
+import { useUserContext } from '../../hooks/use-user-context';
 import { sleep } from '../../helpers/sleep';
 import { MemoryRouterShim as Router } from '../../components/router-shim';
+import { waitFor as customWaitFor } from '../../helpers/wait-for';
+
+vi.mock('../../hooks/use-user-context');
 
 vi.mock('../../components/layout.tsx', () => {
   const Layout: FC<PropsWithChildren> = ({ children }) => <>{children}</>;
@@ -32,6 +36,8 @@ describe('Resource Page', () => {
   });
 
   it('should successfully log in the user', async () => {
+    (useUserContext as Mock).mockReturnValue(null);
+
     const from = '/events/4zrtsev65z';
     const state = { from };
     const pathname = '/login';
@@ -65,6 +71,8 @@ describe('Resource Page', () => {
   });
 
   it('should warn if the user is not verified', async () => {
+    (useUserContext as Mock).mockReturnValue(null);
+
     const from = '/events/4zrtsev65z';
     const state = { from };
     const pathname = '/login';
@@ -100,6 +108,8 @@ describe('Resource Page', () => {
   });
 
   it('should warn if the given data is not valid', async () => {
+    (useUserContext as Mock).mockReturnValue(null);
+
     const from = '/events/4zrtsev65z';
     const state = { from };
     const pathname = '/login';
@@ -135,6 +145,8 @@ describe('Resource Page', () => {
   });
 
   it('should give feedback if there was an error', async () => {
+    (useUserContext as Mock).mockReturnValue(null);
+
     const from = '/events/4zrtsev65z';
     const state = { from };
     const pathname = '/login';
@@ -169,5 +181,31 @@ describe('Resource Page', () => {
 
     expect(passwordField.value).toBe('');
     expect(scope.isDone()).toBe(true);
+  });
+
+  it('should redirect authenticated users to the startpage', async () => {
+    (useUserContext as Mock).mockReturnValue({ id: 'abc123' });
+
+    const pagePath = '/login';
+    let pathname = '';
+
+    render(
+      <Router initialEntries={[pagePath]}>
+        <Switch>
+          <Route path="/login" exact={true} component={LoginPage} />
+          <Route
+            path="*"
+            render={({ location }) => {
+              pathname = location.pathname;
+              return null;
+            }}
+          />
+        </Switch>
+      </Router>
+    );
+
+    await customWaitFor(() => pathname !== '', 200);
+
+    expect(pathname).toBe('/');
   });
 });
