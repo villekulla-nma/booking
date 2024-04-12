@@ -26,8 +26,8 @@
     "create-default-password": "cd server && npm run create-default-password"
   },
   "devDependencies": {
-    "@types/react": "18.2.75",
-    "@types/react-dom": "18.2.24",
+    "@types/react": "18.2.77",
+    "@types/react-dom": "18.2.25",
     "lerna": "8.1.2",
     "npm-run-all2": "6.1.2",
     "postcss": "8.4.38",
