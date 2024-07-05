@@ -28,7 +28,7 @@
   "devDependencies": {
     "@types/react": "18.2.79",
     "@types/react-dom": "18.2.25",
-    "lerna": "8.1.5",
+    "lerna": "8.1.6",
     "npm-run-all2": "6.2.2",
     "postcss": "8.4.39",
     "prettier": "3.3.2"
