@@ -32,7 +32,7 @@
     "bcryptjs": "2.4.3",
     "dotenv": "16.4.5",
     "fastify": "4.26.2",
-    "fluent-json-schema": "4.2.1",
+    "fluent-json-schema": "5.0.0",
     "jsonwebtoken": "9.0.2",
     "randomcolor": "0.6.2",
     "sequelize": "6.37.2",
