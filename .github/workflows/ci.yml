@@ -101,6 +101,63 @@ jobs:
           NODE_OPTIONS: --openssl-legacy-provider
         run: npm run build
 
+  serve:
+    runs-on: ubuntu-latest
+    needs: dependencies
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+          cache: 'npm'
+
+      - name: Cache Node dependencies
+        uses: actions/cache@v4
+        id: npm-cache
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+
+      - run: cp .env.example .env
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Serve application
+        run: npm run dev &
+        timeout-minutes: 2
+        env:
+          SQLITE3_PATH: db_dev.sqlite
+          JWT_SECRET: 04282b712063569f9e9ff52ef7aefb43
+          SALT: $2a$10$ZXtnb9EonONnZp3tqkLd2u
+          VILLEKULLA_ADMIN_0_ID: vLsVuqJe9
+          VILLEKULLA_ADMIN_0_UNIT_ID: 1N6CuTL2p
+          VILLEKULLA_ADMIN_0_EMAIL: foobar@example.tld
+          VILLEKULLA_ADMIN_0_FIRST_NAME: Foo
+          VILLEKULLA_ADMIN_0_LAST_NAME: Bar
+          VILLEKULLA_ADMIN_0_PASSWORD: test
+
+      - name: Wait for dev server
+        timeout-minutes: 1
+        run: while ! nc -z localhost 8080; do sleep 0.1; done
+
+      - name: Test health endpoint
+        id: health
+        run: |
+          STATUS=$(curl -s -o /dev/null -I -w "%{http_code}" http://localhost:8080/api/_health)
+          if [ "$STATUS" = "200" ]; then
+              exit 0
+          else
+              exit 1
+          fi
+
   release:
     runs-on: ubuntu-latest
     needs: [test, build, dependencies]
