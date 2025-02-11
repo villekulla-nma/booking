@@ -6,7 +6,7 @@
   "scripts": {
     "db:seed": "npx sequelize-cli db:seed:all",
     "db:migrate": "npx sequelize-cli db:migrate",
-    "predev": "rm -f ./db_dev.sqlite && npm run db:migrate && npm run db:seed",
+    "predev": "rm -f ./db_dev.sqlite && npm run db:migrate -- --debug && npm run db:seed -- --debug",
     "dev": "nodemon",
     "lint": "eslint .",
     "test:watch": "jest --watch",
