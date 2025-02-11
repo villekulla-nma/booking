@@ -43,7 +43,7 @@
     "@booking/types": "0.7.0",
     "@types/bcryptjs": "2.4.6",
     "@types/jest": "29.5.12",
-    "@types/jsonwebtoken": "9.0.7",
+    "@types/jsonwebtoken": "9.0.8",
     "@types/node": "22.13.1",
     "@types/node-fetch": "2.6.12",
     "@types/randomcolor": "0.5.9",
