@@ -1,6 +1,5 @@
 import type { FastifyInstance } from 'fastify';
 import type { AddressInfo } from 'net';
-import fetch from 'node-fetch';
 
 import type { Db } from '../db';
 import { initDb } from '../db';
@@ -81,7 +80,7 @@ describe('Server [POST] /api/units', () => {
         },
         body: JSON.stringify(updatedUnit),
       });
-      const data = await response.json();
+      const data = (await response.json()) as Record<string, unknown>;
 
       expect(response.status).toBe(401);
       expect(data.status).toBe('invalid');
@@ -116,7 +115,7 @@ describe('Server [POST] /api/units', () => {
           color: 'non-hexadecimal value',
         }),
       });
-      const data = await response.json();
+      const data = (await response.json()) as Record<string, unknown>;
 
       expect(response.status).toBe(400);
       expect(data.status).toBe('invalid');
@@ -133,7 +132,7 @@ describe('Server [POST] /api/units', () => {
         },
         body: JSON.stringify(updatedUnit),
       });
-      const data = await response.json();
+      const data = (await response.json()) as Record<string, unknown>;
 
       expect(response.status).toBe(400);
       expect(data.status).toBe('error');
@@ -152,7 +151,7 @@ describe('Server [POST] /api/units', () => {
         },
         body: JSON.stringify(updatedUnit),
       });
-      const data = await response.json();
+      const data = (await response.json()) as Record<string, unknown>;
 
       expect(response.status).toBe(400);
       expect(data.status).toBe('invalid');
@@ -169,7 +168,7 @@ describe('Server [POST] /api/units', () => {
         },
         body: JSON.stringify(updatedUnit),
       });
-      const data = await response.json();
+      const data = (await response.json()) as Record<string, unknown>;
 
       expect(response.status).toBe(500);
       expect(data.status).toBe('error');
@@ -188,7 +187,7 @@ describe('Server [POST] /api/units', () => {
         },
         body: JSON.stringify(updatedUnit),
       });
-      const data = await response.json();
+      const data = (await response.json()) as Record<string, unknown>;
       const result = await db.Unit.findByPk(unit.id);
 
       expect(response.status).toBe(200);

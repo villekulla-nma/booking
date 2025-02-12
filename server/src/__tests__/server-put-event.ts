@@ -1,6 +1,5 @@
 import type { FastifyInstance } from 'fastify';
 import type { AddressInfo } from 'net';
-import fetch from 'node-fetch';
 import { Op } from 'sequelize';
 
 import type { Db } from '../db';
@@ -120,7 +119,7 @@ describe('Server [PUT] /api/resources/:resourceId/events', () => {
           }),
         }
       );
-      const data = await response.json();
+      const data = (await response.json()) as Record<string, unknown>;
 
       expect(response.status).toBe(400);
       expect(data.status).toBe('overlapping');
@@ -146,7 +145,7 @@ describe('Server [PUT] /api/resources/:resourceId/events', () => {
         }),
       }
     );
-    const data = await response.json();
+    const data = (await response.json()) as Record<string, unknown>;
 
     expect(response.status).toBe(400);
     expect(data.status).toBe('invalid');
@@ -177,7 +176,7 @@ describe('Server [PUT] /api/resources/:resourceId/events', () => {
         }),
       }
     );
-    const data = await response.json();
+    const data = (await response.json()) as Record<string, unknown>;
 
     expect(response.status).toBe(400);
     expect(data.status).toBe('invalid');
@@ -205,7 +204,7 @@ describe('Server [PUT] /api/resources/:resourceId/events', () => {
         }),
       }
     );
-    const data = await response.json();
+    const data = (await response.json()) as Record<string, unknown>;
 
     expect(response.status).toBe(500);
     expect(data.status).toBe('error');
@@ -254,7 +253,7 @@ describe('Server [PUT] /api/resources/:resourceId/events', () => {
             }),
           }
         );
-        const data = await response.json();
+        const data = (await response.json()) as Record<string, unknown>;
         const event = await db.Event.findOne({
           where: {
             start: { [Op.eq]: start },

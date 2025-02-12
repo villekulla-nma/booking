@@ -1,6 +1,5 @@
 import type { FastifyInstance } from 'fastify';
 import type { AddressInfo } from 'net';
-import fetch from 'node-fetch';
 
 import type { Db } from '../db';
 import { initDb } from '../db';
@@ -72,7 +71,7 @@ describe('Server [PUT] /api/user', () => {
         },
         body: JSON.stringify(newUser),
       });
-      const data = await response.json();
+      const data = (await response.json()) as Record<string, unknown>;
 
       expect(response.status).toBe(401);
       expect(data.status).toBe('invalid');
@@ -109,7 +108,7 @@ describe('Server [PUT] /api/user', () => {
           unitId: newUser.unitId.replace(/./g, 'x'),
         }),
       });
-      const data = await response.json();
+      const data = (await response.json()) as Record<string, unknown>;
 
       expect(response.status).toBe(400);
       expect(data.status).toBe('invalid');
@@ -128,7 +127,7 @@ describe('Server [PUT] /api/user', () => {
         },
         body: JSON.stringify(newUser),
       });
-      const data = await response.json();
+      const data = (await response.json()) as Record<string, unknown>;
 
       expect(response.status).toBe(400);
       expect(data.status).toBe('invalid');
@@ -145,7 +144,7 @@ describe('Server [PUT] /api/user', () => {
         },
         body: JSON.stringify(newUser),
       });
-      const data = await response.json();
+      const data = (await response.json()) as Record<string, unknown>;
 
       expect(response.status).toBe(500);
       expect(data.status).toBe('error');
@@ -164,7 +163,7 @@ describe('Server [PUT] /api/user', () => {
         },
         body: JSON.stringify(newUser),
       });
-      const data = await response.json();
+      const data = (await response.json()) as Record<string, unknown>;
       const newUserFromDb = await getUserByKey(db, 'email', newUser.email);
 
       expect(response.status).toBe(200);

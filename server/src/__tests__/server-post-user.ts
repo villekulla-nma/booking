@@ -1,7 +1,6 @@
 import type { FastifyInstance } from 'fastify';
 import type { AddressInfo } from 'net';
 import type { UserRole } from '@booking/types';
-import fetch from 'node-fetch';
 
 import type { Db } from '../db';
 import { initDb } from '../db';
@@ -74,7 +73,7 @@ describe('Server [POST] /api/user', () => {
         },
         body: JSON.stringify({ ...userOne, firstName: 'Persona Uno' }),
       });
-      const data = await response.json();
+      const data = (await response.json()) as Record<string, unknown>;
 
       expect(response.status).toBe(401);
       expect(data.status).toBe('invalid');
@@ -104,7 +103,7 @@ describe('Server [POST] /api/user', () => {
         },
         body: JSON.stringify({ ...userOne, firstName: 'Persona Uno' }),
       });
-      const data = await response.json();
+      const data = (await response.json()) as Record<string, unknown>;
 
       expect(response.status).toBe(400);
       expect(data.status).toBe('error');
@@ -123,7 +122,7 @@ describe('Server [POST] /api/user', () => {
         },
         body: JSON.stringify({ ...userOne, firstName: 'Persona Uno' }),
       });
-      const data = await response.json();
+      const data = (await response.json()) as Record<string, unknown>;
 
       expect(response.status).toBe(400);
       expect(data.status).toBe('invalid');
@@ -140,7 +139,7 @@ describe('Server [POST] /api/user', () => {
         },
         body: JSON.stringify({ ...userOne, firstName: 'Persona Uno' }),
       });
-      const data = await response.json();
+      const data = (await response.json()) as Record<string, unknown>;
 
       expect(response.status).toBe(500);
       expect(data.status).toBe('error');
@@ -159,7 +158,7 @@ describe('Server [POST] /api/user', () => {
         },
         body: JSON.stringify({ ...userOne, firstName: 'Persona Uno' }),
       });
-      const data = await response.json();
+      const data = (await response.json()) as Record<string, unknown>;
       const result = await db.User.findByPk(userOne.id);
 
       expect(response.status).toBe(200);

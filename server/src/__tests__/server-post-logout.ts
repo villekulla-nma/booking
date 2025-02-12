@@ -1,6 +1,5 @@
 import type { FastifyInstance } from 'fastify';
 import type { AddressInfo } from 'net';
-import fetch from 'node-fetch';
 
 import type { Db } from '../db';
 import { initServer } from '../server';

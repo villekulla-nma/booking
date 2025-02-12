@@ -1,6 +1,5 @@
 import type { FastifyInstance } from 'fastify';
 import type { AddressInfo } from 'net';
-import fetch from 'node-fetch';
 import { Op } from 'sequelize';
 
 import type { Db } from '../db';
@@ -61,7 +60,7 @@ describe('Server [POST] /api/password-reset/:token', () => {
         }),
       }
     );
-    const data = await response.json();
+    const data = (await response.json()) as Record<string, unknown>;
 
     expect(response.status).toBe(400);
     expect(data.status).toBe('invalid');
@@ -81,7 +80,7 @@ describe('Server [POST] /api/password-reset/:token', () => {
         }),
       }
     );
-    const data = await response.json();
+    const data = (await response.json()) as Record<string, unknown>;
 
     expect(response.status).toBe(400);
     expect(data.status).toBe('error');
@@ -106,7 +105,7 @@ describe('Server [POST] /api/password-reset/:token', () => {
         }),
       }
     );
-    const data = await response.json();
+    const data = (await response.json()) as Record<string, unknown>;
 
     expect(response.status).toBe(400);
     expect(data.status).toBe('error');
@@ -133,7 +132,7 @@ describe('Server [POST] /api/password-reset/:token', () => {
         }),
       }
     );
-    const data = await response.json();
+    const data = (await response.json()) as Record<string, unknown>;
     const user = await db.User.findByPk('TD0sIeaoz');
 
     expect(response.status).toBe(200);
