@@ -1,6 +1,5 @@
 import type { FastifyInstance } from 'fastify';
 import type { AddressInfo } from 'net';
-import fetch from 'node-fetch';
 import { URLSearchParams } from 'url';
 
 import type { Db } from '../db';
@@ -151,7 +150,8 @@ describe('Server [GET] /api/resources/:resourceId/events', () => {
         },
       }
     );
-    const data = await response.json();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const data = (await response.json()) as any;
 
     expect(response.status).toBe(200);
     expect(data.status).toBe('ok');
@@ -172,7 +172,8 @@ describe('Server [GET] /api/resources/:resourceId/events', () => {
         },
       }
     );
-    const data = await response.json();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const data = (await response.json()) as any;
 
     expect(response.status).toBe(200);
     expect(data.status).toBe('ok');
@@ -197,7 +198,7 @@ describe('Server [GET] /api/resources/:resourceId/events', () => {
         },
       }
     );
-    const data = await response.json();
+    const data = (await response.json()) as Record<string, unknown>;
 
     expect(data.status).toBe('ok');
     expect(data.payload).toEqual([]);

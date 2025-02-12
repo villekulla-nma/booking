@@ -1,6 +1,5 @@
 import type { FastifyInstance } from 'fastify';
 import type { AddressInfo } from 'net';
-import fetch from 'node-fetch';
 
 import type { Db } from '../db';
 import { initDb } from '../db';
@@ -80,7 +79,7 @@ describe('Server [PUT] /api/resources', () => {
         },
         body: JSON.stringify(newResource),
       });
-      const data = await response.json();
+      const data = (await response.json()) as Record<string, unknown>;
 
       expect(response.status).toBe(401);
       expect(data.status).toBe('invalid');
@@ -112,7 +111,7 @@ describe('Server [PUT] /api/resources', () => {
         },
         body: JSON.stringify(newResource),
       });
-      const data = await response.json();
+      const data = (await response.json()) as Record<string, unknown>;
 
       expect(response.status).toBe(400);
       expect(data.status).toBe('invalid');
@@ -129,7 +128,7 @@ describe('Server [PUT] /api/resources', () => {
         },
         body: JSON.stringify(newResource),
       });
-      const data = await response.json();
+      const data = (await response.json()) as Record<string, unknown>;
 
       expect(response.status).toBe(500);
       expect(data.status).toBe('error');
@@ -148,7 +147,7 @@ describe('Server [PUT] /api/resources', () => {
         },
         body: JSON.stringify(newResource),
       });
-      const data = await response.json();
+      const data = (await response.json()) as Record<string, unknown>;
       const resource = (await getAllResources(db)).find(
         ({ name }) => name === newResource.name
       );

@@ -1,6 +1,5 @@
 import type { FastifyInstance } from 'fastify';
 import type { AddressInfo } from 'net';
-import fetch from 'node-fetch';
 
 import type { Db } from '../db';
 import { initDb } from '../db';
@@ -44,7 +43,7 @@ describe('Server [GET] /api/user', () => {
 
   it('should respond with 401/error on missing cookie', async () => {
     const response = await fetch(`http://localhost:${port}/api/user`);
-    const data = await response.json();
+    const data = (await response.json()) as Record<string, unknown>;
 
     expect(response.status).toBe(401);
     expect(data.status).toBe('error');
@@ -61,7 +60,7 @@ describe('Server [GET] /api/user', () => {
           cookie: `login=${cookie}`,
         },
       });
-      const data = await response.json();
+      const data = (await response.json()) as Record<string, unknown>;
 
       expect(response.status).toBe(400);
       expect(data.status).toBe('invalid');
@@ -77,7 +76,7 @@ describe('Server [GET] /api/user', () => {
         cookie: `login=${cookieValue}`,
       },
     });
-    const data = await response.json();
+    const data = (await response.json()) as Record<string, unknown>;
 
     expect(response.status).toBe(200);
     expect(data.status).toBe('ok');

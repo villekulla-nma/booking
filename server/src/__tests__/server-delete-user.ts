@@ -1,6 +1,5 @@
 import type { FastifyInstance } from 'fastify';
 import type { AddressInfo } from 'net';
-import fetch from 'node-fetch';
 
 import type { Db } from '../db';
 import { initDb } from '../db';
@@ -117,7 +116,7 @@ describe('Server [DELETE] /api/user', () => {
       },
       body: JSON.stringify({ id: 'Ul2Zrv1BX' }),
     });
-    const { message } = await response.json();
+    const { message } = (await response.json()) as Record<string, unknown>;
 
     expect(response.status).toBe(400);
     expect(message).toBe('Cannot delete your own account.');

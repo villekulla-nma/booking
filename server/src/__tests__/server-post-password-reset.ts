@@ -1,6 +1,5 @@
 import type { FastifyInstance } from 'fastify';
 import type { AddressInfo } from 'net';
-import fetch from 'node-fetch';
 
 import type { Db } from '../db';
 import { initDb } from '../db';
@@ -45,7 +44,7 @@ describe('Server [POST] /api/password-reset', () => {
         body: JSON.stringify({ email: 'nobody@example.com' }),
       }
     );
-    const data = await response.json();
+    const data = (await response.json()) as Record<string, unknown>;
 
     expect(response.status).toBe(200);
     expect(data.status).toBe('ok');
@@ -62,7 +61,7 @@ describe('Server [POST] /api/password-reset', () => {
         body: JSON.stringify({ email: 'person.one@example.com' }),
       }
     );
-    const data = await response.json();
+    const data = (await response.json()) as Record<string, unknown>;
     const user = await db.User.findByPk('TD0sIeaoz');
 
     expect(response.status).toBe(200);

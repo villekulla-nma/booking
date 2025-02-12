@@ -1,6 +1,5 @@
 import type { FastifyInstance } from 'fastify';
 import type { AddressInfo } from 'net';
-import fetch from 'node-fetch';
 
 import type { Db } from '../db';
 import { initDb } from '../db';
@@ -60,10 +59,10 @@ describe('Server [GET] /api/users', () => {
           cookie: `login=${cookieValue}`,
         },
       });
-      const data = await response.json();
+      const { status } = (await response.json()) as Record<string, unknown>;
 
       expect(response.status).toBe(401);
-      expect(data.status).toBe('invalid');
+      expect(status).toBe('invalid');
     });
   });
 
@@ -85,7 +84,8 @@ describe('Server [GET] /api/users', () => {
           cookie: `login=${cookieValue}`,
         },
       });
-      const data = await response.json();
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const data = (await response.json()) as any;
 
       expect(response.status).toBe(200);
       expect(data.status).toBe('ok');
