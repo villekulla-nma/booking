@@ -5,8 +5,6 @@
 const bcrypt = require('bcryptjs');
 const { strict: assert } = require('assert');
 
-require('dotenv').config();
-
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, _Sequelize) {

@@ -4,8 +4,8 @@
   "author": "Emanuel Kluge (https://emanuel-kluge.de/)",
   "license": "MIT",
   "scripts": {
-    "db:seed": "npx sequelize-cli db:seed:all",
-    "db:migrate": "npx sequelize-cli db:migrate",
+    "db:seed": "node --env-file=\"../.env\" ../node_modules/.bin/sequelize-cli db:seed:all",
+    "db:migrate": "node --env-file=\"../.env\" ../node_modules/.bin/sequelize-cli db:migrate",
     "predev": "rm -f ./db_dev.sqlite && npm run db:migrate -- --debug && npm run db:seed -- --debug",
     "dev": "nodemon",
     "lint": "eslint .",
@@ -30,7 +30,6 @@
   "dependencies": {
     "@sendgrid/mail": "8.1.3",
     "bcryptjs": "2.4.3",
-    "dotenv": "16.4.5",
     "fastify": "4.28.1",
     "fluent-json-schema": "5.0.0",
     "jsonwebtoken": "9.0.2",
