@@ -3,7 +3,6 @@
 // @ts-check
 
 const bcrypt = require('bcryptjs');
-require('dotenv').config();
 
 /**
  * @typedef {import('../models/user').UserCreationAttributes} UserCreationAttributes;

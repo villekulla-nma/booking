@@ -2,7 +2,7 @@
   "$schema": "https://json.schemastore.org/nodemon.json",
   "watch": ["src"],
   "ext": "ts,json",
-  "exec": "ts-node ./src",
+  "exec": "node --env-file=\"../.env\" ../node_modules/.bin/ts-node ./src",
   "env": {
     "NODE_OPTIONS": "--enable-source-maps"
   }
