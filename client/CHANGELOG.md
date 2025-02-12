@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 0.7.1 (2025-02-12)
+
+
+### Bug Fixes
+
+* **deps:** update dependency react-error-boundary to v4.1.2 ([b21886f](https://github.com/villekulla-nma/booking/commit/b21886fcdb9b384c790bec889548f33bff31d782))
+
+
+
+
+
 # [0.7.0](https://github.com/villekulla-nma/booking/compare/v0.6.7...v0.7.0) (2024-04-07)
 
 **Note:** Version bump only for package @booking/client

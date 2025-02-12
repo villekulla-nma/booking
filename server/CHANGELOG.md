@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 0.7.1 (2025-02-12)
+
+
+### Bug Fixes
+
+* **server:** remove package dotenv ([819e50d](https://github.com/villekulla-nma/booking/commit/819e50d1ab27f8447cbd722a582fe8a21000c723))
+
+
+
+
+
 # [0.7.0](https://github.com/villekulla-nma/booking/compare/v0.6.7...v0.7.0) (2024-04-07)
 
 
