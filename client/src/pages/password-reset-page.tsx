@@ -40,14 +40,10 @@ export const PasswordResetPage: FC = () => {
     setLoading(true);
 
     requestPasswordReset(email.trim())
-      .then(
-        () => {
-          setEmail('');
-          setFormSubmitted(true);
-        },
-        () => alert('Da ist leider etwas schief gelaufen.')
-      )
+      .then(() => setEmail(''))
+      .catch(() => alert('Da ist leider etwas schief gelaufen.'))
       .finally(() => {
+        setFormSubmitted(true);
         setLoading(false);
       });
   };
