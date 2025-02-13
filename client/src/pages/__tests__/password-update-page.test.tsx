@@ -86,7 +86,7 @@ describe('Resource Page', () => {
     expect(scope.isDone()).toBe(true);
   });
 
-  it('should give ffedback on error', async () => {
+  it('should give feedback on error', async () => {
     const token = 'password-reset-token';
     const scope = nock('http://localhost')
       .post(`/api/password-reset/${token}`)
@@ -98,6 +98,12 @@ describe('Resource Page', () => {
       </Router>
     );
 
+    fireEvent.change(screen.getByLabelText('Passwort'), {
+      target: { value: '12345' },
+    });
+    fireEvent.change(screen.getByLabelText('Passwort wiederholen'), {
+      target: { value: '67890' },
+    });
     fireEvent.click(
       // eslint-disable-next-line testing-library/no-node-access
       screen.getByText('Absenden').closest('button') as HTMLButtonElement
