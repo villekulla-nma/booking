@@ -1,5 +1,5 @@
 import { vi, type Mock } from 'vitest';
-import { renderHook } from '@testing-library/react-hooks/dom';
+import { renderHook, waitFor } from '@testing-library/react';
 import nock from 'nock';
 import { UserResponse } from '@booking/types';
 
@@ -54,10 +54,8 @@ describe('User-User', () => {
 
       const view = renderHook(() => useUser());
 
-      await view.waitForNextUpdate();
-
+      await waitFor(() => expect(view.result.current).toBeNull());
       expect(scope.isDone()).toBe(true);
-      expect(view.result.current).toBeNull();
     });
   });
 
@@ -74,10 +72,8 @@ describe('User-User', () => {
 
       const view = renderHook(() => useUser());
 
-      await view.waitForNextUpdate();
-
+      await waitFor(() => expect(view.result.current).toEqual(user));
       expect(scope.isDone()).toBe(true);
-      expect(view.result.current).toEqual(user);
     });
   });
 });

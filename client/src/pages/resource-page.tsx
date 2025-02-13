@@ -150,7 +150,7 @@ export const ResourcePage: FC = () => {
   const params = useParams<Params>();
   const currentViewType = getViewTypeOption(params.view);
   const nowProp = getNowFromString(params.now);
-  const calendar = useRef<FullCalendar>();
+  const calendar = useRef<FullCalendar | null>(null);
   const [dateSelection, setDateSelection] = useState<SelectionRange>();
   const isDesktop = useMediaQuery(MQ_IS_DESKTOP);
   const eventSource = useRef<EventSourceInput>({
