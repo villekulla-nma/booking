@@ -76,7 +76,7 @@ describe('Reservation Page', () => {
         const resourceId = 'Uj5SAS740';
         const reservationPagePath = `/resources/${resourceId}/create`;
         const getUserConfirmation = vi.fn();
-        const scope = nock('http://localhost')
+        const scope = nock('http://localhost:3000')
           .put(`/api/resources/${resourceId}/events`, () => true)
           .reply(401, { status: 'error' });
         let pathname = '';
@@ -129,7 +129,7 @@ describe('Reservation Page', () => {
         const state = { allDay: false, start, end };
         const description = 'Some nice event!';
         const getUserConfirmation = vi.fn();
-        const scope = nock('http://localhost')
+        const scope = nock('http://localhost:3000')
           .put(
             `/api/resources/${resourceId}/events`,
             (body) =>
@@ -214,7 +214,7 @@ describe('Reservation Page', () => {
         const start = `${tomorrow}T09:00:00.000Z`;
         const end = `${twoDaysAfterTomorrow}T13:30:00.000Z`;
         const state = { allDay: true, start, end };
-        const scope = nock('http://localhost')
+        const scope = nock('http://localhost:3000')
           .put(
             `/api/resources/${resourceId}/events`,
             (body) =>
@@ -271,7 +271,7 @@ describe('Reservation Page', () => {
         const start = `${tomorrow}T09:00:00.000Z`;
         const end = `${tomorrow}T13:30:00.000Z`;
         const state = { allDay: false, start, end };
-        const scope = nock('http://localhost')
+        const scope = nock('http://localhost:3000')
           .put(`/api/resources/${resourceId}/events`)
           .reply(200, { status: 'overlapping' });
 
@@ -307,7 +307,7 @@ describe('Reservation Page', () => {
         const start = `${tomorrow}T09:00:00.000Z`;
         const end = `${tomorrow}T13:30:00.000Z`;
         const state = { allDay: false, start, end };
-        const scope = nock('http://localhost')
+        const scope = nock('http://localhost:3000')
           .put(`/api/resources/${resourceId}/events`)
           .reply(200, { status: 'invalid' });
 
@@ -344,7 +344,7 @@ describe('Reservation Page', () => {
         const start = `${tomorrow}T09:00:00.000Z`;
         const end = `${tomorrow}T13:30:00.000Z`;
         const state = { allDay: false, start, end };
-        const scope = nock('http://localhost')
+        const scope = nock('http://localhost:3000')
           .put(`/api/resources/${resourceId}/events`)
           .reply(200, { status: 'error' });
 

@@ -85,7 +85,7 @@ describe('Admin Users Page', () => {
     it('should render list of users', async () => {
       (useUserContext as Mock).mockReturnValue(userTwo);
 
-      const scope = nock('http://localhost')
+      const scope = nock('http://localhost:3000')
         .get('/api/users')
         .reply(200, { status: 'ok', payload: [userOne, userTwo] });
 
@@ -109,13 +109,13 @@ describe('Admin Users Page', () => {
       (useUserContext as Mock).mockReturnValue(userTwo);
 
       const newFirstName = 'Persona Uno';
-      const initialScope = nock('http://localhost')
+      const initialScope = nock('http://localhost:3000')
         .get('/api/users')
         .reply(200, { status: 'ok', payload: [userOne] });
-      const overlayScope = nock('http://localhost')
+      const overlayScope = nock('http://localhost:3000')
         .get('/api/units')
         .reply(200, { status: 'ok', payload: units });
-      const updateScope = nock('http://localhost')
+      const updateScope = nock('http://localhost:3000')
         .post('/api/user', {
           id: userOne.id,
           firstName: newFirstName,
@@ -188,10 +188,10 @@ describe('Admin Users Page', () => {
       (inquireConfirmation as Mock).mockReturnValue(true);
 
       const fullName = `${userThree.firstName} ${userThree.lastName}`;
-      const initialScope = nock('http://localhost')
+      const initialScope = nock('http://localhost:3000')
         .get('/api/users')
         .reply(200, { status: 'ok', payload: [userOne, userTwo, userThree] });
-      const deletionScope = nock('http://localhost')
+      const deletionScope = nock('http://localhost:3000')
         .delete('/api/user', {
           id: userThree.id,
         })

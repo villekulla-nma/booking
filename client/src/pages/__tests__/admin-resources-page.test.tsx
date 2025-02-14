@@ -67,7 +67,7 @@ describe('Admin Resources Page', () => {
     it('should render list of resources', async () => {
       (useUserContext as Mock).mockReturnValue(user);
 
-      const scope = nock('http://localhost')
+      const scope = nock('http://localhost:3000')
         .get('/api/resources')
         .reply(200, { status: 'ok', payload: resources });
 
@@ -90,10 +90,10 @@ describe('Admin Resources Page', () => {
     it('should create a new resource', async () => {
       (useUserContext as Mock).mockReturnValue(user);
 
-      const initialScope = nock('http://localhost')
+      const initialScope = nock('http://localhost:3000')
         .get('/api/resources')
         .reply(200, { status: 'ok', payload: resources });
-      const creationScope = nock('http://localhost')
+      const creationScope = nock('http://localhost:3000')
         .put('/api/resources', {
           name: newResource.name,
         })
@@ -141,10 +141,10 @@ describe('Admin Resources Page', () => {
       (useUserContext as Mock).mockReturnValue(user);
 
       const newName = 'Awesome Resource #2';
-      const initialScope = nock('http://localhost')
+      const initialScope = nock('http://localhost:3000')
         .get('/api/resources')
         .reply(200, { status: 'ok', payload: resources });
-      const updateScope = nock('http://localhost')
+      const updateScope = nock('http://localhost:3000')
         .post('/api/resources', {
           id: resources[1].id,
           name: newName,
@@ -193,10 +193,10 @@ describe('Admin Resources Page', () => {
       (useUserContext as Mock).mockReturnValue(user);
       (inquireConfirmation as Mock).mockReturnValue(true);
 
-      const initialScope = nock('http://localhost')
+      const initialScope = nock('http://localhost:3000')
         .get('/api/resources')
         .reply(200, { status: 'ok', payload: resources });
-      const deletionScope = nock('http://localhost')
+      const deletionScope = nock('http://localhost:3000')
         .delete('/api/resources', {
           id: resources[1].id,
         })

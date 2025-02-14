@@ -45,7 +45,7 @@ describe('Start Page', () => {
       let pathname = '';
       let from: string | undefined;
 
-      const scope = nock('http://localhost')
+      const scope = nock('http://localhost:3000')
         .get('/api/user/events')
         .query({ limit: 10 })
         .reply(401, { status: 'error' });
@@ -77,7 +77,7 @@ describe('Start Page', () => {
     it('should not display any events', async () => {
       (useUserContext as Mock).mockReturnValue(user);
 
-      const scope = nock('http://localhost')
+      const scope = nock('http://localhost:3000')
         .get('/api/user/events')
         .query({ limit: 10 })
         .reply(200, { payload: [] });
@@ -99,7 +99,7 @@ describe('Start Page', () => {
       (useUserContext as Mock).mockReturnValue(user);
 
       const [today] = new Date().toISOString().split('T');
-      const scope = nock('http://localhost')
+      const scope = nock('http://localhost:3000')
         .get('/api/user/events')
         .query({ limit: 10 })
         .reply(200, {

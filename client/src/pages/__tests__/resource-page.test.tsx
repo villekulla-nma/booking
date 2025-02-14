@@ -86,7 +86,7 @@ describe('Resource Page', () => {
       const date = new Date(Date.now() + 24 * 3600 * 1000);
       const [tomorrow] = date.toISOString().split('T');
       const resourcePagePath = `/resources/${resourceId}/week/${tomorrow}`;
-      const scope = nock('http://localhost')
+      const scope = nock('http://localhost:3000')
         .get(`/api/resources/${resourceId}/events`)
         .query(() => true)
         .reply(401, { status: 'error' });
@@ -134,7 +134,7 @@ describe('Resource Page', () => {
     let scope: nock.Scope;
 
     beforeEach(() => {
-      scope = nock('http://localhost')
+      scope = nock('http://localhost:3000')
         .get(`/api/resources/${resourceId}/events`)
         .query(
           ({ start, end, timeZone, ...rest }) =>

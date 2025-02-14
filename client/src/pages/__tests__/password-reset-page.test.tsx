@@ -25,7 +25,7 @@ describe('Resource Page', () => {
   });
 
   it('should successfully reset the password', async () => {
-    const scope = nock('http://localhost')
+    const scope = nock('http://localhost:3000')
       .post('/api/password-reset', {
         email: 'person.one@example.com',
       })
@@ -53,7 +53,7 @@ describe('Resource Page', () => {
   });
 
   it('should show success message even in case of server error', async () => {
-    const scope = nock('http://localhost')
+    const scope = nock('http://localhost:3000')
       .post('/api/password-reset')
       .reply(500);
 

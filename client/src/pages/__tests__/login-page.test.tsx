@@ -41,7 +41,7 @@ describe('Resource Page', () => {
     const from = '/events/4zrtsev65z';
     const state = { from };
     const pathname = '/login';
-    const scope = nock('http://localhost')
+    const scope = nock('http://localhost:3000')
       .post('/api/login', {
         email: 'person.one@example.com',
         password: '1234',
@@ -76,7 +76,7 @@ describe('Resource Page', () => {
     const from = '/events/4zrtsev65z';
     const state = { from };
     const pathname = '/login';
-    const scope = nock('http://localhost')
+    const scope = nock('http://localhost:3000')
       .post('/api/login', {
         email: 'person.one@example.com',
         password: '1234',
@@ -113,7 +113,7 @@ describe('Resource Page', () => {
     const from = '/events/4zrtsev65z';
     const state = { from };
     const pathname = '/login';
-    const scope = nock('http://localhost')
+    const scope = nock('http://localhost:3000')
       .post('/api/login', {
         email: 'person.one@example.com',
         password: '5678',
@@ -150,7 +150,7 @@ describe('Resource Page', () => {
     const from = '/events/4zrtsev65z';
     const state = { from };
     const pathname = '/login';
-    const scope = nock('http://localhost')
+    const scope = nock('http://localhost:3000')
       .post('/api/login', {
         email: 'person.one@example.com',
         password: '5678',
