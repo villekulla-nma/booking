@@ -66,7 +66,7 @@ describe('Event Page', () => {
     it('should redirect to the login page', async () => {
       const eventId = 'dsgw46hrds';
       const eventPagePath = `/events/${eventId}`;
-      const scope = nock('http://localhost')
+      const scope = nock('http://localhost:3000')
         .get(`/api/events/${eventId}`)
         .reply(401, { status: 'error' });
       let pathname = '';
@@ -126,7 +126,7 @@ describe('Event Page', () => {
           start,
           end,
         };
-        const scope = nock('http://localhost')
+        const scope = nock('http://localhost:3000')
           .get(`/api/events/${eventId}`)
           .reply(200, { status: 'ok', payload: event });
 
@@ -170,7 +170,7 @@ describe('Event Page', () => {
         user: { id: user.id, firstName: user.firstName },
         createdAt: '2021-03-25T10:15:56.000Z',
       };
-      const scope = nock('http://localhost')
+      const scope = nock('http://localhost:3000')
         .get(`/api/events/${eventId}`)
         .reply(200, { status: 'ok', payload: event })
         .delete(`/api/events/${eventId}`)
@@ -227,7 +227,7 @@ describe('Event Page', () => {
         user: { id: user.id, firstName: user.firstName },
         createdAt: '2021-03-25T10:15:56.000Z',
       };
-      const scope = nock('http://localhost')
+      const scope = nock('http://localhost:3000')
         .get(`/api/events/${eventId}`)
         .reply(200, { status: 'ok', payload: event });
 
@@ -260,7 +260,7 @@ describe('Event Page', () => {
         user: { id: 'jZNDP7oxU', firstName: 'whatever' },
         createdAt: '2021-03-25T10:15:56.000Z',
       };
-      const scope = nock('http://localhost')
+      const scope = nock('http://localhost:3000')
         .get(`/api/events/${eventId}`)
         .reply(200, { status: 'ok', payload: event });
 
@@ -291,7 +291,7 @@ describe('Event Page', () => {
         user: { id: user.id, firstName: user.firstName },
         createdAt: '2021-03-25T10:15:56.000Z',
       };
-      const scope = nock('http://localhost')
+      const scope = nock('http://localhost:3000')
         .get(`/api/events/${eventId}`)
         .reply(200, { status: 'ok', payload: event });
 

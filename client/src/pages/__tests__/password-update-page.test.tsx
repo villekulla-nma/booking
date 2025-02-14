@@ -26,7 +26,7 @@ describe('Resource Page', () => {
 
   it('should successfully update the password', async () => {
     const token = 'password-reset-token';
-    const scope = nock('http://localhost')
+    const scope = nock('http://localhost:3000')
       .post(`/api/password-reset/${token}`, {
         password: '12345',
         password_confirm: '12345',
@@ -57,7 +57,7 @@ describe('Resource Page', () => {
 
   it('should warn on mismatch', async () => {
     const token = 'password-reset-token';
-    const scope = nock('http://localhost')
+    const scope = nock('http://localhost:3000')
       .post(`/api/password-reset/${token}`, {
         password: '12345',
         password_confirm: '67890',
@@ -88,7 +88,7 @@ describe('Resource Page', () => {
 
   it('should give feedback on error', async () => {
     const token = 'password-reset-token';
-    const scope = nock('http://localhost')
+    const scope = nock('http://localhost:3000')
       .post(`/api/password-reset/${token}`)
       .reply(200, { status: 'error' });
 

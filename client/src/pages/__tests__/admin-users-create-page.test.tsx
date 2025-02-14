@@ -75,7 +75,7 @@ describe('Admin Users Create Page', () => {
       (useUserContext as Mock).mockReturnValue(user);
 
       let pathname = '';
-      const scope = nock('http://localhost')
+      const scope = nock('http://localhost:3000')
         .get('/api/units')
         .reply(200, { status: 'ok', payload: units });
 
@@ -112,10 +112,10 @@ describe('Admin Users Create Page', () => {
       (useUserContext as Mock).mockReturnValue(user);
 
       let pathname = '';
-      const initialScope = nock('http://localhost')
+      const initialScope = nock('http://localhost:3000')
         .get('/api/units')
         .reply(200, { status: 'ok', payload: units });
-      const creationScope = nock('http://localhost')
+      const creationScope = nock('http://localhost:3000')
         .put('/api/user', {
           firstName: newUser.firstName,
           lastName: newUser.lastName,

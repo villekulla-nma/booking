@@ -48,7 +48,7 @@ describe('User-User', () => {
       }>('../../api');
       (getUser as Mock).mockImplementation(mock);
 
-      const scope = nock('http://localhost')
+      const scope = nock('http://localhost:3000')
         .get('/api/user')
         .reply(401, { status: 'error' });
 
@@ -66,7 +66,7 @@ describe('User-User', () => {
       }>('../../api');
       (getUser as Mock).mockImplementation(mock);
 
-      const scope = nock('http://localhost')
+      const scope = nock('http://localhost:3000')
         .get('/api/user')
         .reply(200, { status: 'ok', payload: user });
 

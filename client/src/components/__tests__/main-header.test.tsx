@@ -54,7 +54,7 @@ describe('Main-Header', () => {
       (useUserContext as Mock).mockReturnValue(user);
 
       const currentPagePath = '/';
-      const scope = nock('http://localhost')
+      const scope = nock('http://localhost:3000')
         .get('/api/resources')
         .reply(401, { status: 'error' });
       let pathname = '';
@@ -94,7 +94,7 @@ describe('Main-Header', () => {
       (useMediaQuery as Mock).mockReturnValue(true);
       (useUserContext as Mock).mockReturnValue(user);
 
-      const scope = nock('http://localhost')
+      const scope = nock('http://localhost:3000')
         .get('/api/resources')
         .reply(200, {
           status: 'ok',
@@ -125,7 +125,7 @@ describe('Main-Header', () => {
       (useMediaQuery as Mock).mockReturnValue(false);
       (useUserContext as Mock).mockReturnValue(user);
 
-      const scope = nock('http://localhost')
+      const scope = nock('http://localhost:3000')
         .get('/api/resources')
         .reply(200, {
           status: 'ok',
@@ -165,7 +165,7 @@ describe('Main-Header', () => {
       (useMediaQuery as Mock).mockReturnValue(true);
       (useUserContext as Mock).mockReturnValue(user);
 
-      const scope = nock('http://localhost')
+      const scope = nock('http://localhost:3000')
         .get('/api/resources')
         .reply(200, { status: 'ok', payload: [] })
         .post('/api/logout')
@@ -212,10 +212,12 @@ describe('Main-Header', () => {
       (useMediaQuery as Mock).mockReturnValue(false);
       (useUserContext as Mock).mockReturnValue({ ...user, role: 'admin' });
 
-      const scope = nock('http://localhost').get('/api/resources').reply(200, {
-        status: 'ok',
-        payload: [],
-      });
+      const scope = nock('http://localhost:3000')
+        .get('/api/resources')
+        .reply(200, {
+          status: 'ok',
+          payload: [],
+        });
 
       render(<MainHeader />, {
         wrapper: ({ children: c }) => <Router>{c}</Router>,

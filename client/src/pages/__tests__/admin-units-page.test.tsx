@@ -70,7 +70,7 @@ describe('Admin Units Page', () => {
     it('should render list of units', async () => {
       (useUserContext as Mock).mockReturnValue(user);
 
-      const scope = nock('http://localhost')
+      const scope = nock('http://localhost:3000')
         .get('/api/units')
         .reply(200, { status: 'ok', payload: units });
 
@@ -93,10 +93,10 @@ describe('Admin Units Page', () => {
     it('should create a new unit', async () => {
       (useUserContext as Mock).mockReturnValue(user);
 
-      const initialScope = nock('http://localhost')
+      const initialScope = nock('http://localhost:3000')
         .get('/api/units')
         .reply(200, { status: 'ok', payload: units });
-      const creationScope = nock('http://localhost')
+      const creationScope = nock('http://localhost:3000')
         .put('/api/units', {
           name: newUnit.name,
         })
@@ -141,10 +141,10 @@ describe('Admin Units Page', () => {
 
       const newName = 'Awesome Unit #2';
       const newColor = '#ffff00';
-      const initialScope = nock('http://localhost')
+      const initialScope = nock('http://localhost:3000')
         .get('/api/units')
         .reply(200, { status: 'ok', payload: units });
-      const updateScope = nock('http://localhost')
+      const updateScope = nock('http://localhost:3000')
         .post('/api/units', {
           id: units[1].id,
           name: newName,
@@ -210,10 +210,10 @@ describe('Admin Units Page', () => {
       (useUserContext as Mock).mockReturnValue(user);
       (inquireConfirmation as Mock).mockReturnValue(true);
 
-      const initialScope = nock('http://localhost')
+      const initialScope = nock('http://localhost:3000')
         .get('/api/units')
         .reply(200, { status: 'ok', payload: units });
-      const deletionScope = nock('http://localhost')
+      const deletionScope = nock('http://localhost:3000')
         .delete('/api/units', {
           id: units[1].id,
         })
