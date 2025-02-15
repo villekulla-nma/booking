@@ -1,15 +1,10 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:base", ":maintainLockFilesWeekly"],
-  "devDependencies": {
-    "automerge": true,
-    "commitBody": "[skip release]"
-  },
-  "dependencyDashboard": true,
+  "extends": ["config:recommended", ":maintainLockFilesWeekly"],
   "packageRules": [
     {
       "groupName": "Fluent UI",
-      "matchPackagePatterns": ["^@fluentui/"]
+      "matchPackageNames": ["/^@fluentui//"]
     },
     {
       "matchUpdateTypes": "lockFileMaintenance",
@@ -22,6 +17,12 @@
     {
       "matchPackageNames": ["ts-jest"],
       "allowedVersions": "26.5.6"
+    },
+    {
+      "matchDepTypes": ["devDependencies"],
+      "automerge": true,
+      "commitBody": "[skip release]"
     }
-  ]
+  ],
+  "dependencyDashboard": true
 }
