@@ -68,7 +68,7 @@
     "@fullcalendar/interaction": "6.1.15",
     "@fullcalendar/react": "6.1.15",
     "@fullcalendar/timegrid": "6.1.15",
-    "@uifabric/icons": "7.9.5",
+    "@uifabric/icons": "7.9.6",
     "classnames": "2.5.1",
     "date-fns": "4.1.0",
     "react": "19.0.0",
