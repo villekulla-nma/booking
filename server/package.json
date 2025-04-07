@@ -28,7 +28,7 @@
     ]
   },
   "dependencies": {
-    "@sendgrid/mail": "8.1.4",
+    "@sendgrid/mail": "8.1.5",
     "bcryptjs": "3.0.2",
     "fastify": "5.2.1",
     "fluent-json-schema": "5.0.0",
