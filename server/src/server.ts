@@ -59,11 +59,16 @@ export const initServer = async (
   port?: string
 ): Promise<FastifyInstance> => {
   const level = process.env.NODE_ENV === 'test' ? 'silent' : 'trace';
+  const host = env('HOST', true) || 'localhost';
   const server = Fastify({ logger: { level } });
 
   routes.forEach(([route, handler]) => handler(route, server, db));
 
-  await server.listen({ port: Number(port || env('PORT') || '3000') });
+  // TODO: shut down gracefully on SIGTERM & SIGINT
+  await server.listen({
+    port: Number(port || env('PORT') || '3000'),
+    host,
+  });
 
   return server;
 };
