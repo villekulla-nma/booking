@@ -12,7 +12,7 @@
     "test:watch": "jest --watch",
     "test": "jest",
     "build": "tsdown",
-    "gen-salt": "node -e \"console.log(require('bcryptjs').genSaltSync())\"",
+    "gen-salt": "node -e \"console.log(require('bcryptjs').genSaltSync(12))\"",
     "create-id": "node -e \"console.log(require('shortid').generate())\""
   },
   "jest": {
