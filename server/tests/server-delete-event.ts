@@ -1,15 +1,15 @@
 import type { FastifyInstance } from 'fastify';
 import type { AddressInfo } from 'net';
 
-import type { Db } from '../db';
-import { initDb } from '../db';
-import { initServer } from '../server';
+import type { Db } from '../src/db';
+import { initDb } from '../src/db';
+import { initServer } from '../src/server';
 import { signJwt } from './helpers/sign-jwt';
 import { getDates } from './helpers/get-dates';
-import { removeEvent } from '../controllers/event';
-import type { EventInstance } from '../models/event';
+import { removeEvent } from '../src/controllers/event';
+import type { EventInstance } from '../src/models/event';
 
-jest.mock('../controllers/event');
+jest.mock('../src/controllers/event');
 
 describe('Server [DELETE] /api/events/:eventId', () => {
   const { yesterday, tomorrow } = getDates();
@@ -71,7 +71,7 @@ describe('Server [DELETE] /api/events/:eventId', () => {
 
   it('should respond with 200 on success', async () => {
     (removeEvent as jest.Mock).mockImplementation(
-      jest.requireActual('../controllers/event').removeEvent
+      jest.requireActual('../src/controllers/event').removeEvent
     );
 
     const response = await fetch(
@@ -94,7 +94,7 @@ describe('Server [DELETE] /api/events/:eventId', () => {
     ['non-existing event', 'GjcSASl40'],
   ])('should respond with 400 on %s', async (_, eventId) => {
     (removeEvent as jest.Mock).mockImplementation(
-      jest.requireActual('../controllers/event').removeEvent
+      jest.requireActual('../src/controllers/event').removeEvent
     );
 
     const response = await fetch(

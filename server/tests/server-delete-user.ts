@@ -1,13 +1,13 @@
 import type { FastifyInstance } from 'fastify';
 import type { AddressInfo } from 'net';
 
-import type { Db } from '../db';
-import { initDb } from '../db';
-import { initServer } from '../server';
+import type { Db } from '../src/db';
+import { initDb } from '../src/db';
+import { initServer } from '../src/server';
 import { signJwt } from './helpers/sign-jwt';
-import { removeUser } from '../controllers/user';
+import { removeUser } from '../src/controllers/user';
 
-jest.mock('../controllers/user');
+jest.mock('../src/controllers/user');
 
 describe('Server [DELETE] /api/user', () => {
   let port: number;
@@ -56,7 +56,7 @@ describe('Server [DELETE] /api/user', () => {
 
   it('should respond with 200 on success', async () => {
     (removeUser as jest.Mock).mockImplementation(
-      jest.requireActual('../controllers/user').removeUser
+      jest.requireActual('../src/controllers/user').removeUser
     );
 
     const response = await fetch(`http://localhost:${port}/api/user`, {
@@ -105,7 +105,7 @@ describe('Server [DELETE] /api/user', () => {
 
   it('should not allow to delete own account', async () => {
     (removeUser as jest.Mock).mockImplementation(
-      jest.requireActual('../controllers/user').removeUser
+      jest.requireActual('../src/controllers/user').removeUser
     );
 
     const response = await fetch(`http://localhost:${port}/api/user`, {

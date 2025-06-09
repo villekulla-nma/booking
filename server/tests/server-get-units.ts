@@ -1,11 +1,11 @@
 import type { FastifyInstance } from 'fastify';
 import type { AddressInfo } from 'net';
 
-import type { Db } from '../db';
-import { initDb } from '../db';
-import { initServer } from '../server';
+import type { Db } from '../src/db';
+import { initDb } from '../src/db';
+import { initServer } from '../src/server';
 import { signJwt } from './helpers/sign-jwt';
-import type { UnitInstance } from '../models/unit';
+import type { UnitInstance } from '../src/models/unit';
 
 describe('Server [GET] /api/units', () => {
   let port: number;

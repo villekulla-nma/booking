@@ -1,24 +1,23 @@
 import type { FastifyInstance } from 'fastify';
 import type { AddressInfo } from 'net';
-import type { UserRole } from '@booking/types';
 
-import type { Db } from '../db';
-import { initDb } from '../db';
-import { initServer } from '../server';
+import type { Db } from '../src/db';
+import { initDb } from '../src/db';
+import { initServer } from '../src/server';
 import { signJwt } from './helpers/sign-jwt';
-import { updateUser } from '../controllers/user';
+import { updateUnit } from '../src/controllers/unit';
 
-jest.mock('../controllers/user');
+jest.mock('../src/controllers/unit');
 
-describe('Server [POST] /api/user', () => {
-  const userOne = {
-    id: 'TD0sIeaoz',
-    email: 'person.one@example.com',
-    firstName: 'Person1',
-    lastName: 'One',
-    role: 'user' as UserRole,
-    unitId: 'YLBqxvCCm',
+describe('Server [POST] /api/units', () => {
+  const unit = {
+    id: 'Uj5SAS740',
+    name: 'Super Unit #1',
+    color: '#ff0000',
   };
+  const newName = 'Awesome Unit #1';
+  const newColor = '#00ff00';
+  const updatedUnit = { name: newName, color: newColor, id: unit.id };
 
   let port: number;
   let cookieValue: string;
@@ -34,7 +33,14 @@ describe('Server [POST] /api/user', () => {
 
     console.log = () => undefined;
 
-    await db.User.create(userOne);
+    await db.User.create({
+      id: 'TD0sIeaoz',
+      email: 'person.one@example.com',
+      firstName: 'Person1',
+      lastName: 'One',
+      role: 'user',
+      unitId: 'YLBqxvCCm',
+    });
     await db.User.create({
       id: 'Ul2Zrv1BX',
       email: 'person.two@example.com',
@@ -43,6 +49,7 @@ describe('Server [POST] /api/user', () => {
       role: 'admin',
       unitId: 'MTpZEtFhN',
     });
+    await db.Unit.create(unit);
   });
 
   afterAll(async () => {
@@ -65,13 +72,13 @@ describe('Server [POST] /api/user', () => {
     });
 
     it('should respond with 401/invalid', async () => {
-      const response = await fetch(`http://localhost:${port}/api/user`, {
+      const response = await fetch(`http://localhost:${port}/api/units`, {
         method: 'POST',
         headers: {
           cookie: `login=${cookieValue}`,
           'content-type': 'application/json',
         },
-        body: JSON.stringify({ ...userOne, firstName: 'Persona Uno' }),
+        body: JSON.stringify(updatedUnit),
       });
       const data = (await response.json()) as Record<string, unknown>;
 
@@ -92,16 +99,38 @@ describe('Server [POST] /api/user', () => {
       cookieValue = undefined;
     });
 
-    it('should respond with 400/error on failure', async () => {
-      (updateUser as jest.Mock).mockResolvedValueOnce(false);
+    it('should respond with 400/invalid on invalid color value', async () => {
+      (updateUnit as jest.Mock).mockImplementationOnce(
+        jest.requireActual('../src/controllers/unit').updateUnit
+      );
 
-      const response = await fetch(`http://localhost:${port}/api/user`, {
+      const response = await fetch(`http://localhost:${port}/api/units`, {
         method: 'POST',
         headers: {
           cookie: `login=${cookieValue}`,
           'content-type': 'application/json',
         },
-        body: JSON.stringify({ ...userOne, firstName: 'Persona Uno' }),
+        body: JSON.stringify({
+          ...updatedUnit,
+          color: 'non-hexadecimal value',
+        }),
+      });
+      const data = (await response.json()) as Record<string, unknown>;
+
+      expect(response.status).toBe(400);
+      expect(data.status).toBe('invalid');
+    });
+
+    it('should respond with 400/error on failure', async () => {
+      (updateUnit as jest.Mock).mockResolvedValueOnce(false);
+
+      const response = await fetch(`http://localhost:${port}/api/units`, {
+        method: 'POST',
+        headers: {
+          cookie: `login=${cookieValue}`,
+          'content-type': 'application/json',
+        },
+        body: JSON.stringify(updatedUnit),
       });
       const data = (await response.json()) as Record<string, unknown>;
 
@@ -110,17 +139,17 @@ describe('Server [POST] /api/user', () => {
     });
 
     it('should respond with 400/invalid on Sequel Validation Error', async () => {
-      (updateUser as jest.Mock).mockRejectedValueOnce(
+      (updateUnit as jest.Mock).mockRejectedValueOnce(
         Object.assign(new Error('nope'), { name: 'SequelizeValidationError' })
       );
 
-      const response = await fetch(`http://localhost:${port}/api/user`, {
+      const response = await fetch(`http://localhost:${port}/api/units`, {
         method: 'POST',
         headers: {
           cookie: `login=${cookieValue}`,
           'content-type': 'application/json',
         },
-        body: JSON.stringify({ ...userOne, firstName: 'Persona Uno' }),
+        body: JSON.stringify(updatedUnit),
       });
       const data = (await response.json()) as Record<string, unknown>;
 
@@ -129,15 +158,15 @@ describe('Server [POST] /api/user', () => {
     });
 
     it('should respond with 500/error on general error', async () => {
-      (updateUser as jest.Mock).mockRejectedValueOnce(new Error('nope'));
+      (updateUnit as jest.Mock).mockRejectedValueOnce(new Error('nope'));
 
-      const response = await fetch(`http://localhost:${port}/api/user`, {
+      const response = await fetch(`http://localhost:${port}/api/units`, {
         method: 'POST',
         headers: {
           cookie: `login=${cookieValue}`,
           'content-type': 'application/json',
         },
-        body: JSON.stringify({ ...userOne, firstName: 'Persona Uno' }),
+        body: JSON.stringify(updatedUnit),
       });
       const data = (await response.json()) as Record<string, unknown>;
 
@@ -146,24 +175,25 @@ describe('Server [POST] /api/user', () => {
     });
 
     it('should respond with 200/ok on success', async () => {
-      (updateUser as jest.Mock).mockImplementationOnce(
-        jest.requireActual('../controllers/user').updateUser
+      (updateUnit as jest.Mock).mockImplementationOnce(
+        jest.requireActual('../src/controllers/unit').updateUnit
       );
 
-      const response = await fetch(`http://localhost:${port}/api/user`, {
+      const response = await fetch(`http://localhost:${port}/api/units`, {
         method: 'POST',
         headers: {
           cookie: `login=${cookieValue}`,
           'content-type': 'application/json',
         },
-        body: JSON.stringify({ ...userOne, firstName: 'Persona Uno' }),
+        body: JSON.stringify(updatedUnit),
       });
       const data = (await response.json()) as Record<string, unknown>;
-      const result = await db.User.findByPk(userOne.id);
+      const result = await db.Unit.findByPk(unit.id);
 
       expect(response.status).toBe(200);
       expect(data.status).toBe('ok');
-      expect(result.firstName).toBe('Persona Uno');
+      expect(result.name).toBe(newName);
+      expect(result.color).toBe(newColor);
     });
   });
 });

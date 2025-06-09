@@ -1,12 +1,12 @@
 import type { FastifyInstance } from 'fastify';
 import type { AddressInfo } from 'net';
 
-import type { Db } from '../db';
-import { initDb } from '../db';
-import { initServer } from '../server';
-import { sendMail } from '../utils/send-mail';
+import type { Db } from '../src/db';
+import { initDb } from '../src/db';
+import { initServer } from '../src/server';
+import { sendMail } from '../src/utils/send-mail';
 
-jest.mock('../utils/send-mail');
+jest.mock('../src/utils/send-mail');
 
 describe('Server [POST] /api/password-reset', () => {
   let port: number;

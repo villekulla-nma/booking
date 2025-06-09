@@ -2,16 +2,16 @@ import type { FastifyInstance } from 'fastify';
 import type { AddressInfo } from 'net';
 import { Op } from 'sequelize';
 
-import type { Db } from '../db';
-import { initDb } from '../db';
-import { initServer } from '../server';
+import type { Db } from '../src/db';
+import { initDb } from '../src/db';
+import { initServer } from '../src/server';
 import { signJwt } from './helpers/sign-jwt';
 import { getDates } from './helpers/get-dates';
-import type { ResourceInstance } from '../models/resource';
-import { createEvent, getOverlappingEvents } from '../controllers/event';
-import type { EventInstance } from '../models/event';
+import type { ResourceInstance } from '../src/models/resource';
+import { createEvent, getOverlappingEvents } from '../src/controllers/event';
+import type { EventInstance } from '../src/models/event';
 
-jest.mock('../controllers/event');
+jest.mock('../src/controllers/event');
 
 describe('Server [PUT] /api/resources/:resourceId/events', () => {
   const { today, tomorrow, dayAfterTomorrow } = getDates();
@@ -100,7 +100,7 @@ describe('Server [PUT] /api/resources/:resourceId/events', () => {
     'should respond with 400/overlapping [%i]',
     async (_, start, end, allDay) => {
       (getOverlappingEvents as jest.Mock).mockImplementation(
-        jest.requireActual('../controllers/event').getOverlappingEvents
+        jest.requireActual('../src/controllers/event').getOverlappingEvents
       );
 
       const response = await fetch(
@@ -153,7 +153,7 @@ describe('Server [PUT] /api/resources/:resourceId/events', () => {
 
   it('should respond with 400/invalid on Sequelize Validation Error', async () => {
     (getOverlappingEvents as jest.Mock).mockImplementation(
-      jest.requireActual('../controllers/event').getOverlappingEvents
+      jest.requireActual('../src/controllers/event').getOverlappingEvents
     );
     (createEvent as jest.Mock).mockRejectedValue(
       Object.assign(new Error('wrong'), { name: 'SequelizeValidationError' })
@@ -184,7 +184,7 @@ describe('Server [PUT] /api/resources/:resourceId/events', () => {
 
   it('should respond with 500/error on failure', async () => {
     (getOverlappingEvents as jest.Mock).mockImplementation(
-      jest.requireActual('../controllers/event').getOverlappingEvents
+      jest.requireActual('../src/controllers/event').getOverlappingEvents
     );
     (createEvent as jest.Mock).mockRejectedValue(new Error('nope'));
 
@@ -230,10 +230,10 @@ describe('Server [PUT] /api/resources/:resourceId/events', () => {
       'should respond with 200/ok on success (%s)',
       async (description, resourceId, start, end, allDay) => {
         (getOverlappingEvents as jest.Mock).mockImplementation(
-          jest.requireActual('../controllers/event').getOverlappingEvents
+          jest.requireActual('../src/controllers/event').getOverlappingEvents
         );
         (createEvent as jest.Mock).mockImplementation(
-          jest.requireActual('../controllers/event').createEvent
+          jest.requireActual('../src/controllers/event').createEvent
         );
 
         const response = await fetch(
