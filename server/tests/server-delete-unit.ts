@@ -1,13 +1,13 @@
 import type { FastifyInstance } from 'fastify';
 import type { AddressInfo } from 'net';
 
-import type { Db } from '../db';
-import { initDb } from '../db';
-import { initServer } from '../server';
+import type { Db } from '../src/db';
+import { initDb } from '../src/db';
+import { initServer } from '../src/server';
 import { signJwt } from './helpers/sign-jwt';
-import { removeUnit } from '../controllers/unit';
+import { removeUnit } from '../src/controllers/unit';
 
-jest.mock('../controllers/unit');
+jest.mock('../src/controllers/unit');
 
 describe('Server [DELETE] /api/units', () => {
   let port: number;
@@ -53,7 +53,7 @@ describe('Server [DELETE] /api/units', () => {
 
   it('should respond with 200 on success', async () => {
     (removeUnit as jest.Mock).mockImplementation(
-      jest.requireActual('../controllers/unit').removeUnit
+      jest.requireActual('../src/controllers/unit').removeUnit
     );
 
     const response = await fetch(`http://localhost:${port}/api/units`, {

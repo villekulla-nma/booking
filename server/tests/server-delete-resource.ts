@@ -1,13 +1,13 @@
 import type { FastifyInstance } from 'fastify';
 import type { AddressInfo } from 'net';
 
-import type { Db } from '../db';
-import { initDb } from '../db';
-import { initServer } from '../server';
+import type { Db } from '../src/db';
+import { initDb } from '../src/db';
+import { initServer } from '../src/server';
 import { signJwt } from './helpers/sign-jwt';
-import { removeResource } from '../controllers/resource';
+import { removeResource } from '../src/controllers/resource';
 
-jest.mock('../controllers/resource');
+jest.mock('../src/controllers/resource');
 
 describe('Server [DELETE] /api/resources', () => {
   let port: number;
@@ -52,7 +52,7 @@ describe('Server [DELETE] /api/resources', () => {
 
   it('should respond with 200 on success', async () => {
     (removeResource as jest.Mock).mockImplementation(
-      jest.requireActual('../controllers/resource').removeResource
+      jest.requireActual('../src/controllers/resource').removeResource
     );
 
     const response = await fetch(`http://localhost:${port}/api/resources`, {

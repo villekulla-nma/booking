@@ -22,9 +22,10 @@
       "./jest.setup.ts"
     ],
     "clearMocks": true,
+    "testMatch": ["**/tests/*.ts"],
     "testPathIgnorePatterns": [
       "/node_modules/",
-      "__tests__/helpers/"
+      "/tests/helpers/"
     ]
   },
   "dependencies": {

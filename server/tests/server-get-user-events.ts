@@ -1,12 +1,12 @@
 import type { FastifyInstance } from 'fastify';
 import type { AddressInfo } from 'net';
 
-import type { Db } from '../db';
-import { initDb } from '../db';
-import { initServer } from '../server';
+import type { Db } from '../src/db';
+import { initDb } from '../src/db';
+import { initServer } from '../src/server';
 import { signJwt } from './helpers/sign-jwt';
-import type { ResourceInstance } from '../models/resource';
-import type { EventInstance } from '../models/event';
+import type { ResourceInstance } from '../src/models/resource';
+import type { EventInstance } from '../src/models/event';
 import { getDates } from './helpers/get-dates';
 
 describe('Server [GET] /api/user/events', () => {

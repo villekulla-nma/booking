@@ -1,8 +1,8 @@
 import type { FastifyInstance } from 'fastify';
 import type { AddressInfo } from 'net';
 
-import type { Db } from '../db';
-import { initServer } from '../server';
+import type { Db } from '../src/db';
+import { initServer } from '../src/server';
 
 describe('Server [POST] /api/logout', () => {
   let port: number;

@@ -2,12 +2,12 @@ import type { FastifyInstance } from 'fastify';
 import type { AddressInfo } from 'net';
 import { Op } from 'sequelize';
 
-import type { Db } from '../db';
-import { initDb } from '../db';
-import { initServer } from '../server';
-import { updateUser, getUserByKey } from '../controllers/user';
+import type { Db } from '../src/db';
+import { initDb } from '../src/db';
+import { initServer } from '../src/server';
+import { updateUser, getUserByKey } from '../src/controllers/user';
 
-jest.mock('../controllers/user');
+jest.mock('../src/controllers/user');
 
 describe('Server [POST] /api/password-reset/:token', () => {
   let port: number;
@@ -88,7 +88,7 @@ describe('Server [POST] /api/password-reset/:token', () => {
 
   it('should respond with 400/error if the update fails', async () => {
     (getUserByKey as jest.Mock).mockImplementation(
-      jest.requireActual('../controllers/user').getUserByKey
+      jest.requireActual('../src/controllers/user').getUserByKey
     );
     (updateUser as jest.Mock).mockResolvedValue(false);
 
@@ -113,10 +113,10 @@ describe('Server [POST] /api/password-reset/:token', () => {
 
   it('should respond with 200/ok if update succeeds', async () => {
     (getUserByKey as jest.Mock).mockImplementation(
-      jest.requireActual('../controllers/user').getUserByKey
+      jest.requireActual('../src/controllers/user').getUserByKey
     );
     (updateUser as jest.Mock).mockImplementation(
-      jest.requireActual('../controllers/user').updateUser
+      jest.requireActual('../src/controllers/user').updateUser
     );
 
     const response = await fetch(

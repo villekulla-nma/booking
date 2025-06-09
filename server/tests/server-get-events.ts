@@ -2,15 +2,15 @@ import type { FastifyInstance } from 'fastify';
 import type { AddressInfo } from 'net';
 import { URLSearchParams } from 'url';
 
-import type { Db } from '../db';
-import { initDb } from '../db';
-import { initServer } from '../server';
+import type { Db } from '../src/db';
+import { initDb } from '../src/db';
+import { initServer } from '../src/server';
 import { signJwt } from './helpers/sign-jwt';
 import { getDates } from './helpers/get-dates';
-import type { ResourceInstance } from '../models/resource';
-import type { EventInstance } from '../models/event';
-import type { UnitInstance } from '../models/unit';
-import type { UserInstance } from '../models/user';
+import type { ResourceInstance } from '../src/models/resource';
+import type { EventInstance } from '../src/models/event';
+import type { UnitInstance } from '../src/models/unit';
+import type { UserInstance } from '../src/models/user';
 
 describe('Server [GET] /api/resources/:resourceId/events', () => {
   const { today, tomorrow, dayAfterTomorrow, threeDaysAhead } = getDates();
