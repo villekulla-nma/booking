@@ -19,5 +19,5 @@
     "skipLibCheck": true,
     "types": ["node", "jest"]
   },
-  "include": ["src", "tests"]
+  "include": ["migrations", "models", "seeders", "src", "tests"]
 }
