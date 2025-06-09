@@ -1,0 +1,49 @@
+name: villekulla-booking
+
+services:
+  sequelize-cli:
+    image: villekulla/booking-migrations:latest
+    build:
+      context: .
+      dockerfile: server/Dockerfile.migrations
+    volumes:
+      - ${SQLITE3_PATH}:/db/db.sqlite
+    container_name: migrations
+
+  api:
+    image: villekulla/booking-api:latest
+    build:
+      context: .
+      dockerfile: server/Dockerfile.api
+    volumes:
+      - ${SQLITE3_PATH}:/db/db.sqlite
+    environment:
+      - APP_URL=${APP_URL}
+      - JWT_SECRET=${JWT_SECRET}
+      - SALT=${SALT}
+      - SENDER_EMAIL_ADDRESS=${SENDER_EMAIL_ADDRESS}
+      - SENDGRID_API_KEY=${SENDGRID_API_KEY}
+    ports:
+      - 3000:3000
+    depends_on:
+      - sequelize-cli
+    container_name: backend
+    restart: unless-stopped
+    networks:
+      - node_network
+
+  app:
+    image: villekulla/booking-app:latest
+    build:
+      context: .
+      dockerfile: client/Dockerfile
+    ports:
+      - 8000:8000
+    depends_on:
+      - api
+    container_name: app
+    networks:
+      - node_network
+
+networks:
+  node_network:

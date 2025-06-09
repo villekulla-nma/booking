@@ -1,0 +1,14 @@
+FROM node:22
+
+VOLUME /db
+
+WORKDIR /app
+
+RUN echo '{"name": "migrations"}' > package.json && \
+  npm install sequelize sequelize-cli sqlite3
+
+ADD server/config config/
+ADD server/migrations migrations/
+ADD server/models/*.js models/
+
+ENTRYPOINT ["node", "./node_modules/.bin/sequelize-cli", "db:migrate", "--env=production"]
