@@ -100,9 +100,14 @@ const getAdminListFromEnv = () => {
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, _Sequelize) {
+    const { SALT: salt } = process.env;
+    if (!salt) {
+      throw new Error('Env var `SALT` missing.');
+    }
+
     const admins = await Promise.all(
       getAdminListFromEnv().map(async (user) => {
-        user.password = await bcrypt.hash(user.password, process.env.SALT);
+        user.password = await bcrypt.hash(user.password, salt);
 
         return user;
       })
