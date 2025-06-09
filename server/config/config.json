@@ -8,7 +8,7 @@
     "dialect": "sqlite"
   },
   "production": {
-    "database": "../db_prod.sqlite",
+    "database": "db/db.sqlite",
     "dialect": "sqlite"
   }
 }
