@@ -27,6 +27,7 @@ import { assignGetAllUsersHandler } from './handlers/get-all-users';
 import { assignPostUnitHandler } from './handlers/post-unit';
 import { assignPostResourceHandler } from './handlers/post-resource';
 import { assignPostUserHandler } from './handlers/post-user';
+import { createGracefulShutdownHandler } from './utils/graceful-shutdown';
 
 const routes: [string, AssignHandlerFunction][] = [
   ['/api/_health', assignGetHealthHandler],
@@ -60,7 +61,8 @@ export const initServer = async (
 ): Promise<FastifyInstance> => {
   const level = process.env.NODE_ENV === 'test' ? 'silent' : 'trace';
   const host = env('HOST', true) || 'localhost';
-  const server = Fastify({ logger: { level } });
+  const server = Fastify({ logger: { level }, keepAliveTimeout: 1_000 });
+  const handleShutdown = createGracefulShutdownHandler(server);
 
   routes.forEach(([route, handler]) => handler(route, server, db));
 
@@ -69,6 +71,9 @@ export const initServer = async (
     port: Number(port || env('PORT') || '3000'),
     host,
   });
+
+  process.on('SIGTERM', handleShutdown);
+  process.on('SIGINT', handleShutdown);
 
   return server;
 };
