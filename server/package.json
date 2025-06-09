@@ -11,7 +11,7 @@
     "lint": "eslint .",
     "test:watch": "jest --watch",
     "test": "jest",
-    "build": "ncc build src/index.ts -o ../dist/api --target es2020",
+    "build": "tsdown",
     "gen-salt": "node -e \"console.log(require('bcryptjs').genSaltSync())\"",
     "create-id": "node -e \"console.log(require('shortid').generate())\""
   },
@@ -48,7 +48,6 @@
     "@types/shortid": "2.2.0",
     "@typescript-eslint/eslint-plugin": "7.18.0",
     "@typescript-eslint/parser": "7.18.0",
-    "@vercel/ncc": "0.38.3",
     "eslint": "8.57.1",
     "eslint-config-prettier": "10.1.5",
     "eslint-plugin-prettier": "5.4.1",
@@ -57,6 +56,7 @@
     "sequelize-cli": "6.6.3",
     "ts-jest": "29.1.1",
     "ts-node": "10.9.2",
+    "tsdown": "0.12.7",
     "typescript": "5.8.3"
   }
 }
