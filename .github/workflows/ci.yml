@@ -99,7 +99,17 @@ jobs:
       - name: Build application
         env:
           NODE_OPTIONS: --openssl-legacy-provider
-        run: npm run build
+        run: |
+          npm run build
+          mkdir -p tmp
+          mv dist tmp
+
+      - name: Upload build
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist_folder
+          path: tmp
+          retention-days: 1
 
   serve:
     runs-on: ubuntu-latest
