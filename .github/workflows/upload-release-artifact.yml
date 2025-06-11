@@ -6,8 +6,50 @@ on:
       - published
 
 jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+          cache: 'npm'
+
+      - name: Cache Node dependencies
+        uses: actions/cache@v4
+        id: npm-cache
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build application
+        env:
+          NODE_OPTIONS: --openssl-legacy-provider
+        run: |
+          npm run build
+          mkdir -p tmp
+          mv dist tmp
+
+      - name: Upload build
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist_folder
+          path: tmp
+          retention-days: 1
+
   artifacts:
     runs-on: ubuntu-latest
+    needs: build
 
     steps:
       - uses: actions/checkout@v4
@@ -37,6 +79,7 @@ jobs:
 
   docker:
     runs-on: ubuntu-latest
+    needs: build
     strategy:
       matrix:
         include:
