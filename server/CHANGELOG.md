@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 0.7.2 (2025-06-11)
+
+
+### Bug Fixes
+
+* **deps:** update dependency @sendgrid/mail to v8.1.5 ([7d218ac](https://github.com/villekulla-nma/booking/commit/7d218ac8ff39972fe1355e5fdd903b4c2abdc483))
+* **deps:** update dependency fastify to v5.3.3 ([d3eef75](https://github.com/villekulla-nma/booking/commit/d3eef75b4a1432e7706fc4a71f28f5d110a1d53e))
+* **deps:** update dependency fluent-json-schema to v6 ([67fead5](https://github.com/villekulla-nma/booking/commit/67fead5c8ba8dbe5d8685250314dc5e81f07d641))
+* **deps:** update dependency sequelize to v6.37.7 ([1a16136](https://github.com/villekulla-nma/booking/commit/1a1613638bef58d2144c943c6d3feb3619df9176))
+* **server:** handle `SIGINT` & `SIGTERM` events ([89d83a9](https://github.com/villekulla-nma/booking/commit/89d83a99551020abf130b7541fa8ff15bc812181)), closes [/github.com/fastify/fastify/discussions/5140#discussioncomment-7478990](https://github.com//github.com/fastify/fastify/discussions/5140/issues/discussioncomment-7478990)
+* **server:** make hostname configurable via env var ([be76319](https://github.com/villekulla-nma/booking/commit/be7631977845acf9c1808e0fc9a8f25fab3586eb))
+
+
+
+
+
 ## 0.7.1 (2025-02-12)
 
 

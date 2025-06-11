@@ -1,6 +1,6 @@
 {
   "name": "@booking/server",
-  "version": "0.7.1",
+  "version": "0.7.2",
   "author": "Emanuel Kluge (https://emanuel-kluge.de/)",
   "license": "MIT",
   "scripts": {
@@ -22,7 +22,9 @@
       "./jest.setup.ts"
     ],
     "clearMocks": true,
-    "testMatch": ["**/tests/*.ts"],
+    "testMatch": [
+      "**/tests/*.ts"
+    ],
     "testPathIgnorePatterns": [
       "/node_modules/",
       "/tests/helpers/"
@@ -40,7 +42,7 @@
     "sqlite3": "5.1.7"
   },
   "devDependencies": {
-    "@booking/types": "0.7.1",
+    "@booking/types": "0.7.2",
     "@types/jest": "29.5.12",
     "@types/jsonwebtoken": "9.0.7",
     "@types/node": "22.15.31",

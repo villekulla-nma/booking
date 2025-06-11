@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 0.7.2 (2025-06-11)
+
+
+### Bug Fixes
+
+* **deps:** update dependency react-error-boundary to v6 ([59f8e83](https://github.com/villekulla-nma/booking/commit/59f8e83a5ab4e76a7d7fec211770c6709d2c4301))
+* **deps:** update fluent ui ([ecbee6a](https://github.com/villekulla-nma/booking/commit/ecbee6afc9483f2062ccbce68d16156c6a424031))
+* **deps:** update fullcalendar monorepo to v6.1.17 ([2aea8af](https://github.com/villekulla-nma/booking/commit/2aea8af5a677cd4efd33376ea21ac40f4dab4d3b))
+* **deps:** update react monorepo ([36cfe14](https://github.com/villekulla-nma/booking/commit/36cfe14b4c82c7d4ffe55b062bf1b06121aaa9d2))
+
+
+
+
+
 ## 0.7.1 (2025-02-12)
 
 
