@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.7.3](https://github.com/villekulla-nma/booking/compare/v0.7.2...v0.7.3) (2025-06-12)
+
+
+### Bug Fixes
+
+* **deps:** update dependency fastify to v5.4.0 ([d87c7f0](https://github.com/villekulla-nma/booking/commit/d87c7f02de42d7923e4579823d41ba0b2c992e3d))
+
+
+
+
+
 ## 0.7.2 (2025-06-11)
 
 
