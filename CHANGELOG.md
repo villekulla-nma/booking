@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.7.4](https://github.com/villekulla-nma/booking/compare/v0.7.3...v0.7.4) (2025-06-14)
+
+
+### Bug Fixes
+
+* **client:** update password reset request payload ([158263c](https://github.com/villekulla-nma/booking/commit/158263c4544435a4e0f15e3ed72e8a0d28831b65))
+* remove obsolete env var `APP_URL` ([11f4885](https://github.com/villekulla-nma/booking/commit/11f48855b4b3f8c8acbae5b3809de09fb6d7f90e))
+* **server:** get rid of env var `APP_URL` ([678e0e3](https://github.com/villekulla-nma/booking/commit/678e0e30166e6a7ea8bf0d9fe66d4fd4fc091d25))
+
+
+
+
+
 ## [0.7.3](https://github.com/villekulla-nma/booking/compare/v0.7.2...v0.7.3) (2025-06-12)
 
 

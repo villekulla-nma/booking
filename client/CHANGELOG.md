@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.7.4](https://github.com/villekulla-nma/booking/compare/v0.7.3...v0.7.4) (2025-06-14)
+
+
+### Bug Fixes
+
+* **client:** update password reset request payload ([158263c](https://github.com/villekulla-nma/booking/commit/158263c4544435a4e0f15e3ed72e8a0d28831b65))
+
+
+
+
+
 ## 0.7.2 (2025-06-11)
 
 

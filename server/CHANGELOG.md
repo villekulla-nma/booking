@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.7.4](https://github.com/villekulla-nma/booking/compare/v0.7.3...v0.7.4) (2025-06-14)
+
+
+### Bug Fixes
+
+* **server:** get rid of env var `APP_URL` ([678e0e3](https://github.com/villekulla-nma/booking/commit/678e0e30166e6a7ea8bf0d9fe66d4fd4fc091d25))
+
+
+
+
+
 ## [0.7.3](https://github.com/villekulla-nma/booking/compare/v0.7.2...v0.7.3) (2025-06-12)
 
 
