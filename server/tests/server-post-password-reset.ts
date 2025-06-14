@@ -9,6 +9,7 @@ import { sendMail } from '../src/utils/send-mail';
 jest.mock('../src/utils/send-mail');
 
 describe('Server [POST] /api/password-reset', () => {
+  const appUrl = 'http://example.com';
   let port: number;
   let server: FastifyInstance;
   let db: Db;
@@ -41,7 +42,7 @@ describe('Server [POST] /api/password-reset', () => {
         headers: {
           'content-type': 'application/json',
         },
-        body: JSON.stringify({ email: 'nobody@example.com' }),
+        body: JSON.stringify({ email: 'nobody@example.com', appUrl }),
       }
     );
     const data = (await response.json()) as Record<string, unknown>;
@@ -58,7 +59,7 @@ describe('Server [POST] /api/password-reset', () => {
         headers: {
           'content-type': 'application/json',
         },
-        body: JSON.stringify({ email: 'person.one@example.com' }),
+        body: JSON.stringify({ email: 'person.one@example.com', appUrl }),
       }
     );
     const data = (await response.json()) as Record<string, unknown>;
@@ -75,13 +76,13 @@ describe('Server [POST] /api/password-reset', () => {
       headers: {
         'content-type': 'application/json',
       },
-      body: JSON.stringify({ email: 'person.one@example.com' }),
+      body: JSON.stringify({ email: 'person.one@example.com', appUrl }),
     });
 
     expect(sendMail).toHaveBeenCalledWith(
       expect.objectContaining({
         subject: 'Passwort-Reset',
-        text: expect.stringMatching(/^Moin Person1,/),
+        text: expect.stringMatching(/(^Moin Person1,|http:\/\/example.com)/g),
         to: 'person.one@example.com',
       })
     );
