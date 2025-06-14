@@ -28,6 +28,7 @@ describe('Resource Page', () => {
     const scope = nock('http://localhost:3000')
       .post('/api/password-reset', {
         email: 'person.one@example.com',
+        appUrl: 'http://localhost',
       })
       .reply(200);
 
