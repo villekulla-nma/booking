@@ -72,12 +72,14 @@ export const logout = async (): Promise<void> => {
 
 export const requestPasswordReset = async (email: string): Promise<void> => {
   try {
+    const appUrl = `${location.protocol}//${location.hostname}`;
+
     await fetch('/api/password-reset', {
       method: 'POST',
       headers: {
         'content-type': 'application/json',
       },
-      body: JSON.stringify({ email }),
+      body: JSON.stringify({ email, appUrl }),
     });
   } catch {
     /* nothing to do here */
