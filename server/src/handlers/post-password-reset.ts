@@ -7,15 +7,16 @@ import { randomBytes } from '../utils/crypto';
 import { getUserByKey, updateUser } from '../controllers/user';
 import { responseSchema200 } from '../utils/schema';
 import { STATUS } from '../constants';
-import { env } from '../utils/env';
 import { sendMail } from '../utils/send-mail';
 
 interface Body {
   email: string;
+  appUrl: string;
 }
 
 const bodySchema = S.object()
   .prop('email', S.string().format(S.FORMATS.EMAIL).required())
+  .prop('appUrl', S.string().format(S.FORMATS.URI).required())
   .valueOf();
 
 const opts: RouteShorthandOptions = {
@@ -25,8 +26,11 @@ const opts: RouteShorthandOptions = {
   },
 };
 
-const getEmailText = (userName: string, token: string): string => {
-  const appUrl = env('APP_URL');
+const getEmailText = (
+  userName: string,
+  appUrl: string,
+  token: string
+): string => {
   const resetUrl = new URL(`/app/password-reset/${token}`, appUrl).toString();
 
   return `Moin ${userName},
@@ -46,7 +50,7 @@ export const assignPostPasswordResetHandler: AssignHandlerFunction = (
   db
 ) => {
   server.post(route, opts, async (request, reply) => {
-    const { email } = request.body as Body;
+    const { email, appUrl } = request.body as Body;
 
     do {
       const user = await getUserByKey(db, 'email', email);
@@ -59,7 +63,7 @@ export const assignPostPasswordResetHandler: AssignHandlerFunction = (
         const token = randomBytes(32);
         const sendEmailPromise = sendMail({
           subject: 'Passwort-Reset',
-          text: getEmailText(user.firstName, token),
+          text: getEmailText(user.firstName, appUrl, token),
           to: user.email,
         });
         const updateUserPromise = updateUser(db, user.id, {
@@ -68,13 +72,13 @@ export const assignPostPasswordResetHandler: AssignHandlerFunction = (
 
         await Promise.all([sendEmailPromise, updateUserPromise]);
 
-        console.log(
+        server.log.info(
           'Password reset token "%s" for user "%s"',
           token,
           user.email
         );
       } catch (err) {
-        console.debug(err);
+        server.log.error(err);
       }
     } while (false); // eslint-disable-line no-constant-condition
 
