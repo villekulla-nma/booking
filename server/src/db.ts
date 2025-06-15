@@ -12,6 +12,7 @@ import { createEvent } from '../models/event';
 import { createUnit } from '../models/unit';
 import { createResource } from '../models/resource';
 import { createUser } from '../models/user';
+import { createAdmins } from './controllers/user';
 
 export interface Db {
   Event: ModelCtor<EventInstance>;
@@ -54,6 +55,13 @@ export const initDb = async (): Promise<Db> => {
 
     terminate: () => sequelize.close(),
   };
+
+  try {
+    await createAdmins(db);
+  } catch (err) {
+    console.error('Failed to create admin users.');
+    throw err;
+  }
 
   return db;
 };

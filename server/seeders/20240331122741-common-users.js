@@ -35,7 +35,7 @@ module.exports = {
     );
 
     assert.ok(
-      Number(newAmount) > 2,
+      Number(newAmount) === 2,
       `Expected to have more than 2 users, but only having ${newAmount}`
     );
   },

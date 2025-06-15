@@ -4,7 +4,9 @@ import type { UserAttributes, UserRole } from '@booking/types';
 
 import type { UserResult } from './types';
 import type { Db } from '../db';
-import type { UserInstance } from '../models/user';
+import type { UserCreationAttributes, UserInstance } from '../models/user';
+import { getAdminListFromEnv } from '../utils/get-admins-from-env';
+import { hashPassword } from '../utils/crypto';
 
 const toUserResult = (
   user: UserInstance,
@@ -119,4 +121,30 @@ export const updateUser = async (
     },
   });
   return result === 1;
+};
+
+export const createAdmins = async (db: Db) => {
+  const admins = await getAdminListFromEnv()
+    .map(async (user) => {
+      user.password = await hashPassword(user.password);
+
+      return user;
+    })
+    .reduce(
+      async (
+        list: Promise<UserCreationAttributes[]>,
+        admin: Promise<UserCreationAttributes>
+      ) => {
+        const [acc, cur] = await Promise.all([list, admin]);
+        const user = await getUserById(db, cur.id);
+
+        if (!user) {
+          acc.push(cur);
+        }
+        return list;
+      },
+      Promise.resolve<UserCreationAttributes[]>([])
+    );
+
+  await db.User.bulkCreate(admins);
 };
