@@ -22,6 +22,7 @@ services:
       - SALT=${SALT}
       - SENDER_EMAIL_ADDRESS=${SENDER_EMAIL_ADDRESS}
       - SENDGRID_API_KEY=${SENDGRID_API_KEY}
+      - NODE_ENV=${NODE_ENV:-development}
     ports:
       - 3000:3000
     depends_on:
