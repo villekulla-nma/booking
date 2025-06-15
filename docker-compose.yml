@@ -1,13 +1,13 @@
 name: villekulla-booking
 
 services:
-  sequelize-cli:
+  migrations:
     image: villekulla/booking-migrations:latest
     build:
       context: .
       dockerfile: server/Dockerfile.migrations
     volumes:
-      - ${SQLITE3_PATH}:/db/db.sqlite
+      - ${SQLITE3_PATH}:/var/db/db.sqlite
     container_name: migrations
 
   api:
@@ -16,7 +16,7 @@ services:
       context: .
       dockerfile: server/Dockerfile.api
     volumes:
-      - ${SQLITE3_PATH}:/db/db.sqlite
+      - ${SQLITE3_PATH}:/var/db/db.sqlite
     environment:
       - JWT_SECRET=${JWT_SECRET}
       - SALT=${SALT}
@@ -25,7 +25,7 @@ services:
     ports:
       - 3000:3000
     depends_on:
-      - sequelize-cli
+      - migrations
     container_name: backend
     restart: unless-stopped
     networks:
