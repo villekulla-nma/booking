@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.7.5](https://github.com/villekulla-nma/booking/compare/v0.7.4...v0.7.5) (2025-06-15)
+
+**Note:** Version bump only for package booking
+
+
+
+
+
 ## [0.7.4](https://github.com/villekulla-nma/booking/compare/v0.7.3...v0.7.4) (2025-06-14)
 
 
