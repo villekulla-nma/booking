@@ -43,7 +43,7 @@
   },
   "devDependencies": {
     "@booking/types": "0.7.2",
-    "@types/jest": "29.5.12",
+    "@types/jest": "30.0.0",
     "@types/jsonwebtoken": "9.0.7",
     "@types/node": "22.15.31",
     "@types/randomcolor": "0.5.9",
