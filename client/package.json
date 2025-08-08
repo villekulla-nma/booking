@@ -97,7 +97,7 @@
     "eslint-plugin-testing-library": "7.6.3",
     "jsdom": "26.1.0",
     "nock": "14.0.9",
-    "typescript": "5.8.3",
+    "typescript": "5.9.2",
     "vite": "7.1.1",
     "vitest": "3.2.4"
   }
