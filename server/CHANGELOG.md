@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.7.7](https://github.com/villekulla-nma/booking/compare/v0.7.6...v0.7.7) (2025-08-23)
+
+
+### Bug Fixes
+
+* **server:** inject correct path to SQLite db in API container ([ec03849](https://github.com/villekulla-nma/booking/commit/ec03849dcb49c5496d82b6bf35163c0530033b7d))
+
+
+
+
+
 ## [0.7.6](https://github.com/villekulla-nma/booking/compare/v0.7.5...v0.7.6) (2025-06-15)
 
 
