@@ -32,7 +32,7 @@
   },
   "dependencies": {
     "@sendgrid/mail": "8.1.5",
-    "bcryptjs": "3.0.2",
+    "bcryptjs": "3.0.3",
     "fastify": "5.4.0",
     "fluent-json-schema": "6.0.0",
     "jsonwebtoken": "9.0.2",
